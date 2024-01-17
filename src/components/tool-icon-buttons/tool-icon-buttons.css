@@ -1,0 +1,6 @@
+.tool-icon-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  margin-right: 8px;
+}

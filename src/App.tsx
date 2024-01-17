@@ -1,51 +1,29 @@
-import { createSignal } from "solid-js";
-import logo from "./assets/logo.svg";
-import { invoke } from "@tauri-apps/api/tauri";
+import { ToolIconButtons } from "./components/tool-icon-buttons/tool-icon-buttons";
+import { DiagramZoom } from "./components/diagram-zoom/diagram-zoom";
 import "./App.css";
+import { ProsessList } from "./components/prosess-list/prosess-list";
+import { ActorList } from "./components/actor-list/actor-list";
 
 function App() {
-  const [greetMsg, setGreetMsg] = createSignal("");
-  const [name, setName] = createSignal("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name: name() }));
-  }
-
   return (
-    <div class="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div class="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={logo} class="logo solid" alt="Solid logo" />
-        </a>
+    <div class="app">
+      <div class="menu" />
+      <div class="main">
+        <div class="split-left">
+          <ProsessList />
+          <div class="v-divide"></div>
+          <ActorList />
+        </div>
+        <div class="h-divide"></div>
+        <div class="split-right">
+          <ToolIconButtons />
+          <div class="editor">
+            <div class="title">プロセス1</div>
+            <canvas class="diagram" />
+            <DiagramZoom />
+          </div>
+        </div>
       </div>
-
-      <p>Click on the Tauri, Vite, and Solid logos to learn more.</p>
-
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg()}</p>
     </div>
   );
 }
