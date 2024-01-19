@@ -25,6 +25,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-solid": "^0.13.1",
     "prettier": "^3.2.2",
+    "solid-devtools": "^0.29.2",
     "typescript": "^5.0.2",
     "vite": "^5.0.0",
     "vite-plugin-solid": "^2.8.0"

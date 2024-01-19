@@ -3,7 +3,7 @@ import "./actor-list.css";
 export function ActorList() {
   return (
     <div class="actor-list-area">
-      <div class="title">アクター</div>
+      <h5>アクター</h5>
       <div class="list" />
       <div>
         <button>追加</button>

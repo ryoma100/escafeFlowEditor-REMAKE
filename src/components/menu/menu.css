@@ -1,0 +1,52 @@
+/* メニューバー */
+.menu__bar {
+  background-color: var(--menu-background-color);
+}
+.menu__bar > ul {
+  display: flex;
+  justify-content: row;
+  padding: 0;
+  margin: 0 0 0 8px;
+  list-style-type: none;
+}
+
+/* メニューアイテム */
+.menu__item {
+  position: relative;
+}
+.menu__item > a {
+  text-decoration: none;
+  padding: 0 8px;
+}
+.menu__item:hover {
+  background-color: var(--menu-selected-color);
+}
+
+/* ドロップダウンメニュー */
+.menu__item:hover .menu__drop {
+  visibility: visible; /* メニューアイテムhover時に表示 */
+}
+.menu__drop {
+  position: absolute;
+  background-color: var(--menu-background-color);
+  visibility: hidden;
+  width: max-content;
+  z-index: 1;
+  list-style-type: none;
+  padding: 0;
+}
+
+/* ドロップダウンメニューアイテム */
+.menu__drop-item {
+  padding: 0 16px;
+}
+.menu__drop-item > a {
+  align-items: center;
+  display: flex;
+  justify-content: row;
+  text-decoration: none;
+  padding: 0;
+}
+.menu__drop-item:hover {
+  background-color: var(--menu-selected-color);
+}

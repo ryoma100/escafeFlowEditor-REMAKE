@@ -1,0 +1,5 @@
+.process-dialog-grid {
+  display: grid;
+  grid-template-columns: 64px 256px;
+  gap: 8px;
+}

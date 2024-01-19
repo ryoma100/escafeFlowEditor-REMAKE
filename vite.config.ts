@@ -1,9 +1,16 @@
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
+import devtools from "solid-devtools/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [solid()],
+  plugins: [
+    devtools({
+      /* features options - all disabled by default */
+      autoname: true, // e.g. enable autoname
+    }),
+    solid(),
+  ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
