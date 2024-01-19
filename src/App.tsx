@@ -1,17 +1,22 @@
-import { ToolIconButtons } from "./components/tool-icon-buttons/tool-icon-buttons";
-import { DiagramZoom } from "./components/diagram-zoom/diagram-zoom";
-import "./App.css";
-import { ProsessList } from "./components/prosess-list/prosess-list";
 import { ActorList } from "./components/actor-list/actor-list";
+import { DiagramZoom } from "./components/diagram-zoom/diagram-zoom";
 import { Menu } from "./components/menu/menu";
+import { ProcessList } from "./components/process-list/process-list";
+import { ToolIconButtons } from "./components/tool-icon-buttons/tool-icon-buttons";
+import "./app.css";
+import { useModel } from "./context";
 
 function App() {
+  const {
+    process: { selectedProcess },
+  } = useModel();
+
   return (
     <div class="app">
       <Menu />
       <div class="main">
         <div class="split-left">
-          <ProsessList />
+          <ProcessList />
           <div class="v-divide"></div>
           <ActorList />
         </div>
@@ -19,7 +24,7 @@ function App() {
         <div class="split-right">
           <ToolIconButtons />
           <div class="editor">
-            <h5>プロセス1</h5>
+            <h5>{selectedProcess().title}</h5>
             <canvas class="diagram" />
             <DiagramZoom />
           </div>

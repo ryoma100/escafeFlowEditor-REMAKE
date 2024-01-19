@@ -1,22 +1,20 @@
 import { For, Match, Switch, createSignal } from "solid-js";
-import "./prosess-list.css";
 import { ProcessDialog } from "../dialog/process-dialog";
+import { useModel } from "../../context";
+import "./process-list.css";
+import { ProcessType } from "../../models/process-model";
 
-const defaultProcessList = [...Array(20)].map((_, index) => {
-  return { id: index + 1, title: `プロセス${index + 1}` };
-});
+export function ProcessList() {
+  const {
+    process: {
+      processList,
+      selectedProcess,
+      setSelectedProcess,
+      addProcess,
+      removeProcess,
+    },
+  } = useModel();
 
-export type ProcessType = {
-  id: number;
-  title: string;
-};
-
-export function ProsessList() {
-  const [processList, setProcessList] =
-    createSignal<ProcessType[]>(defaultProcessList);
-  const [selectedProcess, setSelectedProcess] = createSignal<ProcessType>(
-    defaultProcessList[0]
-  );
   const [dialogOpen, setDialogOpen] = createSignal<boolean>(false);
 
   // onClickとonDblClick両方セットすると、onDblClickが呼ばれない
@@ -36,26 +34,16 @@ export function ProsessList() {
   }
 
   function handleAddClick(_: MouseEvent) {
-    const item = { id: 99, title: "テスト" };
-    setProcessList([...processList(), item]);
-    setSelectedProcess(item);
+    addProcess();
   }
 
   function handleRemoveClick(_: MouseEvent) {
-    const nextSelectedIndex = Math.min(
-      processList().findIndex((it) => it.id === selectedProcess().id),
-      processList().length - 2
-    );
-    const newList = processList().filter(
-      (it) => it.id !== selectedProcess().id
-    );
-    setProcessList(newList);
-    setSelectedProcess(newList[nextSelectedIndex]);
+    removeProcess();
   }
 
   return (
     <>
-      <div class="prosess-list-area">
+      <div class="process-list-area">
         <h5>プロセス</h5>
         <div class="list-scroll">
           <ul class="list">

@@ -1,5 +1,5 @@
 import { createEffect } from "solid-js";
-import { ProcessType } from "../prosess-list/prosess-list";
+import { ProcessType } from "../process-list/process-list";
 import "./process-dialog.css";
 
 export function ProcessDialog(props: {

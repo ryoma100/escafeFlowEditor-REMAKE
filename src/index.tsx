@@ -4,5 +4,13 @@ import "solid-devtools";
 
 import "./styles.css";
 import App from "./App";
+import { ModelProvider } from "./context";
 
-render(() => <App />, document.getElementById("root") as HTMLElement);
+render(
+  () => (
+    <ModelProvider>
+      <App />
+    </ModelProvider>
+  ),
+  document.getElementById("root") as HTMLElement
+);
