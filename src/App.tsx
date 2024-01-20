@@ -1,7 +1,7 @@
-import { ActorList } from "./components/actor-list/actor-list";
+import { ActorList } from "./components/list/actor-list";
 import { DiagramZoom } from "./components/diagram-zoom/diagram-zoom";
 import { Menu } from "./components/menu/menu";
-import { ProcessList } from "./components/process-list/process-list";
+import { ProcessList } from "./components/list/process-list";
 import { ToolIconButtons } from "./components/tool-icon-buttons/tool-icon-buttons";
 import "./app.css";
 import { useModel } from "./context";

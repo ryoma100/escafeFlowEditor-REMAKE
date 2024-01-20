@@ -24,7 +24,7 @@ export function ProcessDialog() {
   });
 
   function handleOkButtonClick() {
-    updateProcess({ ...formData });
+    updateProcess({ ...formData }); //TODO:コピーしないと別のプロセスが上書きされる？
     setOpenProcessDialog(false);
   }
 

@@ -1,32 +1,34 @@
-.process-list-area {
+.list {
   height: 50%;
   margin-left: 8px;
   display: flex;
   flex-direction: column;
 }
 
-.list-scroll {
+.list__scroll--outer {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-.list {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
   background-color: white;
 }
 
-.list-item {
+.list__scroll--inner {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.list__item {
   padding: 2px 4px;
   background-color: white;
   cursor: default;
   user-select: none;
 }
-.list-item-selected {
+
+.list__item--selected {
   background-color: var(--list-selected-color);
 }
-.list-item:hover {
+
+.list__item:hover {
   background-color: var(--list-hover-color);
 }
