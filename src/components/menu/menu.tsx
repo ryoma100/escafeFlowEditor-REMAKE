@@ -5,9 +5,11 @@ export function Menu() {
   const {
     pkg: { setPackageDialog },
     process: { setOpenProcessDialog },
+    actor: { setOpenActorDialog },
   } = useDialog();
   const {
     process: { addProcess, removeProcess },
+    actor: { addActor, removeActor },
   } = useModel();
 
   function handleFileNewClick() {
@@ -55,14 +57,17 @@ export function Menu() {
   }
 
   function handleActorAddClick() {
+    addActor();
     return false;
   }
 
   function handleActorRemoveClick() {
+    removeActor();
     return false;
   }
 
   function handleActorPropertyClick() {
+    setOpenActorDialog(true);
     return false;
   }
 

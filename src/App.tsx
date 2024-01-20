@@ -6,6 +6,7 @@ import "./app.css";
 import { ProcessDialog } from "./components/dialog/process-dialog";
 import { PackageDialog } from "./components/dialog/package-dialog";
 import { Main } from "./components/main/main";
+import { ActorDialog } from "./components/dialog/actor-dialog";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
 
       <PackageDialog />
       <ProcessDialog />
+      <ActorDialog />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { createSignal } from "solid-js";
 const defaultActorList = [...Array(10)].map((_, index) => {
   return {
     id: index + 1,
-    actorId: `newpkg_wp1_par${index + 1}`,
+    xpdlId: `newpkg_wp1_par${index + 1}`,
     title: `アクター${index + 1}`,
   };
 });
@@ -11,14 +11,14 @@ let nextActorId = defaultActorList.length + 1;
 
 export type ActorEntity = {
   id: number;
-  actorId: string;
+  xpdlId: string;
   title: string;
 };
 
 function defaultActor(): ActorEntity {
   return {
     id: 0,
-    actorId: "",
+    xpdlId: "",
     title: "",
   };
 }
@@ -34,7 +34,7 @@ export function actorModel() {
   function addActor() {
     const item = {
       id: nextActorId,
-      actorId: `newpkg_wp1_par${nextActorId}`,
+      xpdlId: `newpkg_wp1_par${nextActorId}`,
       title: `アクター${nextActorId}`,
     };
     nextActorId++;

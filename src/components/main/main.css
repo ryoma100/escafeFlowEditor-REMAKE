@@ -8,3 +8,10 @@
   background-color: white;
   flex-grow: 1;
 }
+
+.main__zoom {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
