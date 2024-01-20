@@ -1,15 +1,14 @@
 .list {
-  height: 50%;
-  margin-left: 8px;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .list__scroll--outer {
-  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: white;
+  height: 100%;
 }
 
 .list__scroll--inner {

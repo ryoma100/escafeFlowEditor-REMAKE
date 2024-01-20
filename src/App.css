@@ -1,79 +1,39 @@
 .app {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 160px 96px 1fr;
+  grid-template-rows: 24px 1fr 1fr;
   height: 100vh;
   width: 100%;
 }
 
-.menu {
-  background-color: burlywood;
-  width: 100%;
-  height: 24px;
+.app__menu {
+  grid-column: 1 / 4;
+  grid-row: 1 / 2;
 }
 
-.main {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  width: 100%;
+.app__process-list {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  height: calc(50vh - 20px);
+  margin-left: 8px;
 }
 
-.title {
-  font-size: 12px;
-  height: 24px;
-  font-weight: bold;
-  padding: 0;
-  margin: 0;
+.app__actor-list {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+  height: calc(50vh - 20px);
+  margin-left: 8px;
 }
 
-.split-left {
-  display: flex;
-  flex-direction: column;
-  width: 160px;
-  height: auto;
-  padding: 4px 0 8px 0;
+.app__tool-button {
+  grid-column: 2 / 3;
+  grid-row: 2 / 4;
+  margin-top: 24px;
 }
 
-.h-divide {
-  background-repeat: no-repeat;
-  background-position: 50%;
-  flex: none;
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
-  cursor: col-resize;
-  width: 8px;
-}
-.h-divide:hover {
-  background-color: var(--devider-hover-color);
-}
-
-.v-divide {
-  background-repeat: no-repeat;
-  background-position: 50%;
-  flex: none;
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
-  cursor: row-resize;
-  height: 8px;
-}
-.v-divide:hover {
-  background-color: var(--devider-hover-color);
-}
-
-.split-right {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin: 4px 8px 8px 0;
-}
-
-.editor {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-.diagram {
-  background-color: white;
-  width: 100%;
-  height: 100%;
+.app__main {
+  grid-column: 3 / 3;
+  grid-row: 2 / 4;
+  height: calc(100vh - 32px);
+  margin-right: 8px;
 }
