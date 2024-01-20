@@ -1,12 +1,15 @@
 import { createContext, useContext, JSX, createSignal } from "solid-js";
 import { processModel } from "./models/process-model";
+import { packageModel } from "./models/package-model";
 
+/** モデルContext */
 const ModelContext = createContext<{
+  pkg: ReturnType<typeof packageModel>;
   process: ReturnType<typeof processModel>;
-}>({ process: undefined as any });
+}>({ pkg: undefined as any, process: undefined as any });
 
 export function ModelProvider(props: { children: JSX.Element }) {
-  const value = { process: processModel() };
+  const value = { pkg: packageModel(), process: processModel() };
 
   return (
     <ModelContext.Provider value={value}>
@@ -19,7 +22,9 @@ export function useModel() {
   return useContext(ModelContext);
 }
 
+/** ダイアログContext */
 const DialogContext = createContext<ReturnType<typeof createDialogSignals>>({
+  pkg: undefined as any,
   process: undefined as any,
 });
 
@@ -38,6 +43,10 @@ export function useDialog() {
 }
 
 function createDialogSignals() {
+  const [openPackageDialog, setPackageDialog] = createSignal(false);
   const [openProcessDialog, setOpenProcessDialog] = createSignal(false);
-  return { process: { openProcessDialog, setOpenProcessDialog } };
+  return {
+    pkg: { openPackageDialog, setPackageDialog },
+    process: { openProcessDialog, setOpenProcessDialog },
+  };
 }

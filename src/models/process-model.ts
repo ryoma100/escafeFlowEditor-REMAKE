@@ -3,7 +3,7 @@ import { createSignal } from "solid-js";
 const defaultProcessList = [...Array(20)].map((_, index) => {
   return {
     id: index + 1,
-    xpdlId: `xpld-${index + 1}`,
+    xpdlId: `newpkg_wp${index + 1}`,
     title: `プロセス${index + 1}`,
   };
 });
@@ -15,11 +15,13 @@ export type ProcessEntity = {
   title: string;
 };
 
-const defaultProcess: Readonly<ProcessEntity> = {
-  id: 0,
-  xpdlId: "",
-  title: "",
-} as const;
+function defaultProcess(): ProcessEntity {
+  return {
+    id: 0,
+    xpdlId: "",
+    title: "",
+  };
+}
 
 export function processModel() {
   const [processList, setProcessList] =
@@ -32,7 +34,7 @@ export function processModel() {
   function addProcess() {
     const item = {
       id: nextProcessId,
-      xpdlId: `xpdlId-${nextProcessId}`,
+      xpdlId: `newpkg_wp${nextProcessId}`,
       title: `プロセス${nextProcessId}`,
     };
     nextProcessId++;

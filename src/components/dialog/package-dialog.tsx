@@ -1,22 +1,22 @@
 import { createEffect } from "solid-js";
 import { useDialog, useModel } from "../../context";
 import { createStore } from "solid-js/store";
-import { ProcessEntity } from "../../models/process-model";
 import "./dialog.css";
+import { PackageEntity } from "../../models/package-model";
 
-export function ProcessDialog() {
+export function PackageDialog() {
   const {
-    process: { openProcessDialog, setOpenProcessDialog },
+    pkg: { openPackageDialog, setPackageDialog },
   } = useDialog();
   const {
-    process: { selectedProcess, updateProcess, defaultProcess },
+    pkg: { pkg, setPkg, defaultPackage },
   } = useModel();
 
-  const [formData, setFormData] = createStore<ProcessEntity>(defaultProcess());
+  const [formData, setFormData] = createStore<PackageEntity>(defaultPackage());
 
   createEffect(() => {
-    if (openProcessDialog()) {
-      setFormData({ ...selectedProcess() });
+    if (openPackageDialog()) {
+      setFormData({ ...pkg() });
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -24,25 +24,25 @@ export function ProcessDialog() {
   });
 
   function handleOkButtonClick() {
-    updateProcess({ ...formData });
-    setOpenProcessDialog(false);
+    setPkg({ ...formData });
+    setPackageDialog(false);
   }
 
   function handleClose() {
-    setOpenProcessDialog(false);
+    setPackageDialog(false);
   }
 
   let dialog: HTMLDialogElement | undefined;
   return (
     <dialog class="dialog" ref={dialog} onClose={handleClose}>
-      <h5>ワークフロープロセスの編集</h5>
+      <h5>パッケージの編集</h5>
       <form method="dialog">
         <div class="dialog__input">
           <div>ID：</div>
           <input
             type="text"
-            value={formData.xpdlId}
-            onInput={(e) => setFormData("xpdlId", e.target.value)}
+            value={formData.pkgId}
+            onInput={(e) => setFormData("pkgId", e.target.value)}
           />
           <div>名前：</div>
           <input

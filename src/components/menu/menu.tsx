@@ -3,6 +3,7 @@ import "./menu.css";
 
 export function Menu() {
   const {
+    pkg: { setPackageDialog },
     process: { setOpenProcessDialog },
   } = useDialog();
   const {
@@ -34,6 +35,7 @@ export function Menu() {
   }
 
   function handlePackagePropertyClick() {
+    setPackageDialog(true);
     return false;
   }
 

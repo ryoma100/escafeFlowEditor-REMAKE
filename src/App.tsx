@@ -6,6 +6,7 @@ import { ToolIconButtons } from "./components/tool-icon-buttons/tool-icon-button
 import "./app.css";
 import { useModel } from "./context";
 import { ProcessDialog } from "./components/dialog/process-dialog";
+import { PackageDialog } from "./components/dialog/package-dialog";
 
 function App() {
   const {
@@ -34,6 +35,7 @@ function App() {
         </div>
       </div>
 
+      <PackageDialog />
       <ProcessDialog />
     </>
   );

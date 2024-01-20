@@ -1,5 +1,4 @@
 import { For, Match, Switch, createSignal } from "solid-js";
-import { ProcessDialog } from "../dialog/process-dialog";
 import { useDialog, useModel } from "../../context";
 import "./process-list.css";
 import { ProcessEntity } from "../../models/process-model";
