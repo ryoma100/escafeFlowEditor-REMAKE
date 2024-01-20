@@ -1,0 +1,23 @@
+/* ダイアログ */
+.dialog {
+  padding: 0 8px 8px 8px;
+  background-color: lightgray;
+}
+
+.dialog > form {
+  background-color: white;
+  padding: 8px;
+}
+
+.dialog__input {
+  display: grid;
+  grid-template-columns: 64px 256px;
+  gap: 8px;
+}
+
+.dialog__buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  column-gap: 8px;
+}

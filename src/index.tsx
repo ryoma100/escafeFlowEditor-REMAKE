@@ -4,12 +4,14 @@ import "solid-devtools";
 
 import "./styles.css";
 import App from "./App";
-import { ModelProvider } from "./context";
+import { DialogProvider, ModelProvider } from "./context";
 
 render(
   () => (
     <ModelProvider>
-      <App />
+      <DialogProvider>
+        <App />
+      </DialogProvider>
     </ModelProvider>
   ),
   document.getElementById("root") as HTMLElement

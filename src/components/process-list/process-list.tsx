@@ -1,8 +1,8 @@
 import { For, Match, Switch, createSignal } from "solid-js";
 import { ProcessDialog } from "../dialog/process-dialog";
-import { useModel } from "../../context";
+import { useDialog, useModel } from "../../context";
 import "./process-list.css";
-import { ProcessType } from "../../models/process-model";
+import { ProcessEntity } from "../../models/process-model";
 
 export function ProcessList() {
   const {
@@ -14,19 +14,20 @@ export function ProcessList() {
       removeProcess,
     },
   } = useModel();
-
-  const [dialogOpen, setDialogOpen] = createSignal<boolean>(false);
+  const {
+    process: { setOpenProcessDialog },
+  } = useDialog();
 
   // onClickとonDblClick両方セットすると、onDblClickが呼ばれない
   let clickCouunt = 0;
-  function handleItemClick(item: ProcessType, _: MouseEvent) {
+  function handleItemClick(item: ProcessEntity, _: MouseEvent) {
     clickCouunt++;
     if (clickCouunt < 2) {
       setTimeout(() => {
         setSelectedProcess(item);
         if (clickCouunt > 1) {
           // double click
-          setDialogOpen(true);
+          setOpenProcessDialog(true);
         }
         clickCouunt = 0;
       }, 200);
@@ -51,7 +52,12 @@ export function ProcessList() {
               {(item) => (
                 <Switch>
                   <Match when={item.id === selectedProcess().id}>
-                    <li class="list-item list-item-selected">{item.title}</li>
+                    <li
+                      class="list-item list-item-selected"
+                      onClick={[handleItemClick, item]}
+                    >
+                      {item.title}
+                    </li>
                   </Match>
                   <Match when={item.id !== selectedProcess().id}>
                     <li class="list-item" onClick={[handleItemClick, item]}>
@@ -73,13 +79,6 @@ export function ProcessList() {
           </button>
         </div>
       </div>
-
-      <ProcessDialog
-        open={dialogOpen()}
-        item={selectedProcess()}
-        onOkButtonClick={() => setDialogOpen(false)}
-        onCancelButtonClick={() => setDialogOpen(false)}
-      />
     </>
   );
 }

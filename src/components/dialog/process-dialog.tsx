@@ -1,39 +1,64 @@
 import { createEffect } from "solid-js";
-import { ProcessType } from "../process-list/process-list";
-import "./process-dialog.css";
+import { useDialog, useModel } from "../../context";
+import { createStore } from "solid-js/store";
+import { ProcessEntity } from "../../models/process-model";
+import "./dialog.css";
 
-export function ProcessDialog(props: {
-  open: boolean;
-  item: ProcessType;
-  onOkButtonClick: () => void;
-  onCancelButtonClick: () => void;
-}) {
+export function ProcessDialog() {
   let dialog: HTMLDialogElement | undefined;
+  const {
+    process: { openProcessDialog, setOpenProcessDialog },
+  } = useDialog();
+  const {
+    process: { selectedProcess, updateProcess, defaultProcess },
+  } = useModel();
+
+  const [form, setForm] = createStore<ProcessEntity>(defaultProcess);
 
   createEffect(() => {
-    if (props.open) {
+    if (openProcessDialog()) {
+      setForm({ ...selectedProcess() });
       dialog?.showModal();
     } else {
       dialog?.close();
     }
   });
 
+  function handleOkButtonClick() {
+    updateProcess(form);
+    setOpenProcessDialog(false);
+  }
+
+  function handleClose() {
+    setOpenProcessDialog(false);
+  }
+
   return (
-    <dialog ref={dialog} onClose={props.onCancelButtonClick}>
+    <dialog class="dialog" ref={dialog} onClose={handleClose}>
       <h5>ワークフロープロセスの編集</h5>
       <form method="dialog">
-        <div class="process-dialog-grid">
+        <div class="dialog__input">
           <div>ID：</div>
-          <input type="text" value={1} />
+          <input
+            type="text"
+            value={form.xpdlId}
+            onInput={(e) => setForm("xpdlId", e.target.value)}
+          />
           <div>名前：</div>
-          <input type="text" value={props.item.title} />
+          <input
+            type="text"
+            value={form.title}
+            onInput={(e) => setForm("title", e.target.value)}
+          />
         </div>
-        <button type="button" onClick={props.onOkButtonClick}>
-          OK
-        </button>
-        <button type="button" onClick={props.onCancelButtonClick}>
-          Cancel
-        </button>
+        <div class="dialog__buttons">
+          <button type="button" onClick={handleOkButtonClick}>
+            OK
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
+        </div>
       </form>
     </dialog>
   );

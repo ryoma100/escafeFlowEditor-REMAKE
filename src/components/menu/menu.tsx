@@ -1,6 +1,14 @@
+import { useDialog, useModel } from "../../context";
 import "./menu.css";
 
 export function Menu() {
+  const {
+    process: { setOpenProcessDialog },
+  } = useDialog();
+  const {
+    process: { addProcess, removeProcess },
+  } = useModel();
+
   function handleFileNewClick() {
     return false;
   }
@@ -30,14 +38,17 @@ export function Menu() {
   }
 
   function handleProcessAddClick() {
+    addProcess();
     return false;
   }
 
   function handleProcessRemoveClick() {
+    removeProcess();
     return false;
   }
 
   function handleProcessPropertyClick() {
+    setOpenProcessDialog(true);
     return false;
   }
 

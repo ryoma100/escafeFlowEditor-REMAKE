@@ -1,3 +1,4 @@
+/* テーマカラー */
 :root {
   --main-background-color: #c5e1a5;
   --menu-background-color: #8bc34a;
@@ -7,11 +8,6 @@
   --devider-hover-color: #689f38;
 
   --font-color: #0f0f0f;
-}
-
-body {
-  margin: 0;
-  padding: 0;
 }
 
 #root {
@@ -32,18 +28,13 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 h5 {
   font-weight: bold;
   padding: 0;
   margin: 0;
-}
-
-dialog {
-  padding: 0 8px 8px 8px;
-  background-color: lightgray;
-}
-
-dialog > form {
-  background-color: white;
-  padding: 8px;
 }
