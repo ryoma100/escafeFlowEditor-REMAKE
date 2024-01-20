@@ -1,0 +1,17 @@
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  margin: 0 8px;
+}
+
+.toolbar__button {
+  width: 80px;
+  height: 48px;
+  background-color: var(--menu-background-color);
+  margin-bottom: 4px;
+  border-radius: 3px;
+}
+
+.toolbar__button--margin-bottom {
+  margin-bottom: 16px;
+}

@@ -3,9 +3,8 @@
   --main-background-color: #c5e1a5;
   --menu-background-color: #8bc34a;
   --menu-selected-color: #689f38;
-  --list-selected-color: #8bc34a;
-  --list-hover-color: #689f38;
-  --devider-hover-color: #689f38;
+  --list-selected-color: #689f38;
+  --list-hover-color: #8bc34a;
 
   --font-color: #0f0f0f;
 }

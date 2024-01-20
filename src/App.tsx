@@ -1,7 +1,7 @@
 import { ActorList } from "./components/list/actor-list";
 import { Menu } from "./components/menu/menu";
 import { ProcessList } from "./components/list/process-list";
-import { ToolIconButtons } from "./components/tool-icon-buttons/tool-icon-buttons";
+import { Toolbar } from "./components/toolbar/toolbar";
 import "./app.css";
 import { ProcessDialog } from "./components/dialog/process-dialog";
 import { PackageDialog } from "./components/dialog/package-dialog";
@@ -21,8 +21,8 @@ function App() {
         <div class="app__actor-list">
           <ActorList />
         </div>
-        <div class="app__tool-button">
-          <ToolIconButtons />
+        <div class="app__toolbar">
+          <Toolbar />
         </div>
         <div class="app__main">
           <Main />

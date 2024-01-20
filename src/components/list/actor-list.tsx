@@ -63,7 +63,7 @@ export function ActorList() {
           </For>
         </ul>
       </div>
-      <div>
+      <div class="list__buttons">
         <button onClick={handleAddClick}>追加</button>
         <button onClick={handleRemoveClick} disabled={actorList().length === 1}>
           削除

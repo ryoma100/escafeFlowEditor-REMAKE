@@ -63,7 +63,7 @@ export function ProcessList() {
           </For>
         </ul>
       </div>
-      <div>
+      <div class="list__buttons">
         <button onClick={handleAddClick}>追加</button>
         <button
           onClick={handleRemoveClick}
