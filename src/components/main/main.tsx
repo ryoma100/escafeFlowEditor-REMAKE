@@ -28,7 +28,7 @@ export function Main() {
         <button onClick={handleAutoZoomButtonClick}>Auto</button>
         <input
           type="range"
-          min="5"
+          min="10"
           max="200"
           step="1"
           value={zoom()}

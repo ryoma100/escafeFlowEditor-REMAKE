@@ -5,7 +5,7 @@ type MoveType = "none" | "scroll" | "item";
 
 export function Diagram(props: { zoom: number }) {
   const [moveType, setMoveType] = createSignal<MoveType>("none");
-  const [point, setPoint] = createSignal({ x: 0, y: 0 });
+  const [offset, setOffset] = createSignal({ x: 0, y: 0 });
   const [size, setSize] = createSignal({ width: 0, height: 0 });
 
   function handleDiagramMouseDown() {
@@ -30,9 +30,9 @@ export function Diagram(props: { zoom: number }) {
   function handleDiagramMouseMove(e: MouseEvent) {
     switch (moveType()) {
       case "scroll":
-        setPoint({
-          x: point().x - e.movementX / props.zoom,
-          y: point().y - e.movementY / props.zoom,
+        setOffset({
+          x: offset().x - e.movementX / props.zoom,
+          y: offset().y - e.movementY / props.zoom,
         });
         break;
       case "item":
@@ -46,10 +46,6 @@ export function Diagram(props: { zoom: number }) {
 
   function handleDiagramMouseUp() {
     setMoveType("none");
-  }
-
-  function viewBox() {
-    return `${point().x} ${point().y} ${size().width / props.zoom} ${size().height / props.zoom}`;
   }
 
   // TODO: テスト用
@@ -66,7 +62,7 @@ export function Diagram(props: { zoom: number }) {
         ref={svg}
         width={size().width}
         height={size().height}
-        viewBox={viewBox()}
+        viewBox={`${offset().x} ${offset().y} ${size().width / props.zoom} ${size().height / props.zoom}`}
         onMouseDown={handleDiagramMouseDown}
       >
         <circle
