@@ -1,58 +1,46 @@
-import { createEffect, createSignal, onMount } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import "./diagram.css";
 
 export function Diagram() {
-  const [svgSize, setSvgSize] = createSignal({ width: 0, height: 0 });
+  const [point, setPoint] = createSignal({ x: 0, y: 0 });
+  const [size, setSize] = createSignal({ width: 0, height: 0 });
 
   onMount(() => {
-    setSvgSize({
-      width: svg?.clientWidth ?? 0,
-      height: svg?.clientHeight ?? 0,
-    });
-    window.addEventListener("resize", () => {
-      setSvgSize({
+    const observer = new ResizeObserver(() => {
+      setSize({
         width: svg?.clientWidth ?? 0,
         height: svg?.clientHeight ?? 0,
       });
     });
+    if (svg) {
+      observer.observe(svg);
+    }
   });
 
-  function viewBox() {
-    return `${point().x} ${point().y} ${svgSize().width} ${svgSize().height}`;
-  }
-
-  createEffect(() => {
-    console.log("svg", svgSize());
-  });
-
-  const [point, setPoint] = createSignal({ x: 0, y: 0 });
-  const [isMove, setIsMove] = createSignal(false);
-
-  function handleMouseDown(e: MouseEvent) {
-    setIsMove(true);
+  function handleMouseDown() {
+    document.addEventListener("mousemove", handleMouseMove);
   }
 
   function handleMouseMove(e: MouseEvent) {
-    if (isMove()) {
-      setPoint({ x: point().x - e.movementX, y: point().y - e.movementY });
-    }
+    setPoint({ x: point().x - e.movementX, y: point().y - e.movementY });
   }
 
-  function handleMouseUp(e: MouseEvent) {
-    setIsMove(false);
+  function handleMouseUp() {
+    document.removeEventListener("mousemove", handleMouseMove);
   }
 
   let svg: SVGSVGElement | undefined;
   return (
-    <div class="diagram">
+    <div
+      class="diagram"
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
       <svg
         ref={svg}
-        width={svgSize().width}
-        height={svgSize().height}
-        viewBox={viewBox()}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        width={size().width}
+        height={size().height}
+        viewBox={`${point().x} ${point().y} ${size().width} ${size().height}`}
       >
         <circle cx="100" cy="100" r="50" fill="blue" />
       </svg>

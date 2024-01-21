@@ -9,6 +9,10 @@ import { Main } from "./components/main/main";
 import { ActorDialog } from "./components/dialog/actor-dialog";
 
 function App() {
+  document.onselectstart = () => {
+    return false;
+  };
+
   return (
     <>
       <div class="app">
