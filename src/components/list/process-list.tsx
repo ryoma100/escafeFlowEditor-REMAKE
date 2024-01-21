@@ -1,12 +1,12 @@
 import { For, Match, Switch } from "solid-js";
-import { useDialog, useModel } from "../../context";
+import { useOperation, useModel } from "../../context";
 import "./list.css";
 import { ProcessEntity } from "../../models/process-model";
 
 export function ProcessList() {
   const {
     process: { setOpenProcessDialog },
-  } = useDialog();
+  } = useOperation();
   const {
     process: {
       processList,
@@ -21,7 +21,7 @@ export function ProcessList() {
   let lastClickTime: number = new Date().getTime();
   function handleItemClick(item: ProcessEntity, _: MouseEvent) {
     const time = new Date().getTime();
-    if (lastClickTime + 200 < time) {
+    if (lastClickTime + 250 < time) {
       setSelectedProcess(item);
     } else {
       setOpenProcessDialog(true);

@@ -1,12 +1,12 @@
 import { For, Match, Switch } from "solid-js";
-import { useDialog, useModel } from "../../context";
+import { useOperation, useModel } from "../../context";
 import "./list.css";
 import { ActorEntity } from "../../models/actor-model";
 
 export function ActorList() {
   const {
     actor: { setOpenActorDialog },
-  } = useDialog();
+  } = useOperation();
   const {
     actor: {
       actorList,
@@ -21,7 +21,7 @@ export function ActorList() {
   let lastClickTime: number = new Date().getTime();
   function handleItemClick(item: ActorEntity, _: MouseEvent) {
     const time = new Date().getTime();
-    if (lastClickTime + 200 < time) {
+    if (lastClickTime + 250 < time) {
       setSelectedActor(item);
     } else {
       setOpenActorDialog(true);

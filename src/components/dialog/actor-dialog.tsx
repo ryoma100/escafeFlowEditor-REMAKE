@@ -1,5 +1,5 @@
 import { createEffect } from "solid-js";
-import { useDialog, useModel } from "../../context";
+import { useOperation, useModel } from "../../context";
 import { createStore } from "solid-js/store";
 import { ActorEntity } from "../../models/actor-model";
 import "./dialog.css";
@@ -7,7 +7,7 @@ import "./dialog.css";
 export function ActorDialog() {
   const {
     actor: { openActorDialog, setOpenActorDialog },
-  } = useDialog();
+  } = useOperation();
   const {
     actor: { selectedActor, updateActor, defaultActor },
   } = useModel();

@@ -34,6 +34,7 @@
 .app__main {
   grid-column: 3 / 3;
   grid-row: 2 / 4;
+  width: calc(100vw - 264px);
   height: calc(100vh - 32px);
   margin-right: 8px;
 }

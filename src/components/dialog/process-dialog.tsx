@@ -1,5 +1,5 @@
 import { createEffect } from "solid-js";
-import { useDialog, useModel } from "../../context";
+import { useOperation, useModel } from "../../context";
 import { createStore } from "solid-js/store";
 import { ProcessEntity } from "../../models/process-model";
 import "./dialog.css";
@@ -7,7 +7,7 @@ import "./dialog.css";
 export function ProcessDialog() {
   const {
     process: { openProcessDialog, setOpenProcessDialog },
-  } = useDialog();
+  } = useOperation();
   const {
     process: { selectedProcess, updateProcess, defaultProcess },
   } = useModel();

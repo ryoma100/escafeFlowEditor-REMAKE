@@ -1,5 +1,5 @@
 import { createEffect } from "solid-js";
-import { useDialog, useModel } from "../../context";
+import { useOperation, useModel } from "../../context";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
 import { PackageEntity } from "../../models/package-model";
@@ -7,7 +7,7 @@ import { PackageEntity } from "../../models/package-model";
 export function PackageDialog() {
   const {
     pkg: { openPackageDialog, setPackageDialog },
-  } = useDialog();
+  } = useOperation();
   const {
     pkg: { pkg, setPkg, defaultPackage },
   } = useModel();

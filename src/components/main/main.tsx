@@ -1,7 +1,10 @@
 import "./main.css";
-import { useModel } from "../../context";
+import { useModel, useOperation } from "../../context";
 
 export function Main() {
+  const {
+    toolbar: { toolbar },
+  } = useOperation();
   const {
     process: { selectedProcess },
   } = useModel();
@@ -12,7 +15,7 @@ export function Main() {
       <canvas class="main__diagram" />
       <div class="main__zoom">
         <button>Auto</button>
-        <span>slider</span>
+        <span>{toolbar()}</span>
         <button>100%</button>
       </div>
     </div>

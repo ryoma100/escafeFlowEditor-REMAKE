@@ -1,4 +1,4 @@
-import { useDialog, useModel } from "../../context";
+import { useOperation, useModel } from "../../context";
 import "./menu.css";
 
 export function Menu() {
@@ -6,7 +6,7 @@ export function Menu() {
     pkg: { setPackageDialog },
     process: { setOpenProcessDialog },
     actor: { setOpenActorDialog },
-  } = useDialog();
+  } = useOperation();
   const {
     process: { addProcess, removeProcess },
     actor: { addActor, removeActor },
