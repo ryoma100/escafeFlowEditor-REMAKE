@@ -1,5 +1,6 @@
 import "./main.css";
 import { useModel, useOperation } from "../../context";
+import { Diagram } from "../../diagram/disgram";
 
 export function Main() {
   const {
@@ -12,7 +13,9 @@ export function Main() {
   return (
     <div class="main">
       <h5>{selectedProcess().title}</h5>
-      <canvas class="main__diagram" />
+      <div class="main__diagram">
+        <Diagram />
+      </div>
       <div class="main__zoom">
         <button>Auto</button>
         <span>{toolbar()}</span>
