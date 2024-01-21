@@ -1,9 +1,16 @@
 import { createSignal, onMount } from "solid-js";
 import "./diagram.css";
 
+type MoveType = "none" | "scroll" | "item";
+
 export function Diagram(props: { zoom: number }) {
+  const [moveType, setMoveType] = createSignal<MoveType>("none");
   const [point, setPoint] = createSignal({ x: 0, y: 0 });
   const [size, setSize] = createSignal({ width: 0, height: 0 });
+
+  function handleDiagramMouseDown() {
+    setMoveType("scroll");
+  }
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -19,13 +26,6 @@ export function Diagram(props: { zoom: number }) {
     document.addEventListener("mousemove", handleDiagramMouseMove);
     document.addEventListener("mouseup", handleDiagramMouseUp);
   });
-
-  type MoveType = "none" | "scroll" | "item";
-  const [moveType, setMoveType] = createSignal<MoveType>("none");
-
-  function handleDiagramMouseDown() {
-    setMoveType("scroll");
-  }
 
   function handleDiagramMouseMove(e: MouseEvent) {
     switch (moveType()) {
@@ -44,18 +44,19 @@ export function Diagram(props: { zoom: number }) {
     }
   }
 
+  function handleDiagramMouseUp() {
+    setMoveType("none");
+  }
+
   function viewBox() {
     return `${point().x} ${point().y} ${size().width / props.zoom} ${size().height / props.zoom}`;
   }
 
+  // TODO: テスト用
   const [itemPosition, setItemPosition] = createSignal({ x: 100, y: 100 });
   function handleItemMouseDown(e: MouseEvent) {
     e.stopPropagation();
     setMoveType("item");
-  }
-
-  function handleDiagramMouseUp() {
-    setMoveType("none");
   }
 
   let svg: SVGSVGElement | undefined;

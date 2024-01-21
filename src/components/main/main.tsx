@@ -28,9 +28,9 @@ export function Main() {
         <button onClick={handleAutoZoomButtonClick}>Auto</button>
         <input
           type="range"
-          min="10"
+          min="5"
           max="200"
-          step="10"
+          step="1"
           value={zoom()}
           onInput={(e) => setZoom(Number(e.target.value))}
         />
