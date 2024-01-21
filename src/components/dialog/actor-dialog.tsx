@@ -24,7 +24,7 @@ export function ActorDialog() {
   });
 
   function handleOkButtonClick() {
-    updateActor({ ...formData }); //TODO:コピーしないと別のプロセスが上書きされる？
+    updateActor({ ...formData }); //TODO:コピーしないと別のアクターが上書きされる？
     setOpenActorDialog(false);
   }
 
