@@ -1,25 +1,40 @@
 import "./main.css";
-import { useModel, useOperation } from "../../context";
+import { useModel } from "../../context";
 import { Diagram } from "../../diagram/disgram";
+import { createSignal } from "solid-js";
 
 export function Main() {
   const {
-    toolbar: { toolbar },
-  } = useOperation();
-  const {
     process: { selectedProcess },
   } = useModel();
+
+  const [zoom, setZoom] = createSignal(100);
+
+  function handleAutoZoomButtonClick() {
+    //
+  }
+
+  function handleNomalZoomButtonClick() {
+    setZoom(100);
+  }
 
   return (
     <div class="main">
       <h5>{selectedProcess().title}</h5>
       <div class="main__diagram">
-        <Diagram />
+        <Diagram zoom={zoom() / 100} />
       </div>
       <div class="main__zoom">
-        <button>Auto</button>
-        <span>{toolbar()}</span>
-        <button>100%</button>
+        <button onClick={handleAutoZoomButtonClick}>Auto</button>
+        <input
+          type="range"
+          min="10"
+          max="200"
+          step="10"
+          value={zoom()}
+          onInput={(e) => setZoom(Number(e.target.value))}
+        />
+        <button onClick={handleNomalZoomButtonClick}>100%</button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 import "./diagram.css";
 
-export function Diagram() {
+export function Diagram(props: { zoom: number }) {
   const [point, setPoint] = createSignal({ x: 0, y: 0 });
   const [size, setSize] = createSignal({ width: 0, height: 0 });
 
@@ -29,6 +29,10 @@ export function Diagram() {
     document.removeEventListener("mousemove", handleMouseMove);
   }
 
+  function viewBox() {
+    return `${point().x} ${point().y} ${size().width / props.zoom} ${size().height / props.zoom}`;
+  }
+
   let svg: SVGSVGElement | undefined;
   return (
     <div
@@ -40,7 +44,7 @@ export function Diagram() {
         ref={svg}
         width={size().width}
         height={size().height}
-        viewBox={`${point().x} ${point().y} ${size().width} ${size().height}`}
+        viewBox={viewBox()}
       >
         <circle cx="100" cy="100" r="50" fill="blue" />
       </svg>
