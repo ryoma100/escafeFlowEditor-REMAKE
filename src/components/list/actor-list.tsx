@@ -1,7 +1,8 @@
 import { For, Match, Switch } from "solid-js";
-import { useOperation, useModel } from "../../context";
+import { useOperation } from "../../context/operation-context";
 import "./list.css";
 import { ActorEntity } from "../../models/actor-model";
+import { useModel } from "../../context/model-context";
 
 export function ActorList() {
   const {

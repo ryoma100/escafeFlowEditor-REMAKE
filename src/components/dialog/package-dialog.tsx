@@ -1,8 +1,9 @@
 import { createEffect } from "solid-js";
-import { useOperation, useModel } from "../../context";
+import { useOperation } from "../../context/operation-context";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
 import { PackageEntity } from "../../models/package-model";
+import { useModel } from "../../context/model-context";
 
 export function PackageDialog() {
   const {

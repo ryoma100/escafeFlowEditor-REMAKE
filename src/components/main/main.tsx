@@ -1,7 +1,7 @@
 import "./main.css";
-import { useModel } from "../../context";
 import { Diagram } from "../../diagram/disgram";
 import { createSignal } from "solid-js";
+import { useModel } from "../../context/model-context";
 
 export function Main() {
   const {

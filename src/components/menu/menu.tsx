@@ -1,4 +1,5 @@
-import { useOperation, useModel } from "../../context";
+import { useModel } from "../../context/model-context";
+import { useOperation } from "../../context/operation-context";
 import "./menu.css";
 
 export function Menu() {
