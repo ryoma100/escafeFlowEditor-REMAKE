@@ -1,38 +1,38 @@
 .app {
   display: grid;
-  grid-template-columns: 160px 96px 1fr;
-  grid-template-rows: 24px 1fr 1fr;
+  grid-template-columns: 160px 96px auto;
+  grid-template-rows: 24px 35fr 65fr;
   height: 100vh;
   width: 100vw;
 }
 
 .app__menu {
   grid-column: 1 / 4;
-  grid-row: 1 / 2;
+  grid-row: 1;
 }
 
 .app__process-list {
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  height: calc(50vh - 20px);
+  grid-column: 1;
+  grid-row: 2;
+  height: calc(35vh - 20px);
   margin-left: 8px;
 }
 
 .app__actor-list {
-  grid-column: 1 / 2;
-  grid-row: 3 / 4;
-  height: calc(50vh - 20px);
+  grid-column: 1;
+  grid-row: 3;
+  height: calc(65vh - 20px);
   margin-left: 8px;
 }
 
 .app__toolbar {
-  grid-column: 2 / 3;
+  grid-column: 2;
   grid-row: 2 / 4;
   margin-top: 24px;
 }
 
 .app__main {
-  grid-column: 3 / 3;
+  grid-column: 3;
   grid-row: 2 / 4;
   width: calc(100vw - 264px);
   height: calc(100vh - 32px);
