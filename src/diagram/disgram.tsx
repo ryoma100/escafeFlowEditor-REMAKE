@@ -1,5 +1,4 @@
 import { For, createSignal, onMount } from "solid-js";
-import { produce } from "solid-js/store";
 import "./diagram.css";
 import { useOperation } from "../context/operation-context";
 import { useModel } from "../context/model-context";
@@ -9,7 +8,13 @@ export function Diagram(props: { zoom: number }) {
     toolbar: { toolbar },
   } = useOperation();
   const {
-    activity: { activityList, addActivity, setActivityList },
+    activity: {
+      activityList,
+      addActivity,
+      moveActivity,
+      resizeLeft,
+      resizeRight,
+    },
   } = useModel();
 
   const [isDragging, setIsDragging] = createSignal<boolean>(false);
@@ -17,7 +22,7 @@ export function Diagram(props: { zoom: number }) {
   const [size, setSize] = createSignal({ width: 0, height: 0 });
 
   const [dragTarget, setDragTarget] = createSignal<{
-    target: "activity" | "screen";
+    target: "activity" | "screen" | "activity-left" | "activity-right";
     id: string;
   }>({ target: "screen", id: "" });
 
@@ -63,13 +68,17 @@ export function Diagram(props: { zoom: number }) {
         });
         break;
       case "activity":
-        setActivityList(
-          (it) => it.id === dragTarget().id,
-          produce((it) => {
-            it.x = it.x + e.movementX / props.zoom;
-            it.y = it.y + e.movementY / props.zoom;
-          })
+        moveActivity(
+          dragTarget().id,
+          e.movementX / props.zoom,
+          e.movementY / props.zoom
         );
+        break;
+      case "activity-left":
+        resizeLeft(dragTarget().id, e.movementX / props.zoom);
+        break;
+      case "activity-right":
+        resizeRight(dragTarget().id, e.movementX / props.zoom);
         break;
     }
   }
@@ -78,12 +87,31 @@ export function Diagram(props: { zoom: number }) {
     setIsDragging(false);
   }
 
-  function handleActivityMouseDown(e: MouseEvent) {
+  function handleActivityMouseDown(actId: string, e: MouseEvent) {
     switch (toolbar()) {
       case "cursor":
         e.stopPropagation();
-        const actId = (e.target as SVGElement).id;
         setDragTarget({ target: "activity", id: actId });
+        setIsDragging(true);
+        break;
+    }
+  }
+
+  function handleActivityLeftMouseDown(actId: string, e: MouseEvent) {
+    switch (toolbar()) {
+      case "cursor":
+        e.stopPropagation();
+        setDragTarget({ target: "activity-left", id: actId });
+        setIsDragging(true);
+        break;
+    }
+  }
+
+  function handleActivityRightMouseDown(actId: string, e: MouseEvent) {
+    switch (toolbar()) {
+      case "cursor":
+        e.stopPropagation();
+        setDragTarget({ target: "activity-right", id: actId });
         setIsDragging(true);
         break;
     }
@@ -101,14 +129,35 @@ export function Diagram(props: { zoom: number }) {
       >
         <For each={activityList}>
           {(activity) => (
-            <circle
-              id={activity.id}
-              cx={activity.x}
-              cy={activity.y}
-              r={50}
-              fill="red"
-              onMouseDown={handleActivityMouseDown}
-            />
+            <g>
+              <rect
+                x={activity.x - activity.width / 2 - 10}
+                y={activity.y - 51}
+                width={10}
+                height={activity.height + 2}
+                class="actor-select"
+                onMouseDown={[handleActivityLeftMouseDown, activity.id]}
+              />
+              <rect
+                x={activity.x + activity.width / 2}
+                y={activity.y - 51}
+                width={10}
+                height={activity.height + 2}
+                class="actor-select"
+                onMouseDown={[handleActivityRightMouseDown, activity.id]}
+              />
+              <rect
+                x={activity.x - activity.width / 2}
+                y={activity.y - activity.height / 2}
+                width={activity.width}
+                height={activity.height}
+                onMouseDown={[handleActivityMouseDown, activity.id]}
+                class="actor"
+              />
+              <text color="blue" x={activity.x} y={activity.y}>
+                {activity.id}
+              </text>
+            </g>
           )}
         </For>
       </svg>
