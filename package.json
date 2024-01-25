@@ -10,7 +10,8 @@
     "serve": "vite preview",
     "tauri": "tauri",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
-    "format:fix": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" "
+    "format:fix": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
+    "preinstall": "npx -y only-allow pnpm"
   },
   "license": "MIT",
   "dependencies": {
@@ -29,5 +30,9 @@
     "typescript": "^5.0.2",
     "vite": "^5.0.0",
     "vite-plugin-solid": "^2.8.0"
+  },
+  "volta": {
+    "node": "20.11.0",
+    "pnpm": "8.14.3"
   }
 }
