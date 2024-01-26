@@ -35,12 +35,12 @@ export function activityModel() {
     setActivityList([...activityList, entity]);
   }
 
-  function moveActivity(id: string, movementCX: number, movementCY: number) {
+  function moveActivity(id: string, moveX: number, moveY: number) {
     setActivityList(
       (it) => it.id === id,
       produce((it) => {
-        it.x = it.x + movementCX;
-        it.y = it.y + movementCY;
+        it.x += moveX;
+        it.y += moveY;
       })
     );
   }

@@ -2,6 +2,7 @@ import { For, createSignal, onMount } from "solid-js";
 import "./diagram.css";
 import { useOperation } from "../context/operation-context";
 import { useModel } from "../context/model-context";
+import { ActivityNode } from "./activity-node";
 
 export function Diagram(props: { zoom: number }) {
   const {
@@ -17,30 +18,11 @@ export function Diagram(props: { zoom: number }) {
     },
   } = useModel();
 
-  const [isDragging, setIsDragging] = createSignal<boolean>(false);
   const [offset, setOffset] = createSignal({ x: 0, y: 0 });
   const [size, setSize] = createSignal({ width: 0, height: 0 });
 
-  const [dragTarget, setDragTarget] = createSignal<{
-    target: "activity" | "screen" | "activity-left" | "activity-right";
-    id: string;
-  }>({ target: "screen", id: "" });
-
-  function handleDiagramMouseDown(e: MouseEvent) {
-    switch (toolbar()) {
-      case "cursor":
-        setDragTarget({ target: "screen", id: "" });
-        setIsDragging(true);
-        break;
-      case "manual":
-        addActivity(
-          "manual",
-          offset().x + e.offsetX / props.zoom,
-          offset().y + e.offsetY / props.zoom
-        );
-        break;
-    }
-  }
+  type DragType = "none" | "scroll" | "addActivity";
+  let dragType: DragType = "none";
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -52,69 +34,38 @@ export function Diagram(props: { zoom: number }) {
     if (svg) {
       observer.observe(svg);
     }
-
-    document.addEventListener("mousemove", handleDiagramMouseMove);
-    document.addEventListener("mouseup", handleDiagramMouseUp);
   });
 
-  function handleDiagramMouseMove(e: MouseEvent) {
-    if (!isDragging()) return;
+  function handleMouseDown(e: MouseEvent) {
+    switch (toolbar()) {
+      case "cursor":
+        dragType = "scroll";
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+        break;
+      case "manual":
+        addActivity(
+          "manual",
+          offset().x + e.offsetX / props.zoom,
+          offset().y + e.offsetY / props.zoom
+        );
+        break;
+    }
+  }
 
-    switch (dragTarget().target) {
-      case "screen":
+  function handleMouseMove(e: MouseEvent) {
+    switch (dragType) {
+      case "scroll":
         setOffset({
           x: offset().x - e.movementX / props.zoom,
           y: offset().y - e.movementY / props.zoom,
         });
         break;
-      case "activity":
-        moveActivity(
-          dragTarget().id,
-          e.movementX / props.zoom,
-          e.movementY / props.zoom
-        );
-        break;
-      case "activity-left":
-        resizeLeft(dragTarget().id, e.movementX / props.zoom);
-        break;
-      case "activity-right":
-        resizeRight(dragTarget().id, e.movementX / props.zoom);
-        break;
     }
   }
 
-  function handleDiagramMouseUp() {
-    setIsDragging(false);
-  }
-
-  function handleActivityMouseDown(actId: string, e: MouseEvent) {
-    switch (toolbar()) {
-      case "cursor":
-        e.stopPropagation();
-        setDragTarget({ target: "activity", id: actId });
-        setIsDragging(true);
-        break;
-    }
-  }
-
-  function handleActivityLeftMouseDown(actId: string, e: MouseEvent) {
-    switch (toolbar()) {
-      case "cursor":
-        e.stopPropagation();
-        setDragTarget({ target: "activity-left", id: actId });
-        setIsDragging(true);
-        break;
-    }
-  }
-
-  function handleActivityRightMouseDown(actId: string, e: MouseEvent) {
-    switch (toolbar()) {
-      case "cursor":
-        e.stopPropagation();
-        setDragTarget({ target: "activity-right", id: actId });
-        setIsDragging(true);
-        break;
-    }
+  function handleMouseUp() {
+    dragType = "none";
   }
 
   let svg: SVGSVGElement | undefined;
@@ -125,40 +76,10 @@ export function Diagram(props: { zoom: number }) {
         width={size().width}
         height={size().height}
         viewBox={`${offset().x} ${offset().y} ${size().width / props.zoom} ${size().height / props.zoom}`}
-        onMouseDown={handleDiagramMouseDown}
+        onMouseDown={handleMouseDown}
       >
         <For each={activityList}>
-          {(activity) => (
-            <g>
-              <rect
-                x={activity.x - activity.width / 2 - 10}
-                y={activity.y - 51}
-                width={10}
-                height={activity.height + 2}
-                class="actor-select"
-                onMouseDown={[handleActivityLeftMouseDown, activity.id]}
-              />
-              <rect
-                x={activity.x + activity.width / 2}
-                y={activity.y - 51}
-                width={10}
-                height={activity.height + 2}
-                class="actor-select"
-                onMouseDown={[handleActivityRightMouseDown, activity.id]}
-              />
-              <rect
-                x={activity.x - activity.width / 2}
-                y={activity.y - activity.height / 2}
-                width={activity.width}
-                height={activity.height}
-                onMouseDown={[handleActivityMouseDown, activity.id]}
-                class="actor"
-              />
-              <text color="blue" x={activity.x} y={activity.y}>
-                {activity.id}
-              </text>
-            </g>
-          )}
+          {(activity) => <ActivityNode id={activity.id} zoom={props.zoom} />}
         </For>
       </svg>
     </div>
