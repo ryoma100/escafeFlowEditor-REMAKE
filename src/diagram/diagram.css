@@ -70,6 +70,26 @@
 
 .activity__title {
   font-size: 12px;
-  line-height: 1.4;
-  margin: 0 2px;
+  line-height: 1.25;
+  margin: 0 2px 2px 2px;
+}
+
+.activity__prev--one {
+  width: 100%;
+  height: 50%;
+  border-bottom: solid 1px black;
+}
+
+.activity__prev--many {
+  border-left: solid 1px black;
+}
+
+.activity__next--one {
+  width: 100%;
+  height: 50%;
+  border-bottom: solid 1px black;
+}
+
+.activity__next--many {
+  border-right: solid 1px black;
 }

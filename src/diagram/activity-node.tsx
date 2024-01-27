@@ -71,37 +71,37 @@ export function ActivityNode(props: { id: number; zoom: number }) {
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      console.log("titleDiv", titleDiv?.clientWidth, titleDiv?.clientHeight);
-      setTitleDivHeight(titleDiv?.clientHeight ?? 0);
+      setHeight((titleDiv?.clientHeight ?? 0) + 64); // TODO: 高さを調整
     });
     if (titleDiv) {
       observer.observe(titleDiv);
     }
   });
 
-  const [titleDivHeight, setTitleDivHeight] = createSignal(0);
-
-  const width = () => activity().width;
-  const height = () => titleDivHeight() + 64; // TODO: 計算できないか？
-  const x = () => activity().x - activity().width / 2;
-  const y = () => activity().y - height() / 2;
+  const [height, setHeight] = createSignal(0);
 
   let titleDiv: HTMLDivElement | undefined;
   return (
     <foreignObject
       data-id={activity().xpdlId}
-      x={x()}
-      y={y()}
-      width={width()}
+      x={activity().x - activity().width / 2}
+      y={activity().y - height() / 2}
+      width={activity().width}
       height={height()}
     >
       <div
-        class={activity().selected ? "activity activity--selected" : "activity"}
+        class="activity"
+        classList={{
+          "activity--selected": activity().selected,
+        }}
       >
         <div
           class="activity__resize"
+          classList={{ "activity__prev--many": true }}
           onMouseDown={[handleMouseDown, "leftResize"]}
-        ></div>
+        >
+          <div classList={{ "activity__prev--one": true }}></div>
+        </div>
         <div class="activity__main" onMouseDown={[handleMouseDown, "move"]}>
           <div class="activity__actor">アクター1アクター1アクター1</div>
           <div class="activity__icon">🐧</div>
@@ -111,8 +111,11 @@ export function ActivityNode(props: { id: number; zoom: number }) {
         </div>
         <div
           class="activity__resize"
+          classList={{ "activity__next--many": true }}
           onMouseDown={[handleMouseDown, "rightResize"]}
-        ></div>
+        >
+          <div classList={{ "activity__next--one": true }}></div>
+        </div>
       </div>
     </foreignObject>
   );
