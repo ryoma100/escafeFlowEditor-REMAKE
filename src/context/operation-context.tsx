@@ -8,6 +8,7 @@ const OperationContext = createContext<
   pkg: undefined as any,
   process: undefined as any,
   actor: undefined as any,
+  activity: undefined as any,
 });
 
 export function OperationProvider(props: { children: JSX.Element }) {
@@ -29,10 +30,12 @@ function createOperationSignals() {
   const [openPackageDialog, setPackageDialog] = createSignal(false);
   const [openProcessDialog, setOpenProcessDialog] = createSignal(false);
   const [openActorDialog, setOpenActorDialog] = createSignal(false);
+  const [openActivityDialogById, setOpenActivityDialogById] = createSignal(0);
   return {
     toolbar: { toolbar, setToolbar },
     pkg: { openPackageDialog, setPackageDialog },
     process: { openProcessDialog, setOpenProcessDialog },
     actor: { openActorDialog, setOpenActorDialog },
+    activity: { openActivityDialogById, setOpenActivityDialogById },
   };
 }

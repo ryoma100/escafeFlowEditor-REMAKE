@@ -2,6 +2,7 @@ import { createStore, produce } from "solid-js/store";
 
 export type ActvityType = "manual" | "auto" | "hand";
 
+let lastActivityId = 0;
 export type ActivityEntity = {
   // not reactive fields
   id: number;
@@ -17,7 +18,19 @@ export type ActivityEntity = {
   selected: boolean;
 };
 
-let lastActivityId = 0;
+export function defaultActivity(): ActivityEntity {
+  return {
+    id: 0,
+    xpdlId: "",
+    type: "auto",
+    actorId: 0,
+    title: "",
+    x: 0,
+    y: 0,
+    width: 0,
+    selected: false,
+  };
+}
 
 export function activityModel() {
   const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
@@ -28,7 +41,7 @@ export function activityModel() {
       id: lastActivityId,
       xpdlId: `newpkg_wp1_act${lastActivityId}`,
       type,
-      actorId: 0,
+      actorId: 1,
       title: `アクティビティ ${lastActivityId} アクティビティ`,
       x,
       y,

@@ -7,6 +7,7 @@ import { ProcessDialog } from "./components/dialog/process-dialog";
 import { PackageDialog } from "./components/dialog/package-dialog";
 import { Main } from "./components/main/main";
 import { ActorDialog } from "./components/dialog/actor-dialog";
+import { ActivityDialog } from "./components/dialog/activity-dialog";
 
 function App() {
   document.onselectstart = () => {
@@ -36,6 +37,7 @@ function App() {
       <PackageDialog />
       <ProcessDialog />
       <ActorDialog />
+      <ActivityDialog />
     </>
   );
 }

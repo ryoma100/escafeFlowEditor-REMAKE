@@ -1,5 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import { useModel } from "../context/model-context";
+import { useOperation } from "../context/operation-context";
 
 export function ActivityNode(props: { id: number; zoom: number }) {
   const {
@@ -12,7 +13,11 @@ export function ActivityNode(props: { id: number; zoom: number }) {
       selectActivities,
       toggleSelectActivity,
     },
+    actor: { actorList },
   } = useModel();
+  const {
+    activity: { setOpenActivityDialogById },
+  } = useOperation();
 
   type DragType = "none" | "move" | "leftResize" | "rightResize";
   let dragType: DragType = "none";
@@ -69,6 +74,10 @@ export function ActivityNode(props: { id: number; zoom: number }) {
     dragType = "none";
   }
 
+  function handleDblClick() {
+    setOpenActivityDialogById(props.id);
+  }
+
   onMount(() => {
     const observer = new ResizeObserver(() => {
       setHeight((titleDiv?.clientHeight ?? 0) + 64); // TODO: 高さを調整
@@ -102,8 +111,14 @@ export function ActivityNode(props: { id: number; zoom: number }) {
         >
           <div classList={{ "activity__prev--one": true }}></div>
         </div>
-        <div class="activity__main" onMouseDown={[handleMouseDown, "move"]}>
-          <div class="activity__actor">アクター1アクター1アクター1</div>
+        <div
+          class="activity__main"
+          onMouseDown={[handleMouseDown, "move"]}
+          onDblClick={handleDblClick}
+        >
+          <div class="activity__actor">
+            {actorList().find((it) => it.id === activity().actorId)?.title}
+          </div>
           <div class="activity__icon">🐧</div>
           <div ref={titleDiv} class="activity__title">
             {activity().title}
