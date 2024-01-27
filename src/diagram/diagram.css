@@ -4,7 +4,7 @@
   height: 100%;
 }
 
-.diagram svg {
+.diagram > svg {
   position: absolute;
   top: 0;
   left: 0;
@@ -20,16 +20,26 @@
   stroke-width: 2px;
 }
 .actor:hover {
-  fill: lightgray;
   cursor: move;
 }
 
-.actor-select {
+.actor__resize {
   fill-opacity: 0;
 }
 
-.actor-select:hover {
+.actor__resize:hover {
   fill-opacity: 1;
   fill: lightgray;
   cursor: ew-resize;
+}
+
+.actor__select {
+  fill-opacity: 0;
+}
+
+.actor__select--selected {
+  fill-opacity: 1;
+  fill: white;
+  stroke: lightgray;
+  stroke-width: 2px;
 }

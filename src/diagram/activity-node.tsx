@@ -1,9 +1,16 @@
-import { produce } from "solid-js/store";
 import { useModel } from "../context/model-context";
 
-export function ActivityNode(props: { id: string; zoom: number }) {
+export function ActivityNode(props: { id: number; zoom: number }) {
   const {
-    activity: { activityList, setActivityList },
+    activity: {
+      activityList,
+      moveSelectedActivities,
+      resizeLeft,
+      resizeRight,
+      layerTopActivity,
+      selectActivities,
+      toggleSelectActivity,
+    },
   } = useModel();
 
   type DragType = "none" | "move" | "leftResize" | "rightResize";
@@ -12,15 +19,28 @@ export function ActivityNode(props: { id: string; zoom: number }) {
   const activity = () => {
     const target = activityList.find((it) => it.id === props.id);
     if (!target) {
-      throw new Error("ActivityNode: cannot find a activity");
+      throw new Error("ActivityNode: cannot find activity");
     }
     return target;
   };
 
   function handleMouseDown(type: DragType, e: MouseEvent) {
     e.stopPropagation();
-
     dragType = type;
+
+    switch (dragType) {
+      case "move":
+        if (e.shiftKey) {
+          toggleSelectActivity(props.id);
+        } else {
+          if (!activity().selected) {
+            selectActivities([props.id]);
+          }
+          layerTopActivity(props.id);
+        }
+        break;
+    }
+
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   }
@@ -31,35 +51,13 @@ export function ActivityNode(props: { id: string; zoom: number }) {
 
     switch (dragType) {
       case "move":
-        setActivityList(
-          (it) => it.id === props.id,
-          produce((it) => {
-            it.x += moveX;
-            it.y += moveY;
-          })
-        );
+        moveSelectedActivities(moveX, moveY);
         break;
       case "leftResize":
-        setActivityList(
-          (it) => it.id === props.id,
-          produce((it) => {
-            if (100 <= it.width - moveX) {
-              it.x += moveX / 2;
-              it.width -= moveX;
-            }
-          })
-        );
+        resizeLeft(props.id, moveX);
         break;
       case "rightResize":
-        setActivityList(
-          (it) => it.id === props.id,
-          produce((it) => {
-            if (100 <= it.width + moveX) {
-              it.x += moveX / 2;
-              it.width += moveX;
-            }
-          })
-        );
+        resizeRight(props.id, moveX);
         break;
     }
   }
@@ -71,13 +69,22 @@ export function ActivityNode(props: { id: string; zoom: number }) {
   }
 
   return (
-    <g onMouseDown={[handleMouseDown, "move"]}>
+    <g data-id={activity().xpdlId} onMouseDown={[handleMouseDown, "move"]}>
+      <rect
+        x={activity().x - activity().width / 2 - 10}
+        y={activity().y - activity().height / 2 - 2}
+        width={activity().width + 20}
+        height={activity().height + 4}
+        class={
+          activity().selected ? "actor__select--selected" : "actor__select"
+        }
+      />
       <rect
         x={activity().x - activity().width / 2 - 10}
         y={activity().y - 51}
         width={10}
         height={activity().height + 2}
-        class="actor-select"
+        class="actor__resize"
         onMouseDown={[handleMouseDown, "leftResize"]}
       />
       <rect
@@ -85,7 +92,7 @@ export function ActivityNode(props: { id: string; zoom: number }) {
         y={activity().y - 51}
         width={10}
         height={activity().height + 2}
-        class="actor-select"
+        class="actor__resize"
         onMouseDown={[handleMouseDown, "rightResize"]}
       />
       <rect
@@ -95,7 +102,7 @@ export function ActivityNode(props: { id: string; zoom: number }) {
         height={activity().height}
         class="actor"
       />
-      <text color="blue" x={activity().x} y={activity().y}>
+      <text x={activity().x} y={activity().y}>
         {activity().id}
       </text>
     </g>

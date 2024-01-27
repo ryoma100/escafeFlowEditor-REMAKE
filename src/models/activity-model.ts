@@ -3,11 +3,12 @@ import { createStore, produce } from "solid-js/store";
 export type ActvityType = "manual" | "auto" | "hand";
 
 export type ActivityEntity = {
-  id: string;
+  id: number;
   xpdlId: string;
   type: ActvityType;
-  title: string;
   actorId: number;
+  title: string;
+  selected: boolean;
   x: number;
   y: number;
   width: number;
@@ -19,13 +20,15 @@ let nextActivityId = 1;
 export function activityModel() {
   const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
 
-  function addActivity(type: ActvityType, x: number, y: number) {
+  function addActivity(type: ActvityType, x: number, y: number): number {
+    const id = nextActivityId;
     const entity: ActivityEntity = {
-      id: `act${nextActivityId}`,
+      id,
       xpdlId: `newpkg_wp1_act${nextActivityId}`,
       type,
       title: "",
       actorId: 0,
+      selected: false,
       x,
       y,
       width: 100,
@@ -33,11 +36,12 @@ export function activityModel() {
     };
     nextActivityId++;
     setActivityList([...activityList, entity]);
+    return id;
   }
 
-  function moveActivity(id: string, moveX: number, moveY: number) {
+  function moveSelectedActivities(moveX: number, moveY: number) {
     setActivityList(
-      (it) => it.id === id,
+      (it) => it.selected,
       produce((it) => {
         it.x += moveX;
         it.y += moveY;
@@ -45,25 +49,52 @@ export function activityModel() {
     );
   }
 
-  function resizeLeft(id: string, movementCX: number) {
+  function selectActivities(ids: number[]) {
     setActivityList(
-      (it) => it.id === id,
+      () => true,
       produce((it) => {
-        if (100 <= it.width - movementCX) {
-          it.x = it.x + movementCX / 2;
-          it.width = it.width - movementCX;
+        const selected = ids.includes(it.id);
+        if (it.selected !== selected) {
+          it.selected = selected;
         }
       })
     );
   }
 
-  function resizeRight(id: string, movementCX: number) {
+  function toggleSelectActivity(id: number) {
     setActivityList(
       (it) => it.id === id,
       produce((it) => {
-        if (100 <= it.width + movementCX) {
-          it.x = it.x + movementCX / 2;
-          it.width = it.width + movementCX;
+        it.selected = !it.selected;
+      })
+    );
+  }
+
+  function layerTopActivity(id: number) {
+    const target = activityList.find((it) => it.id === id)!;
+    const listWithoutTarget = activityList.filter((it) => it.id !== id);
+    setActivityList([...listWithoutTarget, target]);
+  }
+
+  function resizeLeft(id: number, moveX: number) {
+    setActivityList(
+      (it) => it.id === id,
+      produce((it) => {
+        if (100 <= it.width - moveX) {
+          it.x += moveX / 2;
+          it.width -= moveX;
+        }
+      })
+    );
+  }
+
+  function resizeRight(id: number, moveX: number) {
+    setActivityList(
+      (it) => it.id === id,
+      produce((it) => {
+        if (100 <= it.width + moveX) {
+          it.x += moveX / 2;
+          it.width += moveX;
         }
       })
     );
@@ -73,8 +104,11 @@ export function activityModel() {
     activityList,
     setActivityList,
     addActivity,
-    moveActivity,
+    moveSelectedActivities,
     resizeLeft,
     resizeRight,
+    layerTopActivity,
+    selectActivities,
+    toggleSelectActivity,
   };
 }

@@ -12,9 +12,9 @@ export function Diagram(props: { zoom: number }) {
     activity: {
       activityList,
       addActivity,
-      moveActivity,
-      resizeLeft,
-      resizeRight,
+      moveSelectedActivities,
+      layerTopActivity,
+      selectActivities,
     },
   } = useModel();
 
@@ -23,6 +23,7 @@ export function Diagram(props: { zoom: number }) {
 
   type DragType = "none" | "scroll" | "addActivity";
   let dragType: DragType = "none";
+  let addActivityId: number = 0;
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -37,34 +38,47 @@ export function Diagram(props: { zoom: number }) {
   });
 
   function handleMouseDown(e: MouseEvent) {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
     switch (toolbar()) {
       case "cursor":
         dragType = "scroll";
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
+        selectActivities([]);
         break;
       case "manual":
-        addActivity(
+        dragType = "addActivity";
+        addActivityId = addActivity(
           "manual",
           offset().x + e.offsetX / props.zoom,
           offset().y + e.offsetY / props.zoom
         );
+        layerTopActivity(addActivityId);
+        selectActivities([addActivityId]);
         break;
     }
   }
 
   function handleMouseMove(e: MouseEvent) {
+    const moveX = e.movementX / props.zoom;
+    const moveY = e.movementY / props.zoom;
+
     switch (dragType) {
       case "scroll":
         setOffset({
-          x: offset().x - e.movementX / props.zoom,
-          y: offset().y - e.movementY / props.zoom,
+          x: offset().x - moveX,
+          y: offset().y - moveY,
         });
+        break;
+      case "addActivity":
+        moveSelectedActivities(moveX, moveY);
         break;
     }
   }
 
   function handleMouseUp() {
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
     dragType = "none";
   }
 
