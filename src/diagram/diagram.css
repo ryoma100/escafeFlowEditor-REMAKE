@@ -14,32 +14,62 @@
   height: 100%;
 }
 
-.actor {
-  fill: white;
-  stroke: black;
-  stroke-width: 2px;
-}
-.actor:hover {
-  cursor: move;
-}
-
-.actor__resize {
-  fill-opacity: 0;
+.activity {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border: 2px solid transparent;
 }
 
-.actor__resize:hover {
-  fill-opacity: 1;
-  fill: lightgray;
+.activity--selected {
+  border: 2px solid lightgray;
+}
+
+.activity__resize {
+  width: 10px;
+  height: 100%;
+}
+
+.activity__resize:hover {
   cursor: ew-resize;
+  background-color: lightgray;
 }
 
-.actor__select {
-  fill-opacity: 0;
+.activity__main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  cursor: move;
+  border: 2px solid black;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: white;
 }
 
-.actor__select--selected {
-  fill-opacity: 1;
-  fill: white;
-  stroke: lightgray;
-  stroke-width: 2px;
+.activity__actor {
+  width: 100%;
+  font-size: 12px;
+  margin: 0 2px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.activity__icon {
+  width: 100%;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.activity__title {
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0 2px;
 }

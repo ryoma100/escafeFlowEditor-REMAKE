@@ -92,9 +92,11 @@ export function Diagram(props: { zoom: number }) {
         viewBox={`${offset().x} ${offset().y} ${size().width / props.zoom} ${size().height / props.zoom}`}
         onMouseDown={handleMouseDown}
       >
-        <For each={activityList}>
-          {(activity) => <ActivityNode id={activity.id} zoom={props.zoom} />}
-        </For>
+        <g data-id="activities">
+          <For each={activityList}>
+            {(activity) => <ActivityNode id={activity.id} zoom={props.zoom} />}
+          </For>
+        </g>
       </svg>
     </div>
   );

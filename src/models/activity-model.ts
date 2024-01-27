@@ -3,40 +3,40 @@ import { createStore, produce } from "solid-js/store";
 export type ActvityType = "manual" | "auto" | "hand";
 
 export type ActivityEntity = {
+  // not reactive fields
   id: number;
   xpdlId: string;
+
+  // reactive fileds
   type: ActvityType;
   actorId: number;
   title: string;
-  selected: boolean;
   x: number;
   y: number;
   width: number;
-  height: number;
+  selected: boolean;
 };
 
-let nextActivityId = 1;
+let lastActivityId = 0;
 
 export function activityModel() {
   const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
 
   function addActivity(type: ActvityType, x: number, y: number): number {
-    const id = nextActivityId;
+    lastActivityId++;
     const entity: ActivityEntity = {
-      id,
-      xpdlId: `newpkg_wp1_act${nextActivityId}`,
+      id: lastActivityId,
+      xpdlId: `newpkg_wp1_act${lastActivityId}`,
       type,
-      title: "",
       actorId: 0,
-      selected: false,
+      title: `アクティビティ ${lastActivityId} アクティビティ`,
       x,
       y,
       width: 100,
-      height: 100,
+      selected: false,
     };
-    nextActivityId++;
     setActivityList([...activityList, entity]);
-    return id;
+    return lastActivityId;
   }
 
   function moveSelectedActivities(moveX: number, moveY: number) {
