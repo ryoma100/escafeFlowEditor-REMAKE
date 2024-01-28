@@ -12,7 +12,7 @@ export function ActivityNode(props: { id: number }) {
       toggleSelectActivity,
     },
     actor: { actorList },
-    transition: { addTransition },
+    transition: { addTransition, transitionList },
   } = useModel();
   const {
     activity: { setOpenActivityDialogById },
@@ -84,6 +84,11 @@ export function ActivityNode(props: { id: number }) {
     }
   });
 
+  const fromTransitionsLenght = () =>
+    transitionList.filter((it) => it.toActivityId === props.id).length;
+  const toTransitionsLength = () =>
+    transitionList.filter((it) => it.fromActivityId === props.id).length;
+
   const [height, setHeight] = createSignal(0);
 
   let titleDiv: HTMLDivElement | undefined;
@@ -103,10 +108,12 @@ export function ActivityNode(props: { id: number }) {
       >
         <div
           class="activity__resize"
-          classList={{ "activity__prev--many": true }}
+          classList={{ "activity__prev--many": fromTransitionsLenght() >= 2 }}
           onMouseDown={handleLeftMouseDown}
         >
-          <div classList={{ "activity__prev--one": true }}></div>
+          <div
+            classList={{ "activity__prev--one": fromTransitionsLenght() >= 1 }}
+          ></div>
         </div>
         <div
           class="activity__main"
@@ -124,10 +131,12 @@ export function ActivityNode(props: { id: number }) {
         </div>
         <div
           class="activity__resize"
-          classList={{ "activity__next--many": true }}
+          classList={{ "activity__next--many": toTransitionsLength() >= 2 }}
           onMouseDown={handleRightMouseDown}
         >
-          <div classList={{ "activity__next--one": true }}></div>
+          <div
+            classList={{ "activity__next--one": toTransitionsLength() >= 1 }}
+          ></div>
         </div>
       </div>
     </foreignObject>

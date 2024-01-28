@@ -17,7 +17,7 @@ export function TransitionEdge(props: { id: number }) {
       stroke="gray"
       stroke-width="2"
       fill="none"
-      d={`M${fromActivity().x},${fromActivity().y}L${toActivity().x},${toActivity().y}`}
+      d={`M${fromActivity().x + fromActivity().width / 2},${fromActivity().y}L${toActivity().x - toActivity().width / 2},${toActivity().y}`}
     />
   );
 }
