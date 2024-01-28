@@ -97,3 +97,25 @@
 .activity__next--many {
   border-right: solid 1px black;
 }
+
+.adding-line {
+  stroke: black;
+  stroke-width: 2;
+  fill: none;
+}
+
+.transition {
+  stroke: lightgray;
+  stroke-width: 2px;
+  fill: none;
+}
+
+.transition--hover {
+  stroke: transparent;
+  stroke-width: 6px;
+  fill: none;
+}
+
+.transition--hover:hover {
+  stroke: gray;
+}

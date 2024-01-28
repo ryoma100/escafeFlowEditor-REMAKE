@@ -24,7 +24,7 @@ export function ActivityNode(props: { id: number }) {
 
   const activity = () => activityList.find((it) => it.id === props.id)!;
 
-  function handleLeftMouseDown(e: MouseEvent) {
+  function handleLeftMouseDown(_e: MouseEvent) {
     selectActivities([props.id]);
     setDragType("resizeActivityLeft");
   }
@@ -62,7 +62,7 @@ export function ActivityNode(props: { id: number }) {
     }
   }
 
-  function handleMouseUp(e: MouseEvent) {
+  function handleMouseUp(_e: MouseEvent) {
     switch (dragType()) {
       case "addTransition":
         addTransition(activity().id);

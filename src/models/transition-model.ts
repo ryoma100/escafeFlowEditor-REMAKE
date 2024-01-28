@@ -42,5 +42,5 @@ export function transitionModel({
     return lastTransitionId;
   }
 
-  return { addTransition, transitionList };
+  return { addTransition, transitionList, setTransitionList };
 }

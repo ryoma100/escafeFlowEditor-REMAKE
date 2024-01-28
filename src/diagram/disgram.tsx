@@ -154,9 +154,7 @@ export function Diagram() {
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>
             <path
-              stroke="black"
-              stroke-width="2"
-              fill="none"
+              class="adding-line"
               // SVGはイベント伝搬しないから、onMouseUpイベントをActivityで発生させるため、ちょっとずらす
               d={`M${addingLine().fromX},${addingLine().fromY}L${addingLine().toX + 8},${addingLine().toY + 8}`}
             />
