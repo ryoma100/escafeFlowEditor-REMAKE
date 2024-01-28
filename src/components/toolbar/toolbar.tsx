@@ -1,4 +1,4 @@
-import { useOperation } from "../../context/operation-context";
+import { useDiagram } from "../../context/diagram-context";
 import "./toolbar.css";
 
 export type ToolbarType =
@@ -14,7 +14,7 @@ export type ToolbarType =
 export function Toolbar() {
   const {
     toolbar: { toolbar, setToolbar },
-  } = useOperation();
+  } = useDiagram();
 
   return (
     <div class="toolbar">

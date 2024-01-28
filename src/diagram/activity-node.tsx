@@ -1,8 +1,10 @@
 import { createSignal, onMount } from "solid-js";
 import { useModel } from "../context/model-context";
 import { useOperation } from "../context/operation-context";
+import { DragType } from "./disgram";
+import { useDiagram } from "../context/diagram-context";
 
-export function ActivityNode(props: { id: number; zoom: number }) {
+export function ActivityNode(props: { id: number }) {
   const {
     activity: {
       activityList,
@@ -18,24 +20,22 @@ export function ActivityNode(props: { id: number; zoom: number }) {
   const {
     activity: { setOpenActivityDialogById },
   } = useOperation();
+  const {
+    diagram: { zoom },
+  } = useDiagram();
 
-  type DragType = "none" | "move" | "leftResize" | "rightResize";
   let dragType: DragType = "none";
 
   const activity = () => {
-    const target = activityList.find((it) => it.id === props.id);
-    if (!target) {
-      throw new Error("ActivityNode: cannot find activity");
-    }
-    return target;
+    return activityList.find((it) => it.id === props.id)!;
   };
 
   function handleMouseDown(type: DragType, e: MouseEvent) {
     e.stopPropagation();
-    dragType = type;
 
+    dragType = type;
     switch (dragType) {
-      case "move":
+      case "moveActivity":
         if (e.shiftKey) {
           toggleSelectActivity(props.id);
         } else {
@@ -46,23 +46,22 @@ export function ActivityNode(props: { id: number; zoom: number }) {
         }
         break;
     }
-
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   }
 
   function handleMouseMove(e: MouseEvent) {
-    const moveX = e.movementX / props.zoom;
-    const moveY = e.movementY / props.zoom;
+    const moveX = e.movementX / zoom();
+    const moveY = e.movementY / zoom();
 
     switch (dragType) {
-      case "move":
+      case "moveActivity":
         moveSelectedActivities(moveX, moveY);
         break;
-      case "leftResize":
+      case "resizeActivityLeft":
         resizeLeft(props.id, moveX);
         break;
-      case "rightResize":
+      case "resizeActivityRight":
         resizeRight(props.id, moveX);
         break;
     }
@@ -107,13 +106,13 @@ export function ActivityNode(props: { id: number; zoom: number }) {
         <div
           class="activity__resize"
           classList={{ "activity__prev--many": true }}
-          onMouseDown={[handleMouseDown, "leftResize"]}
+          onMouseDown={[handleMouseDown, "resizeActivityLeft"]}
         >
           <div classList={{ "activity__prev--one": true }}></div>
         </div>
         <div
           class="activity__main"
-          onMouseDown={[handleMouseDown, "move"]}
+          onMouseDown={[handleMouseDown, "moveActivity"]}
           onDblClick={handleDblClick}
         >
           <div class="activity__actor">
@@ -127,7 +126,7 @@ export function ActivityNode(props: { id: number; zoom: number }) {
         <div
           class="activity__resize"
           classList={{ "activity__next--many": true }}
-          onMouseDown={[handleMouseDown, "rightResize"]}
+          onMouseDown={[handleMouseDown, "resizeActivityRight"]}
         >
           <div classList={{ "activity__next--one": true }}></div>
         </div>

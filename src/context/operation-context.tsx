@@ -1,10 +1,8 @@
 import { createContext, useContext, JSX, createSignal } from "solid-js";
-import { ToolbarType } from "../components/toolbar/toolbar";
 
 const OperationContext = createContext<
   ReturnType<typeof createOperationSignals>
 >({
-  toolbar: undefined as any,
   pkg: undefined as any,
   process: undefined as any,
   actor: undefined as any,
@@ -26,13 +24,12 @@ export function useOperation() {
 }
 
 function createOperationSignals() {
-  const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
   const [openPackageDialog, setPackageDialog] = createSignal(false);
   const [openProcessDialog, setOpenProcessDialog] = createSignal(false);
   const [openActorDialog, setOpenActorDialog] = createSignal(false);
   const [openActivityDialogById, setOpenActivityDialogById] = createSignal(0);
+
   return {
-    toolbar: { toolbar, setToolbar },
     pkg: { openPackageDialog, setPackageDialog },
     process: { openProcessDialog, setOpenProcessDialog },
     actor: { openActorDialog, setOpenActorDialog },

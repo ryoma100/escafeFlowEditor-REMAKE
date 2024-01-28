@@ -1,13 +1,23 @@
-import { For, createSignal, onMount } from "solid-js";
+import { For, createEffect, onMount } from "solid-js";
 import "./diagram.css";
-import { useOperation } from "../context/operation-context";
 import { useModel } from "../context/model-context";
 import { ActivityNode } from "./activity-node";
+import { createStore } from "solid-js/store";
+import { useDiagram } from "../context/diagram-context";
 
-export function Diagram(props: { zoom: number }) {
+export type DragType =
+  | "none"
+  | "scroll"
+  | "addActivity"
+  | "moveActivity"
+  | "resizeActivityLeft"
+  | "resizeActivityRight";
+
+export function Diagram() {
   const {
     toolbar: { toolbar },
-  } = useOperation();
+    diagram: { zoom },
+  } = useDiagram();
   const {
     activity: {
       activityList,
@@ -18,22 +28,34 @@ export function Diagram(props: { zoom: number }) {
     },
   } = useModel();
 
-  const [offset, setOffset] = createSignal({ x: 0, y: 0 });
-  const [size, setSize] = createSignal({ width: 0, height: 0 });
+  const [svgRect, setRect] = createStore({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+  const [viewBox, setViewBox] = createStore({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
 
-  type DragType = "none" | "scroll" | "addActivity";
   let dragType: DragType = "none";
   let addActivityId: number = 0;
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      setSize({
-        width: svg?.clientWidth ?? 0,
-        height: svg?.clientHeight ?? 0,
+      const rect = diagram?.getBoundingClientRect();
+      setRect({
+        x: rect?.left ?? 0,
+        y: rect?.top ?? 0,
+        width: rect?.width ?? 0,
+        height: rect?.height ?? 0,
       });
     });
-    if (svg) {
-      observer.observe(svg);
+    if (diagram) {
+      observer.observe(diagram);
     }
   });
 
@@ -50,8 +72,8 @@ export function Diagram(props: { zoom: number }) {
         dragType = "addActivity";
         addActivityId = addActivity(
           "manual",
-          offset().x + e.offsetX / props.zoom,
-          offset().y + e.offsetY / props.zoom
+          viewBox.x + (e.clientX - svgRect.x) / zoom(),
+          viewBox.y + (e.clientY - svgRect.y) / zoom()
         );
         layerTopActivity(addActivityId);
         selectActivities([addActivityId]);
@@ -60,14 +82,14 @@ export function Diagram(props: { zoom: number }) {
   }
 
   function handleMouseMove(e: MouseEvent) {
-    const moveX = e.movementX / props.zoom;
-    const moveY = e.movementY / props.zoom;
+    const moveX = e.movementX / zoom();
+    const moveY = e.movementY / zoom();
 
     switch (dragType) {
       case "scroll":
-        setOffset({
-          x: offset().x - moveX,
-          y: offset().y - moveY,
+        setViewBox({
+          x: viewBox.x - moveX,
+          y: viewBox.y - moveY,
         });
         break;
       case "addActivity":
@@ -82,19 +104,25 @@ export function Diagram(props: { zoom: number }) {
     dragType = "none";
   }
 
-  let svg: SVGSVGElement | undefined;
+  createEffect(() => {
+    setViewBox({
+      width: svgRect.width / zoom(),
+      height: svgRect.height / zoom(),
+    });
+  });
+
+  let diagram: HTMLDivElement | undefined;
   return (
-    <div class="diagram">
+    <div class="diagram" ref={diagram}>
       <svg
-        ref={svg}
-        width={size().width}
-        height={size().height}
-        viewBox={`${offset().x} ${offset().y} ${size().width / props.zoom} ${size().height / props.zoom}`}
+        width={svgRect.width}
+        height={svgRect.height}
+        viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
         onMouseDown={handleMouseDown}
       >
         <g data-id="activities">
           <For each={activityList}>
-            {(activity) => <ActivityNode id={activity.id} zoom={props.zoom} />}
+            {(activity) => <ActivityNode id={activity.id} />}
           </For>
         </g>
       </svg>

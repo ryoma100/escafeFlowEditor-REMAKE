@@ -5,12 +5,15 @@ import "./styles.css";
 import App from "./App";
 import { ModelProvider } from "./context/model-context";
 import { OperationProvider } from "./context/operation-context";
+import { DiagramProvider } from "./context/diagram-context";
 
 render(
   () => (
     <ModelProvider>
       <OperationProvider>
-        <App />
+        <DiagramProvider>
+          <App />
+        </DiagramProvider>
       </OperationProvider>
     </ModelProvider>
   ),
