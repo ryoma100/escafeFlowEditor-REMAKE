@@ -51,6 +51,10 @@
   background-color: white;
 }
 
+.activity__main:hover {
+  background-color: lightgray;
+}
+
 .activity__actor {
   width: 100%;
   font-size: 12px;

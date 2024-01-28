@@ -12,6 +12,7 @@ export function ActivityNode(props: { id: number }) {
       toggleSelectActivity,
     },
     actor: { actorList },
+    transition: { addTransition },
   } = useModel();
   const {
     activity: { setOpenActivityDialogById },
@@ -21,9 +22,7 @@ export function ActivityNode(props: { id: number }) {
     diagram: { dragType, setDragType, setAddingLine },
   } = useDiagram();
 
-  const activity = () => {
-    return activityList.find((it) => it.id === props.id)!;
-  };
+  const activity = () => activityList.find((it) => it.id === props.id)!;
 
   function handleLeftMouseDown(e: MouseEvent) {
     selectActivities([props.id]);
@@ -51,6 +50,7 @@ export function ActivityNode(props: { id: number }) {
         }
         break;
       case "transion":
+        selectActivities([props.id]);
         setAddingLine({
           fromX: activity().x,
           fromY: activity().y,
@@ -63,9 +63,9 @@ export function ActivityNode(props: { id: number }) {
   }
 
   function handleMouseUp(e: MouseEvent) {
-    console.log(activity().id);
     switch (dragType()) {
       case "addTransition":
+        addTransition(activity().id);
         setDragType("none");
         break;
     }

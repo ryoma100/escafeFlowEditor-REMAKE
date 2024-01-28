@@ -4,6 +4,7 @@ import { useModel } from "../context/model-context";
 import { ActivityNode } from "./activity-node";
 import { createStore } from "solid-js/store";
 import { useDiagram } from "../context/diagram-context";
+import { TransitionEdge } from "./transition-edge";
 
 export type DragType =
   | "none"
@@ -29,6 +30,7 @@ export function Diagram() {
       resizeLeft,
       resizeRight,
     },
+    transition: { transitionList },
   } = useModel();
 
   const [svgRect, setRect] = createStore({
@@ -141,12 +143,15 @@ export function Diagram() {
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
         onMouseDown={handleMouseDown}
       >
-        <g data-id="activities">
-          <For each={activityList}>
-            {(activity) => <ActivityNode id={activity.id} />}
+        <g data-id="transitions">
+          <For each={transitionList}>
+            {(it) => <TransitionEdge id={it.id} />}
           </For>
         </g>
-        <g data-id="addingLine">
+        <g data-id="activities">
+          <For each={activityList}>{(it) => <ActivityNode id={it.id} />}</For>
+        </g>
+        <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>
             <path
               stroke="black"
