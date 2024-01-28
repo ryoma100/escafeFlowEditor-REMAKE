@@ -1,4 +1,4 @@
-import { For, createEffect, onMount } from "solid-js";
+import { For, Show, createEffect, onMount } from "solid-js";
 import "./diagram.css";
 import { useModel } from "../context/model-context";
 import { ActivityNode } from "./activity-node";
@@ -9,14 +9,15 @@ export type DragType =
   | "none"
   | "scroll"
   | "addActivity"
-  | "moveActivity"
+  | "moveActivities"
   | "resizeActivityLeft"
-  | "resizeActivityRight";
+  | "resizeActivityRight"
+  | "addTransition";
 
 export function Diagram() {
   const {
     toolbar: { toolbar },
-    diagram: { zoom },
+    diagram: { zoom, dragType, setDragType, addingLine, setAddingLine },
   } = useDiagram();
   const {
     activity: {
@@ -25,6 +26,8 @@ export function Diagram() {
       moveSelectedActivities,
       layerTopActivity,
       selectActivities,
+      resizeLeft,
+      resizeRight,
     },
   } = useModel();
 
@@ -41,7 +44,6 @@ export function Diagram() {
     height: 0,
   });
 
-  let dragType: DragType = "none";
   let addActivityId: number = 0;
 
   onMount(() => {
@@ -57,26 +59,30 @@ export function Diagram() {
     if (diagram) {
       observer.observe(diagram);
     }
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
   });
 
   function handleMouseDown(e: MouseEvent) {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    switch (toolbar()) {
-      case "cursor":
-        dragType = "scroll";
-        selectActivities([]);
-        break;
-      case "manual":
-        dragType = "addActivity";
-        addActivityId = addActivity(
-          "manual",
-          viewBox.x + (e.clientX - svgRect.x) / zoom(),
-          viewBox.y + (e.clientY - svgRect.y) / zoom()
-        );
-        layerTopActivity(addActivityId);
-        selectActivities([addActivityId]);
+    switch (dragType()) {
+      case "none":
+        switch (toolbar()) {
+          case "cursor":
+            selectActivities([]);
+            setDragType("scroll");
+            break;
+          case "manual":
+            addActivityId = addActivity(
+              "manual",
+              viewBox.x + (e.clientX - svgRect.x) / zoom(),
+              viewBox.y + (e.clientY - svgRect.y) / zoom()
+            );
+            layerTopActivity(addActivityId);
+            selectActivities([addActivityId]);
+            setDragType("addActivity");
+            break;
+        }
         break;
     }
   }
@@ -85,7 +91,7 @@ export function Diagram() {
     const moveX = e.movementX / zoom();
     const moveY = e.movementY / zoom();
 
-    switch (dragType) {
+    switch (dragType()) {
       case "scroll":
         setViewBox({
           x: viewBox.x - moveX,
@@ -95,13 +101,28 @@ export function Diagram() {
       case "addActivity":
         moveSelectedActivities(moveX, moveY);
         break;
+      case "moveActivities":
+        moveSelectedActivities(moveX, moveY);
+        break;
+      case "resizeActivityLeft":
+        resizeLeft(moveX);
+        break;
+      case "resizeActivityRight":
+        resizeRight(moveX);
+        break;
+      case "addTransition":
+        setAddingLine({
+          fromX: addingLine().fromX,
+          fromY: addingLine().fromY,
+          toX: (e.clientX - svgRect.x) / zoom(),
+          toY: (e.clientY - svgRect.y) / zoom(),
+        });
+        break;
     }
   }
 
   function handleMouseUp() {
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-    dragType = "none";
+    setDragType("none");
   }
 
   createEffect(() => {
@@ -124,6 +145,17 @@ export function Diagram() {
           <For each={activityList}>
             {(activity) => <ActivityNode id={activity.id} />}
           </For>
+        </g>
+        <g data-id="addingLine">
+          <Show when={dragType() === "addTransition"}>
+            <path
+              stroke="black"
+              stroke-width="2"
+              fill="none"
+              // SVGはイベント伝搬しないから、onMouseUpイベントをActivityで発生させるため、ちょっとずらす
+              d={`M${addingLine().fromX},${addingLine().fromY}L${addingLine().toX + 8},${addingLine().toY + 8}`}
+            />
+          </Show>
         </g>
       </svg>
     </div>

@@ -89,9 +89,9 @@ export function activityModel() {
     setActivityList([...listWithoutTarget, target]);
   }
 
-  function resizeLeft(id: number, moveX: number) {
+  function resizeLeft(moveX: number) {
     setActivityList(
-      (it) => it.id === id,
+      (it) => it.selected,
       produce((it) => {
         if (100 <= it.width - moveX) {
           it.x += moveX / 2;
@@ -101,9 +101,9 @@ export function activityModel() {
     );
   }
 
-  function resizeRight(id: number, moveX: number) {
+  function resizeRight(moveX: number) {
     setActivityList(
-      (it) => it.id === id,
+      (it) => it.selected,
       produce((it) => {
         if (100 <= it.width + moveX) {
           it.x += moveX / 2;

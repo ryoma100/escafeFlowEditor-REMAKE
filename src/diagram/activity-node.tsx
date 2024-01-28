@@ -1,16 +1,12 @@
 import { createSignal, onMount } from "solid-js";
 import { useModel } from "../context/model-context";
 import { useOperation } from "../context/operation-context";
-import { DragType } from "./disgram";
 import { useDiagram } from "../context/diagram-context";
 
 export function ActivityNode(props: { id: number }) {
   const {
     activity: {
       activityList,
-      moveSelectedActivities,
-      resizeLeft,
-      resizeRight,
       layerTopActivity,
       selectActivities,
       toggleSelectActivity,
@@ -21,56 +17,58 @@ export function ActivityNode(props: { id: number }) {
     activity: { setOpenActivityDialogById },
   } = useOperation();
   const {
-    diagram: { zoom },
+    toolbar: { toolbar },
+    diagram: { dragType, setDragType, setAddingLine },
   } = useDiagram();
-
-  let dragType: DragType = "none";
 
   const activity = () => {
     return activityList.find((it) => it.id === props.id)!;
   };
 
-  function handleMouseDown(type: DragType, e: MouseEvent) {
-    e.stopPropagation();
+  function handleLeftMouseDown(e: MouseEvent) {
+    selectActivities([props.id]);
+    setDragType("resizeActivityLeft");
+  }
 
-    dragType = type;
-    switch (dragType) {
-      case "moveActivity":
+  function handleRightMouseDown(e: MouseEvent) {
+    selectActivities([props.id]);
+    setDragType("resizeActivityRight");
+  }
+
+  function handleMouseDown(e: MouseEvent) {
+    switch (toolbar()) {
+      case "cursor":
         if (e.shiftKey) {
           toggleSelectActivity(props.id);
+          setDragType("none");
+          e.stopPropagation();
         } else {
           if (!activity().selected) {
             selectActivities([props.id]);
           }
           layerTopActivity(props.id);
+          setDragType("moveActivities");
         }
         break;
-    }
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  }
-
-  function handleMouseMove(e: MouseEvent) {
-    const moveX = e.movementX / zoom();
-    const moveY = e.movementY / zoom();
-
-    switch (dragType) {
-      case "moveActivity":
-        moveSelectedActivities(moveX, moveY);
-        break;
-      case "resizeActivityLeft":
-        resizeLeft(props.id, moveX);
-        break;
-      case "resizeActivityRight":
-        resizeRight(props.id, moveX);
+      case "transion":
+        setAddingLine({
+          fromX: activity().x,
+          fromY: activity().y,
+          toX: activity().x,
+          toY: activity().y,
+        });
+        setDragType("addTransition");
         break;
     }
   }
 
-  function handleMouseUp() {
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-    dragType = "none";
+  function handleMouseUp(e: MouseEvent) {
+    console.log(activity().id);
+    switch (dragType()) {
+      case "addTransition":
+        setDragType("none");
+        break;
+    }
   }
 
   function handleDblClick() {
@@ -106,14 +104,15 @@ export function ActivityNode(props: { id: number }) {
         <div
           class="activity__resize"
           classList={{ "activity__prev--many": true }}
-          onMouseDown={[handleMouseDown, "resizeActivityLeft"]}
+          onMouseDown={handleLeftMouseDown}
         >
           <div classList={{ "activity__prev--one": true }}></div>
         </div>
         <div
           class="activity__main"
-          onMouseDown={[handleMouseDown, "moveActivity"]}
+          onMouseDown={handleMouseDown}
           onDblClick={handleDblClick}
+          onMouseUp={handleMouseUp}
         >
           <div class="activity__actor">
             {actorList().find((it) => it.id === activity().actorId)?.title}
@@ -126,7 +125,7 @@ export function ActivityNode(props: { id: number }) {
         <div
           class="activity__resize"
           classList={{ "activity__next--many": true }}
-          onMouseDown={[handleMouseDown, "resizeActivityRight"]}
+          onMouseDown={handleRightMouseDown}
         >
           <div classList={{ "activity__next--one": true }}></div>
         </div>
