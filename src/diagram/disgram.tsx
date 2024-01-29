@@ -147,11 +147,11 @@ export function Diagram() {
           <marker
             id="arrow-end"
             viewBox="0 -5 10 10"
-            refX="5"
+            refX="10"
             refY="0"
             orient="auto"
-            markerWidth="10"
-            markerHeight="10"
+            markerWidth="15"
+            markerHeight="15"
           >
             <polygon points="10,0 0,5 0,-5" fill="gray" />
           </marker>
