@@ -22,15 +22,21 @@ export function TransitionEdge(props: { id: number }) {
 
   return (
     <>
-      <path
+      <line
         class="transition"
-        d={`M${fromActivity().cx + fromActivity().width / 2},${fromActivity().cy}L${toActivity().cx - toActivity().width / 2},${toActivity().cy}`}
-        marker-end="url(#end_arrow)"
+        x1={fromActivity().cx + fromActivity().width / 2}
+        y1={fromActivity().cy}
+        x2={toActivity().cx - toActivity().width / 2}
+        y2={toActivity().cy}
+        marker-end="url(#arrow-end)"
       />
-      <path
+      <line
         class="transition--hover"
         onDblClick={onDlbClick}
-        d={`M${fromActivity().cx + fromActivity().width / 2},${fromActivity().cy}L${toActivity().cx - toActivity().width / 2},${toActivity().cy}`}
+        x1={fromActivity().cx + fromActivity().width / 2}
+        y1={fromActivity().cy}
+        x2={toActivity().cx - toActivity().width / 2}
+        y2={toActivity().cy}
       />
     </>
   );

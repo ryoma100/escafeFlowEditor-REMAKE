@@ -35,7 +35,7 @@ export function defaultActivity(): ActivityEntity {
 export function activityModel() {
   const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
 
-  function addActivity(type: ActvityType, x: number, y: number): number {
+  function addActivity(type: ActvityType, cx: number, cy: number): number {
     lastActivityId++;
     const entity: ActivityEntity = {
       id: lastActivityId,
@@ -43,8 +43,8 @@ export function activityModel() {
       type,
       actorId: 1,
       title: `アクティビティ ${lastActivityId} アクティビティ`,
-      cx: x,
-      cy: y,
+      cx,
+      cy,
       width: 100,
       selected: true,
     };

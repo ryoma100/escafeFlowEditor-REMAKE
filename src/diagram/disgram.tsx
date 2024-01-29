@@ -144,8 +144,16 @@ export function Diagram() {
         onMouseDown={handleMouseDown}
       >
         <defs>
-          <marker id="end_arrow" refX="3" refY="0" orient="auto">
-            <path d="M0,0 L8,1 0,2 Z" fill="#eab942" />
+          <marker
+            id="arrow-end"
+            viewBox="0 -5 10 10"
+            refX="5"
+            refY="0"
+            orient="auto"
+            markerWidth="10"
+            markerHeight="10"
+          >
+            <polygon points="10,0 0,5 0,-5" fill="gray" />
           </marker>
         </defs>
         <g data-id="activities">
@@ -158,10 +166,13 @@ export function Diagram() {
         </g>
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>
-            <path
+            <line
               class="adding-line"
+              x1={addingLine().fromX}
+              y1={addingLine().fromY}
               // SVG does not propagate events. Adjust positision +8 to dispatch onMouseUp event in Activity.
-              d={`M${addingLine().fromX},${addingLine().fromY}L${addingLine().toX + 8},${addingLine().toY + 8}`}
+              x2={addingLine().toX + 8}
+              y2={addingLine().toY + 8}
             />
           </Show>
         </g>
