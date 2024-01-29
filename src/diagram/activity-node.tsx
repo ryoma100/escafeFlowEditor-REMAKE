@@ -52,10 +52,10 @@ export function ActivityNode(props: { id: number }) {
       case "transion":
         selectActivities([props.id]);
         setAddingLine({
-          fromX: activity().x,
-          fromY: activity().y,
-          toX: activity().x,
-          toY: activity().y,
+          fromX: activity().cx,
+          fromY: activity().cy,
+          toX: activity().cx,
+          toY: activity().cy,
         });
         setDragType("addTransition");
         break;
@@ -95,10 +95,11 @@ export function ActivityNode(props: { id: number }) {
   return (
     <foreignObject
       data-id={activity().xpdlId}
-      x={activity().x - activity().width / 2}
-      y={activity().y - height() / 2}
+      x={activity().cx - activity().width / 2}
+      y={activity().cy - height() / 2}
       width={activity().width}
       height={height()}
+      onMouseUp={handleMouseUp}
     >
       <div
         class="activity"
@@ -119,7 +120,6 @@ export function ActivityNode(props: { id: number }) {
           class="activity__main"
           onMouseDown={handleMouseDown}
           onDblClick={handleDblClick}
-          onMouseUp={handleMouseUp}
         >
           <div class="activity__actor">
             {actorList().find((it) => it.id === activity().actorId)?.title}

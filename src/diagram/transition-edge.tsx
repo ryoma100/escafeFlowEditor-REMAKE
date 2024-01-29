@@ -24,12 +24,13 @@ export function TransitionEdge(props: { id: number }) {
     <>
       <path
         class="transition"
-        d={`M${fromActivity().x + fromActivity().width / 2},${fromActivity().y}L${toActivity().x - toActivity().width / 2},${toActivity().y}`}
+        d={`M${fromActivity().cx + fromActivity().width / 2},${fromActivity().cy}L${toActivity().cx - toActivity().width / 2},${toActivity().cy}`}
+        marker-end="url(#end_arrow)"
       />
       <path
         class="transition--hover"
         onDblClick={onDlbClick}
-        d={`M${fromActivity().x + fromActivity().width / 2},${fromActivity().y}L${toActivity().x - toActivity().width / 2},${toActivity().y}`}
+        d={`M${fromActivity().cx + fromActivity().width / 2},${fromActivity().cy}L${toActivity().cx - toActivity().width / 2},${toActivity().cy}`}
       />
     </>
   );

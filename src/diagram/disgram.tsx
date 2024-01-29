@@ -116,8 +116,8 @@ export function Diagram() {
         setAddingLine({
           fromX: addingLine().fromX,
           fromY: addingLine().fromY,
-          toX: (e.clientX - svgRect.x) / zoom(),
-          toY: (e.clientY - svgRect.y) / zoom(),
+          toX: viewBox.x + (e.clientX - svgRect.x) / zoom(),
+          toY: viewBox.y + (e.clientY - svgRect.y) / zoom(),
         });
         break;
     }
@@ -143,19 +143,24 @@ export function Diagram() {
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
         onMouseDown={handleMouseDown}
       >
+        <defs>
+          <marker id="end_arrow" refX="3" refY="0" orient="auto">
+            <path d="M0,0 L8,1 0,2 Z" fill="#eab942" />
+          </marker>
+        </defs>
+        <g data-id="activities">
+          <For each={activityList}>{(it) => <ActivityNode id={it.id} />}</For>
+        </g>
         <g data-id="transitions">
           <For each={transitionList}>
             {(it) => <TransitionEdge id={it.id} />}
           </For>
         </g>
-        <g data-id="activities">
-          <For each={activityList}>{(it) => <ActivityNode id={it.id} />}</For>
-        </g>
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>
             <path
               class="adding-line"
-              // SVGはイベント伝搬しないから、onMouseUpイベントをActivityで発生させるため、ちょっとずらす
+              // SVG does not propagate events. Adjust positision +8 to dispatch onMouseUp event in Activity.
               d={`M${addingLine().fromX},${addingLine().fromY}L${addingLine().toX + 8},${addingLine().toY + 8}`}
             />
           </Show>

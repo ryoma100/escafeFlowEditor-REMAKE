@@ -12,8 +12,8 @@ export type ActivityEntity = {
   type: ActvityType;
   actorId: number;
   title: string;
-  x: number;
-  y: number;
+  cx: number;
+  cy: number;
   width: number;
   selected: boolean;
 };
@@ -25,8 +25,8 @@ export function defaultActivity(): ActivityEntity {
     type: "auto",
     actorId: 0,
     title: "",
-    x: 0,
-    y: 0,
+    cx: 0,
+    cy: 0,
     width: 0,
     selected: false,
   };
@@ -43,10 +43,10 @@ export function activityModel() {
       type,
       actorId: 1,
       title: `アクティビティ ${lastActivityId} アクティビティ`,
-      x,
-      y,
+      cx: x,
+      cy: y,
       width: 100,
-      selected: false,
+      selected: true,
     };
     setActivityList([...activityList, entity]);
     return lastActivityId;
@@ -56,8 +56,8 @@ export function activityModel() {
     setActivityList(
       (it) => it.selected,
       produce((it) => {
-        it.x += moveX;
-        it.y += moveY;
+        it.cx += moveX;
+        it.cy += moveY;
       })
     );
   }
@@ -94,7 +94,7 @@ export function activityModel() {
       (it) => it.selected,
       produce((it) => {
         if (100 <= it.width - moveX) {
-          it.x += moveX / 2;
+          it.cx += moveX / 2;
           it.width -= moveX;
         }
       })
@@ -106,7 +106,7 @@ export function activityModel() {
       (it) => it.selected,
       produce((it) => {
         if (100 <= it.width + moveX) {
-          it.x += moveX / 2;
+          it.cx += moveX / 2;
           it.width += moveX;
         }
       })

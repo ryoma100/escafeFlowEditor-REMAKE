@@ -105,17 +105,25 @@
 }
 
 .transition {
-  stroke: lightgray;
-  stroke-width: 2px;
+  stroke: gray;
+  stroke-width: 1px;
   fill: none;
 }
 
 .transition--hover {
   stroke: transparent;
-  stroke-width: 6px;
+  stroke-width: 5px;
   fill: none;
 }
 
 .transition--hover:hover {
+  stroke: black;
+}
+
+.transition-arrow {
+  fill: lightgray;
+}
+
+.transition__hover:hover {
   stroke: gray;
 }
