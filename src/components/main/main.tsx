@@ -2,29 +2,22 @@ import "./main.css";
 import { Diagram } from "../../diagram/disgram";
 import { useModel } from "../../context/model-context";
 import { useDiagram } from "../../context/diagram-context";
-import { createEffect, createSignal } from "solid-js";
 
 export function Main() {
   const {
     process: { selectedProcess },
   } = useModel();
   const {
-    diagram: { setZoom },
+    diagram: { zoom, setZoom },
   } = useDiagram();
 
-  const [percentZoom, setPersentZoom] = createSignal(100);
-
   function handleAutoZoomButtonClick() {
-    //
+    // TODO: auto zoom
   }
 
   function handleNomalZoomButtonClick() {
-    setPersentZoom(100);
+    setZoom(1);
   }
-
-  createEffect(() => {
-    setZoom(percentZoom() / 100);
-  });
 
   return (
     <div class="main">
@@ -36,11 +29,11 @@ export function Main() {
         <button onClick={handleAutoZoomButtonClick}>Auto</button>
         <input
           type="range"
-          min="10"
-          max="200"
-          step="1"
-          value={percentZoom()}
-          onInput={(e) => setPersentZoom(Number(e.target.value))}
+          min="0.1"
+          max="2"
+          step="0.01"
+          value={zoom()}
+          onInput={(e) => setZoom(Number(e.target.value))}
         />
         <button onClick={handleNomalZoomButtonClick}>100%</button>
       </div>

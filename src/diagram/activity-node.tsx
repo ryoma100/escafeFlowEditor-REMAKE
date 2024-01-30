@@ -23,13 +23,27 @@ export function ActivityNode(props: { id: number }) {
   } = useDiagram();
 
   const activity = () => activityList.find((it) => it.id === props.id)!;
+  const fromTransitionsLenght = () =>
+    transitionList.filter((it) => it.toActivityId === props.id).length;
+  const toTransitionsLength = () =>
+    transitionList.filter((it) => it.fromActivityId === props.id).length;
+
+  const [height, setHeight] = createSignal(0);
+  onMount(() => {
+    const observer = new ResizeObserver(() => {
+      setHeight((titleDiv?.clientHeight ?? 0) + 64); // TODO: 高さを調整
+    });
+    if (titleDiv) {
+      observer.observe(titleDiv);
+    }
+  });
 
   function handleLeftMouseDown(_e: MouseEvent) {
     selectActivities([props.id]);
     setDragType("resizeActivityLeft");
   }
 
-  function handleRightMouseDown(e: MouseEvent) {
+  function handleRightMouseDown(_e: MouseEvent) {
     selectActivities([props.id]);
     setDragType("resizeActivityRight");
   }
@@ -74,22 +88,6 @@ export function ActivityNode(props: { id: number }) {
   function handleDblClick() {
     setOpenActivityDialogById(props.id);
   }
-
-  onMount(() => {
-    const observer = new ResizeObserver(() => {
-      setHeight((titleDiv?.clientHeight ?? 0) + 64); // TODO: 高さを調整
-    });
-    if (titleDiv) {
-      observer.observe(titleDiv);
-    }
-  });
-
-  const fromTransitionsLenght = () =>
-    transitionList.filter((it) => it.toActivityId === props.id).length;
-  const toTransitionsLength = () =>
-    transitionList.filter((it) => it.fromActivityId === props.id).length;
-
-  const [height, setHeight] = createSignal(0);
 
   let titleDiv: HTMLDivElement | undefined;
   return (
