@@ -170,9 +170,8 @@ export function Diagram() {
               class="adding-line"
               x1={addingLine().fromX}
               y1={addingLine().fromY}
-              // SVG does not propagate events. Adjust positision +8 to dispatch onMouseUp event in Activity.
-              x2={addingLine().toX + 8}
-              y2={addingLine().toY + 8}
+              x2={addingLine().toX}
+              y2={addingLine().toY}
             />
           </Show>
         </g>
