@@ -9,6 +9,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "tauri": "tauri",
+    "check": "tsc",
     "format": "prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
     "format:fix": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
     "preinstall": "npx -y only-allow pnpm"

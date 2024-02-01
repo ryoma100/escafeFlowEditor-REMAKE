@@ -1,29 +1,32 @@
-import { For, Match, Switch } from "solid-js";
+import { For, createSignal } from "solid-js";
 import { useOperation } from "../../context/operation-context";
 import "./list.css";
-import { ProcessEntity } from "../../models/process-model";
-import { useModel } from "../../context/model-context";
+import { dataSource } from "../../data-source/data-source";
+import { ProcessEntity } from "../../data-source/data-type";
+import { dataFactory } from "../../data-source/data-factory";
 
 export function ProcessList() {
   const {
     process: { setOpenProcessDialog },
   } = useOperation();
-  const {
-    process: {
-      processList,
-      selectedProcess,
-      setSelectedProcess,
-      addProcess,
-      removeProcess,
-    },
-  } = useModel();
+
+  const [processList, setProcessList] = createSignal<ProcessEntity[]>(
+    dataSource.pkg.processes
+  );
 
   // onClickとonDblClick両方セットすると、onDblClickが呼ばれない
   let lastClickTime: number = new Date().getTime();
   function handleItemClick(item: ProcessEntity, _: MouseEvent) {
     const time = new Date().getTime();
     if (lastClickTime + 250 < time) {
-      setSelectedProcess(item);
+      const list = processList().map((it) =>
+        it.id === item.id && !it.selected
+          ? { ...it, selected: true }
+          : it.selected
+            ? { ...it, selected: false }
+            : it
+      );
+      setProcessList(list);
     } else {
       setOpenProcessDialog(true);
     }
@@ -31,11 +34,17 @@ export function ProcessList() {
   }
 
   function handleAddClick(_: MouseEvent) {
-    addProcess();
+    const unselectProcessList = processList().map((it) =>
+      it.selected ? { ...it, selected: false } : it
+    );
+    const selectProcess = dataFactory.createProcess(dataSource.pkg, true);
+    setProcessList([...unselectProcessList, selectProcess]);
   }
 
   function handleRemoveClick(_: MouseEvent) {
-    removeProcess();
+    const list = processList().filter((it) => !it.selected);
+    list[0] = { ...list[0], selected: true };
+    setProcessList(list);
   }
 
   return (
@@ -44,22 +53,14 @@ export function ProcessList() {
       <div class="list__scroll--outer">
         <ul class="list__scroll--inner">
           <For each={processList()}>
-            {(item) => (
-              <Switch>
-                <Match when={item.id === selectedProcess().id}>
-                  <li
-                    class="list__item list__item--selected"
-                    onClick={[handleItemClick, item]}
-                  >
-                    {item.title}
-                  </li>
-                </Match>
-                <Match when={item.id !== selectedProcess().id}>
-                  <li class="list__item" onClick={[handleItemClick, item]}>
-                    {item.title}
-                  </li>
-                </Match>
-              </Switch>
+            {(it) => (
+              <li
+                class="list__item"
+                classList={{ "list__item--selected": it.selected }}
+                onClick={[handleItemClick, it]}
+              >
+                {it.name}
+              </li>
             )}
           </For>
         </ul>
