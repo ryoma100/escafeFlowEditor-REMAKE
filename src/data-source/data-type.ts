@@ -32,8 +32,6 @@ export type ProcessEntity = {
 
   _lastAttributeId: number;
   attributes: AttributeEntity[];
-
-  selected: boolean;
 };
 
 export type ActorEntity = {

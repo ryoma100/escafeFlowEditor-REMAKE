@@ -1,19 +1,19 @@
 import { createEffect } from "solid-js";
 import { useOperation } from "../../context/operation-context";
 import { createStore } from "solid-js/store";
-import { ProcessEntity } from "../../models/process-model";
 import "./dialog.css";
 import { useModel } from "../../context/model-context";
+import { ProcessEntity } from "../../data-source/data-type";
 
 export function ProcessDialog() {
   const {
     process: { openProcessDialog, setOpenProcessDialog },
   } = useOperation();
   const {
-    process: { selectedProcess, updateProcess, defaultProcess },
+    process: { selectedProcess, updateProcess },
   } = useModel();
 
-  const [formData, setFormData] = createStore<ProcessEntity>(defaultProcess());
+  const [formData, setFormData] = createStore<ProcessEntity>(undefined as any);
 
   createEffect(() => {
     if (openProcessDialog()) {
@@ -25,7 +25,7 @@ export function ProcessDialog() {
   });
 
   function handleOkButtonClick() {
-    updateProcess({ ...formData }); //TODO:コピーしないと別のプロセスが上書きされる？
+    updateProcess({ ...formData });
     setOpenProcessDialog(false);
   }
 
@@ -48,8 +48,8 @@ export function ProcessDialog() {
           <div>名前：</div>
           <input
             type="text"
-            value={formData.title}
-            onInput={(e) => setFormData("title", e.target.value)}
+            value={formData.name}
+            onInput={(e) => setFormData("name", e.target.value)}
           />
         </div>
         <div class="dialog__buttons">

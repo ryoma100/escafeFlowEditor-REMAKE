@@ -14,14 +14,11 @@ function createPackage(): PackageEntity {
     _lastProcessId: 0,
     processes: [],
   };
-  pkg.processes = [createProcess(pkg, true)];
+  pkg.processes = [createProcess(pkg)];
   return pkg;
 }
 
-function createProcess(
-  pkg: PackageEntity,
-  selected: boolean = false
-): ProcessEntity {
+function createProcess(pkg: PackageEntity): ProcessEntity {
   let id = 0;
   let xpdlId = "";
   do {
@@ -47,7 +44,6 @@ function createProcess(
     transitions: [],
     _lastAttributeId: 0,
     attributes: [],
-    selected,
   };
   process.actors = [createActor(process)];
   return process;
