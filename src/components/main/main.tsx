@@ -21,7 +21,7 @@ export function Main() {
 
   return (
     <div class="main">
-      <h5>{selectedProcess().title}</h5>
+      <h5>{selectedProcess().name}</h5>
       <div class="main__diagram">
         <Diagram />
       </div>

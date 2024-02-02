@@ -1,8 +1,8 @@
-import { For, Match, Switch } from "solid-js";
+import { For } from "solid-js";
 import { useOperation } from "../../context/operation-context";
 import "./list.css";
-import { ActorEntity } from "../../models/actor-model";
 import { useModel } from "../../context/model-context";
+import { ActorEntity } from "../../data-source/data-type";
 
 export function ActorList() {
   const {
@@ -11,19 +11,19 @@ export function ActorList() {
   const {
     actor: {
       actorList,
-      selectedActor,
-      setSelectedActor,
+      selectedActorId,
+      setSelectedActorId,
       addActor,
-      removeActor,
+      removeSelectedActor,
     },
   } = useModel();
 
   // onClickとonDblClick両方セットすると、onDblClickが呼ばれない
   let lastClickTime: number = new Date().getTime();
-  function handleItemClick(item: ActorEntity, _: MouseEvent) {
+  function handleItemClick(actor: ActorEntity, _: MouseEvent) {
     const time = new Date().getTime();
     if (lastClickTime + 250 < time) {
-      setSelectedActor(item);
+      setSelectedActorId(actor.id);
     } else {
       setOpenActorDialog(true);
     }
@@ -35,7 +35,7 @@ export function ActorList() {
   }
 
   function handleRemoveClick(_: MouseEvent) {
-    removeActor();
+    removeSelectedActor();
   }
 
   return (
@@ -43,30 +43,24 @@ export function ActorList() {
       <h5>アクター</h5>
       <div class="list__scroll--outer">
         <ul class="list__scroll--inner">
-          <For each={actorList()}>
-            {(item) => (
-              <Switch>
-                <Match when={item.id === selectedActor().id}>
-                  <li
-                    class="list__item list__item--selected"
-                    onClick={[handleItemClick, item]}
-                  >
-                    {item.title}
-                  </li>
-                </Match>
-                <Match when={item.id !== selectedActor().id}>
-                  <li class="list__item" onClick={[handleItemClick, item]}>
-                    {item.title}
-                  </li>
-                </Match>
-              </Switch>
+          <For each={actorList}>
+            {(it) => (
+              <li
+                class="list__item"
+                classList={{
+                  "list__item--selected": it.id === selectedActorId(),
+                }}
+                onClick={[handleItemClick, it]}
+              >
+                {it.name}
+              </li>
             )}
           </For>
         </ul>
       </div>
       <div class="list__buttons">
         <button onClick={handleAddClick}>追加</button>
-        <button onClick={handleRemoveClick} disabled={actorList().length === 1}>
+        <button onClick={handleRemoveClick} disabled={actorList.length === 1}>
           削除
         </button>
       </div>

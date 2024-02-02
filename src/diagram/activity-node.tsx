@@ -120,7 +120,7 @@ export function ActivityNode(props: { id: number }) {
           onDblClick={handleDblClick}
         >
           <div class="activity__actor">
-            {actorList().find((it) => it.id === activity().actorId)?.title}
+            {actorList.find((it) => it.id === activity().actorId)?.name}
           </div>
           <div class="activity__icon">🐧</div>
           <div ref={titleDiv} class="activity__title">

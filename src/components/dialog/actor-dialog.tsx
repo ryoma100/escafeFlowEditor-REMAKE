@@ -1,23 +1,23 @@
 import { createEffect } from "solid-js";
 import { useOperation } from "../../context/operation-context";
 import { createStore } from "solid-js/store";
-import { ActorEntity } from "../../models/actor-model";
 import "./dialog.css";
 import { useModel } from "../../context/model-context";
+import { ActorEntity } from "../../data-source/data-type";
 
 export function ActorDialog() {
   const {
     actor: { openActorDialog, setOpenActorDialog },
   } = useOperation();
   const {
-    actor: { selectedActor, updateActor, defaultActor },
+    actor: { actorList, findActor, selectedActorId, updateActor },
   } = useModel();
 
-  const [formData, setFormData] = createStore<ActorEntity>(defaultActor());
+  const [formData, setFormData] = createStore<ActorEntity>(actorList[0]);
 
   createEffect(() => {
     if (openActorDialog()) {
-      setFormData({ ...selectedActor() });
+      setFormData({ ...findActor(selectedActorId()) });
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -25,7 +25,7 @@ export function ActorDialog() {
   });
 
   function handleOkButtonClick() {
-    updateActor({ ...formData }); //TODO:コピーしないと別のアクターが上書きされる？
+    updateActor({ ...formData });
     setOpenActorDialog(false);
   }
 
@@ -48,8 +48,8 @@ export function ActorDialog() {
           <div>名前：</div>
           <input
             type="text"
-            value={formData.title}
-            onInput={(e) => setFormData("title", e.target.value)}
+            value={formData.name}
+            onInput={(e) => setFormData("name", e.target.value)}
           />
         </div>
         <div class="dialog__buttons">

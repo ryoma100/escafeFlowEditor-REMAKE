@@ -68,13 +68,13 @@ export function ActivityDialog() {
           <select
             onChange={(e) => setFormData("actorId", Number(e.target.value))}
           >
-            <For each={actorList()}>
+            <For each={actorList}>
               {(actor) => (
                 <option
                   value={actor.id}
                   selected={actor.id === formData.actorId}
                 >
-                  {actor.title}
+                  {actor.name}
                 </option>
               )}
             </For>

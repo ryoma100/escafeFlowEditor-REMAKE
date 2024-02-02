@@ -1,9 +1,9 @@
 import { JSX, createContext, useContext } from "solid-js";
 import { packageModel } from "../models/package-model";
-import { actorModel } from "../models/actor-model";
 import { activityModel } from "../models/activity-model";
 import { transitionModel } from "../models/transition-model";
 import { processModel } from "../data-model/process-model";
+import { actorModel } from "../data-model/actor-model";
 
 const ModelContext = createContext<{
   pkg: ReturnType<typeof packageModel>;
