@@ -2,20 +2,28 @@ import { createSignal } from "solid-js";
 import { ProcessEntity } from "../data-source/data-type";
 import { dataSource } from "../data-source/data-source";
 import { dataFactory } from "../data-source/data-factory";
+import { createActorModel } from "./actor-model";
 
-export function createProcessModel() {
+export function createProcessModel(
+  actorModel: ReturnType<typeof createActorModel>
+) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     dataSource.pkg.processes
   );
-
   const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(
     dataSource.pkg.processes[0]
   );
 
+  function changeProcess(process: ProcessEntity) {
+    actorModel.changeProcess(process);
+    setSelectedProcess(process);
+  }
+
   function addProcess() {
     const process = dataFactory.createProcess(dataSource.pkg);
-    setProcessList([...processList(), process]);
-    setSelectedProcess(process);
+    dataSource.pkg.processes = [...dataSource.pkg.processes, process];
+    setProcessList(dataSource.pkg.processes);
+    changeProcess(process);
   }
 
   function updateProcess(process: ProcessEntity) {
@@ -26,21 +34,17 @@ export function createProcessModel() {
   }
 
   function removeSelectedProcess() {
-    const nextSelectedIndex = Math.min(
-      processList().findIndex((it) => it.id === selectedProcess().id),
-      processList().length - 2
-    );
-    const newList = processList().filter(
+    dataSource.pkg.processes = dataSource.pkg.processes.filter(
       (it) => it.id !== selectedProcess().id
     );
-    setProcessList(newList);
-    setSelectedProcess(newList[nextSelectedIndex]);
+    setProcessList(dataSource.pkg.processes);
+    changeProcess(dataSource.pkg.processes[0]);
   }
 
   return {
     processList,
     selectedProcess,
-    setSelectedProcess,
+    changeProcess,
     addProcess,
     updateProcess,
     removeSelectedProcess,

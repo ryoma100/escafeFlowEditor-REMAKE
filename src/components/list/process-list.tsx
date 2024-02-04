@@ -12,14 +12,14 @@ export function ProcessList() {
     processModel: {
       processList,
       selectedProcess,
-      setSelectedProcess,
       addProcess,
       removeSelectedProcess,
+      changeProcess,
     },
   } = useModel();
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
-    setSelectedProcess(process);
+    changeProcess(process);
   }
 
   function handleItemDblClick(_: MouseEvent) {

@@ -1,24 +1,27 @@
-import { createStore, produce } from "solid-js/store";
-import { ActorEntity } from "../data-source/data-type";
+import { createStore, produce, unwrap } from "solid-js/store";
+import { ActorEntity, ProcessEntity } from "../data-source/data-type";
 import { createSignal } from "solid-js";
 import { dataFactory } from "../data-source/data-factory";
-import { createProcessModel } from "./process-model";
+import { dataSource } from "../data-source/data-source";
 
-export function createActorModel(
-  processModel: ReturnType<typeof createProcessModel>
-) {
+export function createActorModel() {
+  console.log("createActorModel");
+
+  let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
   const [actorList, setActorList] = createStore<ActorEntity[]>(
-    processModel.selectedProcess().actors
+    selectedProcess.actors
   );
   const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(
     actorList[0]
   );
 
-  // function changeProcess(processId: number) {
-  //   process = dataSource.findProcess(processId);
-  //   setActorList(process.actors);
-  //   setSelectedActorId(process.actors[0].id);
-  // }
+  function changeProcess(process: ProcessEntity) {
+    dataSource.findProcess(selectedProcess.id).actors = [...actorList];
+
+    selectedProcess = process;
+    setActorList(dataSource.findProcess(selectedProcess.id).actors);
+    setSelectedActor(actorList[0]);
+  }
 
   function findActor(actorId: number): ActorEntity {
     const actor = actorList.find((it) => it.id === actorId);
@@ -29,10 +32,11 @@ export function createActorModel(
   }
 
   function addActor() {
-    const actor = dataFactory.createActor(processModel.selectedProcess());
+    const actor = dataFactory.createActor(selectedProcess);
     setActorList([...actorList, actor]);
     const proxyActor = actorList[actorList.length - 1];
     setSelectedActor(proxyActor);
+    console.log("add", unwrap(actorList));
   }
 
   function updateActor(actor: ActorEntity) {
@@ -63,5 +67,6 @@ export function createActorModel(
     addActor,
     updateActor,
     removeSelectedActor,
+    changeProcess: changeProcess,
   };
 }
