@@ -1,5 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
+import "./activity-node.css";
 
 export function ActivityNode(props: { id: number }) {
   const {

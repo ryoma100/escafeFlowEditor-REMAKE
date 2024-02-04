@@ -1,5 +1,5 @@
 import { createStore, produce } from "solid-js/store";
-import { createEffect } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { TransitionEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
@@ -10,6 +10,7 @@ export function TransitionDialog() {
   } = useAppContext();
 
   const [formData, setFormData] = createStore<TransitionEntity>(null as any);
+  const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
     if (openTransitionDialogId() > 0) {
@@ -33,6 +34,17 @@ export function TransitionDialog() {
     setOpenTransitionDialogId(0);
   }
 
+  function handleXpdlIdInput(e: InputEvent) {
+    const text = (e.target as HTMLInputElement).value;
+    setXpdlIdError(
+      transitionList.some(
+        (it) => it.id !== openTransitionDialogId() && it.xpdlId === text
+      )
+        ? "このIDは既に存在します"
+        : ""
+    );
+  }
+
   function handleClose() {
     setOpenTransitionDialogId(0);
   }
@@ -47,11 +59,17 @@ export function TransitionDialog() {
           <input
             type="text"
             value={formData.xpdlId}
-            onInput={(e) => setFormData("xpdlId", e.target.value)}
+            onInput={handleXpdlIdInput}
+            onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
+          <p>{xpdlIdError()}</p>
         </div>
         <div class="dialog__buttons">
-          <button type="button" onClick={handleOkButtonClick}>
+          <button
+            type="button"
+            onClick={handleOkButtonClick}
+            disabled={xpdlIdError() !== ""}
+          >
             OK
           </button>
           <button type="button" onClick={handleClose}>

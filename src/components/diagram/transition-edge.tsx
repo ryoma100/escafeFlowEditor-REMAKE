@@ -1,4 +1,5 @@
 import { useAppContext } from "../../context/app-context";
+import "./transition-edge.css";
 
 export function TransitionEdge(props: { id: number }) {
   const {

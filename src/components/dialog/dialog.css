@@ -10,7 +10,7 @@
 
 .dialog__input {
   display: grid;
-  grid-template-columns: 64px 256px;
+  grid-template-columns: 64px 256px 64px;
   gap: 8px;
 }
 
