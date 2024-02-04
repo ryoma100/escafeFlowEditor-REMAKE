@@ -24,7 +24,11 @@ export function ModelProvider(props: { children: JSX.Element }) {
   const actorModel = createActorModel();
   const activityModel = createActivityModel(actorModel);
   const transitionModel = createTransitionModel(activityModel);
-  const processModel = createProcessModel(actorModel, activityModel);
+  const processModel = createProcessModel(
+    actorModel,
+    activityModel,
+    transitionModel
+  );
 
   const value = {
     packageModel,

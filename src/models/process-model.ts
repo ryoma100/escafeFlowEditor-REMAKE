@@ -1,13 +1,15 @@
-import { createSignal } from "solid-js";
+import { batch, createSignal } from "solid-js";
 import { ProcessEntity } from "../data-source/data-type";
 import { dataSource } from "../data-source/data-source";
 import { dataFactory } from "../data-source/data-factory";
 import { createActorModel } from "./actor-model";
 import { createActivityModel } from "./activity-model";
+import { createTransitionModel } from "./transition-model";
 
 export function createProcessModel(
   actorModel: ReturnType<typeof createActorModel>,
-  activityModel: ReturnType<typeof createActivityModel>
+  activityModel: ReturnType<typeof createActivityModel>,
+  transitionModel: ReturnType<typeof createTransitionModel>
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     dataSource.pkg.processes
@@ -19,9 +21,13 @@ export function createProcessModel(
   function changeProcess(process: ProcessEntity) {
     actorModel.saveActors();
     activityModel.saveActivity();
-    setSelectedProcess(process);
-    actorModel.loadActors(process);
-    activityModel.loadActivity(process);
+    transitionModel.saveTransition();
+    batch(() => {
+      setSelectedProcess(process);
+      actorModel.loadActors(process);
+      activityModel.loadActivity(process);
+      transitionModel.loadTransition(process);
+    });
   }
 
   function addProcess() {

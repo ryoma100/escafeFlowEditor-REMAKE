@@ -1,11 +1,8 @@
 import { createStore, produce } from "solid-js/store";
 import { useOperation } from "../../context/operation-context";
-import {
-  TransitionEntity,
-  defaultTransition,
-} from "../../models/transition-model";
 import { createEffect } from "solid-js";
 import { useModel } from "../../context/model-context";
+import { TransitionEntity } from "../../data-source/data-type";
 
 export function TransitionDialog() {
   const {
@@ -15,8 +12,7 @@ export function TransitionDialog() {
     transition: { openTransitionDialogById, setOpenTransitionDialogId },
   } = useOperation();
 
-  const [formData, setFormData] =
-    createStore<TransitionEntity>(defaultTransition());
+  const [formData, setFormData] = createStore<TransitionEntity>(null as any);
 
   createEffect(() => {
     if (openTransitionDialogById() > 0) {

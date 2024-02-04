@@ -1,46 +1,44 @@
-import { createStore } from "solid-js/store";
+import { createStore, unwrap } from "solid-js/store";
 import { createActivityModel } from "./activity-model";
-
-let lastTransitionId = 0;
-export type TransitionEntity = {
-  // not reactive fields
-  id: number;
-  xpdlId: string;
-
-  // reactive fields
-  fromActivityId: number;
-  toActivityId: number;
-};
-
-export function defaultTransition(): TransitionEntity {
-  return {
-    id: 0,
-    xpdlId: "",
-    fromActivityId: 0,
-    toActivityId: 0,
-  };
-}
+import { ProcessEntity, TransitionEntity } from "../data-source/data-type";
+import { dataSource } from "../data-source/data-source";
+import { dataFactory } from "../data-source/data-factory";
 
 export function createTransitionModel({
   activityList,
 }: ReturnType<typeof createActivityModel>) {
+  let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
   const [transitionList, setTransitionList] = createStore<TransitionEntity[]>(
     []
   );
 
-  function addTransition(toActivityId: number) {
-    const fromActivityId = activityList.find((it) => it.selected)!.id;
-
-    lastTransitionId++;
-    const entity: TransitionEntity = {
-      id: lastTransitionId,
-      xpdlId: `newpkg_wp1_tra${lastTransitionId}`,
-      fromActivityId,
-      toActivityId,
-    };
-    setTransitionList([...transitionList, entity]);
-    return lastTransitionId;
+  function saveTransition() {
+    dataSource.findProcess(selectedProcess.id).transitions = [
+      ...unwrap(transitionList),
+    ];
   }
 
-  return { addTransition, transitionList, setTransitionList };
+  function loadTransition(process: ProcessEntity) {
+    selectedProcess = process;
+    setTransitionList(dataSource.findProcess(process.id).transitions);
+  }
+
+  function addTransition(toActivityId: number) {
+    const fromActivityId = activityList.find((it) => it.selected)!.id;
+    const transition = dataFactory.createTransition(
+      selectedProcess,
+      fromActivityId,
+      toActivityId
+    );
+    setTransitionList([...transitionList, transition]);
+    return transition.id;
+  }
+
+  return {
+    addTransition,
+    transitionList,
+    setTransitionList,
+    saveTransition,
+    loadTransition,
+  };
 }
