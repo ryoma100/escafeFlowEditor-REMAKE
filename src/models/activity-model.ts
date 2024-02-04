@@ -1,55 +1,36 @@
-import { createStore, produce } from "solid-js/store";
+import { createStore, produce, unwrap } from "solid-js/store";
+import { ActivityEntity, ProcessEntity } from "../data-source/data-type";
+import { dataFactory } from "../data-source/data-factory";
+import { dataSource } from "../data-source/data-source";
+import { createActorModel } from "./actor-model";
 
-export type ActvityType = "manual" | "auto" | "hand";
-
-let lastActivityId = 0;
-export type ActivityEntity = {
-  // not reactive fields
-  id: number;
-  xpdlId: string;
-
-  // reactive fileds
-  type: ActvityType;
-  actorId: number;
-  title: string;
-  cx: number;
-  cy: number;
-  width: number;
-  selected: boolean;
-};
-
-export function defaultActivity(): ActivityEntity {
-  return {
-    id: 0,
-    xpdlId: "",
-    type: "auto",
-    actorId: 0,
-    title: "",
-    cx: 0,
-    cy: 0,
-    width: 0,
-    selected: false,
-  };
-}
-
-export function createActivityModel() {
+export function createActivityModel(
+  actorModel: ReturnType<typeof createActorModel>
+) {
+  let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
   const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
 
-  function addActivity(type: ActvityType, cx: number, cy: number): number {
-    lastActivityId++;
-    const entity: ActivityEntity = {
-      id: lastActivityId,
-      xpdlId: `newpkg_wp1_act${lastActivityId}`,
-      type,
-      actorId: 1,
-      title: `アクティビティ ${lastActivityId} アクティビティ`,
-      cx,
-      cy,
-      width: 100,
-      selected: true,
-    };
-    setActivityList([...activityList, entity]);
-    return lastActivityId;
+  function saveActivity() {
+    dataSource.findProcess(selectedProcess.id).activities = [
+      ...unwrap(activityList),
+    ];
+  }
+
+  function loadActivity(process: ProcessEntity) {
+    selectedProcess = process;
+    setActivityList(dataSource.findProcess(process.id).activities);
+  }
+
+  function addActivity(type: ActivityEntity["type"], cx: number, cy: number) {
+    const activity = dataFactory.createActivity(
+      selectedProcess,
+      actorModel.selectedActor().id,
+      type
+    );
+    activity.cx = cx;
+    activity.cy = cy;
+    setActivityList([...activityList, activity]);
+    return activity.id;
   }
 
   function moveSelectedActivities(moveX: number, moveY: number) {
@@ -123,5 +104,7 @@ export function createActivityModel() {
     layerTopActivity,
     selectActivities,
     toggleSelectActivity,
+    saveActivity,
+    loadActivity,
   };
 }

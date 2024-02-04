@@ -3,9 +3,11 @@ import { ProcessEntity } from "../data-source/data-type";
 import { dataSource } from "../data-source/data-source";
 import { dataFactory } from "../data-source/data-factory";
 import { createActorModel } from "./actor-model";
+import { createActivityModel } from "./activity-model";
 
 export function createProcessModel(
-  actorModel: ReturnType<typeof createActorModel>
+  actorModel: ReturnType<typeof createActorModel>,
+  activityModel: ReturnType<typeof createActivityModel>
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     dataSource.pkg.processes
@@ -15,8 +17,11 @@ export function createProcessModel(
   );
 
   function changeProcess(process: ProcessEntity) {
-    actorModel.changeProcess(process);
+    actorModel.saveActors();
+    activityModel.saveActivity();
     setSelectedProcess(process);
+    actorModel.loadActors(process);
+    activityModel.loadActivity(process);
   }
 
   function addProcess() {
@@ -34,11 +39,16 @@ export function createProcessModel(
   }
 
   function removeSelectedProcess() {
-    dataSource.pkg.processes = dataSource.pkg.processes.filter(
+    const nextSelectedIndex = Math.min(
+      processList().findIndex((it) => it.id === selectedProcess().id),
+      processList().length - 2
+    );
+    const newList = processList().filter(
       (it) => it.id !== selectedProcess().id
     );
-    setProcessList(dataSource.pkg.processes);
-    changeProcess(dataSource.pkg.processes[0]);
+    setProcessList(newList);
+    setSelectedProcess(processList()[nextSelectedIndex]);
+    changeProcess(selectedProcess());
   }
 
   return {

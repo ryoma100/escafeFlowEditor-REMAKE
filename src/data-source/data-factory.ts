@@ -87,7 +87,8 @@ function createActivity(
     splitType: "none",
     cx: 0,
     cy: 0,
-    width: 0,
+    width: 100,
+    selected: false,
   };
 }
 

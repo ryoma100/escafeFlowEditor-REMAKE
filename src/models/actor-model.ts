@@ -5,8 +5,6 @@ import { dataFactory } from "../data-source/data-factory";
 import { dataSource } from "../data-source/data-source";
 
 export function createActorModel() {
-  console.log("createActorModel");
-
   let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
   const [actorList, setActorList] = createStore<ActorEntity[]>(
     selectedProcess.actors
@@ -15,20 +13,14 @@ export function createActorModel() {
     actorList[0]
   );
 
-  function changeProcess(process: ProcessEntity) {
-    dataSource.findProcess(selectedProcess.id).actors = [...actorList];
-
-    selectedProcess = process;
-    setActorList(dataSource.findProcess(selectedProcess.id).actors);
-    setSelectedActor(actorList[0]);
+  function saveActors() {
+    dataSource.findProcess(selectedProcess.id).actors = [...unwrap(actorList)];
   }
 
-  function findActor(actorId: number): ActorEntity {
-    const actor = actorList.find((it) => it.id === actorId);
-    if (!actor) {
-      throw new Error(`actorModel: not found actor. id=${actorId}`);
-    }
-    return actor;
+  function loadActors(process: ProcessEntity) {
+    selectedProcess = process;
+    setActorList(dataSource.findProcess(process.id).actors);
+    setSelectedActor(actorList[0]);
   }
 
   function addActor() {
@@ -36,7 +28,6 @@ export function createActorModel() {
     setActorList([...actorList, actor]);
     const proxyActor = actorList[actorList.length - 1];
     setSelectedActor(proxyActor);
-    console.log("add", unwrap(actorList));
   }
 
   function updateActor(actor: ActorEntity) {
@@ -51,22 +42,22 @@ export function createActorModel() {
 
   function removeSelectedActor() {
     const nextSelectedIndex = Math.min(
-      actorList.findIndex((it) => it === selectedActor()),
+      actorList.findIndex((it) => it.id === selectedActor().id),
       actorList.length - 2
     );
-    const newList = actorList.filter((it) => it !== selectedActor());
+    const newList = actorList.filter((it) => it.id !== selectedActor().id);
     setActorList(newList);
-    setSelectedActor(newList[nextSelectedIndex]);
+    setSelectedActor(actorList[nextSelectedIndex]);
   }
 
   return {
     actorList,
-    findActor,
     selectedActor,
     setSelectedActor,
     addActor,
     updateActor,
     removeSelectedActor,
-    changeProcess: changeProcess,
+    saveActors,
+    loadActors,
   };
 }

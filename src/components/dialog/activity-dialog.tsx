@@ -3,7 +3,7 @@ import { useOperation } from "../../context/operation-context";
 import { createStore, produce } from "solid-js/store";
 import "./dialog.css";
 import { useModel } from "../../context/model-context";
-import { ActivityEntity, defaultActivity } from "../../models/activity-model";
+import { ActivityEntity } from "../../data-source/data-type";
 
 export function ActivityDialog() {
   const {
@@ -14,8 +14,7 @@ export function ActivityDialog() {
     activity: { openActivityDialogById, setOpenActivityDialogById },
   } = useOperation();
 
-  const [formData, setFormData] =
-    createStore<ActivityEntity>(defaultActivity());
+  const [formData, setFormData] = createStore<ActivityEntity>(null as any);
 
   createEffect(() => {
     if (openActivityDialogById() > 0) {
@@ -36,7 +35,7 @@ export function ActivityDialog() {
         it.xpdlId = formData.xpdlId;
         it.type = formData.type;
         it.actorId = formData.actorId;
-        it.title = formData.title;
+        it.name = formData.name;
       })
     );
     setOpenActivityDialogById(0);
@@ -61,8 +60,8 @@ export function ActivityDialog() {
           <div>仕事名：</div>
           <input
             type="text"
-            value={formData.title}
-            onInput={(e) => setFormData("title", e.target.value)}
+            value={formData.name}
+            onInput={(e) => setFormData("name", e.target.value)}
           />
           <div>アクター：</div>
           <select

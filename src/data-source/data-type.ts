@@ -65,6 +65,7 @@ export type ActivityEntity = {
   cx: number;
   cy: number;
   width: number;
+  selected: boolean;
 };
 
 export type TransitionEntity = {

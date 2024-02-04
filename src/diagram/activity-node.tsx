@@ -124,7 +124,7 @@ export function ActivityNode(props: { id: number }) {
           </div>
           <div class="activity__icon">🐧</div>
           <div ref={titleDiv} class="activity__title">
-            {activity().title}
+            {activity().name}
           </div>
         </div>
         <div

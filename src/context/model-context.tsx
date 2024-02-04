@@ -22,9 +22,9 @@ const ModelContext = createContext<{
 export function ModelProvider(props: { children: JSX.Element }) {
   const packageModel = createPackageModel();
   const actorModel = createActorModel();
-  const activityModel = createActivityModel();
+  const activityModel = createActivityModel(actorModel);
   const transitionModel = createTransitionModel(activityModel);
-  const processModel = createProcessModel(actorModel);
+  const processModel = createProcessModel(actorModel, activityModel);
 
   const value = {
     packageModel,
