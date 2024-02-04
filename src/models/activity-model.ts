@@ -32,7 +32,7 @@ export function defaultActivity(): ActivityEntity {
   };
 }
 
-export function activityModel() {
+export function createActivityModel() {
   const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
 
   function addActivity(type: ActvityType, cx: number, cy: number): number {

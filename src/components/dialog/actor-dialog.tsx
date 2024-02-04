@@ -10,14 +10,14 @@ export function ActorDialog() {
     actor: { openActorDialog, setOpenActorDialog },
   } = useOperation();
   const {
-    actor: { actorList, findActor, selectedActorId, updateActor },
+    actorModel: { selectedActor, updateActor },
   } = useModel();
 
-  const [formData, setFormData] = createStore<ActorEntity>(actorList[0]);
+  const [formData, setFormData] = createStore<ActorEntity>(null as any);
 
   createEffect(() => {
     if (openActorDialog()) {
-      setFormData({ ...findActor(selectedActorId()) });
+      setFormData(selectedActor());
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -25,7 +25,7 @@ export function ActorDialog() {
   });
 
   function handleOkButtonClick() {
-    updateActor({ ...formData });
+    updateActor(formData);
     setOpenActorDialog(false);
   }
 

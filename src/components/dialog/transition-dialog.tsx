@@ -9,7 +9,7 @@ import { useModel } from "../../context/model-context";
 
 export function TransitionDialog() {
   const {
-    transition: { transitionList, setTransitionList },
+    transitionModel: { transitionList, setTransitionList },
   } = useModel();
   const {
     transition: { openTransitionDialogById, setOpenTransitionDialogId },

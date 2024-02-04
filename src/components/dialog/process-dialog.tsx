@@ -10,7 +10,7 @@ export function ProcessDialog() {
     process: { openProcessDialog, setOpenProcessDialog },
   } = useOperation();
   const {
-    process: { selectedProcess, updateProcess },
+    processModel: { selectedProcess, updateProcess },
   } = useModel();
 
   const [formData, setFormData] = createStore<ProcessEntity>(undefined as any);

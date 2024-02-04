@@ -21,7 +21,7 @@ export function Diagram() {
     diagram: { zoom, dragType, setDragType, addingLine, setAddingLine },
   } = useDiagram();
   const {
-    activity: {
+    activityModel: {
       activityList,
       addActivity,
       moveSelectedActivities,
@@ -30,7 +30,7 @@ export function Diagram() {
       resizeLeft,
       resizeRight,
     },
-    transition: { transitionList },
+    transitionModel: { transitionList },
   } = useModel();
 
   const [svgRect, setRect] = createStore({

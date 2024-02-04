@@ -3,8 +3,8 @@ import { useOperation } from "../context/operation-context";
 
 export function TransitionEdge(props: { id: number }) {
   const {
-    activity: { activityList },
-    transition: { transitionList },
+    activityModel: { activityList },
+    transitionModel: { transitionList },
   } = useModel();
   const {
     transition: { setOpenTransitionDialogId },

@@ -3,7 +3,7 @@ import { ProcessEntity } from "../data-source/data-type";
 import { dataSource } from "../data-source/data-source";
 import { dataFactory } from "../data-source/data-factory";
 
-export function processModel() {
+export function createProcessModel() {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     dataSource.pkg.processes
   );

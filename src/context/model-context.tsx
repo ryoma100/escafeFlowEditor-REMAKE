@@ -1,33 +1,36 @@
 import { JSX, createContext, useContext } from "solid-js";
-import { packageModel } from "../models/package-model";
-import { activityModel } from "../models/activity-model";
-import { transitionModel } from "../models/transition-model";
-import { processModel } from "../data-model/process-model";
-import { actorModel } from "../data-model/actor-model";
+import { createPackageModel } from "../models/package-model";
+import { createActivityModel } from "../models/activity-model";
+import { createTransitionModel as createTransitionModel } from "../models/transition-model";
+import { createProcessModel as createProcessModel } from "../models/process-model";
+import { createActorModel } from "../models/actor-model";
 
 const ModelContext = createContext<{
-  pkg: ReturnType<typeof packageModel>;
-  process: ReturnType<typeof processModel>;
-  actor: ReturnType<typeof actorModel>;
-  activity: ReturnType<typeof activityModel>;
-  transition: ReturnType<typeof transitionModel>;
+  packageModel: ReturnType<typeof createPackageModel>;
+  processModel: ReturnType<typeof createProcessModel>;
+  actorModel: ReturnType<typeof createActorModel>;
+  activityModel: ReturnType<typeof createActivityModel>;
+  transitionModel: ReturnType<typeof createTransitionModel>;
 }>({
-  pkg: undefined as any,
-  process: undefined as any,
-  actor: undefined as any,
-  activity: undefined as any,
-  transition: undefined as any,
+  packageModel: undefined as any,
+  processModel: undefined as any,
+  actorModel: undefined as any,
+  activityModel: undefined as any,
+  transitionModel: undefined as any,
 });
 
 export function ModelProvider(props: { children: JSX.Element }) {
-  const activity = activityModel();
+  const packageModel = createPackageModel();
+  const processModel = createProcessModel();
+  const actorModel = createActorModel(processModel);
+  const activityModel = createActivityModel();
 
   const value = {
-    pkg: packageModel(),
-    process: processModel(),
-    actor: actorModel(),
-    activity,
-    transition: transitionModel(activity),
+    packageModel,
+    processModel,
+    actorModel,
+    activityModel,
+    transitionModel: createTransitionModel(activityModel),
   };
 
   return (

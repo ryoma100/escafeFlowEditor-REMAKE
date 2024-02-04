@@ -5,14 +5,14 @@ import { useDiagram } from "../context/diagram-context";
 
 export function ActivityNode(props: { id: number }) {
   const {
-    activity: {
+    activityModel: {
       activityList,
       layerTopActivity,
       selectActivities,
       toggleSelectActivity,
     },
-    actor: { actorList },
-    transition: { addTransition, transitionList },
+    actorModel: { actorList },
+    transitionModel: { addTransition, transitionList },
   } = useModel();
   const {
     activity: { setOpenActivityDialogById },

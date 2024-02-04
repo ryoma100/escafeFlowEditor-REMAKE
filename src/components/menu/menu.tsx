@@ -9,8 +9,8 @@ export function Menu() {
     actor: { setOpenActorDialog },
   } = useOperation();
   const {
-    process: { addProcess, removeSelectedProcess },
-    actor: { addActor, removeSelectedActor },
+    processModel: { addProcess, removeSelectedProcess },
+    actorModel: { addActor, removeSelectedActor },
   } = useModel();
 
   function handleFileNewClick() {

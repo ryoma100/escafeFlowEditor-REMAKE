@@ -10,7 +10,7 @@ export function PackageDialog() {
     pkg: { openPackageDialog, setPackageDialog },
   } = useOperation();
   const {
-    pkg: { pkg, setPkg, defaultPackage },
+    packageModel: { pkg, setPkg, defaultPackage },
   } = useModel();
 
   const [formData, setFormData] = createStore<PackageEntity>(defaultPackage());

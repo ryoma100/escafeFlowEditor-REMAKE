@@ -7,8 +7,8 @@ import { ActivityEntity, defaultActivity } from "../../models/activity-model";
 
 export function ActivityDialog() {
   const {
-    activity: { activityList, setActivityList },
-    actor: { actorList },
+    activityModel: { activityList, setActivityList },
+    actorModel: { actorList },
   } = useModel();
   const {
     activity: { openActivityDialogById, setOpenActivityDialogById },

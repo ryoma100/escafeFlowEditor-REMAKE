@@ -5,7 +5,7 @@ import { useDiagram } from "../../context/diagram-context";
 
 export function Main() {
   const {
-    process: { selectedProcess },
+    processModel: { selectedProcess },
   } = useModel();
   const {
     diagram: { zoom, setZoom },

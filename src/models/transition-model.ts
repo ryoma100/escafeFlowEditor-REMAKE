@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { activityModel } from "./activity-model";
+import { createActivityModel } from "./activity-model";
 
 let lastTransitionId = 0;
 export type TransitionEntity = {
@@ -21,9 +21,9 @@ export function defaultTransition(): TransitionEntity {
   };
 }
 
-export function transitionModel({
+export function createTransitionModel({
   activityList,
-}: ReturnType<typeof activityModel>) {
+}: ReturnType<typeof createActivityModel>) {
   const [transitionList, setTransitionList] = createStore<TransitionEntity[]>(
     []
   );

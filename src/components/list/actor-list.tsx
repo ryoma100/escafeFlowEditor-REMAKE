@@ -9,32 +9,28 @@ export function ActorList() {
     actor: { setOpenActorDialog },
   } = useOperation();
   const {
-    actor: {
+    actorModel: {
       actorList,
-      selectedActorId,
-      setSelectedActorId,
+      selectedActor,
+      setSelectedActor,
       addActor,
       removeSelectedActor,
     },
   } = useModel();
 
-  // onClickとonDblClick両方セットすると、onDblClickが呼ばれない
-  let lastClickTime: number = new Date().getTime();
-  function handleItemClick(actor: ActorEntity, _: MouseEvent) {
-    const time = new Date().getTime();
-    if (lastClickTime + 250 < time) {
-      setSelectedActorId(actor.id);
-    } else {
-      setOpenActorDialog(true);
-    }
-    lastClickTime = time;
+  function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
+    setSelectedActor(actor);
   }
 
-  function handleAddClick(_: MouseEvent) {
+  function handleItemDblClick(_: MouseEvent) {
+    setOpenActorDialog(true);
+  }
+
+  function handleAddButtonClick(_: MouseEvent) {
     addActor();
   }
 
-  function handleRemoveClick(_: MouseEvent) {
+  function handleRemoveButtonClick(_: MouseEvent) {
     removeSelectedActor();
   }
 
@@ -48,9 +44,10 @@ export function ActorList() {
               <li
                 class="list__item"
                 classList={{
-                  "list__item--selected": it.id === selectedActorId(),
+                  "list__item--selected": it === selectedActor(),
                 }}
-                onClick={[handleItemClick, it]}
+                onMouseDown={[handleItemMouseDown, it]}
+                onDblClick={handleItemDblClick}
               >
                 {it.name}
               </li>
@@ -59,8 +56,11 @@ export function ActorList() {
         </ul>
       </div>
       <div class="list__buttons">
-        <button onClick={handleAddClick}>追加</button>
-        <button onClick={handleRemoveClick} disabled={actorList.length === 1}>
+        <button onClick={handleAddButtonClick}>追加</button>
+        <button
+          onClick={handleRemoveButtonClick}
+          disabled={actorList.length === 1}
+        >
           削除
         </button>
       </div>

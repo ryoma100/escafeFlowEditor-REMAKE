@@ -9,7 +9,7 @@ export function ProcessList() {
     process: { setOpenProcessDialog },
   } = useOperation();
   const {
-    process: {
+    processModel: {
       processList,
       selectedProcess,
       setSelectedProcess,
@@ -18,23 +18,19 @@ export function ProcessList() {
     },
   } = useModel();
 
-  // onClickとonDblClick両方セットすると、onDblClickが呼ばれない
-  let lastClickTime: number = new Date().getTime();
-  function handleItemClick(item: ProcessEntity, _: MouseEvent) {
-    const time = new Date().getTime();
-    if (lastClickTime + 250 < time) {
-      setSelectedProcess(item);
-    } else {
-      setOpenProcessDialog(true);
-    }
-    lastClickTime = time;
+  function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
+    setSelectedProcess(process);
   }
 
-  function handleAddClick(_: MouseEvent) {
+  function handleItemDblClick(_: MouseEvent) {
+    setOpenProcessDialog(true);
+  }
+
+  function handleAddButtonClick(_: MouseEvent) {
     addProcess();
   }
 
-  function handleRemoveClick(_: MouseEvent) {
+  function handleRemoveButtonClick(_: MouseEvent) {
     removeSelectedProcess();
   }
 
@@ -50,7 +46,8 @@ export function ProcessList() {
                 classList={{
                   "list__item--selected": it.id === selectedProcess().id,
                 }}
-                onClick={[handleItemClick, it]}
+                onMouseDown={[handleItemMouseDown, it]}
+                onDblClick={handleItemDblClick}
               >
                 {it.name}
               </li>
@@ -59,9 +56,9 @@ export function ProcessList() {
         </ul>
       </div>
       <div class="list__buttons">
-        <button onClick={handleAddClick}>追加</button>
+        <button onClick={handleAddButtonClick}>追加</button>
         <button
-          onClick={handleRemoveClick}
+          onClick={handleRemoveButtonClick}
           disabled={processList().length === 1}
         >
           削除

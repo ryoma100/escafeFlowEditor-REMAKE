@@ -12,7 +12,7 @@ export type PackageEntity = {
   title: string;
 };
 
-export function packageModel() {
+export function createPackageModel() {
   const [pkg, setPkg] = createSignal<PackageEntity>({
     pkgId: "newpkg",
     title: "パッケージ",
