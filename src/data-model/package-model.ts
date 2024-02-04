@@ -1,12 +1,5 @@
 import { createSignal } from "solid-js";
 
-function defaultPackage(): PackageEntity {
-  return {
-    pkgId: "",
-    title: "",
-  };
-}
-
 export type PackageEntity = {
   pkgId: string;
   title: string;
@@ -18,5 +11,5 @@ export function createPackageModel() {
     title: "パッケージ",
   });
 
-  return { pkg, setPkg, defaultPackage };
+  return { pkg, setPkg };
 }

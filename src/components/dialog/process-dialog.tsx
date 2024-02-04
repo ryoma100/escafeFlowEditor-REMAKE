@@ -10,7 +10,7 @@ export function ProcessDialog() {
     dialog: { openProcessDialogId, setOpenProcessDialogId },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ProcessEntity>(undefined as any);
+  const [formData, setFormData] = createStore<ProcessEntity>(null as any);
 
   createEffect(() => {
     if (openProcessDialogId()) {

@@ -16,13 +16,13 @@ const AppContext = createContext<{
   dialog: ReturnType<typeof createDialogContext>;
   diagram: ReturnType<typeof createDiagramContext>;
 }>({
-  packageModel: undefined as any,
-  processModel: undefined as any,
-  actorModel: undefined as any,
-  activityModel: undefined as any,
-  transitionModel: undefined as any,
-  dialog: undefined as any,
-  diagram: undefined as any,
+  packageModel: null as any,
+  processModel: null as any,
+  actorModel: null as any,
+  activityModel: null as any,
+  transitionModel: null as any,
+  dialog: null as any,
+  diagram: null as any,
 });
 
 function createModelContext() {

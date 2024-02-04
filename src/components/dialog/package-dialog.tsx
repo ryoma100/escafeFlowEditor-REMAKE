@@ -6,11 +6,11 @@ import { useAppContext } from "../../context/app-context";
 
 export function PackageDialog() {
   const {
-    packageModel: { pkg, setPkg, defaultPackage },
+    packageModel: { pkg, setPkg },
     dialog: { openPackageDialog, setOpenPackageDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<PackageEntity>(defaultPackage());
+  const [formData, setFormData] = createStore<PackageEntity>(null as any);
 
   createEffect(() => {
     if (openPackageDialog()) {
