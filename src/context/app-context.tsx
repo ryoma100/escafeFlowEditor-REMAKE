@@ -1,11 +1,11 @@
 import { JSX, createContext, createSignal, useContext } from "solid-js";
-import { createPackageModel } from "../models/package-model";
-import { createActorModel } from "../models/actor-model";
-import { createActivityModel } from "../models/activity-model";
-import { createTransitionModel } from "../models/transition-model";
-import { createProcessModel } from "../models/process-model";
+import { createPackageModel } from "../data-model/package-model";
+import { createActorModel } from "../data-model/actor-model";
+import { createActivityModel } from "../data-model/activity-model";
+import { createTransitionModel } from "../data-model/transition-model";
+import { createProcessModel } from "../data-model/process-model";
 import { ToolbarType } from "../components/toolbar/toolbar";
-import { DragType } from "../diagram/disgram";
+import { DragType } from "../components/diagram/disgram";
 
 const AppContext = createContext<{
   packageModel: ReturnType<typeof createPackageModel>;

@@ -3,7 +3,7 @@ import "./diagram.css";
 import { ActivityNode } from "./activity-node";
 import { createStore } from "solid-js/store";
 import { TransitionEdge } from "./transition-edge";
-import { useAppContext } from "../context/app-context";
+import { useAppContext } from "../../context/app-context";
 
 export type DragType =
   | "none"

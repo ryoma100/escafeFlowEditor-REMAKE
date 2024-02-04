@@ -1,5 +1,5 @@
 import "./main.css";
-import { Diagram } from "../../diagram/disgram";
+import { Diagram } from "../diagram/disgram";
 import { useAppContext } from "../../context/app-context";
 
 export function Main() {

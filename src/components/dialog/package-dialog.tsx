@@ -1,7 +1,7 @@
 import { createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
-import { PackageEntity } from "../../models/package-model";
+import { PackageEntity } from "../../data-model/package-model";
 import { useAppContext } from "../../context/app-context";
 
 export function PackageDialog() {
