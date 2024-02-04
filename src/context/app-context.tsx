@@ -68,14 +68,14 @@ function createDialogContext() {
 
 function createDiagramContext() {
   const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
-  const [zoom, setZoom] = createSignal<number>(1);
+  const [zoom, setZoom] = createSignal<number>(1.0);
   const [dragType, setDragType] = createSignal<DragType>("none");
   const [addingLine, setAddingLine] = createSignal<{
     fromX: number;
     fromY: number;
     toX: number;
     toY: number;
-  }>({ fromX: 0, fromY: 0, toX: 0, toY: 0 });
+  }>(null as any);
 
   return {
     toolbar,

@@ -11,10 +11,6 @@ import { ActivityDialog } from "./components/dialog/activity-dialog";
 import { TransitionDialog } from "./components/dialog/transition-dialog";
 
 function App() {
-  document.onselectstart = () => {
-    return false;
-  };
-
   return (
     <>
       <div class="app">

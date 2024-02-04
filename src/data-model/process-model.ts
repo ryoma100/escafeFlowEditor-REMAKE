@@ -12,6 +12,7 @@ export function createProcessModel(
   transitionModel: ReturnType<typeof createTransitionModel>
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
+    // ネストしたフィールドをリアクティブにしないため、createStore()は使わない
     dataSource.pkg.processes
   );
   const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(

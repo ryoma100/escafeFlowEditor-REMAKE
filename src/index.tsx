@@ -5,6 +5,10 @@ import "./styles.css";
 import App from "./App";
 import { AppProvider } from "./context/app-context";
 
+document.onselectstart = () => {
+  return false;
+};
+
 render(
   () => (
     <AppProvider>
@@ -13,4 +17,3 @@ render(
   ),
   document.getElementById("root") as HTMLElement
 );
-1;
