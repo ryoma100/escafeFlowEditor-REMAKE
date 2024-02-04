@@ -1,17 +1,16 @@
-import { useModel } from "../../context/model-context";
-import { useOperation } from "../../context/operation-context";
+import { useAppContext } from "../../context/app-context";
 import "./menu.css";
 
 export function Menu() {
   const {
-    pkg: { setPackageDialog },
-    process: { setOpenProcessDialog },
-    actor: { setOpenActorDialog },
-  } = useOperation();
-  const {
-    processModel: { addProcess, removeSelectedProcess },
-    actorModel: { addActor, removeSelectedActor },
-  } = useModel();
+    processModel: { addProcess, removeSelectedProcess, selectedProcess },
+    actorModel: { addActor, removeSelectedActor, selectedActor },
+    dialog: {
+      setOpenPackageDialog,
+      setOpenProcessDialogId,
+      setOpenActorDialogId,
+    },
+  } = useAppContext();
 
   function handleFileNewClick() {
     return false;
@@ -38,7 +37,7 @@ export function Menu() {
   }
 
   function handlePackagePropertyClick() {
-    setPackageDialog(true);
+    setOpenPackageDialog(true);
     return false;
   }
 
@@ -53,7 +52,7 @@ export function Menu() {
   }
 
   function handleProcessPropertyClick() {
-    setOpenProcessDialog(true);
+    setOpenProcessDialogId(selectedProcess().id);
     return false;
   }
 
@@ -68,7 +67,7 @@ export function Menu() {
   }
 
   function handleActorPropertyClick() {
-    setOpenActorDialog(true);
+    setOpenActorDialogId(selectedActor().id);
     return false;
   }
 

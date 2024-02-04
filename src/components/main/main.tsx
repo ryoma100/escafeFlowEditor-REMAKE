@@ -1,15 +1,12 @@
 import "./main.css";
 import { Diagram } from "../../diagram/disgram";
-import { useModel } from "../../context/model-context";
-import { useDiagram } from "../../context/diagram-context";
+import { useAppContext } from "../../context/app-context";
 
 export function Main() {
   const {
     processModel: { selectedProcess },
-  } = useModel();
-  const {
     diagram: { zoom, setZoom },
-  } = useDiagram();
+  } = useAppContext();
 
   function handleAutoZoomButtonClick() {
     // TODO: auto zoom

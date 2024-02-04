@@ -1,22 +1,19 @@
 import { createEffect } from "solid-js";
-import { useOperation } from "../../context/operation-context";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
-import { useModel } from "../../context/model-context";
 import { ActorEntity } from "../../data-source/data-type";
+import { useAppContext } from "../../context/app-context";
 
 export function ActorDialog() {
   const {
-    actor: { openActorDialog, setOpenActorDialog },
-  } = useOperation();
-  const {
     actorModel: { selectedActor, updateActor },
-  } = useModel();
+    dialog: { openActorDialogId, setOpenActorDialogId },
+  } = useAppContext();
 
   const [formData, setFormData] = createStore<ActorEntity>(null as any);
 
   createEffect(() => {
-    if (openActorDialog()) {
+    if (openActorDialogId() > 0) {
       setFormData(selectedActor());
       dialog?.showModal();
     } else {
@@ -26,11 +23,11 @@ export function ActorDialog() {
 
   function handleOkButtonClick() {
     updateActor(formData);
-    setOpenActorDialog(false);
+    setOpenActorDialogId(selectedActor().id);
   }
 
   function handleClose() {
-    setOpenActorDialog(false);
+    setOpenActorDialogId(0);
   }
 
   let dialog: HTMLDialogElement | undefined;

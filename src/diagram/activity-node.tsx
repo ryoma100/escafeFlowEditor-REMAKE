@@ -1,7 +1,5 @@
 import { createSignal, onMount } from "solid-js";
-import { useModel } from "../context/model-context";
-import { useOperation } from "../context/operation-context";
-import { useDiagram } from "../context/diagram-context";
+import { useAppContext } from "../context/app-context";
 
 export function ActivityNode(props: { id: number }) {
   const {
@@ -13,14 +11,9 @@ export function ActivityNode(props: { id: number }) {
     },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
-  } = useModel();
-  const {
-    activity: { setOpenActivityDialogById },
-  } = useOperation();
-  const {
-    toolbar: { toolbar },
-    diagram: { dragType, setDragType, setAddingLine },
-  } = useDiagram();
+    dialog: { setOpenActivityDialogId },
+    diagram: { toolbar, dragType, setDragType, setAddingLine },
+  } = useAppContext();
 
   const activity = () => activityList.find((it) => it.id === props.id)!;
   const fromTransitionsLenght = () =>
@@ -86,7 +79,7 @@ export function ActivityNode(props: { id: number }) {
   }
 
   function handleDblClick() {
-    setOpenActivityDialogById(props.id);
+    setOpenActivityDialogId(props.id);
   }
 
   let titleDiv: HTMLDivElement | undefined;

@@ -1,4 +1,4 @@
-import { useDiagram } from "../../context/diagram-context";
+import { useAppContext } from "../../context/app-context";
 import "./toolbar.css";
 
 export type ToolbarType =
@@ -13,8 +13,8 @@ export type ToolbarType =
 
 export function Toolbar() {
   const {
-    toolbar: { toolbar, setToolbar },
-  } = useDiagram();
+    diagram: { toolbar, setToolbar },
+  } = useAppContext();
 
   return (
     <div class="toolbar">

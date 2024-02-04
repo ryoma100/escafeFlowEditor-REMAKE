@@ -1,10 +1,9 @@
 import { For, Show, createEffect, onMount } from "solid-js";
 import "./diagram.css";
-import { useModel } from "../context/model-context";
 import { ActivityNode } from "./activity-node";
 import { createStore } from "solid-js/store";
-import { useDiagram } from "../context/diagram-context";
 import { TransitionEdge } from "./transition-edge";
+import { useAppContext } from "../context/app-context";
 
 export type DragType =
   | "none"
@@ -17,10 +16,6 @@ export type DragType =
 
 export function Diagram() {
   const {
-    toolbar: { toolbar },
-    diagram: { zoom, dragType, setDragType, addingLine, setAddingLine },
-  } = useDiagram();
-  const {
     activityModel: {
       activityList,
       addActivity,
@@ -31,7 +26,15 @@ export function Diagram() {
       resizeRight,
     },
     transitionModel: { transitionList },
-  } = useModel();
+    diagram: {
+      toolbar,
+      zoom,
+      dragType,
+      setDragType,
+      addingLine,
+      setAddingLine,
+    },
+  } = useAppContext();
 
   const [svgRect, setRect] = createStore({
     x: 0,

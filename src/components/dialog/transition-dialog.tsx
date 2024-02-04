@@ -1,23 +1,20 @@
 import { createStore, produce } from "solid-js/store";
-import { useOperation } from "../../context/operation-context";
 import { createEffect } from "solid-js";
-import { useModel } from "../../context/model-context";
 import { TransitionEntity } from "../../data-source/data-type";
+import { useAppContext } from "../../context/app-context";
 
 export function TransitionDialog() {
   const {
     transitionModel: { transitionList, setTransitionList },
-  } = useModel();
-  const {
-    transition: { openTransitionDialogById, setOpenTransitionDialogId },
-  } = useOperation();
+    dialog: { openTransitionDialogId, setOpenTransitionDialogId },
+  } = useAppContext();
 
   const [formData, setFormData] = createStore<TransitionEntity>(null as any);
 
   createEffect(() => {
-    if (openTransitionDialogById() > 0) {
+    if (openTransitionDialogId() > 0) {
       const activity = transitionList.find(
-        (it) => it.id === openTransitionDialogById()
+        (it) => it.id === openTransitionDialogId()
       )!;
       setFormData({ ...activity });
       dialog?.showModal();
@@ -28,7 +25,7 @@ export function TransitionDialog() {
 
   function handleOkButtonClick() {
     setTransitionList(
-      (it) => it.id === openTransitionDialogById(),
+      (it) => it.id === openTransitionDialogId(),
       produce((it) => {
         it.xpdlId = formData.xpdlId;
       })

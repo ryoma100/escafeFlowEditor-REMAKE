@@ -1,17 +1,14 @@
 import { createEffect } from "solid-js";
-import { useOperation } from "../../context/operation-context";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
 import { PackageEntity } from "../../models/package-model";
-import { useModel } from "../../context/model-context";
+import { useAppContext } from "../../context/app-context";
 
 export function PackageDialog() {
   const {
-    pkg: { openPackageDialog, setPackageDialog },
-  } = useOperation();
-  const {
     packageModel: { pkg, setPkg, defaultPackage },
-  } = useModel();
+    dialog: { openPackageDialog, setOpenPackageDialog },
+  } = useAppContext();
 
   const [formData, setFormData] = createStore<PackageEntity>(defaultPackage());
 
@@ -26,11 +23,11 @@ export function PackageDialog() {
 
   function handleOkButtonClick() {
     setPkg({ ...formData });
-    setPackageDialog(false);
+    setOpenPackageDialog(false);
   }
 
   function handleClose() {
-    setPackageDialog(false);
+    setOpenPackageDialog(false);
   }
 
   let dialog: HTMLDialogElement | undefined;

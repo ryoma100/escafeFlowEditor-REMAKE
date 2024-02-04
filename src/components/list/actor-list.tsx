@@ -1,13 +1,9 @@
 import { For } from "solid-js";
-import { useOperation } from "../../context/operation-context";
 import "./list.css";
-import { useModel } from "../../context/model-context";
 import { ActorEntity } from "../../data-source/data-type";
+import { useAppContext } from "../../context/app-context";
 
 export function ActorList() {
-  const {
-    actor: { setOpenActorDialog },
-  } = useOperation();
   const {
     actorModel: {
       actorList,
@@ -16,14 +12,15 @@ export function ActorList() {
       addActor,
       removeSelectedActor,
     },
-  } = useModel();
+    dialog: { setOpenActorDialogId },
+  } = useAppContext();
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
     setSelectedActor(actor);
   }
 
   function handleItemDblClick(_: MouseEvent) {
-    setOpenActorDialog(true);
+    setOpenActorDialogId(selectedActor().id);
   }
 
   function handleAddButtonClick(_: MouseEvent) {

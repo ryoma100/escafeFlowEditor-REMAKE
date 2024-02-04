@@ -1,22 +1,19 @@
 import { createEffect } from "solid-js";
-import { useOperation } from "../../context/operation-context";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
-import { useModel } from "../../context/model-context";
 import { ProcessEntity } from "../../data-source/data-type";
+import { useAppContext } from "../../context/app-context";
 
 export function ProcessDialog() {
   const {
-    process: { openProcessDialog, setOpenProcessDialog },
-  } = useOperation();
-  const {
     processModel: { selectedProcess, updateProcess },
-  } = useModel();
+    dialog: { openProcessDialogId, setOpenProcessDialogId },
+  } = useAppContext();
 
   const [formData, setFormData] = createStore<ProcessEntity>(undefined as any);
 
   createEffect(() => {
-    if (openProcessDialog()) {
+    if (openProcessDialogId()) {
       setFormData({ ...selectedProcess() });
       dialog?.showModal();
     } else {
@@ -26,11 +23,11 @@ export function ProcessDialog() {
 
   function handleOkButtonClick() {
     updateProcess({ ...formData });
-    setOpenProcessDialog(false);
+    setOpenProcessDialogId(0);
   }
 
   function handleClose() {
-    setOpenProcessDialog(false);
+    setOpenProcessDialogId(0);
   }
 
   let dialog: HTMLDialogElement | undefined;

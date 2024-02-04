@@ -3,19 +3,13 @@ import { render } from "solid-js/web";
 import "solid-devtools";
 import "./styles.css";
 import App from "./App";
-import { ModelProvider } from "./context/model-context";
-import { OperationProvider } from "./context/operation-context";
-import { DiagramProvider } from "./context/diagram-context";
+import { AppProvider } from "./context/app-context";
 
 render(
   () => (
-    <ModelProvider>
-      <OperationProvider>
-        <DiagramProvider>
-          <App />
-        </DiagramProvider>
-      </OperationProvider>
-    </ModelProvider>
+    <AppProvider>
+      <App />
+    </AppProvider>
   ),
   document.getElementById("root") as HTMLElement
 );

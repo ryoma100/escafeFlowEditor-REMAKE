@@ -1,13 +1,9 @@
 import { For } from "solid-js";
-import { useOperation } from "../../context/operation-context";
 import "./list.css";
 import { ProcessEntity } from "../../data-source/data-type";
-import { useModel } from "../../context/model-context";
+import { useAppContext } from "../../context/app-context";
 
 export function ProcessList() {
-  const {
-    process: { setOpenProcessDialog },
-  } = useOperation();
   const {
     processModel: {
       processList,
@@ -16,14 +12,15 @@ export function ProcessList() {
       removeSelectedProcess,
       changeProcess,
     },
-  } = useModel();
+    dialog: { setOpenProcessDialogId },
+  } = useAppContext();
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
     changeProcess(process);
   }
 
   function handleItemDblClick(_: MouseEvent) {
-    setOpenProcessDialog(true);
+    setOpenProcessDialogId(selectedProcess().id);
   }
 
   function handleAddButtonClick(_: MouseEvent) {

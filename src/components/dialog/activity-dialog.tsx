@@ -1,25 +1,22 @@
 import { For, createEffect } from "solid-js";
-import { useOperation } from "../../context/operation-context";
 import { createStore, produce } from "solid-js/store";
 import "./dialog.css";
-import { useModel } from "../../context/model-context";
 import { ActivityEntity } from "../../data-source/data-type";
+import { useAppContext } from "../../context/app-context";
 
 export function ActivityDialog() {
   const {
-    activityModel: { activityList, setActivityList },
     actorModel: { actorList },
-  } = useModel();
-  const {
-    activity: { openActivityDialogById, setOpenActivityDialogById },
-  } = useOperation();
+    activityModel: { activityList, setActivityList },
+    dialog: { openActivityDialogId, setOpenActivityDialogId },
+  } = useAppContext();
 
   const [formData, setFormData] = createStore<ActivityEntity>(null as any);
 
   createEffect(() => {
-    if (openActivityDialogById() > 0) {
+    if (openActivityDialogId() > 0) {
       const activity = activityList.find(
-        (it) => it.id === openActivityDialogById()
+        (it) => it.id === openActivityDialogId()
       )!;
       setFormData({ ...activity });
       dialog?.showModal();
@@ -30,7 +27,7 @@ export function ActivityDialog() {
 
   function handleOkButtonClick() {
     setActivityList(
-      (it) => it.id === openActivityDialogById(),
+      (it) => it.id === openActivityDialogId(),
       produce((it) => {
         it.xpdlId = formData.xpdlId;
         it.type = formData.type;
@@ -38,11 +35,11 @@ export function ActivityDialog() {
         it.name = formData.name;
       })
     );
-    setOpenActivityDialogById(0);
+    setOpenActivityDialogId(0);
   }
 
   function handleClose() {
-    setOpenActivityDialogById(0);
+    setOpenActivityDialogId(0);
   }
 
   let dialog: HTMLDialogElement | undefined;

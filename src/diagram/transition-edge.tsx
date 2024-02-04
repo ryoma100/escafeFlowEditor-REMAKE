@@ -1,14 +1,11 @@
-import { useModel } from "../context/model-context";
-import { useOperation } from "../context/operation-context";
+import { useAppContext } from "../context/app-context";
 
 export function TransitionEdge(props: { id: number }) {
   const {
     activityModel: { activityList },
     transitionModel: { transitionList },
-  } = useModel();
-  const {
-    transition: { setOpenTransitionDialogId },
-  } = useOperation();
+    dialog: { setOpenTransitionDialogId },
+  } = useAppContext();
 
   const transition = () => transitionList.find((it) => it.id === props.id)!;
   const fromActivity = () =>
