@@ -12,7 +12,7 @@ export function ProcessList() {
       removeSelectedProcess,
       changeProcess,
     },
-    dialog: { setOpenProcessDialogId },
+    dialog: { setOpenProcessDialog },
   } = useAppContext();
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
@@ -20,7 +20,7 @@ export function ProcessList() {
   }
 
   function handleItemDblClick(_: MouseEvent) {
-    setOpenProcessDialogId(selectedProcess().id);
+    setOpenProcessDialog(selectedProcess());
   }
 
   function handleAddButtonClick(_: MouseEvent) {

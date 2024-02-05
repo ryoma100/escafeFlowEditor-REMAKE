@@ -1,14 +1,13 @@
-import { createSignal, onMount } from "solid-js";
+import { JSXElement, createSignal, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./comment-node.css";
+import { CommentEntity } from "../../data-source/data-type";
 
-export function CommentNode(props: { id: number }) {
+export function CommentNode(props: { comment: CommentEntity }): JSXElement {
   const {
-    commentModel: { commentList, toggleSelectComment, selectComments },
+    commentModel: { toggleSelectComment, selectComments },
     diagram: { toolbar, setDragType },
   } = useAppContext();
-
-  const comment = () => commentList.find((it) => it.id === props.id)!;
 
   const [width, setWidth] = createSignal(0);
   const [height, setHeight] = createSignal(0);
@@ -26,12 +25,12 @@ export function CommentNode(props: { id: number }) {
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
-          toggleSelectComment(props.id);
+          toggleSelectComment(props.comment.id);
           setDragType("none");
           e.stopPropagation();
         } else {
-          if (!comment().selected) {
-            selectComments([props.id]);
+          if (!props.comment.selected) {
+            selectComments([props.comment.id]);
           }
           setDragType("moveComments");
         }
@@ -42,15 +41,15 @@ export function CommentNode(props: { id: number }) {
   let titleDiv: HTMLDivElement | undefined;
   return (
     <foreignObject
-      x={comment().x}
-      y={comment().y}
+      x={props.comment.x}
+      y={props.comment.y}
       width={width()}
       height={height()}
     >
       <div
         class="comment"
         classList={{
-          "comment--selected": comment().selected,
+          "comment--selected": props.comment.selected,
         }}
         onMouseDown={handleMouseDown}
       >

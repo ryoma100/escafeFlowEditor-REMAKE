@@ -21,7 +21,11 @@ export function createActivityModel(
     setActivityList(dataSource.findProcess(process.id).activities);
   }
 
-  function addActivity(type: ActivityEntity["type"], cx: number, cy: number) {
+  function addActivity(
+    type: ActivityEntity["type"],
+    cx: number,
+    cy: number
+  ): ActivityEntity {
     const activity = dataFactory.createActivity(
       selectedProcess,
       actorModel.selectedActor().id,
@@ -30,7 +34,7 @@ export function createActivityModel(
     activity.cx = cx;
     activity.cy = cy;
     setActivityList([...activityList, activity]);
-    return activity.id;
+    return activity;
   }
 
   function moveSelectedActivities(moveX: number, moveY: number) {

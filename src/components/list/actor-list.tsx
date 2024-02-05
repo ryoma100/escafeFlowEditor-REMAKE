@@ -12,7 +12,7 @@ export function ActorList() {
       addActor,
       removeSelectedActor,
     },
-    dialog: { setOpenActorDialogId },
+    dialog: { setOpenActorDialog },
   } = useAppContext();
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
@@ -20,7 +20,7 @@ export function ActorList() {
   }
 
   function handleItemDblClick(_: MouseEvent) {
-    setOpenActorDialogId(selectedActor().id);
+    setOpenActorDialog(selectedActor());
   }
 
   function handleAddButtonClick(_: MouseEvent) {

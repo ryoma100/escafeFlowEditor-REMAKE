@@ -1,21 +1,23 @@
+import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
+import { TransitionEntity } from "../../data-source/data-type";
 import "./transition-edge.css";
 
-export function TransitionEdge(props: { id: number }) {
+export function TransitionEdge(props: {
+  transition: TransitionEntity;
+}): JSXElement {
   const {
     activityModel: { activityList },
-    transitionModel: { transitionList },
-    dialog: { setOpenTransitionDialogId },
+    dialog: { setOpenTransitionDialog },
   } = useAppContext();
 
-  const transition = () => transitionList.find((it) => it.id === props.id)!;
   const fromActivity = () =>
-    activityList.find((it) => it.id === transition().fromActivityId)!;
+    activityList.find((it) => it.id === props.transition.fromActivityId)!;
   const toActivity = () =>
-    activityList.find((it) => it.id === transition().toActivityId)!;
+    activityList.find((it) => it.id === props.transition.toActivityId)!;
 
   function onDlbClick(_e: MouseEvent) {
-    setOpenTransitionDialogId(transition().id);
+    setOpenTransitionDialog(props.transition);
   }
 
   return (

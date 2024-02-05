@@ -3,13 +3,10 @@ import "./menu.css";
 
 export function Menu() {
   const {
+    packageModel: { pkg },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    dialog: {
-      setOpenPackageDialog,
-      setOpenProcessDialogId,
-      setOpenActorDialogId,
-    },
+    dialog: { setOpenPackageDialog, setOpenProcessDialog, setOpenActorDialog },
   } = useAppContext();
 
   function handleFileNewClick() {
@@ -37,7 +34,7 @@ export function Menu() {
   }
 
   function handlePackagePropertyClick() {
-    setOpenPackageDialog(true);
+    setOpenPackageDialog(pkg);
     return false;
   }
 
@@ -52,7 +49,7 @@ export function Menu() {
   }
 
   function handleProcessPropertyClick() {
-    setOpenProcessDialogId(selectedProcess().id);
+    setOpenProcessDialog(selectedProcess());
     return false;
   }
 
@@ -67,7 +64,7 @@ export function Menu() {
   }
 
   function handleActorPropertyClick() {
-    setOpenActorDialogId(selectedActor().id);
+    setOpenActorDialog(selectedActor());
     return false;
   }
 

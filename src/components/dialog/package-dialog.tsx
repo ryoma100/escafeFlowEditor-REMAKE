@@ -1,20 +1,21 @@
-import { createEffect } from "solid-js";
+import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
-import { PackageEntity } from "../../data-model/package-model";
 import { useAppContext } from "../../context/app-context";
+import { PackageEntity } from "../../data-source/data-type";
 
-export function PackageDialog() {
+export function PackageDialog(): JSXElement {
   const {
-    packageModel: { pkg, setPkg },
+    packageModel: { setPkg },
     dialog: { openPackageDialog, setOpenPackageDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<PackageEntity>(null as any);
 
   createEffect(() => {
-    if (openPackageDialog()) {
-      setFormData({ ...pkg() });
+    const pkg = openPackageDialog();
+    if (pkg != null) {
+      setFormData({ ...pkg });
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -23,11 +24,11 @@ export function PackageDialog() {
 
   function handleOkButtonClick() {
     setPkg({ ...formData });
-    setOpenPackageDialog(false);
+    setOpenPackageDialog(null);
   }
 
   function handleClose() {
-    setOpenPackageDialog(false);
+    setOpenPackageDialog(null);
   }
 
   let dialog: HTMLDialogElement | undefined;
@@ -39,15 +40,17 @@ export function PackageDialog() {
           <div>ID：</div>
           <input
             type="text"
-            value={formData.pkgId}
-            onInput={(e) => setFormData("pkgId", e.target.value)}
+            value={formData.xpdlId}
+            onInput={(e) => setFormData("xpdlId", e.target.value)}
           />
+          <div />
           <div>名前：</div>
           <input
             type="text"
-            value={formData.title}
-            onInput={(e) => setFormData("title", e.target.value)}
+            value={formData.name}
+            onInput={(e) => setFormData("name", e.target.value)}
           />
+          <div />
         </div>
         <div class="dialog__buttons">
           <button type="button" onClick={handleOkButtonClick}>

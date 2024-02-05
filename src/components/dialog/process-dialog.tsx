@@ -1,21 +1,22 @@
-import { createEffect, createSignal } from "solid-js";
+import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
 import { ProcessEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
-export function ProcessDialog() {
+export function ProcessDialog(): JSXElement {
   const {
-    processModel: { selectedProcess, updateProcess, processList },
-    dialog: { openProcessDialogId, setOpenProcessDialogId },
+    processModel: { updateProcess, processList },
+    dialog: { openProcessDialog, setOpenProcessDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ProcessEntity>(null as any);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
-    if (openProcessDialogId()) {
-      setFormData({ ...selectedProcess() });
+    const process = openProcessDialog();
+    if (process != null) {
+      setFormData({ ...process });
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -26,7 +27,7 @@ export function ProcessDialog() {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
       processList().some(
-        (it) => it.id !== selectedProcess().id && it.xpdlId === text
+        (it) => it.id !== openProcessDialog()?.id && it.xpdlId === text
       )
         ? "このIDは既に存在します"
         : ""
@@ -35,11 +36,11 @@ export function ProcessDialog() {
 
   function handleOkButtonClick() {
     updateProcess({ ...formData });
-    setOpenProcessDialogId(0);
+    setOpenProcessDialog(null);
   }
 
   function handleClose() {
-    setOpenProcessDialogId(0);
+    setOpenProcessDialog(null);
   }
 
   let dialog: HTMLDialogElement | undefined;

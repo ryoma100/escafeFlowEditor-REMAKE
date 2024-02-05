@@ -1,21 +1,22 @@
-import { createEffect, createSignal } from "solid-js";
+import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
 import { ActorEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
-export function ActorDialog() {
+export function ActorDialog(): JSXElement {
   const {
-    actorModel: { selectedActor, updateActor, actorList },
-    dialog: { openActorDialogId, setOpenActorDialogId },
+    actorModel: { updateActor, actorList },
+    dialog: { openActorDialog, setOpenActorDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ActorEntity>(null as any);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
-    if (openActorDialogId() > 0) {
-      setFormData(selectedActor());
+    const actor = openActorDialog();
+    if (actor != null) {
+      setFormData(actor);
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -25,7 +26,9 @@ export function ActorDialog() {
   function handleXpdlIdInput(e: InputEvent) {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
-      actorList.some((it) => it.id !== selectedActor().id && it.xpdlId === text)
+      actorList.some(
+        (it) => it.id !== openActorDialog()?.id && it.xpdlId === text
+      )
         ? "このIDは既に存在します"
         : ""
     );
@@ -33,11 +36,11 @@ export function ActorDialog() {
 
   function handleOkButtonClick() {
     updateActor(formData);
-    setOpenActorDialogId(selectedActor().id);
+    setOpenActorDialog(null);
   }
 
   function handleClose() {
-    setOpenActorDialogId(0);
+    setOpenActorDialog(null);
   }
 
   let dialog: HTMLDialogElement | undefined;

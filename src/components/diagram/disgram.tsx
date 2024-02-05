@@ -1,4 +1,4 @@
-import { For, Show, createEffect, onMount } from "solid-js";
+import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import "./diagram.css";
 import { ActivityNode } from "./activity-node";
 import { createStore } from "solid-js/store";
@@ -17,7 +17,7 @@ export type DragType =
   | "addComment"
   | "moveComments";
 
-export function Diagram() {
+export function Diagram(): JSXElement {
   const {
     activityModel: {
       activityList,
@@ -86,21 +86,21 @@ export function Diagram() {
             setDragType("scroll");
             break;
           case "manual":
-            const addActivityId = addActivity(
+            const activity = addActivity(
               "manual",
               viewBox.x + (e.clientX - svgRect.x) / zoom(),
               viewBox.y + (e.clientY - svgRect.y) / zoom()
             );
-            layerTopActivity(addActivityId);
-            selectActivities([addActivityId]);
+            layerTopActivity(activity.id);
+            selectActivities([activity.id]);
             setDragType("addActivity");
             break;
           case "comment":
-            const addCommentId = addComment(
+            const comment = addComment(
               viewBox.x + (e.clientX - svgRect.x) / zoom(),
               viewBox.y + (e.clientY - svgRect.y) / zoom()
             );
-            selectComments([addCommentId]);
+            selectComments([comment.id]);
             setDragType("addComment");
             break;
         }
@@ -178,15 +178,19 @@ export function Diagram() {
           </marker>
         </defs>
         <g data-id="activities">
-          <For each={activityList}>{(it) => <ActivityNode id={it.id} />}</For>
+          <For each={activityList}>
+            {(activity) => <ActivityNode activity={activity} />}
+          </For>
         </g>
         <g data-id="transitions">
           <For each={transitionList}>
-            {(it) => <TransitionEdge id={it.id} />}
+            {(transition) => <TransitionEdge transition={transition} />}
           </For>
         </g>
         <g data-id="comments">
-          <For each={commentList}>{(it) => <CommentNode id={it.id} />}</For>
+          <For each={commentList}>
+            {(comment) => <CommentNode comment={comment} />}
+          </For>
         </g>
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>

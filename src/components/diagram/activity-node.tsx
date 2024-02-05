@@ -1,26 +1,22 @@
-import { createSignal, onMount } from "solid-js";
+import { JSXElement, createSignal, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./activity-node.css";
+import { ActivityEntity } from "../../data-source/data-type";
 
-export function ActivityNode(props: { id: number }) {
+export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
   const {
-    activityModel: {
-      activityList,
-      layerTopActivity,
-      selectActivities,
-      toggleSelectActivity,
-    },
+    activityModel: { layerTopActivity, selectActivities, toggleSelectActivity },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
-    dialog: { setOpenActivityDialogId },
+    dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLine },
   } = useAppContext();
 
-  const activity = () => activityList.find((it) => it.id === props.id)!;
   const fromTransitionsLenght = () =>
-    transitionList.filter((it) => it.toActivityId === props.id).length;
+    transitionList.filter((it) => it.toActivityId === props.activity.id).length;
   const toTransitionsLength = () =>
-    transitionList.filter((it) => it.fromActivityId === props.id).length;
+    transitionList.filter((it) => it.fromActivityId === props.activity.id)
+      .length;
 
   const [height, setHeight] = createSignal(0);
   onMount(() => {
@@ -33,12 +29,12 @@ export function ActivityNode(props: { id: number }) {
   });
 
   function handleLeftMouseDown(_e: MouseEvent) {
-    selectActivities([props.id]);
+    selectActivities([props.activity.id]);
     setDragType("resizeActivityLeft");
   }
 
   function handleRightMouseDown(_e: MouseEvent) {
-    selectActivities([props.id]);
+    selectActivities([props.activity.id]);
     setDragType("resizeActivityRight");
   }
 
@@ -46,24 +42,24 @@ export function ActivityNode(props: { id: number }) {
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
-          toggleSelectActivity(props.id);
+          toggleSelectActivity(props.activity.id);
           setDragType("none");
           e.stopPropagation();
         } else {
-          if (!activity().selected) {
-            selectActivities([props.id]);
+          if (!props.activity.selected) {
+            selectActivities([props.activity.id]);
           }
-          layerTopActivity(props.id);
+          layerTopActivity(props.activity.id);
           setDragType("moveActivities");
         }
         break;
       case "transion":
-        selectActivities([props.id]);
+        selectActivities([props.activity.id]);
         setAddingLine({
-          fromX: activity().cx,
-          fromY: activity().cy,
-          toX: activity().cx,
-          toY: activity().cy,
+          fromX: props.activity.cx,
+          fromY: props.activity.cy,
+          toX: props.activity.cx,
+          toY: props.activity.cy,
         });
         setDragType("addTransition");
         break;
@@ -73,30 +69,30 @@ export function ActivityNode(props: { id: number }) {
   function handleMouseUp(_e: MouseEvent) {
     switch (dragType()) {
       case "addTransition":
-        addTransition(activity().id);
+        addTransition(props.activity.id);
         setDragType("none");
         break;
     }
   }
 
   function handleDblClick() {
-    setOpenActivityDialogId(props.id);
+    setOpenActivityDialog(props.activity);
   }
 
   let titleDiv: HTMLDivElement | undefined;
   return (
     <foreignObject
-      data-id={activity().xpdlId}
-      x={activity().cx - activity().width / 2}
-      y={activity().cy - height() / 2}
-      width={activity().width}
+      data-id={props.activity.xpdlId}
+      x={props.activity.cx - props.activity.width / 2}
+      y={props.activity.cy - height() / 2}
+      width={props.activity.width}
       height={height()}
       onMouseUp={handleMouseUp}
     >
       <div
         class="activity"
         classList={{
-          "activity--selected": activity().selected,
+          "activity--selected": props.activity.selected,
         }}
       >
         <div
@@ -114,11 +110,11 @@ export function ActivityNode(props: { id: number }) {
           onDblClick={handleDblClick}
         >
           <div class="activity__actor">
-            {actorList.find((it) => it.id === activity().actorId)?.name}
+            {actorList.find((it) => it.id === props.activity.actorId)?.name}
           </div>
           <div class="activity__icon">🐧</div>
           <div ref={titleDiv} class="activity__title">
-            {activity().name}
+            {props.activity.name}
           </div>
         </div>
         <div

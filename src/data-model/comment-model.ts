@@ -18,12 +18,12 @@ export function createCommentModel() {
     setCommentList(dataSource.findProcess(process.id).comments);
   }
 
-  function addComment(x: number, y: number) {
+  function addComment(x: number, y: number): CommentEntity {
     const comment = dataFactory.createComment(selectedProcess);
     comment.x = x - 16;
     comment.y = y - 16;
     setCommentList([...commentList, comment]);
-    return comment.id;
+    return comment;
   }
 
   function moveSelectedComments(moveX: number, moveY: number) {

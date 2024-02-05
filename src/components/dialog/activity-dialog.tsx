@@ -1,24 +1,22 @@
-import { For, createEffect, createSignal } from "solid-js";
+import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import "./dialog.css";
 import { ActivityEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
-export function ActivityDialog() {
+export function ActivityDialog(): JSXElement {
   const {
     actorModel: { actorList },
     activityModel: { activityList, setActivityList },
-    dialog: { openActivityDialogId, setOpenActivityDialogId },
+    dialog: { openActivityDialog, setOpenActivityDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ActivityEntity>(null as any);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
-    if (openActivityDialogId() > 0) {
-      const activity = activityList.find(
-        (it) => it.id === openActivityDialogId()
-      )!;
+    const activity = openActivityDialog();
+    if (activity != null) {
       setFormData({ ...activity });
       dialog?.showModal();
     } else {
@@ -30,7 +28,7 @@ export function ActivityDialog() {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
       activityList.some(
-        (it) => it.id !== openActivityDialogId() && it.xpdlId === text
+        (it) => it.id !== openActivityDialog()?.id && it.xpdlId === text
       )
         ? "このIDは既に存在します"
         : ""
@@ -39,7 +37,7 @@ export function ActivityDialog() {
 
   function handleOkButtonClick() {
     setActivityList(
-      (it) => it.id === openActivityDialogId(),
+      (it) => it.id === openActivityDialog()?.id,
       produce((it) => {
         it.xpdlId = formData.xpdlId;
         it.type = formData.type;
@@ -47,11 +45,11 @@ export function ActivityDialog() {
         it.name = formData.name;
       })
     );
-    setOpenActivityDialogId(0);
+    setOpenActivityDialog(null);
   }
 
   function handleClose() {
-    setOpenActivityDialogId(0);
+    setOpenActivityDialog(null);
   }
 
   let dialog: HTMLDialogElement | undefined;

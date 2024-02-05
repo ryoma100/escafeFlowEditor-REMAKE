@@ -7,6 +7,13 @@ import { createProcessModel } from "../data-model/process-model";
 import { ToolbarType } from "../components/toolbar/toolbar";
 import { DragType } from "../components/diagram/disgram";
 import { createCommentModel } from "../data-model/comment-model";
+import {
+  ActivityEntity,
+  ActorEntity,
+  PackageEntity,
+  ProcessEntity,
+  TransitionEntity,
+} from "../data-source/data-type";
 
 const AppContext = createContext<{
   packageModel: ReturnType<typeof createPackageModel>;
@@ -52,23 +59,28 @@ function createModelContext() {
 }
 
 function createDialogContext() {
-  const [openPackageDialog, setOpenPackageDialog] = createSignal(false);
-  const [openProcessDialogId, setOpenProcessDialogId] = createSignal(0);
-  const [openActorDialogId, setOpenActorDialogId] = createSignal(0);
-  const [openActivityDialogId, setOpenActivityDialogId] = createSignal(0);
-  const [openTransitionDialogId, setOpenTransitionDialogId] = createSignal(0);
+  const [openPackageDialog, setOpenPackageDialog] =
+    createSignal<PackageEntity | null>(null);
+  const [openProcessDialog, setOpenProcessDialog] =
+    createSignal<ProcessEntity | null>(null);
+  const [openActorDialog, setOpenActorDialog] =
+    createSignal<ActorEntity | null>(null);
+  const [openActivityDialog, setOpenActivityDialog] =
+    createSignal<ActivityEntity | null>(null);
+  const [openTransitionDialog, setOpenTransitionDialog] =
+    createSignal<TransitionEntity | null>(null);
 
   return {
     openPackageDialog,
     setOpenPackageDialog,
-    openProcessDialogId,
-    setOpenProcessDialogId,
-    openActorDialogId,
-    setOpenActorDialogId,
-    openActivityDialogId,
-    setOpenActivityDialogId,
-    openTransitionDialogId,
-    setOpenTransitionDialogId,
+    openProcessDialog,
+    setOpenProcessDialog,
+    openActorDialog,
+    setOpenActorDialog,
+    openActivityDialog,
+    setOpenActivityDialog,
+    openTransitionDialog,
+    setOpenTransitionDialog,
   };
 }
 

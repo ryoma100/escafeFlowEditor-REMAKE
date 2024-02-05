@@ -23,7 +23,7 @@ export function createTransitionModel({
     setTransitionList(dataSource.findProcess(process.id).transitions);
   }
 
-  function addTransition(toActivityId: number) {
+  function addTransition(toActivityId: number): TransitionEntity {
     const fromActivityId = activityList.find((it) => it.selected)!.id;
     const transition = dataFactory.createTransition(
       selectedProcess,
@@ -31,7 +31,8 @@ export function createTransitionModel({
       toActivityId
     );
     setTransitionList([...transitionList, transition]);
-    return transition.id;
+    const proxyTransition = transitionList[transitionList.length - 1];
+    return proxyTransition;
   }
 
   return {

@@ -1,23 +1,21 @@
 import { createStore, produce } from "solid-js/store";
-import { createEffect, createSignal } from "solid-js";
+import { JSXElement, createEffect, createSignal } from "solid-js";
 import { TransitionEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
-export function TransitionDialog() {
+export function TransitionDialog(): JSXElement {
   const {
     transitionModel: { transitionList, setTransitionList },
-    dialog: { openTransitionDialogId, setOpenTransitionDialogId },
+    dialog: { openTransitionDialog, setOpenTransitionDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<TransitionEntity>(null as any);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
-    if (openTransitionDialogId() > 0) {
-      const activity = transitionList.find(
-        (it) => it.id === openTransitionDialogId()
-      )!;
-      setFormData({ ...activity });
+    const transition = openTransitionDialog();
+    if (transition != null) {
+      setFormData({ ...transition });
       dialog?.showModal();
     } else {
       dialog?.close();
@@ -26,19 +24,19 @@ export function TransitionDialog() {
 
   function handleOkButtonClick() {
     setTransitionList(
-      (it) => it.id === openTransitionDialogId(),
+      (it) => it.id === formData.id,
       produce((it) => {
         it.xpdlId = formData.xpdlId;
       })
     );
-    setOpenTransitionDialogId(0);
+    setOpenTransitionDialog(null);
   }
 
   function handleXpdlIdInput(e: InputEvent) {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
       transitionList.some(
-        (it) => it.id !== openTransitionDialogId() && it.xpdlId === text
+        (it) => it.id !== openTransitionDialog()?.id && it.xpdlId === text
       )
         ? "このIDは既に存在します"
         : ""
@@ -46,7 +44,7 @@ export function TransitionDialog() {
   }
 
   function handleClose() {
-    setOpenTransitionDialogId(0);
+    setOpenTransitionDialog(null);
   }
 
   let dialog: HTMLDialogElement | undefined;

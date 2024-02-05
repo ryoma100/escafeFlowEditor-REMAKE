@@ -1,15 +1,9 @@
 import { createSignal } from "solid-js";
-
-export type PackageEntity = {
-  pkgId: string;
-  title: string;
-};
+import { PackageEntity } from "../data-source/data-type";
+import { dataSource } from "../data-source/data-source";
 
 export function createPackageModel() {
-  const [pkg, setPkg] = createSignal<PackageEntity>({
-    pkgId: "newpkg",
-    title: "パッケージ",
-  });
+  const [pkg, setPkg] = createSignal<PackageEntity>(dataSource.pkg);
 
   return { pkg, setPkg };
 }
