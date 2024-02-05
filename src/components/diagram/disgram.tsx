@@ -4,6 +4,7 @@ import { ActivityNode } from "./activity-node";
 import { createStore } from "solid-js/store";
 import { TransitionEdge } from "./transition-edge";
 import { useAppContext } from "../../context/app-context";
+import { CommentNode } from "./comment-node";
 
 export type DragType =
   | "none"
@@ -12,7 +13,9 @@ export type DragType =
   | "moveActivities"
   | "resizeActivityLeft"
   | "resizeActivityRight"
-  | "addTransition";
+  | "addTransition"
+  | "addComment"
+  | "moveComments";
 
 export function Diagram() {
   const {
@@ -26,6 +29,12 @@ export function Diagram() {
       resizeRight,
     },
     transitionModel: { transitionList },
+    commentModel: {
+      commentList,
+      selectComments,
+      addComment,
+      moveSelectedComments,
+    },
     diagram: {
       toolbar,
       zoom,
@@ -48,8 +57,6 @@ export function Diagram() {
     width: 0,
     height: 0,
   });
-
-  let addActivityId: number = 0;
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -75,10 +82,11 @@ export function Diagram() {
         switch (toolbar()) {
           case "cursor":
             selectActivities([]);
+            selectComments([]);
             setDragType("scroll");
             break;
           case "manual":
-            addActivityId = addActivity(
+            const addActivityId = addActivity(
               "manual",
               viewBox.x + (e.clientX - svgRect.x) / zoom(),
               viewBox.y + (e.clientY - svgRect.y) / zoom()
@@ -86,6 +94,14 @@ export function Diagram() {
             layerTopActivity(addActivityId);
             selectActivities([addActivityId]);
             setDragType("addActivity");
+            break;
+          case "comment":
+            const addCommentId = addComment(
+              viewBox.x + (e.clientX - svgRect.x) / zoom(),
+              viewBox.y + (e.clientY - svgRect.y) / zoom()
+            );
+            selectComments([addCommentId]);
+            setDragType("addComment");
             break;
         }
         break;
@@ -104,8 +120,6 @@ export function Diagram() {
         });
         break;
       case "addActivity":
-        moveSelectedActivities(moveX, moveY);
-        break;
       case "moveActivities":
         moveSelectedActivities(moveX, moveY);
         break;
@@ -122,6 +136,10 @@ export function Diagram() {
           toX: viewBox.x + (e.clientX - svgRect.x) / zoom(),
           toY: viewBox.y + (e.clientY - svgRect.y) / zoom(),
         });
+        break;
+      case "addComment":
+      case "moveComments":
+        moveSelectedComments(moveX, moveY);
         break;
     }
   }
@@ -166,6 +184,9 @@ export function Diagram() {
           <For each={transitionList}>
             {(it) => <TransitionEdge id={it.id} />}
           </For>
+        </g>
+        <g data-id="comments">
+          <For each={commentList}>{(it) => <CommentNode id={it.id} />}</For>
         </g>
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>

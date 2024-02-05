@@ -5,11 +5,13 @@ import { dataFactory } from "../data-source/data-factory";
 import { createActorModel } from "./actor-model";
 import { createActivityModel } from "./activity-model";
 import { createTransitionModel } from "./transition-model";
+import { createCommentModel } from "./comment-model";
 
 export function createProcessModel(
   actorModel: ReturnType<typeof createActorModel>,
   activityModel: ReturnType<typeof createActivityModel>,
-  transitionModel: ReturnType<typeof createTransitionModel>
+  transitionModel: ReturnType<typeof createTransitionModel>,
+  commentModel: ReturnType<typeof createCommentModel>
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     // ネストしたフィールドをリアクティブにしないため、createStore()は使わない
@@ -23,11 +25,13 @@ export function createProcessModel(
     actorModel.saveActors();
     activityModel.saveActivity();
     transitionModel.saveTransition();
+    commentModel.saveComment();
     batch(() => {
       setSelectedProcess(process);
       actorModel.loadActors(process);
       activityModel.loadActivity(process);
       transitionModel.loadTransition(process);
+      commentModel.loadComment(process);
     });
   }
 

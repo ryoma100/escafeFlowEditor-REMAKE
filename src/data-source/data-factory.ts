@@ -4,6 +4,7 @@ import {
   ActorEntity,
   ActivityEntity,
   TransitionEntity,
+  CommentEntity,
 } from "./data-type";
 
 function createPackage(): PackageEntity {
@@ -42,8 +43,8 @@ function createProcess(pkg: PackageEntity): ProcessEntity {
     activities: [],
     _lastTransitionId: 0,
     transitions: [],
-    _lastAttributeId: 0,
-    attributes: [],
+    _lastCommentId: 0,
+    comments: [],
   };
   process.actors = [createActor(process)];
   return process;
@@ -112,10 +113,23 @@ function createTransition(
   };
 }
 
+function createComment(process: ProcessEntity): CommentEntity {
+  const id = ++process._lastCommentId;
+
+  return {
+    id,
+    comment: "コメント",
+    x: 0,
+    y: 0,
+    selected: false,
+  };
+}
+
 export const dataFactory = {
   createPackage,
   createProcess,
   createActor,
   createActivity,
   createTransition,
+  createComment,
 };

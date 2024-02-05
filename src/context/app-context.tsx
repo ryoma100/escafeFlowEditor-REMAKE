@@ -6,6 +6,7 @@ import { createTransitionModel } from "../data-model/transition-model";
 import { createProcessModel } from "../data-model/process-model";
 import { ToolbarType } from "../components/toolbar/toolbar";
 import { DragType } from "../components/diagram/disgram";
+import { createCommentModel } from "../data-model/comment-model";
 
 const AppContext = createContext<{
   packageModel: ReturnType<typeof createPackageModel>;
@@ -13,6 +14,7 @@ const AppContext = createContext<{
   actorModel: ReturnType<typeof createActorModel>;
   activityModel: ReturnType<typeof createActivityModel>;
   transitionModel: ReturnType<typeof createTransitionModel>;
+  commentModel: ReturnType<typeof createCommentModel>;
   dialog: ReturnType<typeof createDialogContext>;
   diagram: ReturnType<typeof createDiagramContext>;
 }>({
@@ -21,6 +23,7 @@ const AppContext = createContext<{
   actorModel: null as any,
   activityModel: null as any,
   transitionModel: null as any,
+  commentModel: null as any,
   dialog: null as any,
   diagram: null as any,
 });
@@ -30,10 +33,12 @@ function createModelContext() {
   const actorModel = createActorModel();
   const activityModel = createActivityModel(actorModel);
   const transitionModel = createTransitionModel(activityModel);
+  const commentModel = createCommentModel();
   const processModel = createProcessModel(
     actorModel,
     activityModel,
-    transitionModel
+    transitionModel,
+    commentModel
   );
 
   return {
@@ -42,6 +47,7 @@ function createModelContext() {
     actorModel,
     activityModel,
     transitionModel,
+    commentModel,
   };
 }
 

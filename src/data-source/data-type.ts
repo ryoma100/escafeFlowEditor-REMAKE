@@ -30,8 +30,8 @@ export type ProcessEntity = {
   _lastTransitionId: number;
   transitions: TransitionEntity[];
 
-  _lastAttributeId: number;
-  attributes: AttributeEntity[];
+  _lastCommentId: number;
+  comments: CommentEntity[];
 };
 
 export type ActorEntity = {
@@ -75,11 +75,18 @@ export type TransitionEntity = {
   toActivityId: number;
 };
 
-export type AttributeEntity = {
+export type CommentEntity = {
   id: number;
-  name: "start" | "end" | "comment";
-  activityId: string;
   comment: string;
   x: number;
   y: number;
+  selected: boolean;
+};
+
+export type StartStopEntity = {
+  id: number;
+  name: "start" | "end";
+  x: number;
+  y: number;
+  selected: boolean;
 };
