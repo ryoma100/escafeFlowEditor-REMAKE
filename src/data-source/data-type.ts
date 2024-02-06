@@ -62,9 +62,10 @@ export type ActivityEntity = {
   ognl: string;
   joinType: "none" | "xor" | "and";
   splitType: "none" | "xor" | "and";
-  cx: number;
-  cy: number;
+  x: number;
+  y: number;
   width: number;
+  height: number;
   selected: boolean;
 };
 
@@ -80,6 +81,8 @@ export type CommentEntity = {
   comment: string;
   x: number;
   y: number;
+  width: number;
+  height: number;
   selected: boolean;
 };
 

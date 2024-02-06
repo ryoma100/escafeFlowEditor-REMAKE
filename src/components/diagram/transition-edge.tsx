@@ -24,19 +24,19 @@ export function TransitionEdge(props: {
     <>
       <line
         class="transition"
-        x1={fromActivity().cx + fromActivity().width / 2}
-        y1={fromActivity().cy}
-        x2={toActivity().cx - toActivity().width / 2}
-        y2={toActivity().cy}
+        x1={fromActivity().x + fromActivity().width / 2}
+        y1={fromActivity().y}
+        x2={toActivity().x - toActivity().width / 2}
+        y2={toActivity().y}
         marker-end="url(#arrow-end)"
       />
       <line
         class="transition--hover"
         onDblClick={onDlbClick}
-        x1={fromActivity().cx + fromActivity().width / 2}
-        y1={fromActivity().cy}
-        x2={toActivity().cx - toActivity().width / 2}
-        y2={toActivity().cy}
+        x1={fromActivity().x + fromActivity().width / 2}
+        y1={fromActivity().y}
+        x2={toActivity().x - toActivity().width / 2}
+        y2={toActivity().y}
       />
     </>
   );

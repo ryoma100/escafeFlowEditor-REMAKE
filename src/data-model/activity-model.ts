@@ -31,8 +31,8 @@ export function createActivityModel(
       actorModel.selectedActor().id,
       type
     );
-    activity.cx = cx;
-    activity.cy = cy;
+    activity.x = cx - activity.width / 2;
+    activity.y = cy - activity.height / 2;
     setActivityList([...activityList, activity]);
     return activity;
   }
@@ -41,8 +41,8 @@ export function createActivityModel(
     setActivityList(
       (it) => it.selected,
       produce((it) => {
-        it.cx += moveX;
-        it.cy += moveY;
+        it.x += moveX;
+        it.y += moveY;
       })
     );
   }
@@ -79,7 +79,7 @@ export function createActivityModel(
       (it) => it.selected,
       produce((it) => {
         if (100 <= it.width - moveX) {
-          it.cx += moveX / 2;
+          it.x += moveX;
           it.width -= moveX;
         }
       })
@@ -91,7 +91,6 @@ export function createActivityModel(
       (it) => it.selected,
       produce((it) => {
         if (100 <= it.width + moveX) {
-          it.cx += moveX / 2;
           it.width += moveX;
         }
       })

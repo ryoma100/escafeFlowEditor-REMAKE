@@ -25,11 +25,11 @@
 }
 
 .list__item--selected {
-  background-color: var(--list-selected-color);
+  background-color: var(--app-selected-color);
 }
 
 .list__item:hover {
-  background-color: var(--list-hover-color);
+  background-color: var(--app-hover-color);
 }
 
 .list__buttons {

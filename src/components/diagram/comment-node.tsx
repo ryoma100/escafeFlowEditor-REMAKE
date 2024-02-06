@@ -1,21 +1,27 @@
-import { JSXElement, createSignal, onMount } from "solid-js";
+import { JSXElement, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./comment-node.css";
 import { CommentEntity } from "../../data-source/data-type";
+import { produce } from "solid-js/store";
 
 export function CommentNode(props: { comment: CommentEntity }): JSXElement {
   const {
-    commentModel: { toggleSelectComment, selectComments },
+    commentModel: { toggleSelectComment, selectComments, setCommentList },
     diagram: { toolbar, setDragType },
     dialog: { setOpenCommentDialog },
   } = useAppContext();
 
-  const [width, setWidth] = createSignal(0);
-  const [height, setHeight] = createSignal(0);
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      setWidth((titleDiv?.clientWidth ?? 0) + 32);
-      setHeight((titleDiv?.clientHeight ?? 0) + 9);
+      const width = (titleDiv?.clientWidth ?? 0) + 32;
+      const height = (titleDiv?.clientHeight ?? 0) + 9;
+      setCommentList(
+        (it) => it.id === props.comment.id,
+        produce((it) => {
+          it.width = width;
+          it.height = height;
+        })
+      );
     });
     if (titleDiv) {
       observer.observe(titleDiv);
@@ -48,8 +54,8 @@ export function CommentNode(props: { comment: CommentEntity }): JSXElement {
     <foreignObject
       x={props.comment.x}
       y={props.comment.y}
-      width={width()}
-      height={height()}
+      width={props.comment.width}
+      height={props.comment.height}
     >
       <div
         class="comment"

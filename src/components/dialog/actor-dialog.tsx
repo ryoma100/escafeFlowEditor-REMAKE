@@ -17,9 +17,9 @@ export function ActorDialog(): JSXElement {
     const actor = openActorDialog();
     if (actor != null) {
       setFormData(actor);
-      dialog?.showModal();
+      dialogRef?.showModal();
     } else {
-      dialog?.close();
+      dialogRef?.close();
     }
   });
 
@@ -43,9 +43,9 @@ export function ActorDialog(): JSXElement {
     setOpenActorDialog(null);
   }
 
-  let dialog: HTMLDialogElement | undefined;
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialog} onClose={handleClose}>
+    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>アクターの編集</h5>
       <form method="dialog">
         <div class="dialog__input">

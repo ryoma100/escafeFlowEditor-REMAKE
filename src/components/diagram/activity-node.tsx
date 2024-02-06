@@ -1,11 +1,17 @@
-import { JSXElement, createSignal, onMount } from "solid-js";
+import { JSXElement, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./activity-node.css";
 import { ActivityEntity } from "../../data-source/data-type";
+import { produce } from "solid-js/store";
 
 export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
   const {
-    activityModel: { layerTopActivity, selectActivities, toggleSelectActivity },
+    activityModel: {
+      layerTopActivity,
+      selectActivities,
+      toggleSelectActivity,
+      setActivityList,
+    },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
     dialog: { setOpenActivityDialog },
@@ -18,10 +24,16 @@ export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
     transitionList.filter((it) => it.fromActivityId === props.activity.id)
       .length;
 
-  const [height, setHeight] = createSignal(0);
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      setHeight((titleDiv?.clientHeight ?? 0) + 64); // TODO: 高さを調整
+      const height = (titleDiv?.clientHeight ?? 0) + 64; // TODO: 高さを調整
+      setActivityList(
+        (it) => it.id === props.activity.id,
+        produce((it) => {
+          it.y -= (height - it.height) / 2;
+          it.height = height;
+        })
+      );
     });
     if (titleDiv) {
       observer.observe(titleDiv);
@@ -56,10 +68,10 @@ export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
       case "transion":
         selectActivities([props.activity.id]);
         setAddingLine({
-          fromX: props.activity.cx,
-          fromY: props.activity.cy,
-          toX: props.activity.cx,
-          toY: props.activity.cy,
+          fromX: props.activity.x,
+          fromY: props.activity.y,
+          toX: props.activity.x,
+          toY: props.activity.y,
         });
         setDragType("addTransition");
         break;
@@ -83,10 +95,10 @@ export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
   return (
     <foreignObject
       data-id={props.activity.xpdlId}
-      x={props.activity.cx - props.activity.width / 2}
-      y={props.activity.cy - height() / 2}
+      x={props.activity.x}
+      y={props.activity.y}
       width={props.activity.width}
-      height={height()}
+      height={props.activity.height}
       onMouseUp={handleMouseUp}
     >
       <div

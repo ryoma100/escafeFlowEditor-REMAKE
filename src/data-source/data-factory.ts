@@ -86,9 +86,10 @@ function createActivity(
     ognl: "",
     joinType: "none",
     splitType: "none",
-    cx: 0,
-    cy: 0,
+    x: 0,
+    y: 0,
     width: 100,
+    height: 60,
     selected: false,
   };
 }
@@ -121,6 +122,8 @@ function createComment(process: ProcessEntity): CommentEntity {
     comment: "コメント",
     x: 0,
     y: 0,
+    width: 0,
+    height: 0,
     selected: false,
   };
 }
