@@ -59,6 +59,7 @@ export function createCommentModel() {
 
   return {
     commentList,
+    setCommentList,
     addComment,
     moveSelectedComments,
     selectComments,

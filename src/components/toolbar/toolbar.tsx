@@ -1,3 +1,4 @@
+import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./toolbar.css";
 
@@ -11,7 +12,7 @@ export type ToolbarType =
   | "end"
   | "comment";
 
-export function Toolbar() {
+export function Toolbar(): JSXElement {
   const {
     diagram: { toolbar, setToolbar },
   } = useAppContext();

@@ -9,8 +9,10 @@ import { Main } from "./components/main/main";
 import { ActorDialog } from "./components/dialog/actor-dialog";
 import { ActivityDialog } from "./components/dialog/activity-dialog";
 import { TransitionDialog } from "./components/dialog/transition-dialog";
+import { JSXElement } from "solid-js";
+import { CommentDialog } from "./components/dialog/comment-dialog";
 
-function App() {
+function App(): JSXElement {
   return (
     <>
       <div class="app">
@@ -36,6 +38,7 @@ function App() {
       <ActorDialog />
       <ActivityDialog />
       <TransitionDialog />
+      <CommentDialog />
     </>
   );
 }

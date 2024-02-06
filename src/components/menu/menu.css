@@ -1,6 +1,6 @@
 /* メニューバー */
 .menu__bar {
-  background-color: var(--menu-background-color);
+  background-color: var(--button-background-color);
 }
 .menu__bar > ul {
   display: flex;
@@ -19,7 +19,7 @@
   padding: 0 8px;
 }
 .menu__item:hover {
-  background-color: var(--menu-selected-color);
+  background-color: var(--button-selected-color);
 }
 
 /* ドロップダウンメニュー */
@@ -28,7 +28,7 @@
 }
 .menu__drop {
   position: absolute;
-  background-color: var(--menu-background-color);
+  background-color: var(--button-background-color);
   visibility: hidden;
   width: max-content;
   z-index: 1;
@@ -48,5 +48,5 @@
   padding: 0;
 }
 .menu__drop-item:hover {
-  background-color: var(--menu-selected-color);
+  background-color: var(--button-selected-color);
 }

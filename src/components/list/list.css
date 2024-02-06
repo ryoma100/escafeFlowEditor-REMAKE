@@ -7,7 +7,7 @@
 .list__scroll--outer {
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: white;
+  background-color: var(--background-color);
   height: 100%;
 }
 
@@ -19,7 +19,7 @@
 
 .list__item {
   padding: 2px 4px;
-  background-color: white;
+  background-color: var(--background-color);
   cursor: default;
   user-select: none;
 }

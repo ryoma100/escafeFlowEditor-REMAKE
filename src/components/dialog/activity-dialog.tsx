@@ -18,9 +18,9 @@ export function ActivityDialog(): JSXElement {
     const activity = openActivityDialog();
     if (activity != null) {
       setFormData({ ...activity });
-      dialog?.showModal();
+      dialogRef?.showModal();
     } else {
-      dialog?.close();
+      dialogRef?.close();
     }
   });
 
@@ -52,9 +52,9 @@ export function ActivityDialog(): JSXElement {
     setOpenActivityDialog(null);
   }
 
-  let dialog: HTMLDialogElement | undefined;
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialog} onClose={handleClose}>
+    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>仕事の編集</h5>
       <form method="dialog">
         <div class="dialog__input">

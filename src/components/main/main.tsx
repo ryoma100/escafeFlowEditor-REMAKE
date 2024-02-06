@@ -1,8 +1,9 @@
 import "./main.css";
 import { Diagram } from "../diagram/disgram";
 import { useAppContext } from "../../context/app-context";
+import { JSXElement } from "solid-js";
 
-export function Main() {
+export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
     diagram: { zoom, setZoom },

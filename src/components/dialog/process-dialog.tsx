@@ -17,9 +17,9 @@ export function ProcessDialog(): JSXElement {
     const process = openProcessDialog();
     if (process != null) {
       setFormData({ ...process });
-      dialog?.showModal();
+      dialogRef?.showModal();
     } else {
-      dialog?.close();
+      dialogRef?.close();
     }
   });
 
@@ -43,9 +43,9 @@ export function ProcessDialog(): JSXElement {
     setOpenProcessDialog(null);
   }
 
-  let dialog: HTMLDialogElement | undefined;
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialog} onClose={handleClose}>
+    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>ワークフロープロセスの編集</h5>
       <form method="dialog">
         <div class="dialog__input">

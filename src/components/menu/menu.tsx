@@ -1,7 +1,8 @@
+import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./menu.css";
 
-export function Menu() {
+export function Menu(): JSXElement {
   const {
     packageModel: { pkg },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },

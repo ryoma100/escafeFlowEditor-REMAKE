@@ -16,9 +16,9 @@ export function PackageDialog(): JSXElement {
     const pkg = openPackageDialog();
     if (pkg != null) {
       setFormData({ ...pkg });
-      dialog?.showModal();
+      dialogRef?.showModal();
     } else {
-      dialog?.close();
+      dialogRef?.close();
     }
   });
 
@@ -31,9 +31,9 @@ export function PackageDialog(): JSXElement {
     setOpenPackageDialog(null);
   }
 
-  let dialog: HTMLDialogElement | undefined;
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialog} onClose={handleClose}>
+    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>パッケージの編集</h5>
       <form method="dialog">
         <div class="dialog__input">

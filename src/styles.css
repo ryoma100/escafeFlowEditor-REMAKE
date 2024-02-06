@@ -1,12 +1,13 @@
-/* テーマカラー */
 :root {
-  --main-background-color: #c5e1a5;
-  --menu-background-color: #8bc34a;
-  --menu-selected-color: #689f38;
-  --list-selected-color: #689f38;
-  --list-hover-color: #8bc34a;
-
+  --background-color: #ffffff;
   --font-color: #0f0f0f;
+
+  --app-background-color: #c5e1a5;
+  --app-hover-color: #8bc34a;
+  --app-selected-color: #689f38;
+
+  --button-background-color: #8bc34a;
+  --button-selected-color: #689f38;
 }
 
 #root {
@@ -18,7 +19,7 @@
   font-weight: 400;
 
   color: var(--font-color);
-  background-color: var(--main-background-color);
+  background-color: var(--app-background-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

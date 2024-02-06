@@ -1,9 +1,9 @@
-import { For } from "solid-js";
+import { For, JSXElement } from "solid-js";
 import "./list.css";
 import { ProcessEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
-export function ProcessList() {
+export function ProcessList(): JSXElement {
   const {
     processModel: {
       processList,

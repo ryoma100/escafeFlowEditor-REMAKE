@@ -102,7 +102,7 @@ export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
         >
           <div
             classList={{ "activity__prev--one": fromTransitionsLenght() >= 1 }}
-          ></div>
+          />
         </div>
         <div
           class="activity__main"
@@ -124,7 +124,7 @@ export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
         >
           <div
             classList={{ "activity__next--one": toTransitionsLength() >= 1 }}
-          ></div>
+          />
         </div>
       </div>
     </foreignObject>

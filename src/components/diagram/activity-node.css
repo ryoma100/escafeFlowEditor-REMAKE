@@ -32,7 +32,7 @@
   border: 2px solid black;
   box-sizing: border-box;
   overflow: hidden;
-  background-color: white;
+  background-color: var(--background-color);
 }
 
 .activity__main:hover {

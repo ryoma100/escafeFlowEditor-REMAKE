@@ -7,13 +7,14 @@ export function CommentNode(props: { comment: CommentEntity }): JSXElement {
   const {
     commentModel: { toggleSelectComment, selectComments },
     diagram: { toolbar, setDragType },
+    dialog: { setOpenCommentDialog },
   } = useAppContext();
 
   const [width, setWidth] = createSignal(0);
   const [height, setHeight] = createSignal(0);
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      setWidth((titleDiv?.clientWidth ?? 0) + 24);
+      setWidth((titleDiv?.clientWidth ?? 0) + 32);
       setHeight((titleDiv?.clientHeight ?? 0) + 9);
     });
     if (titleDiv) {
@@ -38,6 +39,10 @@ export function CommentNode(props: { comment: CommentEntity }): JSXElement {
     }
   }
 
+  function handleDblClick(_e: MouseEvent) {
+    setOpenCommentDialog(props.comment);
+  }
+
   let titleDiv: HTMLDivElement | undefined;
   return (
     <foreignObject
@@ -52,10 +57,11 @@ export function CommentNode(props: { comment: CommentEntity }): JSXElement {
           "comment--selected": props.comment.selected,
         }}
         onMouseDown={handleMouseDown}
+        onDblClick={handleDblClick}
       >
         <div class="comment__icon">※</div>
         <div ref={titleDiv} class="comment__title">
-          {`コメント\ncomment\n吾輩は猫である。名前はまだ無い。`}
+          {props.comment.comment}
         </div>
       </div>
     </foreignObject>

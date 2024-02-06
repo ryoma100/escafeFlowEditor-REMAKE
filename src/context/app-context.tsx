@@ -10,6 +10,7 @@ import { createCommentModel } from "../data-model/comment-model";
 import {
   ActivityEntity,
   ActorEntity,
+  CommentEntity,
   PackageEntity,
   ProcessEntity,
   TransitionEntity,
@@ -25,14 +26,14 @@ const AppContext = createContext<{
   dialog: ReturnType<typeof createDialogContext>;
   diagram: ReturnType<typeof createDiagramContext>;
 }>({
-  packageModel: null as any,
-  processModel: null as any,
-  actorModel: null as any,
-  activityModel: null as any,
-  transitionModel: null as any,
-  commentModel: null as any,
-  dialog: null as any,
-  diagram: null as any,
+  packageModel: undefined as any,
+  processModel: undefined as any,
+  actorModel: undefined as any,
+  activityModel: undefined as any,
+  transitionModel: undefined as any,
+  commentModel: undefined as any,
+  dialog: undefined as any,
+  diagram: undefined as any,
 });
 
 function createModelContext() {
@@ -69,6 +70,8 @@ function createDialogContext() {
     createSignal<ActivityEntity | null>(null);
   const [openTransitionDialog, setOpenTransitionDialog] =
     createSignal<TransitionEntity | null>(null);
+  const [openCommentDialog, setOpenCommentDialog] =
+    createSignal<CommentEntity | null>(null);
 
   return {
     openPackageDialog,
@@ -81,6 +84,8 @@ function createDialogContext() {
     setOpenActivityDialog,
     openTransitionDialog,
     setOpenTransitionDialog,
+    openCommentDialog,
+    setOpenCommentDialog,
   };
 }
 

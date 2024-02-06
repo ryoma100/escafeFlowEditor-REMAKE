@@ -1,9 +1,9 @@
-import { For } from "solid-js";
+import { For, JSXElement } from "solid-js";
 import "./list.css";
 import { ActorEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
-export function ActorList() {
+export function ActorList(): JSXElement {
   const {
     actorModel: {
       actorList,
