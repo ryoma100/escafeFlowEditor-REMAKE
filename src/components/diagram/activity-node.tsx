@@ -14,6 +14,7 @@ export function ActivityNode(props: {
       toggleSelectActivity,
       setActivityList,
     },
+    commentModel: { selectComments },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
     dialog: { setOpenActivityDialog },
@@ -62,9 +63,10 @@ export function ActivityNode(props: {
         } else {
           if (!props.activity.selected) {
             selectActivities([props.activity.id]);
+            selectComments([]);
           }
           layerTopActivity(props.activity.id);
-          setDragType("moveActivities");
+          setDragType("moveNodes");
         }
         break;
       case "transion":

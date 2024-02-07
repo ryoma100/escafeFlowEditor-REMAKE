@@ -22,14 +22,14 @@ export function createActivityModel(
   }
 
   function addActivity(
-    type: ActivityNodeEntity["type"],
+    activityType: ActivityNodeEntity["activityType"],
     cx: number,
     cy: number
   ): ActivityNodeEntity {
     const activity = dataFactory.createActivity(
       selectedProcess,
       actorModel.selectedActor().id,
-      type
+      activityType
     );
     activity.x = cx - activity.width / 2;
     activity.y = cy - activity.height / 2;

@@ -53,43 +53,68 @@ export type ApplicationEntity = {
   extendedValue: string;
 };
 
-export type ActivityNodeEntity = {
+export type INode = {
   id: number;
+  type: "activity" | "comment" | "start" | "end";
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  selected: boolean;
+};
+
+export type ActivityNodeEntity = INode & {
   xpdlId: string;
-  type: "manual" | "auto" | "hand";
+  type: "activity";
+  activityType: "manual" | "auto" | "hand";
   name: string;
   actorId: number;
   ognl: string;
   joinType: "none" | "xor" | "and";
   splitType: "none" | "xor" | "and";
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  selected: boolean;
 };
 
-export type TransitionEdgeEntity = {
+export type CommentNodeEntity = INode & {
+  type: "comment";
+  comment: string;
+};
+
+export type StartNodeEntity = INode & {
+  type: "start";
+};
+
+export type EndNodeEntity = INode & {
+  type: "end";
+};
+
+export type IEdge = {
   id: number;
+  type: "transition" | "comment" | "start" | "end";
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
+};
+
+export type TransitionEdgeEntity = IEdge & {
+  type: "transition";
   xpdlId: string;
   fromActivityId: number;
   toActivityId: number;
 };
 
-export type CommentNodeEntity = {
-  id: number;
-  comment: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  selected: boolean;
+export type CommentEdgeEntity = IEdge & {
+  type: "comment";
+  fromCommentId: number;
+  toActivityId: number;
 };
 
-export type StartStopNodeEntity = {
-  id: number;
-  name: "start" | "end";
-  x: number;
-  y: number;
-  selected: boolean;
+export type StartEdgeEntity = IEdge & {
+  type: "start";
+  toActivityId: number;
+};
+
+export type EndEdgeEntity = IEdge & {
+  type: "end";
+  fromActivityId: number;
 };

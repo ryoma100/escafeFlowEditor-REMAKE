@@ -69,7 +69,7 @@ function createActor(process: ProcessEntity): ActorEntity {
 function createActivity(
   process: ProcessEntity,
   actorId: number,
-  type: ActivityNodeEntity["type"]
+  activityType: ActivityNodeEntity["activityType"]
 ): ActivityNodeEntity {
   let id = 0;
   let xpdlId = "";
@@ -81,7 +81,8 @@ function createActivity(
   return {
     id,
     xpdlId,
-    type,
+    type: "activity",
+    activityType,
     name: "",
     actorId,
     ognl: "",
@@ -110,8 +111,13 @@ function createTransition(
   return {
     id,
     xpdlId,
+    type: "transition",
     fromActivityId,
     toActivityId,
+    fromX: 0,
+    fromY: 0,
+    toX: 0,
+    toY: 0,
   };
 }
 
@@ -120,6 +126,7 @@ function createComment(process: ProcessEntity): CommentNodeEntity {
 
   return {
     id,
+    type: "comment",
     comment: "コメント",
     x: 0,
     y: 0,

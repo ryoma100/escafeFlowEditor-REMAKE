@@ -10,12 +10,11 @@ export type DragType =
   | "none"
   | "scroll"
   | "addActivity"
-  | "moveActivities"
+  | "moveNodes"
   | "resizeActivityLeft"
   | "resizeActivityRight"
   | "addTransition"
-  | "addComment"
-  | "moveComments";
+  | "addComment";
 
 export function Diagram(): JSXElement {
   const {
@@ -120,8 +119,10 @@ export function Diagram(): JSXElement {
         });
         break;
       case "addActivity":
-      case "moveActivities":
+      case "addComment":
+      case "moveNodes":
         moveSelectedActivities(moveX, moveY);
+        moveSelectedComments(moveX, moveY);
         break;
       case "resizeActivityLeft":
         resizeLeft(moveX);
@@ -136,10 +137,6 @@ export function Diagram(): JSXElement {
           toX: viewBox.x + (e.clientX - svgRect.x) / zoom(),
           toY: viewBox.y + (e.clientY - svgRect.y) / zoom(),
         });
-        break;
-      case "addComment":
-      case "moveComments":
-        moveSelectedComments(moveX, moveY);
         break;
     }
   }

@@ -7,6 +7,7 @@ import { produce } from "solid-js/store";
 export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
   const {
     commentModel: { toggleSelectComment, selectComments, setCommentList },
+    activityModel: { selectActivities },
     diagram: { toolbar, setDragType },
     dialog: { setOpenCommentDialog },
   } = useAppContext();
@@ -38,8 +39,9 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
         } else {
           if (!props.comment.selected) {
             selectComments([props.comment.id]);
+            selectActivities([]);
           }
-          setDragType("moveComments");
+          setDragType("moveNodes");
         }
         break;
     }
