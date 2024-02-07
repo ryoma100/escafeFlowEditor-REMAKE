@@ -1,31 +1,32 @@
+import { ACTIVITY_MIN_WIDTH } from "./data-source";
 import {
-  PackageEntity,
+  ProjectEntity,
   ProcessEntity,
   ActorEntity,
-  ActivityEntity,
-  TransitionEntity,
-  CommentEntity,
+  ActivityNodeEntity,
+  TransitionEdgeEntity,
+  CommentNodeEntity,
 } from "./data-type";
 
-function createPackage(): PackageEntity {
-  const pkg: PackageEntity = {
+function createProject(): ProjectEntity {
+  const project: ProjectEntity = {
     xpdlId: "newpkg",
     name: "パッケージ",
     created: new Date().toISOString(),
     _lastProcessId: 0,
     processes: [],
   };
-  pkg.processes = [createProcess(pkg)];
-  return pkg;
+  project.processes = [createProcess(project)];
+  return project;
 }
 
-function createProcess(pkg: PackageEntity): ProcessEntity {
+function createProcess(project: ProjectEntity): ProcessEntity {
   let id = 0;
   let xpdlId = "";
   do {
-    id = ++pkg._lastProcessId;
-    xpdlId = `${pkg.xpdlId}_wp${id}`;
-  } while (pkg.processes.some((it) => it.xpdlId === xpdlId));
+    id = ++project._lastProcessId;
+    xpdlId = `${project.xpdlId}_wp${id}`;
+  } while (project.processes.some((it) => it.xpdlId === xpdlId));
 
   const process: ProcessEntity = {
     id,
@@ -68,8 +69,8 @@ function createActor(process: ProcessEntity): ActorEntity {
 function createActivity(
   process: ProcessEntity,
   actorId: number,
-  type: ActivityEntity["type"]
-): ActivityEntity {
+  type: ActivityNodeEntity["type"]
+): ActivityNodeEntity {
   let id = 0;
   let xpdlId = "";
   do {
@@ -88,8 +89,8 @@ function createActivity(
     splitType: "none",
     x: 0,
     y: 0,
-    width: 100,
-    height: 60,
+    width: ACTIVITY_MIN_WIDTH,
+    height: 0,
     selected: false,
   };
 }
@@ -98,7 +99,7 @@ function createTransition(
   process: ProcessEntity,
   fromActivityId: number,
   toActivityId: number
-): TransitionEntity {
+): TransitionEdgeEntity {
   let id = 0;
   let xpdlId = "";
   do {
@@ -114,7 +115,7 @@ function createTransition(
   };
 }
 
-function createComment(process: ProcessEntity): CommentEntity {
+function createComment(process: ProcessEntity): CommentNodeEntity {
   const id = ++process._lastCommentId;
 
   return {
@@ -129,7 +130,7 @@ function createComment(process: ProcessEntity): CommentEntity {
 }
 
 export const dataFactory = {
-  createPackage,
+  createProject: createProject,
   createProcess,
   createActor,
   createActivity,

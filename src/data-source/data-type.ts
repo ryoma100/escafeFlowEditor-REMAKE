@@ -1,6 +1,6 @@
 type datetime = string;
 
-export type PackageEntity = {
+export type ProjectEntity = {
   xpdlId: string;
   name: string;
   created: datetime;
@@ -25,13 +25,13 @@ export type ProcessEntity = {
   applications: ApplicationEntity[];
 
   _lastActivityId: number;
-  activities: ActivityEntity[];
+  activities: ActivityNodeEntity[];
 
   _lastTransitionId: number;
-  transitions: TransitionEntity[];
+  transitions: TransitionEdgeEntity[];
 
   _lastCommentId: number;
-  comments: CommentEntity[];
+  comments: CommentNodeEntity[];
 };
 
 export type ActorEntity = {
@@ -53,7 +53,7 @@ export type ApplicationEntity = {
   extendedValue: string;
 };
 
-export type ActivityEntity = {
+export type ActivityNodeEntity = {
   id: number;
   xpdlId: string;
   type: "manual" | "auto" | "hand";
@@ -69,14 +69,14 @@ export type ActivityEntity = {
   selected: boolean;
 };
 
-export type TransitionEntity = {
+export type TransitionEdgeEntity = {
   id: number;
   xpdlId: string;
   fromActivityId: number;
   toActivityId: number;
 };
 
-export type CommentEntity = {
+export type CommentNodeEntity = {
   id: number;
   comment: string;
   x: number;
@@ -86,7 +86,7 @@ export type CommentEntity = {
   selected: boolean;
 };
 
-export type StartStopEntity = {
+export type StartStopNodeEntity = {
   id: number;
   name: "start" | "end";
   x: number;

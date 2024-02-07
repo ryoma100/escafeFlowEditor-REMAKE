@@ -15,10 +15,10 @@ export function createProcessModel(
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     // ネストしたフィールドをリアクティブにしないため、createStore()は使わない
-    dataSource.pkg.processes
+    dataSource.project.processes
   );
   const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(
-    dataSource.pkg.processes[0]
+    dataSource.project.processes[0]
   );
 
   function changeProcess(process: ProcessEntity) {
@@ -36,9 +36,9 @@ export function createProcessModel(
   }
 
   function addProcess() {
-    const process = dataFactory.createProcess(dataSource.pkg);
-    dataSource.pkg.processes = [...dataSource.pkg.processes, process];
-    setProcessList(dataSource.pkg.processes);
+    const process = dataFactory.createProcess(dataSource.project);
+    dataSource.project.processes = [...dataSource.project.processes, process];
+    setProcessList(dataSource.project.processes);
     changeProcess(process);
   }
 

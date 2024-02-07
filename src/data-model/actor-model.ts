@@ -5,7 +5,7 @@ import { dataFactory } from "../data-source/data-factory";
 import { dataSource } from "../data-source/data-source";
 
 export function createActorModel() {
-  let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
+  let selectedProcess: ProcessEntity = dataSource.project.processes[0];
   const [actorList, setActorList] = createStore<ActorEntity[]>(
     selectedProcess.actors
   );

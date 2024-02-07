@@ -4,10 +4,10 @@ import "./menu.css";
 
 export function Menu(): JSXElement {
   const {
-    packageModel: { pkg },
+    projectModel: { project },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    dialog: { setOpenPackageDialog, setOpenProcessDialog, setOpenActorDialog },
+    dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog },
   } = useAppContext();
 
   function handleFileNewClick() {
@@ -34,8 +34,8 @@ export function Menu(): JSXElement {
     return false;
   }
 
-  function handlePackagePropertyClick() {
-    setOpenPackageDialog(pkg);
+  function handleProjectPropertyClick() {
+    setOpenProjectDialog(project);
     return false;
   }
 
@@ -120,7 +120,7 @@ export function Menu(): JSXElement {
           <a href="#">パッケージ</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
-              <a href="#" onClick={handlePackagePropertyClick}>
+              <a href="#" onClick={handleProjectPropertyClick}>
                 プロパティ
               </a>
             </li>

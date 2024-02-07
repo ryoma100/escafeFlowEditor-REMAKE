@@ -1,14 +1,16 @@
 import { dataFactory } from "./data-factory";
 import { ProcessEntity } from "./data-type";
 
-let pkg = dataFactory.createPackage();
+export const ACTIVITY_MIN_WIDTH = 100;
 
-function clearPackage() {
-  pkg = dataFactory.createPackage();
+let project = dataFactory.createProject();
+
+function clearProject() {
+  project = dataFactory.createProject();
 }
 
 function findProcess(processId: number): ProcessEntity {
-  const process = pkg.processes.find((it) => it.id === processId);
+  const process = project.processes.find((it) => it.id === processId);
   if (!process) {
     throw new Error(`DataSource: process not found. id=${processId}`);
   }
@@ -16,7 +18,7 @@ function findProcess(processId: number): ProcessEntity {
 }
 
 export const dataSource = {
-  pkg,
-  clearPackage,
+  project,
+  clearProject,
   findProcess,
 };

@@ -1,11 +1,11 @@
 import { createStore, produce, unwrap } from "solid-js/store";
 import { dataSource } from "../data-source/data-source";
-import { CommentEntity, ProcessEntity } from "../data-source/data-type";
+import { CommentNodeEntity, ProcessEntity } from "../data-source/data-type";
 import { dataFactory } from "../data-source/data-factory";
 
 export function createCommentModel() {
-  let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
-  const [commentList, setCommentList] = createStore<CommentEntity[]>([]);
+  let selectedProcess: ProcessEntity = dataSource.project.processes[0];
+  const [commentList, setCommentList] = createStore<CommentNodeEntity[]>([]);
 
   function saveComment() {
     dataSource.findProcess(selectedProcess.id).comments = [
@@ -18,7 +18,7 @@ export function createCommentModel() {
     setCommentList(dataSource.findProcess(process.id).comments);
   }
 
-  function addComment(x: number, y: number): CommentEntity {
+  function addComment(x: number, y: number): CommentNodeEntity {
     const comment = dataFactory.createComment(selectedProcess);
     comment.x = x - 16;
     comment.y = y - 16;

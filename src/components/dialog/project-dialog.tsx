@@ -2,20 +2,20 @@ import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import "./dialog.css";
 import { useAppContext } from "../../context/app-context";
-import { PackageEntity } from "../../data-source/data-type";
+import { ProjectEntity } from "../../data-source/data-type";
 
-export function PackageDialog(): JSXElement {
+export function ProjectDialog(): JSXElement {
   const {
-    packageModel: { setPkg },
-    dialog: { openPackageDialog, setOpenPackageDialog },
+    projectModel: { setProject },
+    dialog: { openProjectDialog, setOpenProjectDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<PackageEntity>(null as any);
+  const [formData, setFormData] = createStore<ProjectEntity>(null as any);
 
   createEffect(() => {
-    const pkg = openPackageDialog();
-    if (pkg != null) {
-      setFormData({ ...pkg });
+    const project = openProjectDialog();
+    if (project != null) {
+      setFormData({ ...project });
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -23,12 +23,12 @@ export function PackageDialog(): JSXElement {
   });
 
   function handleOkButtonClick() {
-    setPkg({ ...formData });
-    setOpenPackageDialog(null);
+    setProject({ ...formData });
+    setOpenProjectDialog(null);
   }
 
   function handleClose() {
-    setOpenPackageDialog(null);
+    setOpenProjectDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

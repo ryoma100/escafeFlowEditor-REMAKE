@@ -1,14 +1,14 @@
 import { createStore, produce, unwrap } from "solid-js/store";
-import { ActivityEntity, ProcessEntity } from "../data-source/data-type";
+import { ActivityNodeEntity, ProcessEntity } from "../data-source/data-type";
 import { dataFactory } from "../data-source/data-factory";
-import { dataSource } from "../data-source/data-source";
+import { ACTIVITY_MIN_WIDTH, dataSource } from "../data-source/data-source";
 import { createActorModel } from "./actor-model";
 
 export function createActivityModel(
   actorModel: ReturnType<typeof createActorModel>
 ) {
-  let selectedProcess: ProcessEntity = dataSource.pkg.processes[0];
-  const [activityList, setActivityList] = createStore<ActivityEntity[]>([]);
+  let selectedProcess: ProcessEntity = dataSource.project.processes[0];
+  const [activityList, setActivityList] = createStore<ActivityNodeEntity[]>([]);
 
   function saveActivity() {
     dataSource.findProcess(selectedProcess.id).activities = [
@@ -22,10 +22,10 @@ export function createActivityModel(
   }
 
   function addActivity(
-    type: ActivityEntity["type"],
+    type: ActivityNodeEntity["type"],
     cx: number,
     cy: number
-  ): ActivityEntity {
+  ): ActivityNodeEntity {
     const activity = dataFactory.createActivity(
       selectedProcess,
       actorModel.selectedActor().id,
@@ -78,7 +78,7 @@ export function createActivityModel(
     setActivityList(
       (it) => it.selected,
       produce((it) => {
-        if (100 <= it.width - moveX) {
+        if (ACTIVITY_MIN_WIDTH <= it.width - moveX) {
           it.x += moveX;
           it.width -= moveX;
         }
@@ -90,7 +90,7 @@ export function createActivityModel(
     setActivityList(
       (it) => it.selected,
       produce((it) => {
-        if (100 <= it.width + moveX) {
+        if (ACTIVITY_MIN_WIDTH <= it.width + moveX) {
           it.width += moveX;
         }
       })

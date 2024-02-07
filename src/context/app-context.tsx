@@ -1,5 +1,5 @@
 import { JSX, createContext, createSignal, useContext } from "solid-js";
-import { createPackageModel } from "../data-model/package-model";
+import { createProjectModel } from "../data-model/project-model";
 import { createActorModel } from "../data-model/actor-model";
 import { createActivityModel } from "../data-model/activity-model";
 import { createTransitionModel } from "../data-model/transition-model";
@@ -8,16 +8,16 @@ import { ToolbarType } from "../components/toolbar/toolbar";
 import { DragType } from "../components/diagram/disgram";
 import { createCommentModel } from "../data-model/comment-model";
 import {
-  ActivityEntity,
+  ActivityNodeEntity,
   ActorEntity,
-  CommentEntity,
-  PackageEntity,
+  CommentNodeEntity,
+  ProjectEntity,
   ProcessEntity,
-  TransitionEntity,
+  TransitionEdgeEntity,
 } from "../data-source/data-type";
 
 const AppContext = createContext<{
-  packageModel: ReturnType<typeof createPackageModel>;
+  projectModel: ReturnType<typeof createProjectModel>;
   processModel: ReturnType<typeof createProcessModel>;
   actorModel: ReturnType<typeof createActorModel>;
   activityModel: ReturnType<typeof createActivityModel>;
@@ -26,7 +26,7 @@ const AppContext = createContext<{
   dialog: ReturnType<typeof createDialogContext>;
   diagram: ReturnType<typeof createDiagramContext>;
 }>({
-  packageModel: undefined as any,
+  projectModel: undefined as any,
   processModel: undefined as any,
   actorModel: undefined as any,
   activityModel: undefined as any,
@@ -37,7 +37,7 @@ const AppContext = createContext<{
 });
 
 function createModelContext() {
-  const packageModel = createPackageModel();
+  const projectModel = createProjectModel();
   const actorModel = createActorModel();
   const activityModel = createActivityModel(actorModel);
   const transitionModel = createTransitionModel(activityModel);
@@ -50,7 +50,7 @@ function createModelContext() {
   );
 
   return {
-    packageModel,
+    projectModel,
     processModel,
     actorModel,
     activityModel,
@@ -60,22 +60,22 @@ function createModelContext() {
 }
 
 function createDialogContext() {
-  const [openPackageDialog, setOpenPackageDialog] =
-    createSignal<PackageEntity | null>(null);
+  const [openProjectDialog, setOpenProjectDialog] =
+    createSignal<ProjectEntity | null>(null);
   const [openProcessDialog, setOpenProcessDialog] =
     createSignal<ProcessEntity | null>(null);
   const [openActorDialog, setOpenActorDialog] =
     createSignal<ActorEntity | null>(null);
   const [openActivityDialog, setOpenActivityDialog] =
-    createSignal<ActivityEntity | null>(null);
+    createSignal<ActivityNodeEntity | null>(null);
   const [openTransitionDialog, setOpenTransitionDialog] =
-    createSignal<TransitionEntity | null>(null);
+    createSignal<TransitionEdgeEntity | null>(null);
   const [openCommentDialog, setOpenCommentDialog] =
-    createSignal<CommentEntity | null>(null);
+    createSignal<CommentNodeEntity | null>(null);
 
   return {
-    openPackageDialog,
-    setOpenPackageDialog,
+    openProjectDialog,
+    setOpenProjectDialog,
     openProcessDialog,
     setOpenProcessDialog,
     openActorDialog,

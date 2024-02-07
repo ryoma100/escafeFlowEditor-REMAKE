@@ -1,6 +1,6 @@
 import { createStore, produce } from "solid-js/store";
 import { JSXElement, createEffect, createSignal } from "solid-js";
-import { TransitionEntity } from "../../data-source/data-type";
+import { TransitionEdgeEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
 export function TransitionDialog(): JSXElement {
@@ -9,7 +9,9 @@ export function TransitionDialog(): JSXElement {
     dialog: { openTransitionDialog, setOpenTransitionDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<TransitionEntity>(null as any);
+  const [formData, setFormData] = createStore<TransitionEdgeEntity>(
+    null as any
+  );
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

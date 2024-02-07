@@ -1,7 +1,7 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import "./dialog.css";
-import { ActivityEntity } from "../../data-source/data-type";
+import { ActivityNodeEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
 export function ActivityDialog(): JSXElement {
@@ -11,7 +11,7 @@ export function ActivityDialog(): JSXElement {
     dialog: { openActivityDialog, setOpenActivityDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ActivityEntity>(null as any);
+  const [formData, setFormData] = createStore<ActivityNodeEntity>(null as any);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

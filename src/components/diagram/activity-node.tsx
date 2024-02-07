@@ -1,10 +1,12 @@
 import { JSXElement, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./activity-node.css";
-import { ActivityEntity } from "../../data-source/data-type";
+import { ActivityNodeEntity } from "../../data-source/data-type";
 import { produce } from "solid-js/store";
 
-export function ActivityNode(props: { activity: ActivityEntity }): JSXElement {
+export function ActivityNode(props: {
+  activity: ActivityNodeEntity;
+}): JSXElement {
   const {
     activityModel: {
       layerTopActivity,

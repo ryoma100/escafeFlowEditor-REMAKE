@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import "./dialog.css";
-import { CommentEntity } from "../../data-source/data-type";
+import { CommentNodeEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
 
 export function CommentDialog(): JSXElement {
@@ -10,7 +10,9 @@ export function CommentDialog(): JSXElement {
     dialog: { openCommentDialog, setOpenCommentDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<CommentEntity>(undefined as any);
+  const [formData, setFormData] = createStore<CommentNodeEntity>(
+    undefined as any
+  );
 
   createEffect(() => {
     const comment = openCommentDialog();

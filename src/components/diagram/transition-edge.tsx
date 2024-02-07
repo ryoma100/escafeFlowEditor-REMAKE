@@ -1,10 +1,10 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { TransitionEntity } from "../../data-source/data-type";
+import { TransitionEdgeEntity } from "../../data-source/data-type";
 import "./transition-edge.css";
 
 export function TransitionEdge(props: {
-  transition: TransitionEntity;
+  transition: TransitionEdgeEntity;
 }): JSXElement {
   const {
     activityModel: { activityList },
@@ -24,19 +24,19 @@ export function TransitionEdge(props: {
     <>
       <line
         class="transition"
-        x1={fromActivity().x + fromActivity().width / 2}
-        y1={fromActivity().y}
-        x2={toActivity().x - toActivity().width / 2}
-        y2={toActivity().y}
+        x1={fromActivity().x + fromActivity().width}
+        y1={fromActivity().y + fromActivity().height / 2}
+        x2={toActivity().x}
+        y2={toActivity().y + toActivity().height / 2}
         marker-end="url(#arrow-end)"
       />
       <line
         class="transition--hover"
         onDblClick={onDlbClick}
-        x1={fromActivity().x + fromActivity().width / 2}
-        y1={fromActivity().y}
-        x2={toActivity().x - toActivity().width / 2}
-        y2={toActivity().y}
+        x1={fromActivity().x + fromActivity().width}
+        y1={fromActivity().y + fromActivity().height / 2}
+        x2={toActivity().x}
+        y2={toActivity().y + toActivity().height / 2}
       />
     </>
   );
