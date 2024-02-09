@@ -1,17 +1,11 @@
 import { For, JSXElement } from "solid-js";
-import "./list.css";
-import { ActorEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
+import { ActorEntity } from "../../data-source/data-type";
+import "./list.css";
 
 export function ActorList(): JSXElement {
   const {
-    actorModel: {
-      actorList,
-      selectedActor,
-      setSelectedActor,
-      addActor,
-      removeSelectedActor,
-    },
+    actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
     dialog: { setOpenActorDialog },
   } = useAppContext();
 
@@ -54,10 +48,7 @@ export function ActorList(): JSXElement {
       </div>
       <div class="list__buttons">
         <button onClick={handleAddButtonClick}>追加</button>
-        <button
-          onClick={handleRemoveButtonClick}
-          disabled={actorList.length === 1}
-        >
+        <button onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
           削除
         </button>
       </div>

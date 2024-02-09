@@ -15,11 +15,13 @@ npm install
 ## Development
 
 - for Web Browser
+
 ```
 npm run dev
 ```
 
 - for PC Applicaton
+
 ```
 npm run tauri dev
 ```
@@ -27,12 +29,14 @@ npm run tauri dev
 ## Build
 
 - for Web Browser
+
 ```
 npm run build
 npm run preview
 ```
 
 - for PC Application
+
 ```
 npm run tauri build
 ```

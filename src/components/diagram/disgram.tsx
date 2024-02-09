@@ -1,10 +1,10 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
-import "./diagram.css";
-import { ActivityNode } from "./activity-node";
 import { createStore } from "solid-js/store";
-import { TransitionEdge } from "./transition-edge";
 import { useAppContext } from "../../context/app-context";
+import { ActivityNode } from "./activity-node";
 import { CommentNode } from "./comment-node";
+import "./diagram.css";
+import { TransitionEdge } from "./transition-edge";
 
 export type DragType =
   | "none"
@@ -28,20 +28,8 @@ export function Diagram(): JSXElement {
       resizeRight,
     },
     transitionModel: { transitionList },
-    commentModel: {
-      commentList,
-      selectComments,
-      addComment,
-      moveSelectedComments,
-    },
-    diagram: {
-      toolbar,
-      zoom,
-      dragType,
-      setDragType,
-      addingLine,
-      setAddingLine,
-    },
+    commentModel: { commentList, selectComments, addComment, moveSelectedComments },
+    diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLine },
   } = useAppContext();
 
   const [svgRect, setRect] = createStore({
@@ -88,7 +76,7 @@ export function Diagram(): JSXElement {
             const activity = addActivity(
               "manual",
               viewBox.x + (e.clientX - svgRect.x) / zoom(),
-              viewBox.y + (e.clientY - svgRect.y) / zoom()
+              viewBox.y + (e.clientY - svgRect.y) / zoom(),
             );
             layerTopActivity(activity.id);
             selectActivities([activity.id]);
@@ -97,7 +85,7 @@ export function Diagram(): JSXElement {
           case "comment":
             const comment = addComment(
               viewBox.x + (e.clientX - svgRect.x) / zoom(),
-              viewBox.y + (e.clientY - svgRect.y) / zoom()
+              viewBox.y + (e.clientY - svgRect.y) / zoom(),
             );
             selectComments([comment.id]);
             setDragType("addComment");
@@ -175,9 +163,7 @@ export function Diagram(): JSXElement {
           </marker>
         </defs>
         <g data-id="activities">
-          <For each={activityList}>
-            {(activity) => <ActivityNode activity={activity} />}
-          </For>
+          <For each={activityList}>{(activity) => <ActivityNode activity={activity} />}</For>
         </g>
         <g data-id="transitions">
           <For each={transitionList}>
@@ -185,9 +171,7 @@ export function Diagram(): JSXElement {
           </For>
         </g>
         <g data-id="comments">
-          <For each={commentList}>
-            {(comment) => <CommentNode comment={comment} />}
-          </For>
+          <For each={commentList}>{(comment) => <CommentNode comment={comment} />}</For>
         </g>
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>

@@ -1,19 +1,12 @@
 import { JSXElement, onMount } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import "./activity-node.css";
-import { ActivityNodeEntity } from "../../data-source/data-type";
 import { produce } from "solid-js/store";
+import { useAppContext } from "../../context/app-context";
+import { ActivityNodeEntity } from "../../data-source/data-type";
+import "./activity-node.css";
 
-export function ActivityNode(props: {
-  activity: ActivityNodeEntity;
-}): JSXElement {
+export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElement {
   const {
-    activityModel: {
-      layerTopActivity,
-      selectActivities,
-      toggleSelectActivity,
-      setActivityList,
-    },
+    activityModel: { layerTopActivity, selectActivities, toggleSelectActivity, setActivityList },
     commentModel: { selectComments },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
@@ -24,8 +17,7 @@ export function ActivityNode(props: {
   const fromTransitionsLenght = () =>
     transitionList.filter((it) => it.toActivityId === props.activity.id).length;
   const toTransitionsLength = () =>
-    transitionList.filter((it) => it.fromActivityId === props.activity.id)
-      .length;
+    transitionList.filter((it) => it.fromActivityId === props.activity.id).length;
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -35,7 +27,7 @@ export function ActivityNode(props: {
         produce((it) => {
           it.y -= (height - it.height) / 2;
           it.height = height;
-        })
+        }),
       );
     });
     if (titleDiv) {
@@ -116,15 +108,9 @@ export function ActivityNode(props: {
           classList={{ "activity__prev--many": fromTransitionsLenght() >= 2 }}
           onMouseDown={handleLeftMouseDown}
         >
-          <div
-            classList={{ "activity__prev--one": fromTransitionsLenght() >= 1 }}
-          />
+          <div classList={{ "activity__prev--one": fromTransitionsLenght() >= 1 }} />
         </div>
-        <div
-          class="activity__main"
-          onMouseDown={handleMouseDown}
-          onDblClick={handleDblClick}
-        >
+        <div class="activity__main" onMouseDown={handleMouseDown} onDblClick={handleDblClick}>
           <div class="activity__actor">
             {actorList.find((it) => it.id === props.activity.actorId)?.name}
           </div>
@@ -138,9 +124,7 @@ export function ActivityNode(props: {
           classList={{ "activity__next--many": toTransitionsLength() >= 2 }}
           onMouseDown={handleRightMouseDown}
         >
-          <div
-            classList={{ "activity__next--one": toTransitionsLength() >= 1 }}
-          />
+          <div classList={{ "activity__next--one": toTransitionsLength() >= 1 }} />
         </div>
       </div>
     </foreignObject>

@@ -1,11 +1,10 @@
-import { ACTIVITY_MIN_WIDTH } from "./data-source";
 import {
-  ProjectEntity,
-  ProcessEntity,
-  ActorEntity,
   ActivityNodeEntity,
-  TransitionEdgeEntity,
+  ActorEntity,
   CommentNodeEntity,
+  ProcessEntity,
+  ProjectEntity,
+  TransitionEdgeEntity,
 } from "./data-type";
 
 function createProject(): ProjectEntity {
@@ -69,7 +68,7 @@ function createActor(process: ProcessEntity): ActorEntity {
 function createActivity(
   process: ProcessEntity,
   actorId: number,
-  activityType: ActivityNodeEntity["activityType"]
+  activityType: ActivityNodeEntity["activityType"],
 ): ActivityNodeEntity {
   let id = 0;
   let xpdlId = "";
@@ -90,7 +89,7 @@ function createActivity(
     splitType: "none",
     x: 0,
     y: 0,
-    width: ACTIVITY_MIN_WIDTH,
+    width: 100,
     height: 0,
     selected: false,
   };
@@ -99,7 +98,7 @@ function createActivity(
 function createTransition(
   process: ProcessEntity,
   fromActivityId: number,
-  toActivityId: number
+  toActivityId: number,
 ): TransitionEdgeEntity {
   let id = 0;
   let xpdlId = "";

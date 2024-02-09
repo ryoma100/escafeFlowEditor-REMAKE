@@ -1,8 +1,8 @@
 import { JSXElement, onMount } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import "./comment-node.css";
-import { CommentNodeEntity } from "../../data-source/data-type";
 import { produce } from "solid-js/store";
+import { useAppContext } from "../../context/app-context";
+import { CommentNodeEntity } from "../../data-source/data-type";
+import "./comment-node.css";
 
 export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
   const {
@@ -21,7 +21,7 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
         produce((it) => {
           it.width = width;
           it.height = height;
-        })
+        }),
       );
     });
     if (titleDiv) {

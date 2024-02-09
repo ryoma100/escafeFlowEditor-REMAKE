@@ -1,8 +1,8 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
-import "./dialog.css";
 import { useAppContext } from "../../context/app-context";
 import { ProjectEntity } from "../../data-source/data-type";
+import "./dialog.css";
 
 export function ProjectDialog(): JSXElement {
   const {

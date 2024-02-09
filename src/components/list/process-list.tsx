@@ -1,7 +1,7 @@
 import { For, JSXElement } from "solid-js";
-import "./list.css";
-import { ProcessEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
+import { ProcessEntity } from "../../data-source/data-type";
+import "./list.css";
 
 export function ProcessList(): JSXElement {
   const {
@@ -54,10 +54,7 @@ export function ProcessList(): JSXElement {
       </div>
       <div class="list__buttons">
         <button onClick={handleAddButtonClick}>追加</button>
-        <button
-          onClick={handleRemoveButtonClick}
-          disabled={processList().length === 1}
-        >
+        <button onClick={handleRemoveButtonClick} disabled={processList().length === 1}>
           削除
         </button>
       </div>

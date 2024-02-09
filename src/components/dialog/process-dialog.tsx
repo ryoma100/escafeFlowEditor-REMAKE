@@ -1,8 +1,8 @@
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import "./dialog.css";
-import { ProcessEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
+import { ProcessEntity } from "../../data-source/data-type";
+import "./dialog.css";
 
 export function ProcessDialog(): JSXElement {
   const {
@@ -26,11 +26,9 @@ export function ProcessDialog(): JSXElement {
   function handleXpdlIdInput(e: InputEvent) {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
-      processList().some(
-        (it) => it.id !== openProcessDialog()?.id && it.xpdlId === text
-      )
+      processList().some((it) => it.id !== openProcessDialog()?.id && it.xpdlId === text)
         ? "このIDは既に存在します"
-        : ""
+        : "",
     );
   }
 
@@ -66,11 +64,7 @@ export function ProcessDialog(): JSXElement {
           <p />
         </div>
         <div class="dialog__buttons">
-          <button
-            type="button"
-            onClick={handleOkButtonClick}
-            disabled={xpdlIdError() !== ""}
-          >
+          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
             OK
           </button>
           <button type="button" onClick={handleClose}>

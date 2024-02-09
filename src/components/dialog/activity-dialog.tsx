@@ -1,8 +1,8 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
-import "./dialog.css";
-import { ActivityNodeEntity } from "../../data-source/data-type";
 import { useAppContext } from "../../context/app-context";
+import { ActivityNodeEntity } from "../../data-source/data-type";
+import "./dialog.css";
 
 export function ActivityDialog(): JSXElement {
   const {
@@ -27,11 +27,9 @@ export function ActivityDialog(): JSXElement {
   function handleXpdlIdInput(e: InputEvent) {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
-      activityList.some(
-        (it) => it.id !== openActivityDialog()?.id && it.xpdlId === text
-      )
+      activityList.some((it) => it.id !== openActivityDialog()?.id && it.xpdlId === text)
         ? "このIDは既に存在します"
-        : ""
+        : "",
     );
   }
 
@@ -43,7 +41,7 @@ export function ActivityDialog(): JSXElement {
         it.type = formData.type;
         it.actorId = formData.actorId;
         it.name = formData.name;
-      })
+      }),
     );
     setOpenActivityDialog(null);
   }
@@ -74,15 +72,10 @@ export function ActivityDialog(): JSXElement {
           />
           <p />
           <div>アクター：</div>
-          <select
-            onChange={(e) => setFormData("actorId", Number(e.target.value))}
-          >
+          <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
             <For each={actorList}>
               {(actor) => (
-                <option
-                  value={actor.id}
-                  selected={actor.id === formData.actorId}
-                >
+                <option value={actor.id} selected={actor.id === formData.actorId}>
                   {actor.name}
                 </option>
               )}
@@ -91,11 +84,7 @@ export function ActivityDialog(): JSXElement {
           <p />
         </div>
         <div class="dialog__buttons">
-          <button
-            type="button"
-            onClick={handleOkButtonClick}
-            disabled={xpdlIdError() !== ""}
-          >
+          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
             OK
           </button>
           <button type="button" onClick={handleClose}>

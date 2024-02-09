@@ -3,18 +3,14 @@ import { useAppContext } from "../../context/app-context";
 import { TransitionEdgeEntity } from "../../data-source/data-type";
 import "./transition-edge.css";
 
-export function TransitionEdge(props: {
-  transition: TransitionEdgeEntity;
-}): JSXElement {
+export function TransitionEdge(props: { transition: TransitionEdgeEntity }): JSXElement {
   const {
     activityModel: { activityList },
     dialog: { setOpenTransitionDialog },
   } = useAppContext();
 
-  const fromActivity = () =>
-    activityList.find((it) => it.id === props.transition.fromActivityId)!;
-  const toActivity = () =>
-    activityList.find((it) => it.id === props.transition.toActivityId)!;
+  const fromActivity = () => activityList.find((it) => it.id === props.transition.fromActivityId)!;
+  const toActivity = () => activityList.find((it) => it.id === props.transition.toActivityId)!;
 
   function onDlbClick(_e: MouseEvent) {
     setOpenTransitionDialog(props.transition);

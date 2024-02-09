@@ -1,18 +1,18 @@
 import { JSX, createContext, createSignal, useContext } from "solid-js";
-import { createProjectModel } from "../data-model/project-model";
-import { createActorModel } from "../data-model/actor-model";
-import { createActivityModel } from "../data-model/activity-model";
-import { createTransitionModel } from "../data-model/transition-model";
-import { createProcessModel } from "../data-model/process-model";
-import { ToolbarType } from "../components/toolbar/toolbar";
 import { DragType } from "../components/diagram/disgram";
+import { ToolbarType } from "../components/toolbar/toolbar";
+import { createActivityModel } from "../data-model/activity-model";
+import { createActorModel } from "../data-model/actor-model";
 import { createCommentModel } from "../data-model/comment-model";
+import { createProcessModel } from "../data-model/process-model";
+import { createProjectModel } from "../data-model/project-model";
+import { createTransitionModel } from "../data-model/transition-model";
 import {
   ActivityNodeEntity,
   ActorEntity,
   CommentNodeEntity,
-  ProjectEntity,
   ProcessEntity,
+  ProjectEntity,
   TransitionEdgeEntity,
 } from "../data-source/data-type";
 
@@ -42,12 +42,7 @@ function createModelContext() {
   const activityModel = createActivityModel(actorModel);
   const transitionModel = createTransitionModel(activityModel);
   const commentModel = createCommentModel();
-  const processModel = createProcessModel(
-    actorModel,
-    activityModel,
-    transitionModel,
-    commentModel
-  );
+  const processModel = createProcessModel(actorModel, activityModel, transitionModel, commentModel);
 
   return {
     projectModel,
@@ -60,18 +55,14 @@ function createModelContext() {
 }
 
 function createDialogContext() {
-  const [openProjectDialog, setOpenProjectDialog] =
-    createSignal<ProjectEntity | null>(null);
-  const [openProcessDialog, setOpenProcessDialog] =
-    createSignal<ProcessEntity | null>(null);
-  const [openActorDialog, setOpenActorDialog] =
-    createSignal<ActorEntity | null>(null);
-  const [openActivityDialog, setOpenActivityDialog] =
-    createSignal<ActivityNodeEntity | null>(null);
-  const [openTransitionDialog, setOpenTransitionDialog] =
-    createSignal<TransitionEdgeEntity | null>(null);
-  const [openCommentDialog, setOpenCommentDialog] =
-    createSignal<CommentNodeEntity | null>(null);
+  const [openProjectDialog, setOpenProjectDialog] = createSignal<ProjectEntity | null>(null);
+  const [openProcessDialog, setOpenProcessDialog] = createSignal<ProcessEntity | null>(null);
+  const [openActorDialog, setOpenActorDialog] = createSignal<ActorEntity | null>(null);
+  const [openActivityDialog, setOpenActivityDialog] = createSignal<ActivityNodeEntity | null>(null);
+  const [openTransitionDialog, setOpenTransitionDialog] = createSignal<TransitionEdgeEntity | null>(
+    null,
+  );
+  const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNodeEntity | null>(null);
 
   return {
     openProjectDialog,
@@ -119,9 +110,7 @@ export function AppProvider(props: { children: JSX.Element }) {
     diagram: createDiagramContext(),
   };
 
-  return (
-    <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
-  );
+  return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;
 }
 
 export function useAppContext() {

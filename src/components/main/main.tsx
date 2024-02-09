@@ -1,7 +1,7 @@
-import "./main.css";
-import { Diagram } from "../diagram/disgram";
-import { useAppContext } from "../../context/app-context";
 import { JSXElement } from "solid-js";
+import { useAppContext } from "../../context/app-context";
+import { Diagram } from "../diagram/disgram";
+import "./main.css";
 
 export function Main(): JSXElement {
   const {

@@ -1,7 +1,7 @@
-import { createStore, produce } from "solid-js/store";
 import { JSXElement, createEffect, createSignal } from "solid-js";
-import { TransitionEdgeEntity } from "../../data-source/data-type";
+import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
+import { TransitionEdgeEntity } from "../../data-source/data-type";
 
 export function TransitionDialog(): JSXElement {
   const {
@@ -9,9 +9,7 @@ export function TransitionDialog(): JSXElement {
     dialog: { openTransitionDialog, setOpenTransitionDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<TransitionEdgeEntity>(
-    null as any
-  );
+  const [formData, setFormData] = createStore<TransitionEdgeEntity>(null as any);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
@@ -29,7 +27,7 @@ export function TransitionDialog(): JSXElement {
       (it) => it.id === formData.id,
       produce((it) => {
         it.xpdlId = formData.xpdlId;
-      })
+      }),
     );
     setOpenTransitionDialog(null);
   }
@@ -37,11 +35,9 @@ export function TransitionDialog(): JSXElement {
   function handleXpdlIdInput(e: InputEvent) {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
-      transitionList.some(
-        (it) => it.id !== openTransitionDialog()?.id && it.xpdlId === text
-      )
+      transitionList.some((it) => it.id !== openTransitionDialog()?.id && it.xpdlId === text)
         ? "このIDは既に存在します"
-        : ""
+        : "",
     );
   }
 
@@ -65,11 +61,7 @@ export function TransitionDialog(): JSXElement {
           <p>{xpdlIdError()}</p>
         </div>
         <div class="dialog__buttons">
-          <button
-            type="button"
-            onClick={handleOkButtonClick}
-            disabled={xpdlIdError() !== ""}
-          >
+          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
             OK
           </button>
           <button type="button" onClick={handleClose}>

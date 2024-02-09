@@ -1,17 +1,13 @@
-import { createStore, produce, unwrap } from "solid-js/store";
-import { ActorEntity, ProcessEntity } from "../data-source/data-type";
 import { createSignal } from "solid-js";
+import { createStore, produce, unwrap } from "solid-js/store";
 import { dataFactory } from "../data-source/data-factory";
 import { dataSource } from "../data-source/data-source";
+import { ActorEntity, ProcessEntity } from "../data-source/data-type";
 
 export function createActorModel() {
   let selectedProcess: ProcessEntity = dataSource.project.processes[0];
-  const [actorList, setActorList] = createStore<ActorEntity[]>(
-    selectedProcess.actors
-  );
-  const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(
-    actorList[0]
-  );
+  const [actorList, setActorList] = createStore<ActorEntity[]>(selectedProcess.actors);
+  const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(actorList[0]);
 
   function saveActors() {
     dataSource.findProcess(selectedProcess.id).actors = [...unwrap(actorList)];
@@ -36,14 +32,14 @@ export function createActorModel() {
       produce((it) => {
         it.xpdlId = actor.xpdlId;
         it.name = actor.name;
-      })
+      }),
     );
   }
 
   function removeSelectedActor() {
     const nextSelectedIndex = Math.min(
       actorList.findIndex((it) => it.id === selectedActor().id),
-      actorList.length - 2
+      actorList.length - 2,
     );
     const newList = actorList.filter((it) => it.id !== selectedActor().id);
     setActorList(newList);

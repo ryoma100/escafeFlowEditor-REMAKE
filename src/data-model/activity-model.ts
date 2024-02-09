@@ -1,19 +1,15 @@
 import { createStore, produce, unwrap } from "solid-js/store";
-import { ActivityNodeEntity, ProcessEntity } from "../data-source/data-type";
 import { dataFactory } from "../data-source/data-factory";
 import { ACTIVITY_MIN_WIDTH, dataSource } from "../data-source/data-source";
+import { ActivityNodeEntity, ProcessEntity } from "../data-source/data-type";
 import { createActorModel } from "./actor-model";
 
-export function createActivityModel(
-  actorModel: ReturnType<typeof createActorModel>
-) {
+export function createActivityModel(actorModel: ReturnType<typeof createActorModel>) {
   let selectedProcess: ProcessEntity = dataSource.project.processes[0];
   const [activityList, setActivityList] = createStore<ActivityNodeEntity[]>([]);
 
   function saveActivity() {
-    dataSource.findProcess(selectedProcess.id).activities = [
-      ...unwrap(activityList),
-    ];
+    dataSource.findProcess(selectedProcess.id).activities = [...unwrap(activityList)];
   }
 
   function loadActivity(process: ProcessEntity) {
@@ -24,12 +20,12 @@ export function createActivityModel(
   function addActivity(
     activityType: ActivityNodeEntity["activityType"],
     cx: number,
-    cy: number
+    cy: number,
   ): ActivityNodeEntity {
     const activity = dataFactory.createActivity(
       selectedProcess,
       actorModel.selectedActor().id,
-      activityType
+      activityType,
     );
     activity.x = cx - activity.width / 2;
     activity.y = cy - activity.height / 2;
@@ -43,7 +39,7 @@ export function createActivityModel(
       produce((it) => {
         it.x += moveX;
         it.y += moveY;
-      })
+      }),
     );
   }
 
@@ -55,7 +51,7 @@ export function createActivityModel(
         if (it.selected !== selected) {
           it.selected = selected;
         }
-      })
+      }),
     );
   }
 
@@ -64,7 +60,7 @@ export function createActivityModel(
       (it) => it.id === id,
       produce((it) => {
         it.selected = !it.selected;
-      })
+      }),
     );
   }
 
@@ -82,7 +78,7 @@ export function createActivityModel(
           it.x += moveX;
           it.width -= moveX;
         }
-      })
+      }),
     );
   }
 
@@ -93,7 +89,7 @@ export function createActivityModel(
         if (ACTIVITY_MIN_WIDTH <= it.width + moveX) {
           it.width += moveX;
         }
-      })
+      }),
     );
   }
 

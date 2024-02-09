@@ -1,9 +1,9 @@
 /* @refresh reload */
-import { render } from "solid-js/web";
 import "solid-devtools";
-import "./styles.css";
+import { render } from "solid-js/web";
 import App from "./App";
 import { AppProvider } from "./context/app-context";
+import "./styles.css";
 
 document.onselectstart = () => {
   return false;
@@ -15,5 +15,5 @@ render(
       <App />
     </AppProvider>
   ),
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
