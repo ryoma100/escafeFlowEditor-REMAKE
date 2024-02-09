@@ -2,9 +2,9 @@ import { createStore, unwrap } from "solid-js/store";
 import { dataFactory } from "../data-source/data-factory";
 import { dataSource } from "../data-source/data-source";
 import { ProcessEntity, TransitionEdgeEntity } from "../data-source/data-type";
-import { createActivityModel } from "./activity-model";
+import { makeActivityModel } from "./activity-model";
 
-export function createTransitionModel({ activityList }: ReturnType<typeof createActivityModel>) {
+export function makeTransitionModel({ activityList }: ReturnType<typeof makeActivityModel>) {
   let selectedProcess: ProcessEntity = dataSource.project.processes[0];
   const [transitionList, setTransitionList] = createStore<TransitionEdgeEntity[]>([]);
 

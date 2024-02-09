@@ -7,6 +7,7 @@ export function ActorList(): JSXElement {
   const {
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
     dialog: { setOpenActorDialog },
+    i18n: { t },
   } = useAppContext();
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
@@ -27,7 +28,7 @@ export function ActorList(): JSXElement {
 
   return (
     <div class="list">
-      <h5>アクター</h5>
+      <h5>{t("actor")}</h5>
       <div class="list__scroll--outer">
         <ul class="list__scroll--inner">
           <For each={actorList}>

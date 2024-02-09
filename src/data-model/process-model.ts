@@ -2,16 +2,16 @@ import { batch, createSignal } from "solid-js";
 import { dataFactory } from "../data-source/data-factory";
 import { dataSource } from "../data-source/data-source";
 import { ProcessEntity } from "../data-source/data-type";
-import { createActivityModel } from "./activity-model";
-import { createActorModel } from "./actor-model";
-import { createCommentModel } from "./comment-model";
-import { createTransitionModel } from "./transition-model";
+import { makeActivityModel } from "./activity-model";
+import { makeActorModel } from "./actor-model";
+import { makeCommentModel } from "./comment-model";
+import { makeTransitionModel } from "./transition-model";
 
-export function createProcessModel(
-  actorModel: ReturnType<typeof createActorModel>,
-  activityModel: ReturnType<typeof createActivityModel>,
-  transitionModel: ReturnType<typeof createTransitionModel>,
-  commentModel: ReturnType<typeof createCommentModel>,
+export function makeProcessModel(
+  actorModel: ReturnType<typeof makeActorModel>,
+  activityModel: ReturnType<typeof makeActivityModel>,
+  transitionModel: ReturnType<typeof makeTransitionModel>,
+  commentModel: ReturnType<typeof makeCommentModel>,
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>(
     // ネストしたフィールドをリアクティブにしないため、createStore()は使わない

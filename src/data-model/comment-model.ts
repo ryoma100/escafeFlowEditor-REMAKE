@@ -3,7 +3,7 @@ import { dataFactory } from "../data-source/data-factory";
 import { dataSource } from "../data-source/data-source";
 import { CommentNodeEntity, ProcessEntity } from "../data-source/data-type";
 
-export function createCommentModel() {
+export function makeCommentModel() {
   let selectedProcess: ProcessEntity = dataSource.project.processes[0];
   const [commentList, setCommentList] = createStore<CommentNodeEntity[]>([]);
 

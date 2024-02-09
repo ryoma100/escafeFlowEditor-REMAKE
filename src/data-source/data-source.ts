@@ -1,8 +1,6 @@
 import { dataFactory } from "./data-factory";
 import { ProcessEntity } from "./data-type";
 
-export const ACTIVITY_MIN_WIDTH = 100;
-
 let project = dataFactory.createProject();
 
 function clearProject() {

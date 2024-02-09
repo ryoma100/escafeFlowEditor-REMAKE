@@ -1,12 +1,15 @@
-import { JSX, createContext, createSignal, useContext } from "solid-js";
+import * as i18n from "@solid-primitives/i18n";
+import { JSX, createContext, createMemo, createSignal, useContext } from "solid-js";
 import { DragType } from "../components/diagram/disgram";
 import { ToolbarType } from "../components/toolbar/toolbar";
-import { createActivityModel } from "../data-model/activity-model";
-import { createActorModel } from "../data-model/actor-model";
-import { createCommentModel } from "../data-model/comment-model";
-import { createProcessModel } from "../data-model/process-model";
-import { createProjectModel } from "../data-model/project-model";
-import { createTransitionModel } from "../data-model/transition-model";
+import { enDict } from "../constants/i18n-en";
+import { jaDict } from "../constants/i18n-ja";
+import { makeActivityModel } from "../data-model/activity-model";
+import { makeActorModel } from "../data-model/actor-model";
+import { makeCommentModel } from "../data-model/comment-model";
+import { makeProcessModel } from "../data-model/process-model";
+import { makeProjectModel } from "../data-model/project-model";
+import { makeTransitionModel } from "../data-model/transition-model";
 import {
   ActivityNodeEntity,
   ActorEntity,
@@ -16,33 +19,13 @@ import {
   TransitionEdgeEntity,
 } from "../data-source/data-type";
 
-const AppContext = createContext<{
-  projectModel: ReturnType<typeof createProjectModel>;
-  processModel: ReturnType<typeof createProcessModel>;
-  actorModel: ReturnType<typeof createActorModel>;
-  activityModel: ReturnType<typeof createActivityModel>;
-  transitionModel: ReturnType<typeof createTransitionModel>;
-  commentModel: ReturnType<typeof createCommentModel>;
-  dialog: ReturnType<typeof createDialogContext>;
-  diagram: ReturnType<typeof createDiagramContext>;
-}>({
-  projectModel: undefined as any,
-  processModel: undefined as any,
-  actorModel: undefined as any,
-  activityModel: undefined as any,
-  transitionModel: undefined as any,
-  commentModel: undefined as any,
-  dialog: undefined as any,
-  diagram: undefined as any,
-});
-
-function createModelContext() {
-  const projectModel = createProjectModel();
-  const actorModel = createActorModel();
-  const activityModel = createActivityModel(actorModel);
-  const transitionModel = createTransitionModel(activityModel);
-  const commentModel = createCommentModel();
-  const processModel = createProcessModel(actorModel, activityModel, transitionModel, commentModel);
+function makeModelContext() {
+  const projectModel = makeProjectModel();
+  const actorModel = makeActorModel();
+  const activityModel = makeActivityModel(actorModel);
+  const transitionModel = makeTransitionModel(activityModel);
+  const commentModel = makeCommentModel();
+  const processModel = makeProcessModel(actorModel, activityModel, transitionModel, commentModel);
 
   return {
     projectModel,
@@ -54,7 +37,7 @@ function createModelContext() {
   };
 }
 
-function createDialogContext() {
+function makeDialogContext() {
   const [openProjectDialog, setOpenProjectDialog] = createSignal<ProjectEntity | null>(null);
   const [openProcessDialog, setOpenProcessDialog] = createSignal<ProcessEntity | null>(null);
   const [openActorDialog, setOpenActorDialog] = createSignal<ActorEntity | null>(null);
@@ -80,7 +63,7 @@ function createDialogContext() {
   };
 }
 
-function createDiagramContext() {
+function makeDiagramContext() {
   const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
   const [zoom, setZoom] = createSignal<number>(1.0);
   const [dragType, setDragType] = createSignal<DragType>("none");
@@ -89,7 +72,7 @@ function createDiagramContext() {
     fromY: number;
     toX: number;
     toY: number;
-  }>(null as any);
+  }>({ fromX: 0, fromY: 0, toX: 0, toY: 0 });
 
   return {
     toolbar,
@@ -103,14 +86,35 @@ function createDiagramContext() {
   };
 }
 
-export function AppProvider(props: { children: JSX.Element }) {
-  const value = {
-    ...createModelContext(),
-    dialog: createDialogContext(),
-    diagram: createDiagramContext(),
-  };
+function makei18nContext() {
+  const dictionaries = { ja: jaDict, en: enDict };
+  const [locale, setLocale] = createSignal<keyof typeof dictionaries>("ja");
+  const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
+  const t = i18n.translator(dict);
+  return { t, setLocale };
+}
 
-  return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;
+const contextValue = {
+  ...makeModelContext(),
+  dialog: makeDialogContext(),
+  diagram: makeDiagramContext(),
+  i18n: makei18nContext(),
+};
+
+const AppContext = createContext<{
+  projectModel: ReturnType<typeof makeProjectModel>;
+  processModel: ReturnType<typeof makeProcessModel>;
+  actorModel: ReturnType<typeof makeActorModel>;
+  activityModel: ReturnType<typeof makeActivityModel>;
+  transitionModel: ReturnType<typeof makeTransitionModel>;
+  commentModel: ReturnType<typeof makeCommentModel>;
+  dialog: ReturnType<typeof makeDialogContext>;
+  diagram: ReturnType<typeof makeDiagramContext>;
+  i18n: ReturnType<typeof makei18nContext>;
+}>(contextValue);
+
+export function AppProvider(props: { children: JSX.Element }) {
+  return <AppContext.Provider value={contextValue}>{props.children}</AppContext.Provider>;
 }
 
 export function useAppContext() {

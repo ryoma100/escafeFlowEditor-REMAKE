@@ -1,10 +1,11 @@
 import { createStore, produce, unwrap } from "solid-js/store";
+import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import { dataFactory } from "../data-source/data-factory";
-import { ACTIVITY_MIN_WIDTH, dataSource } from "../data-source/data-source";
+import { dataSource } from "../data-source/data-source";
 import { ActivityNodeEntity, ProcessEntity } from "../data-source/data-type";
-import { createActorModel } from "./actor-model";
+import { makeActorModel } from "./actor-model";
 
-export function createActivityModel(actorModel: ReturnType<typeof createActorModel>) {
+export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>) {
   let selectedProcess: ProcessEntity = dataSource.project.processes[0];
   const [activityList, setActivityList] = createStore<ActivityNodeEntity[]>([]);
 

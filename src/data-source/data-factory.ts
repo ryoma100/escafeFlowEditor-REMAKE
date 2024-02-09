@@ -1,3 +1,4 @@
+import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import {
   ActivityNodeEntity,
   ActorEntity,
@@ -89,7 +90,7 @@ function createActivity(
     splitType: "none",
     x: 0,
     y: 0,
-    width: 100,
+    width: ACTIVITY_MIN_WIDTH,
     height: 0,
     selected: false,
   };

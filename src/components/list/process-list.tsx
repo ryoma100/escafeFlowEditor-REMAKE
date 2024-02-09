@@ -13,6 +13,7 @@ export function ProcessList(): JSXElement {
       changeProcess,
     },
     dialog: { setOpenProcessDialog },
+    i18n: { t },
   } = useAppContext();
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
@@ -33,7 +34,7 @@ export function ProcessList(): JSXElement {
 
   return (
     <div class="list">
-      <h5>プロセス</h5>
+      <h5>{t("process")}</h5>
       <div class="list__scroll--outer">
         <ul class="list__scroll--inner">
           <For each={processList()}>
