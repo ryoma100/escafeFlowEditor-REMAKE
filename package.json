@@ -1,7 +1,7 @@
 {
-  "name": "tauri-flow",
+  "name": "tiny-flow-editor",
   "version": "0.0.0",
-  "description": "",
+  "description": "tiny Workflow Dialog Editor",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -9,8 +9,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "tauri": "tauri",
-    "check": "tsc && eslint . --ext .ts,.tsx && stylelint \"**/*.css\" && prettier --check .",
-    "format": "stylelint \"**/*.css\" --fix && prettier --write .",
+    "check": "tsc && eslint . --ext .ts,.tsx && stylelint \"**/*.css\" && prettier --check \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
+    "format": "stylelint \"**/*.css\" --fix && prettier --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\"",
     "preinstall": "npx -y only-allow pnpm"
   },
   "license": "MIT",
@@ -34,7 +34,8 @@
     "stylelint-config-standard": "^36.0.0",
     "typescript": "^5.3.3",
     "vite": "^5.1.0",
-    "vite-plugin-solid": "^2.9.1"
+    "vite-plugin-solid": "^2.9.1",
+    "vite-plugin-solid-svg": "^0.8.0"
   },
   "volta": {
     "node": "20.11.0",

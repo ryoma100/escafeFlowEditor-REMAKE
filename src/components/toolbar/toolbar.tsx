@@ -1,4 +1,12 @@
 import { JSXElement } from "solid-js";
+import ArrowIcon from "../../assets/material-icons/arrow_selector_tool_FILL0_wght400_GRAD0_opsz24.svg";
+import CommentIcon from "../../assets/material-icons/comment_FILL0_wght400_GRAD0_opsz24.svg";
+import AutoIcon from "../../assets/material-icons/computer_FILL0_wght400_GRAD0_opsz24.svg";
+import LineIcon from "../../assets/material-icons/north_east_FILL0_wght400_GRAD0_opsz24.svg";
+import HandIcon from "../../assets/material-icons/pan_tool_FILL0_wght400_GRAD0_opsz24.svg";
+import ManualIcon from "../../assets/material-icons/person_check_FILL0_wght400_GRAD0_opsz24.svg";
+import StratIcon from "../../assets/material-icons/play_arrow_FILL0_wght400_GRAD0_opsz24.svg";
+import EndIcon from "../../assets/material-icons/stop_FILL0_wght400_GRAD0_opsz24.svg";
 import { useAppContext } from "../../context/app-context";
 import "./toolbar.css";
 
@@ -20,92 +28,131 @@ export function Toolbar(): JSXElement {
   return (
     <div class="toolbar">
       <div class="toolbar__button">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-cursor"
-          value="cursor"
-          checked={toolbar() === "cursor"}
-          onChange={() => setToolbar("cursor")}
-        />
-        <label for="toolbar-cursor">cursor</label>
+        <label for="toolbar-cursor">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-cursor"
+            value="cursor"
+            checked={toolbar() === "cursor"}
+            onChange={() => setToolbar("cursor")}
+          />
+          <div>
+            <ArrowIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button toolbar__button--margin-bottom">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-transison"
-          value="transison"
-          checked={toolbar() === "transion"}
-          onChange={() => setToolbar("transion")}
-        />
-        <label for="toolbar-transison">transison</label>
+        <label for="toolbar-transison">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-transison"
+            value="transison"
+            checked={toolbar() === "transion"}
+            onChange={() => setToolbar("transion")}
+          />
+          <div>
+            <LineIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-manual"
-          value="manual"
-          checked={toolbar() === "manual"}
-          onChange={() => setToolbar("manual")}
-        />
-        <label for="toolbar-manual">manual</label>
+        <label for="toolbar-manual">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-manual"
+            value="manual"
+            checked={toolbar() === "manual"}
+            onChange={() => setToolbar("manual")}
+          />
+          <div>
+            <ManualIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-auto"
-          value="auto"
-          checked={toolbar() === "auto"}
-          onChange={() => setToolbar("auto")}
-        />
-        <label for="toolbar-auto">auto</label>
+        <label for="toolbar-auto">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-auto"
+            value="auto"
+            checked={toolbar() === "auto"}
+            onChange={() => setToolbar("auto")}
+          />
+          <div>
+            <AutoIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button toolbar__button--margin-bottom">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-hand"
-          value="hand"
-          checked={toolbar() === "hand"}
-          onChange={() => setToolbar("hand")}
-        />
-        <label for="toolbar-hand">hand</label>
+        <label for="toolbar-hand">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-hand"
+            value="hand"
+            checked={toolbar() === "hand"}
+            onChange={() => setToolbar("hand")}
+          />
+          <div>
+            <HandIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-start"
-          value="start"
-          checked={toolbar() === "start"}
-          onChange={() => setToolbar("start")}
-        />
-        <label for="toolbar-start">start</label>
+        <label for="toolbar-start">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-start"
+            value="start"
+            checked={toolbar() === "start"}
+            onChange={() => setToolbar("start")}
+          />
+          <div>
+            <StratIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-end"
-          value="end"
-          checked={toolbar() === "end"}
-          onChange={() => setToolbar("end")}
-        />
-        <label for="toolbar-end">end</label>
+        <label for="toolbar-end">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-end"
+            value="end"
+            checked={toolbar() === "end"}
+            onChange={() => setToolbar("end")}
+          />
+          <div>
+            <EndIcon />
+          </div>
+        </label>
       </div>
+
       <div class="toolbar__button">
-        <input
-          type="radio"
-          name="toolbar"
-          id="toolbar-comment"
-          value="comment"
-          checked={toolbar() === "comment"}
-          onChange={() => setToolbar("comment")}
-        />
-        <label for="toolbar-comment">comment</label>
+        <label for="toolbar-comment">
+          <input
+            type="radio"
+            name="toolbar"
+            id="toolbar-comment"
+            value="comment"
+            checked={toolbar() === "comment"}
+            onChange={() => setToolbar("comment")}
+          />
+          <div>
+            <CommentIcon />
+          </div>
+        </label>
       </div>
     </div>
   );
