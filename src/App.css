@@ -1,39 +1,39 @@
 .app {
   display: grid;
-  grid-template-columns: 160px 96px auto;
   grid-template-rows: 24px 35fr 65fr;
-  height: 100vh;
+  grid-template-columns: 160px 96px auto;
   width: 100vw;
+  height: 100vh;
 }
 
 .app__menu {
-  grid-column: 1 / 4;
   grid-row: 1;
+  grid-column: 1 / 4;
 }
 
 .app__process-list {
-  grid-column: 1;
   grid-row: 2;
+  grid-column: 1;
   height: calc(35vh - 20px);
   margin-left: 8px;
 }
 
 .app__actor-list {
-  grid-column: 1;
   grid-row: 3;
+  grid-column: 1;
   height: calc(65vh - 20px);
   margin-left: 8px;
 }
 
 .app__toolbar {
-  grid-column: 2;
   grid-row: 2 / 4;
+  grid-column: 2;
   margin-top: 24px;
 }
 
 .app__main {
-  grid-column: 3;
   grid-row: 2 / 4;
+  grid-column: 3;
   width: calc(100vw - 264px);
   height: calc(100vh - 32px);
   margin-right: 8px;

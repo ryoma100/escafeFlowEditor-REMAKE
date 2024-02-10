@@ -1,11 +1,11 @@
 .dialog {
-  padding: 0 8px 8px 8px;
+  padding: 0 8px 8px;
   background-color: lightgray;
 }
 
 .dialog > form {
-  background-color: var(--background-color);
   padding: 8px;
+  background-color: var(--background-color);
 }
 
 .dialog__input {
@@ -16,9 +16,9 @@
 
 .dialog__buttons {
   display: flex;
+  column-gap: 8px;
   justify-content: center;
   margin-top: 16px;
-  column-gap: 8px;
 }
 
 .dialog__comment {

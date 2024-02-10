@@ -1,15 +1,15 @@
 .comment {
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  box-sizing: border-box;
   padding: 2px;
-  border: 1px solid gray;
   margin: 1px;
+  border: 1px solid gray;
 }
 
 .comment--selected {
+  margin: 0;
   border: 2px solid black;
-  margin: 0px;
 }
 
 .comment:hover {

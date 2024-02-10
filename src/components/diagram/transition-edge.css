@@ -1,13 +1,13 @@
 .transition {
+  fill: none;
   stroke: gray;
   stroke-width: 1px;
-  fill: none;
 }
 
 .transition--hover {
+  fill: none;
   stroke: transparent;
   stroke-width: 5px;
-  fill: none;
 }
 
 .transition--hover:hover {

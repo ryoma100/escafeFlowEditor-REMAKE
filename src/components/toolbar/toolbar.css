@@ -7,8 +7,8 @@
 .toolbar__button {
   width: 80px;
   height: 48px;
-  background-color: var(--button-background-color);
   margin-bottom: 4px;
+  background-color: var(--button-background-color);
   border-radius: 3px;
 }
 

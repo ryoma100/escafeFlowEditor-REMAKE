@@ -5,17 +5,17 @@
 }
 
 .main__diagram {
-  background-color: var(--background-color);
   flex-grow: 1;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  background-color: var(--background-color);
 }
 
 .main__zoom {
   display: flex;
   flex-direction: row;
+  column-gap: 8px;
   justify-content: center;
   width: 100%;
   margin-top: 4px;
-  column-gap: 8px;
 }

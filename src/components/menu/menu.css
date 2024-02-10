@@ -1,7 +1,7 @@
-/* メニューバー */
 .menu__bar {
   background-color: var(--button-background-color);
 }
+
 .menu__bar > ul {
   display: flex;
   justify-content: row;
@@ -14,39 +14,44 @@
 .menu__item {
   position: relative;
 }
+
 .menu__item > a {
-  text-decoration: none;
   padding: 0 8px;
+  text-decoration: none;
 }
+
 .menu__item:hover {
   background-color: var(--button-selected-color);
+}
+
+.menu__drop {
+  position: absolute;
+  z-index: 1;
+  width: max-content;
+  padding: 0;
+  list-style-type: none;
+  visibility: hidden;
+  background-color: var(--button-background-color);
 }
 
 /* ドロップダウンメニュー */
 .menu__item:hover .menu__drop {
   visibility: visible; /* メニューアイテムhover時に表示 */
 }
-.menu__drop {
-  position: absolute;
-  background-color: var(--button-background-color);
-  visibility: hidden;
-  width: max-content;
-  z-index: 1;
-  list-style-type: none;
-  padding: 0;
-}
 
 /* ドロップダウンメニューアイテム */
 .menu__drop-item {
   padding: 0 16px;
 }
+
 .menu__drop-item > a {
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: row;
-  text-decoration: none;
   padding: 0;
+  text-decoration: none;
 }
+
 .menu__drop-item:hover {
   background-color: var(--button-selected-color);
 }
