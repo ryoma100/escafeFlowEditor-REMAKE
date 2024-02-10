@@ -1,3 +1,4 @@
+import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
@@ -7,8 +8,9 @@ export function ActorList(): JSXElement {
   const {
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
     dialog: { setOpenActorDialog },
-    i18n: { t },
+    i18n: { dict },
   } = useAppContext();
+  const t = i18n.translator(dict);
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
     setSelectedActor(actor);

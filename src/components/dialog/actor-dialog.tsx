@@ -4,13 +4,19 @@ import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
+const dummy: ActorEntity = {
+  id: 0,
+  xpdlId: "",
+  name: "",
+};
+
 export function ActorDialog(): JSXElement {
   const {
     actorModel: { updateActor, actorList },
     dialog: { openActorDialog, setOpenActorDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ActorEntity>(null as any);
+  const [formData, setFormData] = createStore<ActorEntity>(dummy);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
@@ -52,14 +58,14 @@ export function ActorDialog(): JSXElement {
             type="text"
             value={formData.xpdlId}
             onInput={handleXpdlIdInput}
-            onchange={(e) => setFormData("xpdlId", e.target.value)}
+            onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
           <p>{xpdlIdError()}</p>
           <div>名前：</div>
           <input
             type="text"
             value={formData.name}
-            onchange={(e) => setFormData("name", e.target.value)}
+            onChange={(e) => setFormData("name", e.target.value)}
           />
           <p />
         </div>

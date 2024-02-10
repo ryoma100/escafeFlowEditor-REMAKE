@@ -1,3 +1,4 @@
+import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ProcessEntity } from "../../data-source/data-type";
@@ -13,8 +14,9 @@ export function ProcessList(): JSXElement {
       changeProcess,
     },
     dialog: { setOpenProcessDialog },
-    i18n: { t },
+    i18n: { dict },
   } = useAppContext();
+  const t = i18n.translator(dict);
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
     changeProcess(process);

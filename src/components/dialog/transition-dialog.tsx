@@ -3,13 +3,25 @@ import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { TransitionEdgeEntity } from "../../data-source/data-type";
 
+const dummy: TransitionEdgeEntity = {
+  id: 0,
+  xpdlId: "",
+  type: "transition",
+  fromActivityId: 0,
+  toActivityId: 0,
+  fromX: 0,
+  fromY: 0,
+  toX: 0,
+  toY: 0,
+};
+
 export function TransitionDialog(): JSXElement {
   const {
     transitionModel: { transitionList, setTransitionList },
     dialog: { openTransitionDialog, setOpenTransitionDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<TransitionEdgeEntity>(null as any);
+  const [formData, setFormData] = createStore<TransitionEdgeEntity>(dummy);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
@@ -22,7 +34,7 @@ export function TransitionDialog(): JSXElement {
     }
   });
 
-  function handleOkButtonClick() {
+  function handleOkButtonClick(_e: MouseEvent) {
     setTransitionList(
       (it) => it.id === formData.id,
       produce((it) => {

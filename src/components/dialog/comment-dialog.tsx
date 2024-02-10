@@ -4,13 +4,24 @@ import { useAppContext } from "../../context/app-context";
 import { CommentNodeEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
+const dummy: CommentNodeEntity = {
+  id: 0,
+  type: "comment",
+  comment: "",
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  selected: false,
+};
+
 export function CommentDialog(): JSXElement {
   const {
     commentModel: { setCommentList },
     dialog: { openCommentDialog, setOpenCommentDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<CommentNodeEntity>(undefined as any);
+  const [formData, setFormData] = createStore<CommentNodeEntity>(dummy);
 
   createEffect(() => {
     const comment = openCommentDialog();

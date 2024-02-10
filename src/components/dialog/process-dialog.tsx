@@ -4,13 +4,33 @@ import { useAppContext } from "../../context/app-context";
 import { ProcessEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
+const dummy: ProcessEntity = {
+  id: 0,
+  xpdlId: "",
+  name: "",
+  created: "",
+  enviroments: [],
+  validFrom: "",
+  validTo: "",
+  _lastActorId: 0,
+  actors: [],
+  _lastApplicationId: 0,
+  applications: [],
+  _lastActivityId: 0,
+  activities: [],
+  _lastTransitionId: 0,
+  transitions: [],
+  _lastCommentId: 0,
+  comments: [],
+};
+
 export function ProcessDialog(): JSXElement {
   const {
     processModel: { updateProcess, processList },
     dialog: { openProcessDialog, setOpenProcessDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ProcessEntity>(null as any);
+  const [formData, setFormData] = createStore<ProcessEntity>(dummy);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

@@ -73,22 +73,26 @@ export function Diagram(): JSXElement {
             setDragType("scroll");
             break;
           case "manual":
-            const activity = addActivity(
-              "manual",
-              viewBox.x + (e.clientX - svgRect.x) / zoom(),
-              viewBox.y + (e.clientY - svgRect.y) / zoom(),
-            );
-            layerTopActivity(activity.id);
-            selectActivities([activity.id]);
-            setDragType("addActivity");
+            {
+              const activity = addActivity(
+                "manual",
+                viewBox.x + (e.clientX - svgRect.x) / zoom(),
+                viewBox.y + (e.clientY - svgRect.y) / zoom(),
+              );
+              layerTopActivity(activity.id);
+              selectActivities([activity.id]);
+              setDragType("addActivity");
+            }
             break;
           case "comment":
-            const comment = addComment(
-              viewBox.x + (e.clientX - svgRect.x) / zoom(),
-              viewBox.y + (e.clientY - svgRect.y) / zoom(),
-            );
-            selectComments([comment.id]);
-            setDragType("addComment");
+            {
+              const comment = addComment(
+                viewBox.x + (e.clientX - svgRect.x) / zoom(),
+                viewBox.y + (e.clientY - svgRect.y) / zoom(),
+              );
+              selectComments([comment.id]);
+              setDragType("addComment");
+            }
             break;
         }
         break;

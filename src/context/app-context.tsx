@@ -90,8 +90,7 @@ function makei18nContext() {
   const dictionaries = { ja: jaDict, en: enDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>("ja");
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
-  const t = i18n.translator(dict);
-  return { t, setLocale };
+  return { dict, setLocale };
 }
 
 const contextValue = {

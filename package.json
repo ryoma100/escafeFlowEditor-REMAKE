@@ -9,8 +9,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "tauri": "tauri",
-    "check": "tsc",
-    "format:fix": "stylelint \"**/*.css\" --fix && prettier --write .",
+    "check": "tsc && eslint . --ext .ts,.tsx && stylelint \"**/*.css\" && prettier --check .",
+    "format": "stylelint \"**/*.css\" --fix && prettier --write .",
     "preinstall": "npx -y only-allow pnpm"
   },
   "license": "MIT",
