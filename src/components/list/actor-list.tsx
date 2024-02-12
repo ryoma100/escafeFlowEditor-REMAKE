@@ -38,7 +38,7 @@ export function ActorList(): JSXElement {
               <li
                 class="list__item"
                 classList={{
-                  "list__item--selected": it === selectedActor(),
+                  "list__item--selected": it.id === selectedActor().id,
                 }}
                 onMouseDown={[handleItemMouseDown, it]}
                 onDblClick={handleItemDblClick}

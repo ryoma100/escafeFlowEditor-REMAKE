@@ -1,3 +1,4 @@
+import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce, unwrap } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../../constants/app-const";
@@ -34,7 +35,9 @@ export function ActivityDialog(): JSXElement {
     actorModel: { actorList },
     activityModel: { activityList, setActivityList },
     dialog: { openActivityDialog, setOpenActivityDialog },
+    i18n: { dict },
   } = useAppContext();
+  const t = i18n.translator(dict);
 
   const [formData, setFormData] = createStore<ActivityNodeEntity>(dummy);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
@@ -53,7 +56,7 @@ export function ActivityDialog(): JSXElement {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
       activityList.some((it) => it.id !== openActivityDialog()?.id && it.xpdlId === text)
-        ? "このIDは既に存在します"
+        ? t("idExists")
         : "",
     );
   }
@@ -78,7 +81,7 @@ export function ActivityDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
-      <h5>仕事の編集</h5>
+      <h5>{t("jobEdit")}</h5>
 
       <form method="dialog">
         <div class="dialog__toolbar">
@@ -92,7 +95,7 @@ export function ActivityDialog(): JSXElement {
                 checked={formData.activityType === "manual"}
                 onChange={() => setFormData("activityType", "manual")}
               />
-              <div class="dialog__toolbar-icon">
+              <div class="dialog__toolbar-icon" title={t("manualActivity")}>
                 <ManualActivityIcon />
               </div>
             </label>
@@ -107,7 +110,7 @@ export function ActivityDialog(): JSXElement {
                 checked={formData.activityType === "auto"}
                 onChange={() => setFormData("activityType", "auto")}
               />
-              <div class="dialog__toolbar-icon">
+              <div class="dialog__toolbar-icon" title={t("autoActivity")}>
                 <AutoActivityIcon />
               </div>
             </label>
@@ -122,7 +125,7 @@ export function ActivityDialog(): JSXElement {
                 checked={formData.activityType === "auto"}
                 onChange={() => setFormData("activityType", "auto")}
               />
-              <div class="dialog__toolbar-icon">
+              <div class="dialog__toolbar-icon" title={t("manualTimeLimitActivity")}>
                 <ManualTimeActivityIcon />
               </div>
             </label>
@@ -137,7 +140,7 @@ export function ActivityDialog(): JSXElement {
                 checked={formData.activityType === "auto"}
                 onChange={() => setFormData("activityType", "auto")}
               />
-              <div class="dialog__toolbar-icon">
+              <div class="dialog__toolbar-icon" title={t("autoTimeLimitActivity")}>
                 <AutoTimeActivityIcon />
               </div>
             </label>
@@ -152,7 +155,7 @@ export function ActivityDialog(): JSXElement {
                 checked={formData.activityType === "hand"}
                 onChange={() => setFormData("activityType", "hand")}
               />
-              <div class="dialog__toolbar-icon">
+              <div class="dialog__toolbar-icon" title={t("handWork")}>
                 <HandActivityIcon />
               </div>
             </label>
@@ -160,7 +163,7 @@ export function ActivityDialog(): JSXElement {
         </div>
 
         <div class="dialog__input">
-          <div>ID：</div>
+          <div>ID</div>
           <input
             type="text"
             value={formData.xpdlId}
@@ -168,14 +171,14 @@ export function ActivityDialog(): JSXElement {
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
           <p>{xpdlIdError()}</p>
-          <div>仕事名：</div>
+          <div>{t("jobTitle")}</div>
           <input
             type="text"
             value={formData.name}
             onChange={(e) => setFormData("name", e.target.value)}
           />
           <p />
-          <div>アクター：</div>
+          <div>{t("actor")}</div>
           <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
             <For each={actorList}>
               {(actor) => (

@@ -22,7 +22,7 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      const height = (titleDiv?.clientHeight ?? 0) + 80; // TODO: 高さを調整
+      const height = (titleDiv?.clientHeight ?? 0) + 80;
       setActivityList(
         (it) => it.id === props.activity.id,
         produce((it) => {

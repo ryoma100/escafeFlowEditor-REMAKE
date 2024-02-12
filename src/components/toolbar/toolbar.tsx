@@ -1,3 +1,4 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import {
@@ -25,7 +26,9 @@ export type ToolbarType =
 export function Toolbar(): JSXElement {
   const {
     diagram: { toolbar, setToolbar },
+    i18n: { dict },
   } = useAppContext();
+  const t = i18n.translator(dict);
 
   return (
     <div class="toolbar">
@@ -39,7 +42,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "cursor"}
             onChange={() => setToolbar("cursor")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("select")}>
             <PointIcon />
           </div>
         </label>
@@ -55,7 +58,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "transion"}
             onChange={() => setToolbar("transion")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("transition")}>
             <LineIcon />
           </div>
         </label>
@@ -71,7 +74,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "manual"}
             onChange={() => setToolbar("manual")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("manualActivity")}>
             <ManualActivityIcon />
           </div>
         </label>
@@ -87,7 +90,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "auto"}
             onChange={() => setToolbar("auto")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("autoActivity")}>
             <AutoActivityIcon />
           </div>
         </label>
@@ -103,7 +106,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "hand"}
             onChange={() => setToolbar("hand")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("handWork")}>
             <HandActivityIcon />
           </div>
         </label>
@@ -119,7 +122,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "start"}
             onChange={() => setToolbar("start")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("start")}>
             <StartIcon />
           </div>
         </label>
@@ -135,7 +138,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "end"}
             onChange={() => setToolbar("end")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("end")}>
             <EndIcon />
           </div>
         </label>
@@ -151,7 +154,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "comment"}
             onChange={() => setToolbar("comment")}
           />
-          <div class="toolbar__icon">
+          <div class="toolbar__icon" title={t("comment")}>
             <CommentIcon />
           </div>
         </label>

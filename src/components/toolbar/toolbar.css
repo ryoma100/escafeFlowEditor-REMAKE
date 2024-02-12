@@ -36,6 +36,7 @@
   box-sizing: border-box;
   width: 68px;
   height: 52px;
+  cursor: pointer;
   border: 2px solid var(--button-background-color);
   border-radius: 5px;
 }

@@ -33,3 +33,11 @@ h5 {
   margin: 0;
   font-weight: bold;
 }
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
