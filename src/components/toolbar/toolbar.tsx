@@ -1,13 +1,15 @@
 import { JSXElement } from "solid-js";
-import ArrowIcon from "../../assets/material-icons/arrow_selector_tool_FILL0_wght400_GRAD0_opsz24.svg";
-import CommentIcon from "../../assets/material-icons/comment_FILL0_wght400_GRAD0_opsz24.svg";
-import AutoIcon from "../../assets/material-icons/computer_FILL0_wght400_GRAD0_opsz24.svg";
-import LineIcon from "../../assets/material-icons/north_east_FILL0_wght400_GRAD0_opsz24.svg";
-import HandIcon from "../../assets/material-icons/pan_tool_FILL0_wght400_GRAD0_opsz24.svg";
-import ManualIcon from "../../assets/material-icons/person_check_FILL0_wght400_GRAD0_opsz24.svg";
-import StratIcon from "../../assets/material-icons/play_arrow_FILL0_wght400_GRAD0_opsz24.svg";
-import EndIcon from "../../assets/material-icons/stop_FILL0_wght400_GRAD0_opsz24.svg";
 import { useAppContext } from "../../context/app-context";
+import {
+  AutoActivityIcon,
+  CommentIcon,
+  EndIcon,
+  HandActivityIcon,
+  LineIcon,
+  ManualActivityIcon,
+  PointIcon,
+  StartIcon,
+} from "../icons/material-icons";
 import "./toolbar.css";
 
 export type ToolbarType =
@@ -37,8 +39,8 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "cursor"}
             onChange={() => setToolbar("cursor")}
           />
-          <div>
-            <ArrowIcon />
+          <div class="toolbar__icon">
+            <PointIcon />
           </div>
         </label>
       </div>
@@ -53,7 +55,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "transion"}
             onChange={() => setToolbar("transion")}
           />
-          <div>
+          <div class="toolbar__icon">
             <LineIcon />
           </div>
         </label>
@@ -69,8 +71,8 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "manual"}
             onChange={() => setToolbar("manual")}
           />
-          <div>
-            <ManualIcon />
+          <div class="toolbar__icon">
+            <ManualActivityIcon />
           </div>
         </label>
       </div>
@@ -85,8 +87,8 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "auto"}
             onChange={() => setToolbar("auto")}
           />
-          <div>
-            <AutoIcon />
+          <div class="toolbar__icon">
+            <AutoActivityIcon />
           </div>
         </label>
       </div>
@@ -101,8 +103,8 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "hand"}
             onChange={() => setToolbar("hand")}
           />
-          <div>
-            <HandIcon />
+          <div class="toolbar__icon">
+            <HandActivityIcon />
           </div>
         </label>
       </div>
@@ -117,8 +119,8 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "start"}
             onChange={() => setToolbar("start")}
           />
-          <div>
-            <StratIcon />
+          <div class="toolbar__icon">
+            <StartIcon />
           </div>
         </label>
       </div>
@@ -133,7 +135,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "end"}
             onChange={() => setToolbar("end")}
           />
-          <div>
+          <div class="toolbar__icon">
             <EndIcon />
           </div>
         </label>
@@ -149,7 +151,7 @@ export function Toolbar(): JSXElement {
             checked={toolbar() === "comment"}
             onChange={() => setToolbar("comment")}
           />
-          <div>
+          <div class="toolbar__icon">
             <CommentIcon />
           </div>
         </label>

@@ -2,6 +2,7 @@ import { JSXElement, onMount } from "solid-js";
 import { produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeEntity } from "../../data-source/data-type";
+import { ManualActivityIcon } from "../icons/material-icons";
 import "./activity-node.css";
 
 export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElement {
@@ -21,7 +22,7 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      const height = (titleDiv?.clientHeight ?? 0) + 64; // TODO: 高さを調整
+      const height = (titleDiv?.clientHeight ?? 0) + 80; // TODO: 高さを調整
       setActivityList(
         (it) => it.id === props.activity.id,
         produce((it) => {
@@ -114,7 +115,9 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
           <div class="activity__actor">
             {actorList.find((it) => it.id === props.activity.actorId)?.name}
           </div>
-          <div class="activity__icon">🐧</div>
+          <div class="activity__icon">
+            <ManualActivityIcon />
+          </div>
           <div ref={titleDiv} class="activity__title">
             {props.activity.name}
           </div>

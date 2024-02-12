@@ -1,8 +1,15 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { createStore, produce, unwrap } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeEntity } from "../../data-source/data-type";
+import {
+  AutoActivityIcon,
+  AutoTimeActivityIcon,
+  HandActivityIcon,
+  ManualActivityIcon,
+  ManualTimeActivityIcon,
+} from "../icons/material-icons";
 import "./dialog.css";
 
 const dummy: ActivityNodeEntity = {
@@ -35,7 +42,7 @@ export function ActivityDialog(): JSXElement {
   createEffect(() => {
     const activity = openActivityDialog();
     if (activity != null) {
-      setFormData({ ...activity });
+      setFormData({ ...unwrap(activity) });
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -72,7 +79,86 @@ export function ActivityDialog(): JSXElement {
   return (
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>仕事の編集</h5>
+
       <form method="dialog">
+        <div class="dialog__toolbar">
+          <div class="toolbar__button">
+            <label for="activity-manual">
+              <input
+                type="radio"
+                name="activityType"
+                id="activity-manual"
+                value="manual"
+                checked={formData.activityType === "manual"}
+                onChange={() => setFormData("activityType", "manual")}
+              />
+              <div class="dialog__toolbar-icon">
+                <ManualActivityIcon />
+              </div>
+            </label>
+          </div>
+          <div class="toolbar__button">
+            <label for="activity-auto">
+              <input
+                type="radio"
+                name="activityType"
+                id="activity-auto"
+                value="auto"
+                checked={formData.activityType === "auto"}
+                onChange={() => setFormData("activityType", "auto")}
+              />
+              <div class="dialog__toolbar-icon">
+                <AutoActivityIcon />
+              </div>
+            </label>
+          </div>
+          <div class="toolbar__button">
+            <label for="activity-manual-time">
+              <input
+                type="radio"
+                name="activityType"
+                id="activity-manual-time"
+                value="auto"
+                checked={formData.activityType === "auto"}
+                onChange={() => setFormData("activityType", "auto")}
+              />
+              <div class="dialog__toolbar-icon">
+                <ManualTimeActivityIcon />
+              </div>
+            </label>
+          </div>
+          <div class="toolbar__button">
+            <label for="activity-manual-time">
+              <input
+                type="radio"
+                name="activityType"
+                id="activity-manual-time"
+                value="auto"
+                checked={formData.activityType === "auto"}
+                onChange={() => setFormData("activityType", "auto")}
+              />
+              <div class="dialog__toolbar-icon">
+                <AutoTimeActivityIcon />
+              </div>
+            </label>
+          </div>
+          <div class="toolbar__button">
+            <label for="activity-hand">
+              <input
+                type="radio"
+                name="activityType"
+                id="activity-hand"
+                value="hand"
+                checked={formData.activityType === "hand"}
+                onChange={() => setFormData("activityType", "hand")}
+              />
+              <div class="dialog__toolbar-icon">
+                <HandActivityIcon />
+              </div>
+            </label>
+          </div>
+        </div>
+
         <div class="dialog__input">
           <div>ID：</div>
           <input

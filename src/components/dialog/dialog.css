@@ -25,3 +25,16 @@
   width: 386px;
   height: 128px;
 }
+
+.dialog__toolbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.dialog__toolbar-icon {
+  box-sizing: border-box;
+  width: 68px;
+  height: 52px;
+  border: 2px solid var(--button-background-color);
+  border-radius: 5px;
+}
