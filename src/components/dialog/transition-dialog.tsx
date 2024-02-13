@@ -36,7 +36,7 @@ export function TransitionDialog(): JSXElement {
 
   function handleOkButtonClick(_e: MouseEvent) {
     setTransitionList(
-      (it) => it.id === formData.id,
+      (it) => it.id === openTransitionDialog()?.id,
       produce((it) => {
         it.xpdlId = formData.xpdlId;
       }),

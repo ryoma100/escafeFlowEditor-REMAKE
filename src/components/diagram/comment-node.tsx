@@ -1,12 +1,11 @@
 import { JSXElement, onMount } from "solid-js";
-import { produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { CommentNodeEntity } from "../../data-source/data-type";
 import "./comment-node.css";
 
 export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
   const {
-    commentModel: { toggleSelectComment, selectComments, setCommentList },
+    commentModel: { toggleSelectComment, selectComments, resizeCommentSize },
     activityModel: { selectActivities },
     diagram: { toolbar, setDragType },
     dialog: { setOpenCommentDialog },
@@ -16,13 +15,7 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
     const observer = new ResizeObserver(() => {
       const width = (titleDiv?.clientWidth ?? 0) + 32;
       const height = (titleDiv?.clientHeight ?? 0) + 9;
-      setCommentList(
-        (it) => it.id === props.comment.id,
-        produce((it) => {
-          it.width = width;
-          it.height = height;
-        }),
-      );
+      resizeCommentSize(props.comment, width, height);
     });
     if (titleDiv) {
       observer.observe(titleDiv);

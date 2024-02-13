@@ -34,6 +34,16 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     return activity;
   }
 
+  function resizeActivityHeight(activity: ActivityNodeEntity, height: number) {
+    setActivityList(
+      (it) => it.id === activity.id,
+      produce((it) => {
+        it.y -= (height - it.height) / 2;
+        it.height = height;
+      }),
+    );
+  }
+
   function moveSelectedActivities(moveX: number, moveY: number) {
     setActivityList(
       (it) => it.selected,
@@ -98,6 +108,7 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     activityList,
     setActivityList,
     addActivity,
+    resizeActivityHeight,
     moveSelectedActivities,
     resizeLeft,
     resizeRight,

@@ -24,6 +24,16 @@ export function makeCommentModel() {
     return comment;
   }
 
+  function resizeCommentSize(comment: CommentNodeEntity, width: number, height: number) {
+    setCommentList(
+      (it) => it.id === comment.id,
+      produce((it) => {
+        it.width = width;
+        it.height = height;
+      }),
+    );
+  }
+
   function moveSelectedComments(moveX: number, moveY: number) {
     setCommentList(
       (it) => it.selected,
@@ -59,6 +69,7 @@ export function makeCommentModel() {
     commentList,
     setCommentList,
     addComment,
+    resizeCommentSize,
     moveSelectedComments,
     selectComments,
     toggleSelectComment,

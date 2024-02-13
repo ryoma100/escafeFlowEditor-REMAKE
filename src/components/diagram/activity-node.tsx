@@ -1,5 +1,4 @@
 import { JSXElement, onMount } from "solid-js";
-import { produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeEntity } from "../../data-source/data-type";
 import { ManualActivityIcon } from "../icons/material-icons";
@@ -7,7 +6,12 @@ import "./activity-node.css";
 
 export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElement {
   const {
-    activityModel: { layerTopActivity, selectActivities, toggleSelectActivity, setActivityList },
+    activityModel: {
+      layerTopActivity,
+      selectActivities,
+      toggleSelectActivity,
+      resizeActivityHeight,
+    },
     commentModel: { selectComments },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
@@ -23,13 +27,7 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
   onMount(() => {
     const observer = new ResizeObserver(() => {
       const height = (titleDiv?.clientHeight ?? 0) + 80;
-      setActivityList(
-        (it) => it.id === props.activity.id,
-        produce((it) => {
-          it.y -= (height - it.height) / 2;
-          it.height = height;
-        }),
-      );
+      resizeActivityHeight(props.activity, height);
     });
     if (titleDiv) {
       observer.observe(titleDiv);
