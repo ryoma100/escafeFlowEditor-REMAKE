@@ -50,9 +50,9 @@ export function ActorList(): JSXElement {
         </ul>
       </div>
       <div class="list__buttons">
-        <button onClick={handleAddButtonClick}>追加</button>
+        <button onClick={handleAddButtonClick}>{t("add")}</button>
         <button onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
-          削除
+          {t("delete")}
         </button>
       </div>
     </div>

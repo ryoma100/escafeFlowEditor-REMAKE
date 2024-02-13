@@ -1,3 +1,4 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
@@ -19,7 +20,9 @@ export function TransitionDialog(): JSXElement {
   const {
     transitionModel: { transitionList, setTransitionList },
     dialog: { openTransitionDialog, setOpenTransitionDialog },
+    i18n: { dict },
   } = useAppContext();
+  const t = i18n.translator(dict);
 
   const [formData, setFormData] = createStore<TransitionEdgeEntity>(dummy);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
@@ -48,7 +51,7 @@ export function TransitionDialog(): JSXElement {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
       transitionList.some((it) => it.id !== openTransitionDialog()?.id && it.xpdlId === text)
-        ? "このIDは既に存在します"
+        ? t("idExists")
         : "",
     );
   }
@@ -60,7 +63,7 @@ export function TransitionDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
-      <h5>接続の編集</h5>
+      <h5>{t("editTransition")}</h5>
       <form method="dialog">
         <div class="dialog__input">
           <div>ID：</div>

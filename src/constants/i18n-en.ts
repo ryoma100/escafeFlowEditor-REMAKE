@@ -1,7 +1,18 @@
 export const enDict = {
+  file: "FIle",
+  new: "New",
+  open: "Open",
+  save: "Save",
+  edit: "Edit",
+  selectAll: "Select All",
+  delete: "Delete",
+  property: "Property",
   package: "Package",
   process: "Process",
   actor: "Actor",
+  add: "Add",
+  help: "Help",
+  about: "About this Editor",
 
   select: "Select",
   transition: "Transition",
@@ -15,6 +26,7 @@ export const enDict = {
   comment: "Comment",
 
   idExists: "This ID already exists.",
-  jobEdit: "Job Editing",
+  editActivity: "Job Editing",
   jobTitle: "Job Title",
+  editTransition: "Edit Transition",
 };

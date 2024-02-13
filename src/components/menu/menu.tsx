@@ -1,3 +1,4 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import "./menu.css";
@@ -8,7 +9,9 @@ export function Menu(): JSXElement {
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog },
+    i18n: { dict },
   } = useAppContext();
+  const t = i18n.translator(dict);
 
   function handleFileNewClick() {
     return false;
@@ -77,101 +80,101 @@ export function Menu(): JSXElement {
     <nav class="menu__bar">
       <ul>
         <li class="menu__item">
-          <a href="#">ファイル</a>
+          <a href="#">{t("file")}</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
               <a href="#" onClick={handleFileNewClick}>
-                新規作成
+                {t("new")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleFileOpenClick}>
-                開く
+                {t("open")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleFileSaveClick}>
-                保存
+                {t("save")}
               </a>
             </li>
           </ul>
         </li>
         <li class="menu__item">
-          <a href="#">編集</a>
+          <a href="#">{t("edit")}</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
               <a href="#" onClick={handleEditSelectAllClick}>
-                すべて選択
+                {t("selectAll")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleEditRemoveClick}>
-                削除
+                {t("delete")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleEditPropertyClick}>
-                プロパティ
+                {t("property")}
               </a>
             </li>
           </ul>
         </li>
         <li class="menu__item">
-          <a href="#">パッケージ</a>
+          <a href="#">{t("package")}</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
               <a href="#" onClick={handleProjectPropertyClick}>
-                プロパティ
+                {t("property")}
               </a>
             </li>
           </ul>
         </li>
         <li class="menu__item">
-          <a href="#">プロセス</a>
+          <a href="#">{t("process")}</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
               <a href="#" onClick={handleProcessAddClick}>
-                追加
+                {t("add")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleProcessRemoveClick}>
-                削除
+                {t("delete")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleProcessPropertyClick}>
-                プロパティ
+                {t("property")}
               </a>
             </li>
           </ul>
         </li>
         <li class="menu__item">
-          <a href="#">アクター</a>
+          <a href="#">{t("actor")}</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
               <a href="#" onClick={handleActorAddClick}>
-                追加
+                {t("add")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleActorRemoveClick}>
-                削除
+                {t("delete")}
               </a>
             </li>
             <li class="menu__drop-item">
               <a href="#" onClick={handleActorPropertyClick}>
-                プロパティ
+                {t("property")}
               </a>
             </li>
           </ul>
         </li>
         <li class="menu__item">
-          <a href="#">ヘルプ</a>
+          <a href="#">{t("help")}</a>
           <ul class="menu__drop">
             <li class="menu__drop-item">
               <a href="#" onClick={handleHelpAboutClick}>
-                このエディタについて
+                {t("about")}
               </a>
             </li>
           </ul>

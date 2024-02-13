@@ -81,7 +81,7 @@ export function ActivityDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
-      <h5>{t("jobEdit")}</h5>
+      <h5>{t("editActivity")}</h5>
 
       <form method="dialog">
         <div class="dialog__toolbar">

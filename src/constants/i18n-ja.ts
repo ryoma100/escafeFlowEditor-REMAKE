@@ -1,9 +1,20 @@
 import { enDict } from "./i18n-en";
 
 export const jaDict: typeof enDict = {
+  file: "ファイル",
+  new: "新規作成",
+  open: "開く",
+  save: "保存",
+  edit: "編集",
+  selectAll: "すべて選択",
+  delete: "削除",
+  property: "プロパティ",
   package: "パッケージ",
   process: "プロセス",
   actor: "アクター",
+  add: "追加",
+  help: "ヘルプ",
+  about: "このエディタについて",
 
   select: "選択",
   transition: "トランジション",
@@ -17,6 +28,7 @@ export const jaDict: typeof enDict = {
   comment: "コメント",
 
   idExists: "このIDは既に存在します。",
-  jobEdit: "仕事の編集",
+  editActivity: "仕事の編集",
   jobTitle: "仕事名",
+  editTransition: "接続の編集",
 };
