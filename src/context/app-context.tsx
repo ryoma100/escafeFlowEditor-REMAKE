@@ -72,7 +72,7 @@ function makeDiagramContext() {
     fromY: number;
     toX: number;
     toY: number;
-  }>({ fromX: 0, fromY: 0, toX: 0, toY: 0 });
+  }>(undefined as never);
 
   return {
     toolbar,
@@ -116,14 +116,14 @@ const AppContext = createContext<{
 });
 
 export function AppProvider(props: { children: JSX.Element }) {
-  const contextValue = {
+  const value = {
     ...makeModelContext(),
     dialog: makeDialogContext(),
     diagram: makeDiagramContext(),
     i18n: makei18nContext(),
   };
 
-  return <AppContext.Provider value={contextValue}>{props.children}</AppContext.Provider>;
+  return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;
 }
 
 export function useAppContext() {
