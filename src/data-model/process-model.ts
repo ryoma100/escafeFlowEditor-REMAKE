@@ -1,11 +1,30 @@
 import { batch, createSignal } from "solid-js";
 import { dataFactory } from "../data-source/data-factory";
-import { dataSource } from "../data-source/data-source";
-import { ProcessEntity } from "../data-source/data-type";
+import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
 import { makeCommentModel } from "./comment-model";
 import { makeTransitionModel } from "./transition-model";
+
+const dummy: ProcessEntity = {
+  id: 0,
+  xpdlId: "",
+  name: "",
+  created: "",
+  enviroments: [],
+  validFrom: "",
+  validTo: "",
+  _lastActorId: 0,
+  actors: [],
+  _lastApplicationId: 0,
+  applications: [],
+  _lastActivityId: 0,
+  activities: [],
+  _lastTransitionId: 0,
+  transitions: [],
+  _lastCommentId: 0,
+  comments: [],
+};
 
 export function makeProcessModel(
   actorModel: ReturnType<typeof makeActorModel>,
@@ -13,33 +32,41 @@ export function makeProcessModel(
   transitionModel: ReturnType<typeof makeTransitionModel>,
   commentModel: ReturnType<typeof makeCommentModel>,
 ) {
-  const [processList, setProcessList] = createSignal<ProcessEntity[]>(
-    // ネストしたフィールドをリアクティブにしないため、createStore()は使わない
-    dataSource.project.processes,
-  );
-  const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(
-    dataSource.project.processes[0],
-  );
+  let project: ProjectEntity;
+  const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
+  const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(dummy);
+
+  function load(newProject: ProjectEntity) {
+    project = newProject;
+    const process = project.processes[0];
+    batch(() => {
+      setProcessList(project.processes);
+      setSelectedProcess(process);
+      actorModel.load(process);
+      activityModel.load(process);
+      transitionModel.load(process);
+      commentModel.load(process);
+    });
+  }
 
   function changeProcess(process: ProcessEntity) {
-    actorModel.saveActors();
-    activityModel.saveActivity();
-    transitionModel.saveTransition();
-    commentModel.saveComment();
+    actorModel.save();
+    activityModel.save();
+    transitionModel.save();
+    commentModel.save();
     batch(() => {
       setSelectedProcess(process);
-      actorModel.loadActors(process);
-      activityModel.loadActivity(process);
-      transitionModel.loadTransition(process);
-      commentModel.loadComment(process);
+      actorModel.load(process);
+      activityModel.load(process);
+      transitionModel.load(process);
+      commentModel.load(process);
     });
   }
 
   function addProcess() {
-    const process = dataFactory.createProcess(dataSource.project);
-    dataSource.project.processes = [...dataSource.project.processes, process];
-    setProcessList(dataSource.project.processes);
-    changeProcess(process);
+    const newProcess = dataFactory.createProcess(project);
+    setProcessList([...processList(), newProcess]);
+    changeProcess(newProcess);
   }
 
   function updateProcess(process: ProcessEntity) {
@@ -59,6 +86,7 @@ export function makeProcessModel(
   }
 
   return {
+    load,
     processList,
     selectedProcess,
     changeProcess,

@@ -1,21 +1,20 @@
-import { createStore, produce, unwrap } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import { dataFactory } from "../data-source/data-factory";
-import { dataSource } from "../data-source/data-source";
 import { ActivityNodeEntity, ProcessEntity } from "../data-source/data-type";
 import { makeActorModel } from "./actor-model";
 
 export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>) {
-  let selectedProcess: ProcessEntity = dataSource.project.processes[0];
+  let process: ProcessEntity;
   const [activityList, setActivityList] = createStore<ActivityNodeEntity[]>([]);
 
-  function saveActivity() {
-    dataSource.findProcess(selectedProcess.id).activities = [...unwrap(activityList)];
+  function load(newProcess: ProcessEntity) {
+    process = newProcess;
+    setActivityList(process.activities);
   }
 
-  function loadActivity(process: ProcessEntity) {
-    selectedProcess = process;
-    setActivityList(dataSource.findProcess(process.id).activities);
+  function save() {
+    process.activities = [...activityList];
   }
 
   function addActivity(
@@ -24,7 +23,7 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     cy: number,
   ): ActivityNodeEntity {
     const activity = dataFactory.createActivity(
-      selectedProcess,
+      process,
       actorModel.selectedActor().id,
       activityType,
     );
@@ -105,6 +104,8 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
   }
 
   return {
+    load,
+    save,
     activityList,
     setActivityList,
     addActivity,
@@ -115,7 +116,5 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     layerTopActivity,
     selectActivities,
     toggleSelectActivity,
-    saveActivity,
-    loadActivity,
   };
 }

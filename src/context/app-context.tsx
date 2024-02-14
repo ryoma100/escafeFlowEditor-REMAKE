@@ -20,12 +20,12 @@ import {
 } from "../data-source/data-type";
 
 function makeModelContext() {
-  const projectModel = makeProjectModel();
   const actorModel = makeActorModel();
   const activityModel = makeActivityModel(actorModel);
   const transitionModel = makeTransitionModel(activityModel);
   const commentModel = makeCommentModel();
   const processModel = makeProcessModel(actorModel, activityModel, transitionModel, commentModel);
+  const projectModel = makeProjectModel(processModel);
 
   return {
     projectModel,

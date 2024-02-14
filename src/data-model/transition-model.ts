@@ -1,35 +1,34 @@
-import { createStore, unwrap } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { dataFactory } from "../data-source/data-factory";
-import { dataSource } from "../data-source/data-source";
 import { ProcessEntity, TransitionEdgeEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 
 export function makeTransitionModel({ activityList }: ReturnType<typeof makeActivityModel>) {
-  let selectedProcess: ProcessEntity = dataSource.project.processes[0];
+  let process: ProcessEntity;
   const [transitionList, setTransitionList] = createStore<TransitionEdgeEntity[]>([]);
 
-  function saveTransition() {
-    dataSource.findProcess(selectedProcess.id).transitions = [...unwrap(transitionList)];
+  function load(newProcess: ProcessEntity) {
+    process = newProcess;
+    setTransitionList(process.transitions);
   }
 
-  function loadTransition(process: ProcessEntity) {
-    selectedProcess = process;
-    setTransitionList(dataSource.findProcess(process.id).transitions);
+  function save() {
+    process.transitions = [...transitionList];
   }
 
   function addTransition(toActivityId: number): TransitionEdgeEntity {
     const fromActivityId = activityList.find((it) => it.selected)!.id;
-    const transition = dataFactory.createTransition(selectedProcess, fromActivityId, toActivityId);
+    const transition = dataFactory.createTransition(process, fromActivityId, toActivityId);
     setTransitionList([...transitionList, transition]);
     const proxyTransition = transitionList[transitionList.length - 1];
     return proxyTransition;
   }
 
   return {
+    load,
+    save,
     addTransition,
     transitionList,
     setTransitionList,
-    saveTransition,
-    loadTransition,
   };
 }
