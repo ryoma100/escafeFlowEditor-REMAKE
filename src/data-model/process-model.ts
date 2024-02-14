@@ -6,26 +6,6 @@ import { makeActorModel } from "./actor-model";
 import { makeCommentModel } from "./comment-model";
 import { makeTransitionModel } from "./transition-model";
 
-const dummy: ProcessEntity = {
-  id: 0,
-  xpdlId: "",
-  name: "",
-  created: "",
-  enviroments: [],
-  validFrom: "",
-  validTo: "",
-  _lastActorId: 0,
-  actors: [],
-  _lastApplicationId: 0,
-  applications: [],
-  _lastActivityId: 0,
-  activities: [],
-  _lastTransitionId: 0,
-  transitions: [],
-  _lastCommentId: 0,
-  comments: [],
-};
-
 export function makeProcessModel(
   actorModel: ReturnType<typeof makeActorModel>,
   activityModel: ReturnType<typeof makeActivityModel>,
@@ -34,7 +14,7 @@ export function makeProcessModel(
 ) {
   let project: ProjectEntity;
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
-  const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(dummy);
+  const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(undefined as never);
 
   function load(newProject: ProjectEntity) {
     project = newProject;

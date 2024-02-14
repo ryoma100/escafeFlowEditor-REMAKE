@@ -4,21 +4,13 @@ import { useAppContext } from "../../context/app-context";
 import { ProjectEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
-const dummy: ProjectEntity = {
-  xpdlId: "",
-  name: "",
-  created: "",
-  _lastProcessId: 0,
-  processes: [],
-};
-
 export function ProjectDialog(): JSXElement {
   const {
     projectModel: { setProject },
     dialog: { openProjectDialog, setOpenProjectDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ProjectEntity>(dummy);
+  const [formData, setFormData] = createStore<ProjectEntity>(undefined as never);
 
   createEffect(() => {
     const project = openProjectDialog();

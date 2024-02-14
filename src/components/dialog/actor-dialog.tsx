@@ -4,19 +4,13 @@ import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
-const dummy: ActorEntity = {
-  id: 0,
-  xpdlId: "",
-  name: "",
-};
-
 export function ActorDialog(): JSXElement {
   const {
     actorModel: { updateActor, actorList },
     dialog: { openActorDialog, setOpenActorDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ActorEntity>(dummy);
+  const [formData, setFormData] = createStore<ActorEntity>(undefined as never);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

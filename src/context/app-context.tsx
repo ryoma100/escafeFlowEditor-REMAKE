@@ -93,13 +93,6 @@ function makei18nContext() {
   return { dict, setLocale };
 }
 
-const contextValue = {
-  ...makeModelContext(),
-  dialog: makeDialogContext(),
-  diagram: makeDiagramContext(),
-  i18n: makei18nContext(),
-};
-
 const AppContext = createContext<{
   projectModel: ReturnType<typeof makeProjectModel>;
   processModel: ReturnType<typeof makeProcessModel>;
@@ -110,9 +103,26 @@ const AppContext = createContext<{
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
   i18n: ReturnType<typeof makei18nContext>;
-}>(contextValue);
+}>({
+  projectModel: undefined as never,
+  processModel: undefined as never,
+  actorModel: undefined as never,
+  activityModel: undefined as never,
+  transitionModel: undefined as never,
+  commentModel: undefined as never,
+  dialog: undefined as never,
+  diagram: undefined as never,
+  i18n: undefined as never,
+});
 
 export function AppProvider(props: { children: JSX.Element }) {
+  const contextValue = {
+    ...makeModelContext(),
+    dialog: makeDialogContext(),
+    diagram: makeDiagramContext(),
+    i18n: makei18nContext(),
+  };
+
   return <AppContext.Provider value={contextValue}>{props.children}</AppContext.Provider>;
 }
 

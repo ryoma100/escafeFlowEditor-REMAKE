@@ -5,7 +5,7 @@ import "./menu.css";
 
 export function Menu(): JSXElement {
   const {
-    projectModel: { project, newProject },
+    projectModel: { project, clearProject },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog },
@@ -14,7 +14,7 @@ export function Menu(): JSXElement {
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {
-    newProject();
+    clearProject();
     return false;
   }
 

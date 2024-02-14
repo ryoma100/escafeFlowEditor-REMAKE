@@ -1,7 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce, unwrap } from "solid-js/store";
-import { ACTIVITY_MIN_WIDTH } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeEntity } from "../../data-source/data-type";
 import {
@@ -13,23 +12,6 @@ import {
 } from "../icons/material-icons";
 import "./dialog.css";
 
-const dummy: ActivityNodeEntity = {
-  id: 0,
-  xpdlId: "",
-  type: "activity",
-  activityType: "manual",
-  name: "",
-  actorId: 0,
-  ognl: "",
-  joinType: "none",
-  splitType: "none",
-  x: 0,
-  y: 0,
-  width: ACTIVITY_MIN_WIDTH,
-  height: 0,
-  selected: false,
-};
-
 export function ActivityDialog(): JSXElement {
   const {
     actorModel: { actorList },
@@ -39,7 +21,7 @@ export function ActivityDialog(): JSXElement {
   } = useAppContext();
   const t = i18n.translator(dict);
 
-  const [formData, setFormData] = createStore<ActivityNodeEntity>(dummy);
+  const [formData, setFormData] = createStore<ActivityNodeEntity>(undefined as never);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

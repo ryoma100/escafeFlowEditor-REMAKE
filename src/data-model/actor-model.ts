@@ -3,16 +3,10 @@ import { createStore, produce } from "solid-js/store";
 import { dataFactory } from "../data-source/data-factory";
 import { ActorEntity, ProcessEntity } from "../data-source/data-type";
 
-const dummy: ActorEntity = {
-  id: 0,
-  xpdlId: "",
-  name: "",
-};
-
 export function makeActorModel() {
   let process: ProcessEntity;
   const [actorList, setActorList] = createStore<ActorEntity[]>([]);
-  const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(dummy);
+  const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(undefined as never);
 
   function load(newProcess: ProcessEntity) {
     process = newProcess;
