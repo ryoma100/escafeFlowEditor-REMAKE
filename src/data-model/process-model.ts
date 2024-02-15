@@ -18,19 +18,18 @@ export function makeProcessModel(
 
   function load(newProject: ProjectEntity) {
     project = newProject;
-    const process = project.processes[0];
+    setProcessList(project.processes);
     batch(() => {
-      setProcessList(project.processes);
-      setSelectedProcess(process);
-      actorModel.load(process);
-      activityModel.load(process);
-      transitionModel.load(process);
-      commentModel.load(process);
+      const firstProcess = project.processes[0];
+      setSelectedProcess(firstProcess);
+      actorModel.load(firstProcess);
+      activityModel.load(firstProcess);
+      transitionModel.load(firstProcess);
+      commentModel.load(firstProcess);
     });
   }
 
   function save() {
-    project.processes = [...processList()];
     actorModel.save();
     activityModel.save();
     transitionModel.save();
@@ -38,10 +37,7 @@ export function makeProcessModel(
   }
 
   function changeProcess(process: ProcessEntity) {
-    actorModel.save();
-    activityModel.save();
-    transitionModel.save();
-    commentModel.save();
+    save();
     batch(() => {
       setSelectedProcess(process);
       actorModel.load(process);
@@ -54,6 +50,7 @@ export function makeProcessModel(
   function addProcess() {
     const newProcess = dataFactory.createProcess(project);
     setProcessList([...processList(), newProcess]);
+    project.processes = [...processList()];
     changeProcess(newProcess);
   }
 
@@ -70,6 +67,7 @@ export function makeProcessModel(
     const newList = processList().filter((it) => it.id !== selectedProcess().id);
     setProcessList(newList);
     setSelectedProcess(processList()[nextSelectedIndex]);
+    project.processes = [...processList()];
     changeProcess(selectedProcess());
   }
 
