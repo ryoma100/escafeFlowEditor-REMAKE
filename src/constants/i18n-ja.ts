@@ -31,4 +31,6 @@ export const jaDict: typeof enDict = {
   editActivity: "仕事の編集",
   jobTitle: "仕事名",
   editTransition: "接続の編集",
+
+  xpdlSave: "XPDLを保存",
 };

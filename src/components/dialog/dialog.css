@@ -39,3 +39,8 @@
   border: 2px solid var(--button-background-color);
   border-radius: 5px;
 }
+
+.dialog > textarea {
+  width: 600px;
+  height: 400px;
+}

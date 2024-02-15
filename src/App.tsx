@@ -5,6 +5,7 @@ import { ActorDialog } from "./components/dialog/actor-dialog";
 import { CommentDialog } from "./components/dialog/comment-dialog";
 import { ProcessDialog } from "./components/dialog/process-dialog";
 import { ProjectDialog } from "./components/dialog/project-dialog";
+import { SaveDialog } from "./components/dialog/save-dialog";
 import { TransitionDialog } from "./components/dialog/transition-dialog";
 import { ActorList } from "./components/list/actor-list";
 import { ProcessList } from "./components/list/process-list";
@@ -39,6 +40,7 @@ function App(): JSXElement {
       <ActivityDialog />
       <TransitionDialog />
       <CommentDialog />
+      <SaveDialog />
     </>
   );
 }

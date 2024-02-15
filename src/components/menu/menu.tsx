@@ -8,7 +8,7 @@ export function Menu(): JSXElement {
     projectModel: { project, initProject },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog },
+    dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog, setOpenSaveDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -23,6 +23,7 @@ export function Menu(): JSXElement {
   }
 
   function handleFileSaveClick() {
+    setOpenSaveDialog(project);
     return false;
   }
 

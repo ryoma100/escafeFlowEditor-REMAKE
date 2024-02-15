@@ -29,4 +29,6 @@ export const enDict = {
   editActivity: "Job Editing",
   jobTitle: "Job Title",
   editTransition: "Edit Transition",
+
+  xpdlSave: "Save XPDL",
 };
