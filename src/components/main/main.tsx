@@ -1,6 +1,6 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { Diagram } from "../diagram/disgram";
+import { Diagram } from "../diagram/diagram";
 import "./main.css";
 
 export function Main(): JSXElement {
@@ -13,7 +13,7 @@ export function Main(): JSXElement {
     // TODO: auto zoom
   }
 
-  function handleNomalZoomButtonClick() {
+  function handleNormalZoomButtonClick() {
     setZoom(1);
   }
 
@@ -33,7 +33,7 @@ export function Main(): JSXElement {
           value={zoom()}
           onInput={(e) => setZoom(Number(e.target.value))}
         />
-        <button onClick={handleNomalZoomButtonClick}>100%</button>
+        <button onClick={handleNormalZoomButtonClick}>100%</button>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ npm install
 npm run dev
 ```
 
-- for PC Applicaton
+- for PC Application
 
 ```
 npm run tauri dev

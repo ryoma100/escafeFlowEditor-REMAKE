@@ -19,7 +19,7 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
     diagram: { toolbar, dragType, setDragType, setAddingLine },
   } = useAppContext();
 
-  const fromTransitionsLenght = () =>
+  const fromTransitionsLength = () =>
     transitionList.filter((it) => it.toActivityId === props.activity.id).length;
   const toTransitionsLength = () =>
     transitionList.filter((it) => it.fromActivityId === props.activity.id).length;
@@ -60,7 +60,7 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
           setDragType("moveNodes");
         }
         break;
-      case "transion":
+      case "transition":
         selectActivities([props.activity.id]);
         setAddingLine({
           fromX: props.activity.x,
@@ -104,10 +104,10 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
       >
         <div
           class="activity__resize"
-          classList={{ "activity__prev--many": fromTransitionsLenght() >= 2 }}
+          classList={{ "activity__prev--many": fromTransitionsLength() >= 2 }}
           onMouseDown={handleLeftMouseDown}
         >
-          <div classList={{ "activity__prev--one": fromTransitionsLenght() >= 1 }} />
+          <div classList={{ "activity__prev--one": fromTransitionsLength() >= 1 }} />
         </div>
         <div class="activity__main" onMouseDown={handleMouseDown} onDblClick={handleDblClick}>
           <div class="activity__actor">

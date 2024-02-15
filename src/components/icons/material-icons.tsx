@@ -1,3 +1,4 @@
+// cSpell:ignoreRegExp .*\.svg\";$
 import { JSXElement } from "solid-js";
 import PointSvg from "../../assets/material-icons/arrow_selector_tool_FILL0_wght400_GRAD0_opsz24.svg";
 import CommentSvg from "../../assets/material-icons/comment_FILL0_wght400_GRAD0_opsz24.svg";
@@ -6,7 +7,7 @@ import LineSvg from "../../assets/material-icons/north_east_FILL0_wght400_GRAD0_
 import HandActivitySvg from "../../assets/material-icons/pan_tool_FILL0_wght400_GRAD0_opsz24.svg";
 import PauseSvg from "../../assets/material-icons/pause_circle_FILL0_wght400_GRAD0_opsz24.svg";
 import ManualActivitySvg from "../../assets/material-icons/person_check_FILL0_wght400_GRAD0_opsz24.svg";
-import StratSvg from "../../assets/material-icons/play_arrow_FILL0_wght400_GRAD0_opsz24.svg";
+import StartSvg from "../../assets/material-icons/play_arrow_FILL0_wght400_GRAD0_opsz24.svg";
 import PlaySvg from "../../assets/material-icons/play_circle_FILL0_wght400_GRAD0_opsz24.svg";
 import TimeSvg from "../../assets/material-icons/schedule_FILL0_wght400_GRAD0_opsz24.svg";
 import EndSvg from "../../assets/material-icons/stop_FILL0_wght400_GRAD0_opsz24.svg";
@@ -82,7 +83,7 @@ export function HandActivityIcon(): JSXElement {
 export function StartIcon(): JSXElement {
   return (
     <div class="icon__tool">
-      <StratSvg width={44} height={44} />
+      <StartSvg width={44} height={44} />
     </div>
   );
 }

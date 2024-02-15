@@ -1,6 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSX, createContext, createMemo, createSignal, useContext } from "solid-js";
-import { DragType } from "../components/diagram/disgram";
+import { DragType } from "../components/diagram/diagram";
 import { ToolbarType } from "../components/toolbar/toolbar";
 import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
@@ -86,7 +86,7 @@ function makeDiagramContext() {
   };
 }
 
-function makei18nContext() {
+function makeI18nContext() {
   const dictionaries = { ja: jaDict, en: enDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>("ja");
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
@@ -102,7 +102,7 @@ const AppContext = createContext<{
   commentModel: ReturnType<typeof makeCommentModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
-  i18n: ReturnType<typeof makei18nContext>;
+  i18n: ReturnType<typeof makeI18nContext>;
 }>({
   projectModel: undefined as never,
   processModel: undefined as never,
@@ -120,7 +120,7 @@ export function AppProvider(props: { children: JSX.Element }) {
     ...makeModelContext(),
     dialog: makeDialogContext(),
     diagram: makeDiagramContext(),
-    i18n: makei18nContext(),
+    i18n: makeI18nContext(),
   };
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;

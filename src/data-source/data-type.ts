@@ -14,7 +14,7 @@ export type ProcessEntity = {
   xpdlId: string;
   name: string;
   created: datetime;
-  enviroments: EnviromentEntity[];
+  environments: EnvironmentEntity[];
   validFrom: string;
   validTo: string;
 
@@ -40,7 +40,7 @@ export type ActorEntity = {
   name: string;
 };
 
-export type EnviromentEntity = {
+export type EnvironmentEntity = {
   name: string;
   value: string;
 };

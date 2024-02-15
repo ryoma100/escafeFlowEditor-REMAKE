@@ -113,11 +113,11 @@ export function ActivityDialog(): JSXElement {
             </label>
           </div>
           <div class="toolbar__button">
-            <label for="activity-manual-time">
+            <label for="activity-auto-time">
               <input
                 type="radio"
                 name="activityType"
-                id="activity-manual-time"
+                id="activity-auto-time"
                 value="auto"
                 checked={formData.activityType === "auto"}
                 onChange={() => setFormData("activityType", "auto")}

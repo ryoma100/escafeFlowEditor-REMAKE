@@ -15,7 +15,7 @@ import "./toolbar.css";
 
 export type ToolbarType =
   | "cursor"
-  | "transion"
+  | "transition"
   | "manual"
   | "auto"
   | "hand"
@@ -49,14 +49,14 @@ export function Toolbar(): JSXElement {
       </div>
 
       <div class="toolbar__button toolbar__button--margin-bottom">
-        <label for="toolbar-transison">
+        <label for="toolbar-transition">
           <input
             type="radio"
             name="toolbar"
-            id="toolbar-transison"
-            value="transison"
-            checked={toolbar() === "transion"}
-            onChange={() => setToolbar("transion")}
+            id="toolbar-transition"
+            value="transition"
+            checked={toolbar() === "transition"}
+            onChange={() => setToolbar("transition")}
           />
           <div class="toolbar__icon" title={t("transition")}>
             <LineIcon />
