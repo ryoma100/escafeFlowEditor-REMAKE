@@ -13,5 +13,9 @@ export function makeProjectModel(processModel: ReturnType<typeof makeProcessMode
   const [project, setProject] = createSignal<ProjectEntity>(undefined as never);
   initProject();
 
-  return { project, setProject, initProject };
+  function save() {
+    processModel.save();
+  }
+
+  return { project, setProject, initProject, save };
 }

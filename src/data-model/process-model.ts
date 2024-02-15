@@ -29,6 +29,14 @@ export function makeProcessModel(
     });
   }
 
+  function save() {
+    project.processes = [...processList()];
+    actorModel.save();
+    activityModel.save();
+    transitionModel.save();
+    commentModel.save();
+  }
+
   function changeProcess(process: ProcessEntity) {
     actorModel.save();
     activityModel.save();
@@ -67,6 +75,7 @@ export function makeProcessModel(
 
   return {
     load,
+    save,
     processList,
     selectedProcess,
     changeProcess,
