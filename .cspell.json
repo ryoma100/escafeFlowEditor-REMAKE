@@ -14,8 +14,10 @@
     "newpkg",
     "ognl",
     "optimizelegibility",
+    "preinstall",
     "Ryouichi",
     "serde",
+    "stylelint",
     "tauri"
   ],
   // flagWords - list of words to be always considered incorrect
@@ -24,7 +26,6 @@
   "ignorePaths": [
     "node_modules/**",
     "dist/**",
-    "package.json",
     "pnpm-lock.yaml",
     "src-tauri/target/**",
     "**/*.icns",

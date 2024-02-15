@@ -4,7 +4,7 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "tiny-workflow-editor",
+      "name": "tiny-es-flow-editor",
       "url": "http://localhost:1420",
       "webRoot": "${workspaceFolder}"
     }
