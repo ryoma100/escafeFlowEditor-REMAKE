@@ -6,7 +6,9 @@
   "language": "en",
   // words - list of words to be always considered correct
   "words": [
+    "autodocs",
     "autoname",
+    "customise",
     "datetime",
     "fullscreen",
     "icns",
@@ -17,6 +19,7 @@
     "preinstall",
     "Ryouichi",
     "serde",
+    "solidjs",
     "stylelint",
     "tauri"
   ],
@@ -29,6 +32,7 @@
     "pnpm-lock.yaml",
     "src-tauri/target/**",
     "**/*.icns",
-    "**/*.svg"
+    "**/*.svg",
+    "**/*.avif"
   ]
 }
