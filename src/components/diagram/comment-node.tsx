@@ -1,6 +1,7 @@
 import { JSXElement, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { CommentNodeEntity } from "../../data-source/data-type";
+import { CommentIcon } from "../icons/material-icons";
 import "./comment-node.css";
 
 export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
@@ -10,17 +11,6 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
     diagram: { toolbar, setDragType },
     dialog: { setOpenCommentDialog },
   } = useAppContext();
-
-  onMount(() => {
-    const observer = new ResizeObserver(() => {
-      const width = (titleDiv?.clientWidth ?? 0) + 32;
-      const height = (titleDiv?.clientHeight ?? 0) + 9;
-      resizeCommentSize(props.comment, width, height);
-    });
-    if (titleDiv) {
-      observer.observe(titleDiv);
-    }
-  });
 
   function handleMouseDown(e: MouseEvent) {
     switch (toolbar()) {
@@ -44,7 +34,6 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
     setOpenCommentDialog(props.comment);
   }
 
-  let titleDiv: HTMLDivElement | undefined;
   return (
     <foreignObject
       x={props.comment.x}
@@ -52,19 +41,53 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
       width={props.comment.width}
       height={props.comment.height}
     >
-      <div
-        class="comment"
-        classList={{
-          "comment--selected": props.comment.selected,
-        }}
+      <CommentNodeView
+        comment={props.comment.comment}
+        selected={props.comment.selected}
         onMouseDown={handleMouseDown}
         onDblClick={handleDblClick}
-      >
-        <div class="comment__icon">※</div>
-        <div ref={titleDiv} class="comment__title">
-          {props.comment.comment}
-        </div>
-      </div>
+        onChangeSize={(w, h) => resizeCommentSize(props.comment, w, h)}
+      />
     </foreignObject>
+  );
+}
+
+export function CommentNodeView(props: {
+  comment: string;
+  selected: boolean;
+  onMouseDown?: (e: MouseEvent) => void;
+  onDblClick?: (e: MouseEvent) => void;
+  onChangeSize?: (width: number, height: number) => void;
+}) {
+  onMount(() => {
+    const observer = new ResizeObserver(() => {
+      if (titleDiv) {
+        const width = titleDiv.clientWidth + 48;
+        const height = titleDiv.clientHeight + 8;
+        props.onChangeSize?.(width, height);
+      }
+    });
+    if (titleDiv) {
+      observer.observe(titleDiv);
+    }
+  });
+
+  let titleDiv: HTMLDivElement | undefined;
+  return (
+    <div
+      class="comment"
+      classList={{
+        "comment--selected": props.selected,
+      }}
+      onMouseDown={props.onMouseDown}
+      onDblClick={props.onDblClick}
+    >
+      <div class="comment__icon">
+        <CommentIcon />
+      </div>
+      <div ref={titleDiv} class="comment__title">
+        {props.comment}
+      </div>
+    </div>
   );
 }

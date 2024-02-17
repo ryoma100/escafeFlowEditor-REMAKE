@@ -23,8 +23,7 @@
 }
 
 .toolbar__button div {
-  margin-right: 8px;
-  margin-bottom: 8px;
+  margin: 0 8px 8px 0;
 }
 
 .toolbar__button input[type="radio"]:checked + div {
@@ -34,8 +33,12 @@
 
 .toolbar__icon {
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 68px;
   height: 52px;
+  padding: 8px 0 0 8px;
   cursor: pointer;
   border: 2px solid var(--button-background-color);
   border-radius: 5px;

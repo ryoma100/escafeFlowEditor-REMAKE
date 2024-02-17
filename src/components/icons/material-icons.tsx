@@ -31,51 +31,51 @@ export function LineIcon(): JSXElement {
 
 export function ManualActivityIcon(): JSXElement {
   return (
-    <div class="icon__tool-activity">
-      <PauseSvg width={24} height={24} />
-      <ManualActivitySvg width={44} height={44} />
+    <div class="icon__tool">
+      <PauseSvg width={20} height={20} />
+      <ManualActivitySvg width={40} height={40} />
     </div>
   );
 }
 
 export function AutoActivityIcon(): JSXElement {
   return (
-    <div class="icon__tool-activity">
-      <PlaySvg width={24} height={24} />
-      <AutoActivitySvg width={44} height={44} />
+    <div class="icon__tool">
+      <PlaySvg width={20} height={20} />
+      <AutoActivitySvg width={40} height={40} />
     </div>
   );
 }
 
 export function ManualTimerActivityIcon(): JSXElement {
   return (
-    <div class="icon__tool-activity">
+    <div class="icon__tool">
       <div>
-        <PauseSvg width={24} height={24} />
-        <TimeSvg width={24} height={24} />
+        <PauseSvg width={20} height={20} />
+        <TimeSvg width={20} height={20} />
       </div>
-      <ManualActivitySvg width={44} height={44} />
+      <ManualActivitySvg width={40} height={40} />
     </div>
   );
 }
 
 export function AutoTimerActivityIcon(): JSXElement {
   return (
-    <div class="icon__tool-activity">
+    <div class="icon__tool">
       <div>
-        <PauseSvg width={24} height={24} />
-        <TimeSvg width={24} height={24} />
+        <PauseSvg width={20} height={20} />
+        <TimeSvg width={20} height={20} />
       </div>
-      <AutoActivitySvg width={44} height={44} />
+      <AutoActivitySvg width={40} height={40} />
     </div>
   );
 }
 
 export function UserActivityIcon(): JSXElement {
   return (
-    <div class="icon__tool-activity">
-      <PlaySvg width={24} height={24} />
-      <HandActivitySvg width={44} height={44} />
+    <div class="icon__tool">
+      <PlaySvg width={20} height={20} />
+      <HandActivitySvg width={40} height={40} />
     </div>
   );
 }
@@ -83,7 +83,7 @@ export function UserActivityIcon(): JSXElement {
 export function StartIcon(): JSXElement {
   return (
     <div class="icon__tool">
-      <StartSvg width={44} height={44} />
+      <StartSvg width={40} height={40} />
     </div>
   );
 }
@@ -91,7 +91,7 @@ export function StartIcon(): JSXElement {
 export function EndIcon(): JSXElement {
   return (
     <div class="icon__tool">
-      <EndSvg width={44} height={44} />
+      <EndSvg width={40} height={40} />
     </div>
   );
 }

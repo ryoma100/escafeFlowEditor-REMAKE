@@ -14,14 +14,12 @@
 
 .comment:hover {
   cursor: move;
-  background-color: lightgray;
+  background-color: var(--app-background-color);
 }
 
 .comment__icon {
   display: flex;
   align-items: center;
-  padding-right: 4px;
-  font-size: 16px;
 }
 
 .comment__title {
