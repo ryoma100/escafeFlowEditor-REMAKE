@@ -142,7 +142,7 @@ export function ActivityNodeView(props: {
       class="activity"
       classList={{ "activity--selected": props.selected }}
     >
-      <div class="activity__resize" onMouseDown={props.onLeftMouseDown}>
+      <div class="activity__resize" onMouseDown={(e) => props.onLeftMouseDown?.(e)}>
         <Switch>
           <Match when={props.joinType === "oneJoin"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
@@ -162,7 +162,11 @@ export function ActivityNodeView(props: {
         </Switch>
       </div>
 
-      <div class="activity__main" onMouseDown={props.onMouseDown} onDblClick={props.onDblClick}>
+      <div
+        class="activity__main"
+        onMouseDown={(e) => props.onMouseDown?.(e)}
+        onDblClick={(e) => props.onDblClick?.(e)}
+      >
         <div class="activity__actor">{props.actorName}</div>
         <div class="activity__icon">
           <ManualActivityIcon />
@@ -172,7 +176,7 @@ export function ActivityNodeView(props: {
         </div>
       </div>
 
-      <div class="activity__resize" onMouseDown={props.onRightMouseDown}>
+      <div class="activity__resize" onMouseDown={(e) => props.onRightMouseDown?.(e)}>
         <Switch>
           <Match when={props.splitType === "oneSplit"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">

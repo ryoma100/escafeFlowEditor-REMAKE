@@ -1,4 +1,4 @@
-import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
+import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "../constants/app-const";
 import {
   ActivityNodeEntity,
   ActivityNodeType,
@@ -6,6 +6,7 @@ import {
   CommentNodeEntity,
   ProcessEntity,
   ProjectEntity,
+  StartEndNodeEntity,
   TransitionEdgeEntity,
 } from "./data-type";
 
@@ -47,6 +48,8 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     transitions: [],
     _lastCommentId: 0,
     comments: [],
+    _lastStartEndId: 0,
+    startEndNodes: [],
   };
   process.actors = [createActor(process)];
   return process;
@@ -136,6 +139,20 @@ function createComment(process: ProcessEntity): CommentNodeEntity {
   };
 }
 
+function createStartEnd(process: ProcessEntity, type: "startNode" | "endNode"): StartEndNodeEntity {
+  const id = ++process._lastStartEndId;
+
+  return {
+    id,
+    type,
+    x: 0,
+    y: 0,
+    width: NORMAL_ICON_SIZE,
+    height: NORMAL_ICON_SIZE,
+    selected: false,
+  };
+}
+
 export const dataFactory = {
   createProject: createProject,
   createProcess,
@@ -143,4 +160,5 @@ export const dataFactory = {
   createActivity,
   createTransition,
   createComment,
+  createStartEnd,
 };

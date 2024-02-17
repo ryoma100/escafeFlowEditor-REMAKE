@@ -32,6 +32,9 @@ export type ProcessEntity = {
 
   _lastCommentId: number;
   comments: CommentNodeEntity[];
+
+  _lastStartEndId: number;
+  startEndNodes: StartEndNodeEntity[];
 };
 
 export type ActorEntity = {
@@ -89,12 +92,8 @@ export type CommentNodeEntity = INode & {
   comment: string;
 };
 
-export type StartNodeEntity = INode & {
-  type: "startNode";
-};
-
-export type EndNodeEntity = INode & {
-  type: "endNode";
+export type StartEndNodeEntity = INode & {
+  type: "startNode" | "endNode";
 };
 
 export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge";

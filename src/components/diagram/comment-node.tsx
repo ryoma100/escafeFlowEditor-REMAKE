@@ -79,8 +79,8 @@ export function CommentNodeView(props: {
       classList={{
         "comment--selected": props.selected,
       }}
-      onMouseDown={props.onMouseDown}
-      onDblClick={props.onDblClick}
+      onMouseDown={(e) => props.onMouseDown?.(e)}
+      onDblClick={(e) => props.onDblClick?.(e)}
     >
       <div class="comment__icon">
         <CommentIcon />

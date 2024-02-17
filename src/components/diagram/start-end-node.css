@@ -1,0 +1,16 @@
+.start-end {
+  padding: 2px;
+  margin: 1px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.start-end--selected {
+  margin: 0;
+  border: 2px solid var(--app-selected-color);
+}
+
+.start-end:hover {
+  cursor: move;
+  background-color: var(--app-background-color);
+}

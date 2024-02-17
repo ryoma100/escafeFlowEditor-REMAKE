@@ -4,6 +4,7 @@ import { useAppContext } from "../../context/app-context";
 import { ActivityNode } from "./activity-node";
 import { CommentNode } from "./comment-node";
 import "./diagram.css";
+import { StartEndNode } from "./start-end-node";
 import { TransitionEdge } from "./transition-edge";
 
 export type DragType =
@@ -14,7 +15,8 @@ export type DragType =
   | "resizeActivityLeft"
   | "resizeActivityRight"
   | "addTransition"
-  | "addComment";
+  | "addComment"
+  | "addStartEnd";
 
 export function Diagram(): JSXElement {
   const {
@@ -29,6 +31,7 @@ export function Diagram(): JSXElement {
     },
     transitionModel: { transitionList },
     commentModel: { commentList, selectComments, addComment, moveSelectedComments },
+    startEndModel: { startEndList, addStartEnd, selectStartEnds, moveSelectedStartEnds },
     diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLine },
   } = useAppContext();
 
@@ -47,13 +50,15 @@ export function Diagram(): JSXElement {
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
-      const rect = diagram?.getBoundingClientRect();
-      setRect({
-        x: rect?.left ?? 0,
-        y: rect?.top ?? 0,
-        width: rect?.width ?? 0,
-        height: rect?.height ?? 0,
-      });
+      if (diagram) {
+        const rect = diagram.getBoundingClientRect();
+        setRect({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
     });
     if (diagram) {
       observer.observe(diagram);
@@ -94,6 +99,28 @@ export function Diagram(): JSXElement {
               setDragType("addComment");
             }
             break;
+          case "start":
+            {
+              const startEnd = addStartEnd(
+                "startNode",
+                viewBox.x + (e.clientX - svgRect.x) / zoom(),
+                viewBox.y + (e.clientY - svgRect.y) / zoom(),
+              );
+              selectStartEnds([startEnd.id]);
+              setDragType("addStartEnd");
+            }
+            break;
+          case "end":
+            {
+              const startEnd = addStartEnd(
+                "endNode",
+                viewBox.x + (e.clientX - svgRect.x) / zoom(),
+                viewBox.y + (e.clientY - svgRect.y) / zoom(),
+              );
+              selectStartEnds([startEnd.id]);
+              setDragType("addStartEnd");
+            }
+            break;
         }
         break;
     }
@@ -112,9 +139,11 @@ export function Diagram(): JSXElement {
         break;
       case "addActivity":
       case "addComment":
+      case "addStartEnd":
       case "moveNodes":
         moveSelectedActivities(moveX, moveY);
         moveSelectedComments(moveX, moveY);
+        moveSelectedStartEnds(moveX, moveY);
         break;
       case "resizeActivityLeft":
         resizeLeft(moveX);
@@ -176,6 +205,9 @@ export function Diagram(): JSXElement {
         </g>
         <g data-id="comments">
           <For each={commentList}>{(comment) => <CommentNode comment={comment} />}</For>
+        </g>
+        <g data-id="startEnds">
+          <For each={startEndList}>{(startEnd) => <StartEndNode startEnd={startEnd} />}</For>
         </g>
         <g data-id="adding-line">
           <Show when={dragType() === "addTransition"}>

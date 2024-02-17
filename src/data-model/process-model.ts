@@ -4,6 +4,7 @@ import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
 import { makeCommentModel } from "./comment-model";
+import { makeStartEndModel } from "./start-end-model";
 import { makeTransitionModel } from "./transition-model";
 
 export function makeProcessModel(
@@ -11,6 +12,7 @@ export function makeProcessModel(
   activityModel: ReturnType<typeof makeActivityModel>,
   transitionModel: ReturnType<typeof makeTransitionModel>,
   commentModel: ReturnType<typeof makeCommentModel>,
+  startEndModel: ReturnType<typeof makeStartEndModel>,
 ) {
   let project: ProjectEntity;
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
@@ -26,6 +28,7 @@ export function makeProcessModel(
       activityModel.load(firstProcess);
       transitionModel.load(firstProcess);
       commentModel.load(firstProcess);
+      startEndModel.load(firstProcess);
     });
   }
 
@@ -34,6 +37,7 @@ export function makeProcessModel(
     activityModel.save();
     transitionModel.save();
     commentModel.save();
+    startEndModel.save();
   }
 
   function changeProcess(process: ProcessEntity) {
@@ -44,6 +48,7 @@ export function makeProcessModel(
       activityModel.load(process);
       transitionModel.load(process);
       commentModel.load(process);
+      startEndModel.load(process);
     });
   }
 

@@ -9,6 +9,7 @@ import { makeActorModel } from "../data-model/actor-model";
 import { makeCommentModel } from "../data-model/comment-model";
 import { makeProcessModel } from "../data-model/process-model";
 import { makeProjectModel } from "../data-model/project-model";
+import { makeStartEndModel } from "../data-model/start-end-model";
 import { makeTransitionModel } from "../data-model/transition-model";
 import {
   ActivityNodeEntity,
@@ -24,7 +25,14 @@ function makeModelContext() {
   const activityModel = makeActivityModel(actorModel);
   const transitionModel = makeTransitionModel(activityModel);
   const commentModel = makeCommentModel();
-  const processModel = makeProcessModel(actorModel, activityModel, transitionModel, commentModel);
+  const startEndModel = makeStartEndModel();
+  const processModel = makeProcessModel(
+    actorModel,
+    activityModel,
+    transitionModel,
+    commentModel,
+    startEndModel,
+  );
   const projectModel = makeProjectModel(processModel);
 
   return {
@@ -34,6 +42,7 @@ function makeModelContext() {
     activityModel,
     transitionModel,
     commentModel,
+    startEndModel,
   };
 }
 
@@ -103,6 +112,7 @@ const AppContext = createContext<{
   activityModel: ReturnType<typeof makeActivityModel>;
   transitionModel: ReturnType<typeof makeTransitionModel>;
   commentModel: ReturnType<typeof makeCommentModel>;
+  startEndModel: ReturnType<typeof makeStartEndModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
   i18n: ReturnType<typeof makeI18nContext>;
@@ -113,6 +123,7 @@ const AppContext = createContext<{
   activityModel: undefined as never,
   transitionModel: undefined as never,
   commentModel: undefined as never,
+  startEndModel: undefined as never,
   dialog: undefined as never,
   diagram: undefined as never,
   i18n: undefined as never,
