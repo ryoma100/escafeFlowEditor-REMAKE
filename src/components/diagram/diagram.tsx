@@ -75,7 +75,7 @@ export function Diagram(): JSXElement {
           case "manual":
             {
               const activity = addActivity(
-                "manual",
+                "manualActivity",
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );

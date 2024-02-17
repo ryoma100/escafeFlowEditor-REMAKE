@@ -5,10 +5,10 @@ import { useAppContext } from "../../context/app-context";
 import { ActivityNodeEntity } from "../../data-source/data-type";
 import {
   AutoActivityIcon,
-  AutoTimeActivityIcon,
-  HandActivityIcon,
+  AutoTimerActivityIcon,
   ManualActivityIcon,
-  ManualTimeActivityIcon,
+  ManualTimerActivityIcon,
+  UserActivityIcon,
 } from "../icons/material-icons";
 import "./dialog.css";
 
@@ -68,14 +68,14 @@ export function ActivityDialog(): JSXElement {
       <form method="dialog">
         <div class="dialog__toolbar">
           <div class="toolbar__button">
-            <label for="activity-manual">
+            <label for="manual-activity">
               <input
                 type="radio"
                 name="activityType"
-                id="activity-manual"
-                value="manual"
-                checked={formData.activityType === "manual"}
-                onChange={() => setFormData("activityType", "manual")}
+                id="manual-activity"
+                value="manualActivity"
+                checked={formData.type === "manualActivity"}
+                onChange={() => setFormData("type", "manualActivity")}
               />
               <div class="dialog__toolbar-icon" title={t("manualActivity")}>
                 <ManualActivityIcon />
@@ -83,14 +83,14 @@ export function ActivityDialog(): JSXElement {
             </label>
           </div>
           <div class="toolbar__button">
-            <label for="activity-auto">
+            <label for="auto-activity">
               <input
                 type="radio"
                 name="activityType"
-                id="activity-auto"
-                value="auto"
-                checked={formData.activityType === "auto"}
-                onChange={() => setFormData("activityType", "auto")}
+                id="auto-activity"
+                value="autoActivity"
+                checked={formData.type === "autoActivity"}
+                onChange={() => setFormData("type", "autoActivity")}
               />
               <div class="dialog__toolbar-icon" title={t("autoActivity")}>
                 <AutoActivityIcon />
@@ -98,47 +98,47 @@ export function ActivityDialog(): JSXElement {
             </label>
           </div>
           <div class="toolbar__button">
-            <label for="activity-manual-time">
+            <label for="manual-timer-activity">
               <input
                 type="radio"
                 name="activityType"
-                id="activity-manual-time"
-                value="auto"
-                checked={formData.activityType === "auto"}
-                onChange={() => setFormData("activityType", "auto")}
+                id="manual-timer-activity"
+                value="manualTimerActivity"
+                checked={formData.type === "manualTimerActivity"}
+                onChange={() => setFormData("type", "manualTimerActivity")}
               />
-              <div class="dialog__toolbar-icon" title={t("manualTimeLimitActivity")}>
-                <ManualTimeActivityIcon />
+              <div class="dialog__toolbar-icon" title={t("manualTimerActivity")}>
+                <ManualTimerActivityIcon />
               </div>
             </label>
           </div>
           <div class="toolbar__button">
-            <label for="activity-auto-time">
+            <label for="auto-timer-activity">
               <input
                 type="radio"
                 name="activityType"
-                id="activity-auto-time"
-                value="auto"
-                checked={formData.activityType === "auto"}
-                onChange={() => setFormData("activityType", "auto")}
+                id="auto-timer-activity"
+                value="autoTimerActivity"
+                checked={formData.type === "autoTimerActivity"}
+                onChange={() => setFormData("type", "autoTimerActivity")}
               />
-              <div class="dialog__toolbar-icon" title={t("autoTimeLimitActivity")}>
-                <AutoTimeActivityIcon />
+              <div class="dialog__toolbar-icon" title={t("autoTimerActivity")}>
+                <AutoTimerActivityIcon />
               </div>
             </label>
           </div>
           <div class="toolbar__button">
-            <label for="activity-hand">
+            <label for="user-activity">
               <input
                 type="radio"
                 name="activityType"
-                id="activity-hand"
-                value="hand"
-                checked={formData.activityType === "hand"}
-                onChange={() => setFormData("activityType", "hand")}
+                id="user-activity"
+                value="userActivity"
+                checked={formData.type === "userActivity"}
+                onChange={() => setFormData("type", "userActivity")}
               />
               <div class="dialog__toolbar-icon" title={t("handWork")}>
-                <HandActivityIcon />
+                <UserActivityIcon />
               </div>
             </label>
           </div>

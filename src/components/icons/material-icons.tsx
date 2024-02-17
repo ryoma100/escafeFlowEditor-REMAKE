@@ -47,7 +47,7 @@ export function AutoActivityIcon(): JSXElement {
   );
 }
 
-export function ManualTimeActivityIcon(): JSXElement {
+export function ManualTimerActivityIcon(): JSXElement {
   return (
     <div class="icon__tool-activity">
       <div>
@@ -59,7 +59,7 @@ export function ManualTimeActivityIcon(): JSXElement {
   );
 }
 
-export function AutoTimeActivityIcon(): JSXElement {
+export function AutoTimerActivityIcon(): JSXElement {
   return (
     <div class="icon__tool-activity">
       <div>
@@ -71,7 +71,7 @@ export function AutoTimeActivityIcon(): JSXElement {
   );
 }
 
-export function HandActivityIcon(): JSXElement {
+export function UserActivityIcon(): JSXElement {
   return (
     <div class="icon__tool-activity">
       <PlaySvg width={24} height={24} />

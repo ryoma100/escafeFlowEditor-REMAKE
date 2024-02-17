@@ -1,6 +1,7 @@
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import {
   ActivityNodeEntity,
+  ActivityNodeType,
   ActorEntity,
   CommentNodeEntity,
   ProcessEntity,
@@ -69,7 +70,7 @@ function createActor(process: ProcessEntity): ActorEntity {
 function createActivity(
   process: ProcessEntity,
   actorId: number,
-  activityType: ActivityNodeEntity["activityType"],
+  type: ActivityNodeType,
 ): ActivityNodeEntity {
   let id = 0;
   let xpdlId = "";
@@ -81,13 +82,12 @@ function createActivity(
   return {
     id,
     xpdlId,
-    type: "activity",
-    activityType,
+    type,
     name: "",
     actorId,
     ognl: "",
-    joinType: "none",
-    splitType: "none",
+    joinType: "notJoin",
+    splitType: "notSplit",
     x: 0,
     y: 0,
     width: ACTIVITY_MIN_WIDTH,
@@ -111,7 +111,7 @@ function createTransition(
   return {
     id,
     xpdlId,
-    type: "transition",
+    type: "transitionEdge",
     fromActivityId,
     toActivityId,
     fromX: 0,
@@ -126,7 +126,7 @@ function createComment(process: ProcessEntity): CommentNodeEntity {
 
   return {
     id,
-    type: "comment",
+    type: "commentNode",
     comment: "コメント",
     x: 0,
     y: 0,

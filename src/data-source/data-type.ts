@@ -53,9 +53,17 @@ export type ApplicationEntity = {
   extendedValue: string;
 };
 
+export type ActivityNodeType =
+  | "manualActivity"
+  | "manualTimerActivity"
+  | "autoActivity"
+  | "autoTimerActivity"
+  | "userActivity";
+export type NodeType = ActivityNodeType | "commentNode" | "startNode" | "endNode";
+
 export type INode = {
   id: number;
-  type: "activity" | "comment" | "start" | "end";
+  type: NodeType;
   x: number;
   y: number;
   width: number;
@@ -63,33 +71,37 @@ export type INode = {
   selected: boolean;
 };
 
+export type JoinType = "notJoin" | "oneJoin" | "xorJoin" | "andJoin";
+export type SplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit";
+
 export type ActivityNodeEntity = INode & {
   xpdlId: string;
-  type: "activity";
-  activityType: "manual" | "auto" | "hand";
+  type: ActivityNodeType;
   name: string;
   actorId: number;
   ognl: string;
-  joinType: "none" | "xor" | "and";
-  splitType: "none" | "xor" | "and";
+  joinType: JoinType;
+  splitType: SplitType;
 };
 
 export type CommentNodeEntity = INode & {
-  type: "comment";
+  type: "commentNode";
   comment: string;
 };
 
 export type StartNodeEntity = INode & {
-  type: "start";
+  type: "startNode";
 };
 
 export type EndNodeEntity = INode & {
-  type: "end";
+  type: "endNode";
 };
+
+export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge";
 
 export type IEdge = {
   id: number;
-  type: "transition" | "comment" | "start" | "end";
+  type: EdgeType;
   fromX: number;
   fromY: number;
   toX: number;
@@ -97,24 +109,24 @@ export type IEdge = {
 };
 
 export type TransitionEdgeEntity = IEdge & {
-  type: "transition";
+  type: "transitionEdge";
   xpdlId: string;
   fromActivityId: number;
   toActivityId: number;
 };
 
 export type CommentEdgeEntity = IEdge & {
-  type: "comment";
+  type: "commentEdge";
   fromCommentId: number;
   toActivityId: number;
 };
 
 export type StartEdgeEntity = IEdge & {
-  type: "start";
+  type: "startEdge";
   toActivityId: number;
 };
 
 export type EndEdgeEntity = IEdge & {
-  type: "end";
+  type: "endEdge";
   fromActivityId: number;
 };

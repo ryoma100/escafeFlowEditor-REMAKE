@@ -5,11 +5,11 @@ import {
   AutoActivityIcon,
   CommentIcon,
   EndIcon,
-  HandActivityIcon,
   LineIcon,
   ManualActivityIcon,
   PointIcon,
   StartIcon,
+  UserActivityIcon,
 } from "../icons/material-icons";
 import "./toolbar.css";
 
@@ -107,7 +107,7 @@ export function Toolbar(): JSXElement {
             onChange={() => setToolbar("hand")}
           />
           <div class="toolbar__icon" title={t("handWork")}>
-            <HandActivityIcon />
+            <UserActivityIcon />
           </div>
         </label>
       </div>
