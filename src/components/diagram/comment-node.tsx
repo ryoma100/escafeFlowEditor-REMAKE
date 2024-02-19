@@ -7,8 +7,9 @@ import "./comment-node.css";
 export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
   const {
     commentModel: { toggleSelectComment, selectComments, resizeCommentSize },
+    startEndModel: { selectStartEnds },
     activityModel: { selectActivities },
-    diagram: { toolbar, setDragType },
+    diagram: { toolbar, setDragType, setAddingLine },
     dialog: { setOpenCommentDialog },
   } = useAppContext();
 
@@ -26,6 +27,18 @@ export function CommentNode(props: { comment: CommentNodeEntity }): JSXElement {
           }
           setDragType("moveNodes");
         }
+        break;
+      case "transition":
+        selectActivities([]);
+        selectComments([props.comment.id]);
+        selectStartEnds([]);
+        setAddingLine({
+          fromX: props.comment.x,
+          fromY: props.comment.y,
+          toX: props.comment.x,
+          toY: props.comment.y,
+        });
+        setDragType("addCommentEdge");
         break;
     }
   }

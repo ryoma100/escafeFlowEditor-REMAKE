@@ -3,6 +3,7 @@ import { dataFactory } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
+import { makeCommentEdgeModel } from "./comment-edge-model";
 import { makeCommentModel } from "./comment-model";
 import { makeStartEndModel } from "./start-end-model";
 import { makeTransitionModel } from "./transition-model";
@@ -12,6 +13,7 @@ export function makeProcessModel(
   activityModel: ReturnType<typeof makeActivityModel>,
   transitionModel: ReturnType<typeof makeTransitionModel>,
   commentModel: ReturnType<typeof makeCommentModel>,
+  commentEdgeModel: ReturnType<typeof makeCommentEdgeModel>,
   startEndModel: ReturnType<typeof makeStartEndModel>,
 ) {
   let project: ProjectEntity;
@@ -28,6 +30,7 @@ export function makeProcessModel(
       activityModel.load(firstProcess);
       transitionModel.load(firstProcess);
       commentModel.load(firstProcess);
+      commentEdgeModel.load(firstProcess);
       startEndModel.load(firstProcess);
     });
   }
@@ -37,6 +40,7 @@ export function makeProcessModel(
     activityModel.save();
     transitionModel.save();
     commentModel.save();
+    commentEdgeModel.save();
     startEndModel.save();
   }
 
@@ -48,6 +52,7 @@ export function makeProcessModel(
       activityModel.load(process);
       transitionModel.load(process);
       commentModel.load(process);
+      commentEdgeModel.load(process);
       startEndModel.load(process);
     });
   }

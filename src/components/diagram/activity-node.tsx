@@ -14,8 +14,10 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
       resizeActivityHeight,
     },
     commentModel: { selectComments },
+    commentEdgeModel: { addCommentEdge },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
+    startEndModel: { selectStartEnds },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLine },
   } = useAppContext();
@@ -58,6 +60,8 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
         break;
       case "transition":
         selectActivities([props.activity.id]);
+        selectComments([]);
+        selectStartEnds([]);
         setAddingLine({
           fromX: props.activity.x,
           fromY: props.activity.y,
@@ -73,6 +77,10 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
     switch (dragType()) {
       case "addTransition":
         addTransition(props.activity.id);
+        setDragType("none");
+        break;
+      case "addCommentEdge":
+        addCommentEdge(props.activity.id);
         setDragType("none");
         break;
     }

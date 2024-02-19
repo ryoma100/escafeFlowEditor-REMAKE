@@ -3,6 +3,7 @@ import {
   ActivityNodeEntity,
   ActivityNodeType,
   ActorEntity,
+  CommentEdgeEntity,
   CommentNodeEntity,
   ProcessEntity,
   ProjectEntity,
@@ -50,6 +51,8 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     comments: [],
     _lastStartEndId: 0,
     startEndNodes: [],
+    _lastCommentEdgeId: 0,
+    commentEdges: [],
   };
   process.actors = [createActor(process)];
   return process;
@@ -139,6 +142,25 @@ function createComment(process: ProcessEntity): CommentNodeEntity {
   };
 }
 
+function createCommentEdge(
+  proess: ProcessEntity,
+  fromCommentId: number,
+  toActivityId: number,
+): CommentEdgeEntity {
+  const id = ++proess._lastCommentEdgeId;
+
+  return {
+    id,
+    type: "commentEdge",
+    fromCommentId,
+    toActivityId,
+    fromX: 0,
+    fromY: 0,
+    toX: 0,
+    toY: 0,
+  };
+}
+
 function createStartEnd(process: ProcessEntity, type: "startNode" | "endNode"): StartEndNodeEntity {
   const id = ++process._lastStartEndId;
 
@@ -154,11 +176,12 @@ function createStartEnd(process: ProcessEntity, type: "startNode" | "endNode"): 
 }
 
 export const dataFactory = {
-  createProject: createProject,
+  createProject,
   createProcess,
   createActor,
   createActivity,
   createTransition,
   createComment,
   createStartEnd,
+  createCommentEdge,
 };

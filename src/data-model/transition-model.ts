@@ -3,7 +3,7 @@ import { dataFactory } from "../data-source/data-factory";
 import { ProcessEntity, TransitionEdgeEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 
-export function makeTransitionModel({ activityList }: ReturnType<typeof makeActivityModel>) {
+export function makeTransitionModel(activityModel: ReturnType<typeof makeActivityModel>) {
   let process: ProcessEntity;
   const [transitionList, setTransitionList] = createStore<TransitionEdgeEntity[]>([]);
 
@@ -17,7 +17,7 @@ export function makeTransitionModel({ activityList }: ReturnType<typeof makeActi
   }
 
   function addTransition(toActivityId: number): TransitionEdgeEntity {
-    const fromActivityId = activityList.find((it) => it.selected)!.id;
+    const fromActivityId = activityModel.activityList.find((it) => it.selected)!.id;
     const transition = dataFactory.createTransition(process, fromActivityId, toActivityId);
     setTransitionList([...transitionList, transition]);
     const proxyTransition = transitionList[transitionList.length - 1];

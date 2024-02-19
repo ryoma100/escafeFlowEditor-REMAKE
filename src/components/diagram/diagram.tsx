@@ -2,6 +2,7 @@ import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNode } from "./activity-node";
+import { CommentEdge } from "./comment-edge";
 import { CommentNode } from "./comment-node";
 import "./diagram.css";
 import { StartEndNode } from "./start-end-node";
@@ -16,7 +17,8 @@ export type DragType =
   | "resizeActivityRight"
   | "addTransition"
   | "addComment"
-  | "addStartEnd";
+  | "addStartEnd"
+  | "addCommentEdge";
 
 export function Diagram(): JSXElement {
   const {
@@ -31,7 +33,9 @@ export function Diagram(): JSXElement {
     },
     transitionModel: { transitionList },
     commentModel: { commentList, selectComments, addComment, moveSelectedComments },
+    commentEdgeModel: { commentEdgeList },
     startEndModel: { startEndList, addStartEnd, selectStartEnds, moveSelectedStartEnds },
+
     diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLine },
   } = useAppContext();
 
@@ -152,6 +156,7 @@ export function Diagram(): JSXElement {
         resizeRight(moveX);
         break;
       case "addTransition":
+      case "addCommentEdge":
         setAddingLine({
           fromX: addingLine().fromX,
           fromY: addingLine().fromY,
@@ -206,11 +211,14 @@ export function Diagram(): JSXElement {
         <g data-id="comments">
           <For each={commentList}>{(comment) => <CommentNode comment={comment} />}</For>
         </g>
+        <g data-id="comment-edge">
+          <For each={commentEdgeList}>{(it) => <CommentEdge commentEdge={it} />}</For>
+        </g>
         <g data-id="startEnds">
           <For each={startEndList}>{(startEnd) => <StartEndNode startEnd={startEnd} />}</For>
         </g>
         <g data-id="adding-line">
-          <Show when={dragType() === "addTransition"}>
+          <Show when={dragType() === "addTransition" || dragType() === "addCommentEdge"}>
             <line
               class="adding-line"
               x1={addingLine().fromX}

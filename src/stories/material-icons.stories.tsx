@@ -10,7 +10,7 @@ import {
   PointIcon,
   StartIcon,
   UserActivityIcon,
-} from "./material-icons";
+} from "../components/icons/material-icons";
 
 function Material() {
   const iconBorder = { border: "1px solid gray" };

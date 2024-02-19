@@ -33,6 +33,9 @@ export type ProcessEntity = {
   _lastCommentId: number;
   comments: CommentNodeEntity[];
 
+  _lastCommentEdgeId: number;
+  commentEdges: CommentEdgeEntity[];
+
   _lastStartEndId: number;
   startEndNodes: StartEndNodeEntity[];
 };

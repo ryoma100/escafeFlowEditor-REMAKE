@@ -6,6 +6,7 @@ import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-model";
 import { makeActorModel } from "../data-model/actor-model";
+import { makeCommentEdgeModel } from "../data-model/comment-edge-model";
 import { makeCommentModel } from "../data-model/comment-model";
 import { makeProcessModel } from "../data-model/process-model";
 import { makeProjectModel } from "../data-model/project-model";
@@ -25,12 +26,14 @@ function makeModelContext() {
   const activityModel = makeActivityModel(actorModel);
   const transitionModel = makeTransitionModel(activityModel);
   const commentModel = makeCommentModel();
+  const commentEdgeModel = makeCommentEdgeModel(commentModel);
   const startEndModel = makeStartEndModel();
   const processModel = makeProcessModel(
     actorModel,
     activityModel,
     transitionModel,
     commentModel,
+    commentEdgeModel,
     startEndModel,
   );
   const projectModel = makeProjectModel(processModel);
@@ -42,6 +45,7 @@ function makeModelContext() {
     activityModel,
     transitionModel,
     commentModel,
+    commentEdgeModel,
     startEndModel,
   };
 }
@@ -112,6 +116,7 @@ const AppContext = createContext<{
   activityModel: ReturnType<typeof makeActivityModel>;
   transitionModel: ReturnType<typeof makeTransitionModel>;
   commentModel: ReturnType<typeof makeCommentModel>;
+  commentEdgeModel: ReturnType<typeof makeCommentEdgeModel>;
   startEndModel: ReturnType<typeof makeStartEndModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
@@ -123,6 +128,7 @@ const AppContext = createContext<{
   activityModel: undefined as never,
   transitionModel: undefined as never,
   commentModel: undefined as never,
+  commentEdgeModel: undefined as never,
   startEndModel: undefined as never,
   dialog: undefined as never,
   diagram: undefined as never,
