@@ -25,7 +25,7 @@ function makeModelContext() {
   const activityModel = makeActivityModel(actorModel);
   const transitionModel = makeTransitionModel(activityModel);
   const otherNodeModel = makeOtherNodeModel();
-  const otherEdgeModel = makeOtherEdgeModel(otherNodeModel);
+  const otherEdgeModel = makeOtherEdgeModel(otherNodeModel, activityModel);
   const processModel = makeProcessModel(
     actorModel,
     activityModel,

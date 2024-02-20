@@ -16,10 +16,11 @@ export type DragType =
   | "resizeActivityLeft"
   | "resizeActivityRight"
   | "addTransition"
-  | "addComment"
-  | "addStartEnd"
+  | "addCommentNode"
   | "addCommentEdge"
+  | "addStartNode"
   | "addStartEdge"
+  | "addEndNode"
   | "addEndEdge";
 
 export function DiagramContainer(): JSXElement {
@@ -97,7 +98,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
               selectNodes([comment.id]);
-              setDragType("addComment");
+              setDragType("addCommentNode");
             }
             break;
           case "start":
@@ -107,7 +108,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
               selectNodes([startEnd.id]);
-              setDragType("addStartEnd");
+              setDragType("addStartNode");
             }
             break;
           case "end":
@@ -117,7 +118,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
               selectNodes([startEnd.id]);
-              setDragType("addStartEnd");
+              setDragType("addEndNode");
             }
             break;
         }
@@ -137,8 +138,9 @@ export function DiagramContainer(): JSXElement {
         });
         break;
       case "addActivity":
-      case "addComment":
-      case "addStartEnd":
+      case "addCommentNode":
+      case "addStartNode":
+      case "addEndNode":
       case "moveNodes":
         moveSelectedActivities(moveX, moveY);
         moveSelectedNodes(moveX, moveY);
@@ -151,6 +153,7 @@ export function DiagramContainer(): JSXElement {
         break;
       case "addTransition":
       case "addCommentEdge":
+      case "addStartEdge":
         setAddingLineTo(
           viewBox.x + (e.clientX - svgRect.x) / zoom(),
           viewBox.y + (e.clientY - svgRect.y) / zoom(),

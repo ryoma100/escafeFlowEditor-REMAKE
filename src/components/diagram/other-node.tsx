@@ -7,8 +7,9 @@ import "./other-node.css";
 export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndNode }): JSXElement {
   const {
     otherNodeModel: { selectNodes, toggleSelectNode, resizeCommentNode },
+    otherEdgeModel: { addEndEdge },
     activityModel: { selectActivities },
-    diagram: { toolbar, setDragType, setAddingLineFrom },
+    diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
     dialog: { setOpenCommentDialog },
   } = useAppContext();
 
@@ -41,10 +42,16 @@ export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndN
           case "startNode":
             setDragType("addStartEdge");
             break;
-          case "endNode":
-            setDragType("addEndEdge");
-            break;
         }
+        break;
+    }
+  }
+
+  function handleMouseUp(_e: MouseEvent) {
+    switch (dragType()) {
+      case "addTransition":
+        addEndEdge(props.node.id);
+        setDragType("none");
         break;
     }
   }
@@ -76,7 +83,11 @@ export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndN
           <StartNodeView selected={props.node.selected} onMouseDown={handleMouseDown} />
         </Match>
         <Match when={props.node.type === "endNode"}>
-          <EndNodeView selected={props.node.selected} onMouseDown={handleMouseDown} />
+          <EndNodeView
+            selected={props.node.selected}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+          />
         </Match>
       </Switch>
     </foreignObject>
@@ -135,12 +146,17 @@ export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: Mous
   );
 }
 
-export function EndNodeView(props: { selected: boolean; onMouseDown?: (e: MouseEvent) => void }) {
+export function EndNodeView(props: {
+  selected: boolean;
+  onMouseDown?: (e: MouseEvent) => void;
+  onMouseUp?: (e: MouseEvent) => void;
+}) {
   return (
     <div
       class="start-end"
       classList={{ "start-end--selected": props.selected }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
+      onMouseUp={(e) => props.onMouseUp?.(e)}
     >
       <EndIcon />
     </div>

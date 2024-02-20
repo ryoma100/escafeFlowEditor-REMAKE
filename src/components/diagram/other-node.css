@@ -32,6 +32,7 @@
 .start-end {
   padding: 2px;
   margin: 1px;
+  background-color: var(--background-color);
   border: 1px solid gray;
   border-radius: 5px;
 }

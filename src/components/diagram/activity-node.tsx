@@ -16,7 +16,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
     otherNodeModel: { selectNodes },
-    otherEdgeModel: { addCommentEdge },
+    otherEdgeModel: { addCommentEdge, addStartEdge },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
@@ -77,6 +77,10 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
         break;
       case "addCommentEdge":
         addCommentEdge(props.activity.id);
+        setDragType("none");
+        break;
+      case "addStartEdge":
+        addStartEdge(props.activity.id);
         setDragType("none");
         break;
     }
