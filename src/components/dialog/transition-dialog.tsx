@@ -2,7 +2,7 @@ import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { TransitionEdgeEntity } from "../../data-source/data-type";
+import { TransitionEdge } from "../../data-source/data-type";
 
 export function TransitionDialog(): JSXElement {
   const {
@@ -12,7 +12,7 @@ export function TransitionDialog(): JSXElement {
   } = useAppContext();
   const t = i18n.translator(dict);
 
-  const [formData, setFormData] = createStore<TransitionEdgeEntity>(undefined as never);
+  const [formData, setFormData] = createStore<TransitionEdge>(undefined as never);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

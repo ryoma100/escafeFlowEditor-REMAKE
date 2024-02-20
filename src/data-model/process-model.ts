@@ -3,18 +3,16 @@ import { dataFactory } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
-import { makeCommentEdgeModel } from "./comment-edge-model";
-import { makeCommentModel } from "./comment-model";
-import { makeStartEndModel } from "./start-end-model";
+import { makeOtherEdgeModel } from "./other-edge-model";
+import { makeOtherNodeModel } from "./other-node-model";
 import { makeTransitionModel } from "./transition-model";
 
 export function makeProcessModel(
   actorModel: ReturnType<typeof makeActorModel>,
   activityModel: ReturnType<typeof makeActivityModel>,
   transitionModel: ReturnType<typeof makeTransitionModel>,
-  commentModel: ReturnType<typeof makeCommentModel>,
-  commentEdgeModel: ReturnType<typeof makeCommentEdgeModel>,
-  startEndModel: ReturnType<typeof makeStartEndModel>,
+  otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
+  otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>,
 ) {
   let project: ProjectEntity;
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
@@ -29,9 +27,8 @@ export function makeProcessModel(
       actorModel.load(firstProcess);
       activityModel.load(firstProcess);
       transitionModel.load(firstProcess);
-      commentModel.load(firstProcess);
-      commentEdgeModel.load(firstProcess);
-      startEndModel.load(firstProcess);
+      otherNodeModel.load(firstProcess);
+      otherEdgeModel.load(firstProcess);
     });
   }
 
@@ -39,9 +36,8 @@ export function makeProcessModel(
     actorModel.save();
     activityModel.save();
     transitionModel.save();
-    commentModel.save();
-    commentEdgeModel.save();
-    startEndModel.save();
+    otherNodeModel.save();
+    otherEdgeModel.save();
   }
 
   function changeProcess(process: ProcessEntity) {
@@ -51,9 +47,8 @@ export function makeProcessModel(
       actorModel.load(process);
       activityModel.load(process);
       transitionModel.load(process);
-      commentModel.load(process);
-      commentEdgeModel.load(process);
-      startEndModel.load(process);
+      otherNodeModel.load(process);
+      otherEdgeModel.load(process);
     });
   }
 

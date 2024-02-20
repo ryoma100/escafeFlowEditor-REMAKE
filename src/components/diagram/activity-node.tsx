@@ -1,11 +1,11 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 import { ACTIVITY_MIN_HEIGHT } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
-import { ActivityNodeEntity, JoinType, SplitType } from "../../data-source/data-type";
+import { ActivityNode, JoinType, SplitType } from "../../data-source/data-type";
 import { ManualActivityIcon } from "../icons/material-icons";
 import "./activity-node.css";
 
-export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElement {
+export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
     activityModel: {
       layerTopActivity,
@@ -13,13 +13,12 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
       toggleSelectActivity,
       resizeActivityHeight,
     },
-    commentModel: { selectComments },
-    commentEdgeModel: { addCommentEdge },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
-    startEndModel: { selectStartEnds },
+    otherNodeModel: { selectNodes },
+    otherEdgeModel: { addCommentEdge },
     dialog: { setOpenActivityDialog },
-    diagram: { toolbar, dragType, setDragType, setAddingLine },
+    diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
 
   const joinType = () => {
@@ -52,7 +51,7 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
         } else {
           if (!props.activity.selected) {
             selectActivities([props.activity.id]);
-            selectComments([]);
+            selectNodes([]);
           }
           layerTopActivity(props.activity.id);
           setDragType("moveNodes");
@@ -60,14 +59,11 @@ export function ActivityNode(props: { activity: ActivityNodeEntity }): JSXElemen
         break;
       case "transition":
         selectActivities([props.activity.id]);
-        selectComments([]);
-        selectStartEnds([]);
-        setAddingLine({
-          fromX: props.activity.x,
-          fromY: props.activity.y,
-          toX: props.activity.x,
-          toY: props.activity.y,
-        });
+        selectNodes([]);
+        setAddingLineFrom(
+          props.activity.x + props.activity.width,
+          props.activity.y + props.activity.height / 2,
+        );
         setDragType("addTransition");
         break;
     }

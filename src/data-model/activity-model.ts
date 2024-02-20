@@ -1,23 +1,23 @@
 import { createStore, produce } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import { dataFactory } from "../data-source/data-factory";
-import { ActivityNodeEntity, ActivityNodeType, ProcessEntity } from "../data-source/data-type";
+import { ActivityNode, ActivityNodeType, ProcessEntity } from "../data-source/data-type";
 import { makeActorModel } from "./actor-model";
 
 export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>) {
   let process: ProcessEntity;
-  const [activityList, setActivityList] = createStore<ActivityNodeEntity[]>([]);
+  const [activityList, setActivityList] = createStore<ActivityNode[]>([]);
 
   function load(newProcess: ProcessEntity) {
     process = newProcess;
-    setActivityList(process.activities);
+    setActivityList(process.activityNodes);
   }
 
   function save() {
-    process.activities = [...activityList];
+    process.activityNodes = [...activityList];
   }
 
-  function addActivity(type: ActivityNodeType, cx: number, cy: number): ActivityNodeEntity {
+  function addActivity(type: ActivityNodeType, cx: number, cy: number): ActivityNode {
     const activity = dataFactory.createActivity(process, actorModel.selectedActor().id, type);
     activity.x = cx - activity.width / 2;
     activity.y = cy - activity.height / 2;
@@ -25,7 +25,7 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     return activity;
   }
 
-  function resizeActivityHeight(activity: ActivityNodeEntity, height: number) {
+  function resizeActivityHeight(activity: ActivityNode, height: number) {
     setActivityList(
       (it) => it.id === activity.id,
       produce((it) => {

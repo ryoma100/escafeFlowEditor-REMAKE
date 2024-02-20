@@ -24,20 +24,17 @@ export type ProcessEntity = {
   _lastApplicationId: number;
   applications: ApplicationEntity[];
 
-  _lastActivityId: number;
-  activities: ActivityNodeEntity[];
+  _lastActivityNodeId: number;
+  activityNodes: ActivityNode[];
 
-  _lastTransitionId: number;
-  transitions: TransitionEdgeEntity[];
+  _lastTransitionEdgeId: number;
+  transitionEdges: TransitionEdge[];
 
-  _lastCommentId: number;
-  comments: CommentNodeEntity[];
+  _lastOtherNodeId: number;
+  otherNodes: (CommentNode | StartNode | EndNode)[];
 
-  _lastCommentEdgeId: number;
-  commentEdges: CommentEdgeEntity[];
-
-  _lastStartEndId: number;
-  startEndNodes: StartEndNodeEntity[];
+  _lastOtherEdgeId: number;
+  otherEdges: (CommentEdge | StartEdge | EndEdge)[];
 };
 
 export type ActorEntity = {
@@ -80,7 +77,7 @@ export type INode = {
 export type JoinType = "notJoin" | "oneJoin" | "xorJoin" | "andJoin";
 export type SplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit";
 
-export type ActivityNodeEntity = INode & {
+export type ActivityNode = INode & {
   xpdlId: string;
   type: ActivityNodeType;
   name: string;
@@ -90,13 +87,17 @@ export type ActivityNodeEntity = INode & {
   splitType: SplitType;
 };
 
-export type CommentNodeEntity = INode & {
+export type CommentNode = INode & {
   type: "commentNode";
   comment: string;
 };
 
-export type StartEndNodeEntity = INode & {
-  type: "startNode" | "endNode";
+export type StartNode = INode & {
+  type: "startNode";
+};
+
+export type EndNode = INode & {
+  type: "endNode";
 };
 
 export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge";
@@ -110,25 +111,27 @@ export type IEdge = {
   toY: number;
 };
 
-export type TransitionEdgeEntity = IEdge & {
+export type TransitionEdge = IEdge & {
   type: "transitionEdge";
   xpdlId: string;
   fromActivityId: number;
   toActivityId: number;
 };
 
-export type CommentEdgeEntity = IEdge & {
+export type CommentEdge = IEdge & {
   type: "commentEdge";
   fromCommentId: number;
   toActivityId: number;
 };
 
-export type StartEdgeEntity = IEdge & {
+export type StartEdge = IEdge & {
   type: "startEdge";
+  fromStartId: number;
   toActivityId: number;
 };
 
-export type EndEdgeEntity = IEdge & {
+export type EndEdge = IEdge & {
   type: "endEdge";
   fromActivityId: number;
+  toEndId: number;
 };

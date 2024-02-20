@@ -6,35 +6,32 @@ import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-model";
 import { makeActorModel } from "../data-model/actor-model";
-import { makeCommentEdgeModel } from "../data-model/comment-edge-model";
-import { makeCommentModel } from "../data-model/comment-model";
+import { makeOtherEdgeModel } from "../data-model/other-edge-model";
+import { makeOtherNodeModel } from "../data-model/other-node-model";
 import { makeProcessModel } from "../data-model/process-model";
 import { makeProjectModel } from "../data-model/project-model";
-import { makeStartEndModel } from "../data-model/start-end-model";
 import { makeTransitionModel } from "../data-model/transition-model";
 import {
-  ActivityNodeEntity,
+  ActivityNode,
   ActorEntity,
-  CommentNodeEntity,
+  CommentNode,
   ProcessEntity,
   ProjectEntity,
-  TransitionEdgeEntity,
+  TransitionEdge,
 } from "../data-source/data-type";
 
 function makeModelContext() {
   const actorModel = makeActorModel();
   const activityModel = makeActivityModel(actorModel);
   const transitionModel = makeTransitionModel(activityModel);
-  const commentModel = makeCommentModel();
-  const commentEdgeModel = makeCommentEdgeModel(commentModel);
-  const startEndModel = makeStartEndModel();
+  const otherNodeModel = makeOtherNodeModel();
+  const otherEdgeModel = makeOtherEdgeModel(otherNodeModel);
   const processModel = makeProcessModel(
     actorModel,
     activityModel,
     transitionModel,
-    commentModel,
-    commentEdgeModel,
-    startEndModel,
+    otherNodeModel,
+    otherEdgeModel,
   );
   const projectModel = makeProjectModel(processModel);
 
@@ -44,9 +41,8 @@ function makeModelContext() {
     actorModel,
     activityModel,
     transitionModel,
-    commentModel,
-    commentEdgeModel,
-    startEndModel,
+    otherNodeModel,
+    otherEdgeModel,
   };
 }
 
@@ -54,11 +50,9 @@ function makeDialogContext() {
   const [openProjectDialog, setOpenProjectDialog] = createSignal<ProjectEntity | null>(null);
   const [openProcessDialog, setOpenProcessDialog] = createSignal<ProcessEntity | null>(null);
   const [openActorDialog, setOpenActorDialog] = createSignal<ActorEntity | null>(null);
-  const [openActivityDialog, setOpenActivityDialog] = createSignal<ActivityNodeEntity | null>(null);
-  const [openTransitionDialog, setOpenTransitionDialog] = createSignal<TransitionEdgeEntity | null>(
-    null,
-  );
-  const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNodeEntity | null>(null);
+  const [openActivityDialog, setOpenActivityDialog] = createSignal<ActivityNode | null>(null);
+  const [openTransitionDialog, setOpenTransitionDialog] = createSignal<TransitionEdge | null>(null);
+  const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNode | null>(null);
   const [openSaveDialog, setOpenSaveDialog] = createSignal<ProjectEntity | null>(null);
 
   return {
@@ -90,6 +84,14 @@ function makeDiagramContext() {
     toY: number;
   }>(undefined as never);
 
+  function setAddingLineFrom(x: number, y: number) {
+    setAddingLine({ fromX: x, fromY: y, toX: x, toY: y });
+  }
+
+  function setAddingLineTo(x: number, y: number) {
+    setAddingLine({ fromX: addingLine().fromX, fromY: addingLine().fromY, toX: x, toY: y });
+  }
+
   return {
     toolbar,
     setToolbar,
@@ -98,7 +100,8 @@ function makeDiagramContext() {
     dragType,
     setDragType,
     addingLine,
-    setAddingLine,
+    setAddingLineFrom,
+    setAddingLineTo,
   };
 }
 
@@ -115,9 +118,8 @@ const AppContext = createContext<{
   actorModel: ReturnType<typeof makeActorModel>;
   activityModel: ReturnType<typeof makeActivityModel>;
   transitionModel: ReturnType<typeof makeTransitionModel>;
-  commentModel: ReturnType<typeof makeCommentModel>;
-  commentEdgeModel: ReturnType<typeof makeCommentEdgeModel>;
-  startEndModel: ReturnType<typeof makeStartEndModel>;
+  otherNodeModel: ReturnType<typeof makeOtherNodeModel>;
+  otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
   i18n: ReturnType<typeof makeI18nContext>;
@@ -127,9 +129,8 @@ const AppContext = createContext<{
   actorModel: undefined as never,
   activityModel: undefined as never,
   transitionModel: undefined as never,
-  commentModel: undefined as never,
-  commentEdgeModel: undefined as never,
-  startEndModel: undefined as never,
+  otherNodeModel: undefined as never,
+  otherEdgeModel: undefined as never,
   dialog: undefined as never,
   diagram: undefined as never,
   i18n: undefined as never,

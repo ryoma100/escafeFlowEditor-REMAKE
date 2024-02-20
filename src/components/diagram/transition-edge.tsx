@@ -1,9 +1,9 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { TransitionEdgeEntity } from "../../data-source/data-type";
+import { TransitionEdge } from "../../data-source/data-type";
 import "./transition-edge.css";
 
-export function TransitionEdge(props: { transition: TransitionEdgeEntity }): JSXElement {
+export function TransitionEdgeView(props: { transition: TransitionEdge }): JSXElement {
   const {
     activityModel: { activityList },
     dialog: { setOpenTransitionDialog },

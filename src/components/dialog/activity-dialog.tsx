@@ -2,7 +2,7 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce, unwrap } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { ActivityNodeEntity } from "../../data-source/data-type";
+import { ActivityNode } from "../../data-source/data-type";
 import {
   AutoActivityIcon,
   AutoTimerActivityIcon,
@@ -21,7 +21,7 @@ export function ActivityDialog(): JSXElement {
   } = useAppContext();
   const t = i18n.translator(dict);
 
-  const [formData, setFormData] = createStore<ActivityNodeEntity>(undefined as never);
+  const [formData, setFormData] = createStore<ActivityNode>(undefined as never);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {

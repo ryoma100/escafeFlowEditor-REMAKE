@@ -1,12 +1,11 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { ActivityNode } from "./activity-node";
-import { CommentEdge } from "./comment-edge";
-import { CommentNode } from "./comment-node";
+import { ActivityNodeContainer } from "./activity-node";
 import "./diagram.css";
-import { StartEndNode } from "./start-end-node";
-import { TransitionEdge } from "./transition-edge";
+import { OtherEdgeContainer } from "./other-edge";
+import { OtherNodeContainer } from "./other-node";
+import { TransitionEdgeView } from "./transition-edge";
 
 export type DragType =
   | "none"
@@ -18,7 +17,9 @@ export type DragType =
   | "addTransition"
   | "addComment"
   | "addStartEnd"
-  | "addCommentEdge";
+  | "addCommentEdge"
+  | "addStartEdge"
+  | "addEndEdge";
 
 export function Diagram(): JSXElement {
   const {
@@ -32,11 +33,16 @@ export function Diagram(): JSXElement {
       resizeRight,
     },
     transitionModel: { transitionList },
-    commentModel: { commentList, selectComments, addComment, moveSelectedComments },
-    commentEdgeModel: { commentEdgeList },
-    startEndModel: { startEndList, addStartEnd, selectStartEnds, moveSelectedStartEnds },
-
-    diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLine },
+    otherNodeModel: {
+      otherNodeList,
+      addCommentNode,
+      selectNodes,
+      moveSelectedNodes,
+      addStartNode,
+      addEndNode,
+    },
+    otherEdgeModel: { otherEdgeList },
+    diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLineTo },
   } = useAppContext();
 
   const [svgRect, setRect] = createStore({
@@ -78,7 +84,7 @@ export function Diagram(): JSXElement {
         switch (toolbar()) {
           case "cursor":
             selectActivities([]);
-            selectComments([]);
+            selectNodes([]);
             setDragType("scroll");
             break;
           case "manual":
@@ -95,33 +101,31 @@ export function Diagram(): JSXElement {
             break;
           case "comment":
             {
-              const comment = addComment(
+              const comment = addCommentNode(
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              selectComments([comment.id]);
+              selectNodes([comment.id]);
               setDragType("addComment");
             }
             break;
           case "start":
             {
-              const startEnd = addStartEnd(
-                "startNode",
+              const startEnd = addStartNode(
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              selectStartEnds([startEnd.id]);
+              selectNodes([startEnd.id]);
               setDragType("addStartEnd");
             }
             break;
           case "end":
             {
-              const startEnd = addStartEnd(
-                "endNode",
+              const startEnd = addEndNode(
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              selectStartEnds([startEnd.id]);
+              selectNodes([startEnd.id]);
               setDragType("addStartEnd");
             }
             break;
@@ -146,8 +150,7 @@ export function Diagram(): JSXElement {
       case "addStartEnd":
       case "moveNodes":
         moveSelectedActivities(moveX, moveY);
-        moveSelectedComments(moveX, moveY);
-        moveSelectedStartEnds(moveX, moveY);
+        moveSelectedNodes(moveX, moveY);
         break;
       case "resizeActivityLeft":
         resizeLeft(moveX);
@@ -157,12 +160,10 @@ export function Diagram(): JSXElement {
         break;
       case "addTransition":
       case "addCommentEdge":
-        setAddingLine({
-          fromX: addingLine().fromX,
-          fromY: addingLine().fromY,
-          toX: viewBox.x + (e.clientX - svgRect.x) / zoom(),
-          toY: viewBox.y + (e.clientY - svgRect.y) / zoom(),
-        });
+        setAddingLineTo(
+          viewBox.x + (e.clientX - svgRect.x) / zoom(),
+          viewBox.y + (e.clientY - svgRect.y) / zoom(),
+        );
         break;
     }
   }
@@ -200,25 +201,31 @@ export function Diagram(): JSXElement {
             <polygon points="10,0 0,5 0,-5" fill="gray" />
           </marker>
         </defs>
-        <g data-id="activities">
-          <For each={activityList}>{(activity) => <ActivityNode activity={activity} />}</For>
+        <g data-id="no-activity-edges">
+          <For each={otherEdgeList}>{(it) => <OtherEdgeContainer edge={it} />}</For>
         </g>
-        <g data-id="transitions">
-          <For each={transitionList}>
-            {(transition) => <TransitionEdge transition={transition} />}
+        <g data-id="activity-nodes">
+          <For each={activityList}>
+            {(activity) => <ActivityNodeContainer activity={activity} />}
           </For>
         </g>
-        <g data-id="comments">
-          <For each={commentList}>{(comment) => <CommentNode comment={comment} />}</For>
+        <g data-id="no-activity-nodes">
+          <For each={otherNodeList}>{(node) => <OtherNodeContainer node={node} />}</For>
         </g>
-        <g data-id="comment-edge">
-          <For each={commentEdgeList}>{(it) => <CommentEdge commentEdge={it} />}</For>
-        </g>
-        <g data-id="startEnds">
-          <For each={startEndList}>{(startEnd) => <StartEndNode startEnd={startEnd} />}</For>
+        <g data-id="transition-edges">
+          <For each={transitionList}>
+            {(transition) => <TransitionEdgeView transition={transition} />}
+          </For>
         </g>
         <g data-id="adding-line">
-          <Show when={dragType() === "addTransition" || dragType() === "addCommentEdge"}>
+          <Show
+            when={
+              dragType() === "addTransition" ||
+              dragType() === "addCommentEdge" ||
+              dragType() === "addStartEdge" ||
+              dragType() === "addEndEdge"
+            }
+          >
             <line
               class="adding-line"
               x1={addingLine().fromX}

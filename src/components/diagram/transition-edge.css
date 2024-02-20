@@ -12,7 +12,8 @@
 }
 
 .transition--hover:hover {
-  stroke: black;
+  cursor: pointer;
+  stroke: var(--app-selected-color);
 }
 
 .transition-arrow {

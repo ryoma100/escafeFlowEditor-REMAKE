@@ -1,16 +1,16 @@
-.comment-edge {
+.comment-line {
   fill: none;
   stroke: gray;
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
 }
 
-.comment-edge--hover {
+.comment-line--hover {
   fill: none;
   stroke: transparent;
   stroke-width: 5px;
 }
 
-.comment-edge-arrow {
+.comment-line-arrow {
   fill: lightgray;
 }

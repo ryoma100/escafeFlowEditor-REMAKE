@@ -1,14 +1,17 @@
 import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "../constants/app-const";
 import {
-  ActivityNodeEntity,
+  ActivityNode,
   ActivityNodeType,
   ActorEntity,
-  CommentEdgeEntity,
-  CommentNodeEntity,
+  CommentEdge,
+  CommentNode,
+  EndEdge,
+  EndNode,
   ProcessEntity,
   ProjectEntity,
-  StartEndNodeEntity,
-  TransitionEdgeEntity,
+  StartEdge,
+  StartNode,
+  TransitionEdge,
 } from "./data-type";
 
 function createProject(): ProjectEntity {
@@ -39,20 +42,19 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     environments: [],
     validFrom: "",
     validTo: "",
+
     _lastActorId: 0,
     actors: [],
     _lastApplicationId: 0,
     applications: [],
-    _lastActivityId: 0,
-    activities: [],
-    _lastTransitionId: 0,
-    transitions: [],
-    _lastCommentId: 0,
-    comments: [],
-    _lastStartEndId: 0,
-    startEndNodes: [],
-    _lastCommentEdgeId: 0,
-    commentEdges: [],
+    _lastActivityNodeId: 0,
+    activityNodes: [],
+    _lastTransitionEdgeId: 0,
+    transitionEdges: [],
+    _lastOtherNodeId: 0,
+    otherNodes: [],
+    _lastOtherEdgeId: 0,
+    otherEdges: [],
   };
   process.actors = [createActor(process)];
   return process;
@@ -77,13 +79,13 @@ function createActivity(
   process: ProcessEntity,
   actorId: number,
   type: ActivityNodeType,
-): ActivityNodeEntity {
+): ActivityNode {
   let id = 0;
   let xpdlId = "";
   do {
-    id = ++process._lastActivityId;
+    id = ++process._lastActivityNodeId;
     xpdlId = `${process.xpdlId}_act${id}`;
-  } while (process.activities.some((it) => it.xpdlId === xpdlId));
+  } while (process.activityNodes.some((it) => it.xpdlId === xpdlId));
 
   return {
     id,
@@ -106,13 +108,13 @@ function createTransition(
   process: ProcessEntity,
   fromActivityId: number,
   toActivityId: number,
-): TransitionEdgeEntity {
+): TransitionEdge {
   let id = 0;
   let xpdlId = "";
   do {
-    id = ++process._lastTransitionId;
+    id = ++process._lastTransitionEdgeId;
     xpdlId = `${process.xpdlId}_tra${id}`;
-  } while (process.transitions.some((it) => it.xpdlId === xpdlId));
+  } while (process.transitionEdges.some((it) => it.xpdlId === xpdlId));
 
   return {
     id,
@@ -127,27 +129,55 @@ function createTransition(
   };
 }
 
-function createComment(process: ProcessEntity): CommentNodeEntity {
-  const id = ++process._lastCommentId;
+function createComment(process: ProcessEntity, x: number, y: number): CommentNode {
+  const id = ++process._lastOtherNodeId;
 
   return {
     id,
     type: "commentNode",
     comment: "コメント",
-    x: 0,
-    y: 0,
+    x,
+    y,
     width: 0,
     height: 0,
     selected: false,
   };
 }
 
+function createStartNode(process: ProcessEntity, x: number, y: number): StartNode {
+  const id = ++process._lastOtherNodeId;
+
+  return {
+    id,
+    type: "startNode",
+    x,
+    y,
+    width: NORMAL_ICON_SIZE,
+    height: NORMAL_ICON_SIZE,
+    selected: false,
+  };
+}
+
+function createEndNode(process: ProcessEntity, x: number, y: number): EndNode {
+  const id = ++process._lastOtherNodeId;
+
+  return {
+    id,
+    type: "endNode",
+    x,
+    y,
+    width: NORMAL_ICON_SIZE,
+    height: NORMAL_ICON_SIZE,
+    selected: false,
+  };
+}
+
 function createCommentEdge(
-  proess: ProcessEntity,
+  process: ProcessEntity,
   fromCommentId: number,
   toActivityId: number,
-): CommentEdgeEntity {
-  const id = ++proess._lastCommentEdgeId;
+): CommentEdge {
+  const id = ++process._lastOtherEdgeId;
 
   return {
     id,
@@ -161,17 +191,37 @@ function createCommentEdge(
   };
 }
 
-function createStartEnd(process: ProcessEntity, type: "startNode" | "endNode"): StartEndNodeEntity {
-  const id = ++process._lastStartEndId;
+function createStartEdge(
+  process: ProcessEntity,
+  fromStartId: number,
+  toActivityId: number,
+): StartEdge {
+  const id = ++process._lastOtherEdgeId;
 
   return {
     id,
-    type,
-    x: 0,
-    y: 0,
-    width: NORMAL_ICON_SIZE,
-    height: NORMAL_ICON_SIZE,
-    selected: false,
+    type: "startEdge",
+    fromStartId,
+    toActivityId,
+    fromX: 0,
+    fromY: 0,
+    toX: 0,
+    toY: 0,
+  };
+}
+
+function createEndEdge(process: ProcessEntity, fromActivityId: number, toEndId: number): EndEdge {
+  const id = ++process._lastOtherEdgeId;
+
+  return {
+    id,
+    type: "endEdge",
+    fromActivityId,
+    toEndId,
+    fromX: 0,
+    fromY: 0,
+    toX: 0,
+    toY: 0,
   };
 }
 
@@ -182,6 +232,9 @@ export const dataFactory = {
   createActivity,
   createTransition,
   createComment,
-  createStartEnd,
   createCommentEdge,
+  createStartNode,
+  createStartEdge,
+  createEndNode,
+  createEndEdge,
 };
