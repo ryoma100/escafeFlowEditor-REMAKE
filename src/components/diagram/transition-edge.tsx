@@ -3,7 +3,7 @@ import { useAppContext } from "../../context/app-context";
 import { TransitionEdge } from "../../data-source/data-type";
 import "./transition-edge.css";
 
-export function TransitionEdgeView(props: { transition: TransitionEdge }): JSXElement {
+export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
   const {
     activityModel: { activityList },
     dialog: { setOpenTransitionDialog },

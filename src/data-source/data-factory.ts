@@ -122,10 +122,6 @@ function createTransition(
     type: "transitionEdge",
     fromActivityId,
     toActivityId,
-    fromX: 0,
-    fromY: 0,
-    toX: 0,
-    toY: 0,
   };
 }
 
@@ -184,10 +180,6 @@ function createCommentEdge(
     type: "commentEdge",
     fromCommentId,
     toActivityId,
-    fromX: 0,
-    fromY: 0,
-    toX: 0,
-    toY: 0,
   };
 }
 
@@ -203,10 +195,6 @@ function createStartEdge(
     type: "startEdge",
     fromStartId,
     toActivityId,
-    fromX: 0,
-    fromY: 0,
-    toX: 0,
-    toY: 0,
   };
 }
 
@@ -218,10 +206,6 @@ function createEndEdge(process: ProcessEntity, fromActivityId: number, toEndId: 
     type: "endEdge",
     fromActivityId,
     toEndId,
-    fromX: 0,
-    fromY: 0,
-    toX: 0,
-    toY: 0,
   };
 }
 

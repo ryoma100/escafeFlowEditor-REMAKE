@@ -9,7 +9,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "tauri": "tauri",
-    "lint": "run-p lint:*",
+    "lint": "run-s -c lint:*",
     "lint:cspell": "cspell --no-progress '**'",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint . --ext .ts,.tsx",

@@ -25,6 +25,14 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     return activity;
   }
 
+  function getActivityNode(nodeId: number): ActivityNode {
+    const node = activityList.find((it) => it.id === nodeId);
+    if (node == null) {
+      throw new Error(`getActivityNode(${nodeId}) is not found.`);
+    }
+    return node;
+  }
+
   function resizeActivityHeight(activity: ActivityNode, height: number) {
     setActivityList(
       (it) => it.id === activity.id,
@@ -108,5 +116,6 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     layerTopActivity,
     selectActivities,
     toggleSelectActivity,
+    getActivityNode,
   };
 }

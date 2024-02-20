@@ -1,11 +1,12 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+import { defaultRectangle } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeContainer } from "./activity-node";
 import "./diagram.css";
 import { OtherEdgeContainer } from "./other-edge";
 import { OtherNodeContainer } from "./other-node";
-import { TransitionEdgeView } from "./transition-edge";
+import { TransitionEdgeContainer } from "./transition-edge";
 
 export type DragType =
   | "none"
@@ -21,7 +22,7 @@ export type DragType =
   | "addStartEdge"
   | "addEndEdge";
 
-export function Diagram(): JSXElement {
+export function DiagramContainer(): JSXElement {
   const {
     activityModel: {
       activityList,
@@ -45,18 +46,8 @@ export function Diagram(): JSXElement {
     diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLineTo },
   } = useAppContext();
 
-  const [svgRect, setRect] = createStore({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
-  const [viewBox, setViewBox] = createStore({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  });
+  const [svgRect, setRect] = createStore({ ...defaultRectangle });
+  const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -205,17 +196,13 @@ export function Diagram(): JSXElement {
           <For each={otherEdgeList}>{(it) => <OtherEdgeContainer edge={it} />}</For>
         </g>
         <g data-id="activity-nodes">
-          <For each={activityList}>
-            {(activity) => <ActivityNodeContainer activity={activity} />}
-          </For>
+          <For each={activityList}>{(it) => <ActivityNodeContainer activity={it} />}</For>
         </g>
         <g data-id="no-activity-nodes">
-          <For each={otherNodeList}>{(node) => <OtherNodeContainer node={node} />}</For>
+          <For each={otherNodeList}>{(it) => <OtherNodeContainer node={it} />}</For>
         </g>
         <g data-id="transition-edges">
-          <For each={transitionList}>
-            {(transition) => <TransitionEdgeView transition={transition} />}
-          </For>
+          <For each={transitionList}>{(it) => <TransitionEdgeContainer transition={it} />}</For>
         </g>
         <g data-id="adding-line">
           <Show

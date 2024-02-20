@@ -21,15 +21,39 @@ export function makeOtherNodeModel() {
     return comment;
   }
 
+  function getCommentNode(nodeId: number): CommentNode {
+    const node = otherNodeList.find((it) => it.id === nodeId);
+    if (node?.type !== "commentNode") {
+      throw new Error(`getCommentNode(${nodeId}) is not found.`);
+    }
+    return node;
+  }
+
   function addStartNode(x: number, y: number): StartNode {
     const node = dataFactory.createStartNode(process, x - 16, y - 16);
     setOtherNodeList([...otherNodeList, node]);
     return node;
   }
 
+  function getStartNode(nodeId: number): StartNode {
+    const node = otherNodeList.find((it) => it.id === nodeId);
+    if (node?.type !== "startNode") {
+      throw new Error(`getStartNode(${nodeId}) is not found.`);
+    }
+    return node;
+  }
+
   function addEndNode(x: number, y: number): EndNode {
     const node = dataFactory.createEndNode(process, x - 16, y - 16);
     setOtherNodeList([...otherNodeList, node]);
+    return node;
+  }
+
+  function getEndNode(nodeId: number): EndNode {
+    const node = otherNodeList.find((it) => it.id === nodeId);
+    if (node?.type !== "endNode") {
+      throw new Error(`getEndNode(${nodeId}) is not found.`);
+    }
     return node;
   }
 
@@ -95,5 +119,8 @@ export function makeOtherNodeModel() {
     selectNodes,
     toggleSelectNode,
     updateComment,
+    getCommentNode,
+    getStartNode,
+    getEndNode,
   };
 }

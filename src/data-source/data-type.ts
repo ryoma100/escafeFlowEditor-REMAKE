@@ -64,7 +64,7 @@ export type ActivityNodeType =
   | "userActivity";
 export type NodeType = ActivityNodeType | "commentNode" | "startNode" | "endNode";
 
-export type INode = {
+export interface INode {
   id: number;
   type: NodeType;
   x: number;
@@ -72,16 +72,16 @@ export type INode = {
   width: number;
   height: number;
   selected: boolean;
-};
+}
 
 export type JoinType = "notJoin" | "oneJoin" | "xorJoin" | "andJoin";
 export type SplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit";
 
 export type ActivityNode = INode & {
-  xpdlId: string;
   type: ActivityNodeType;
-  name: string;
+  xpdlId: string;
   actorId: number;
+  name: string;
   ognl: string;
   joinType: JoinType;
   splitType: SplitType;
@@ -102,14 +102,10 @@ export type EndNode = INode & {
 
 export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge";
 
-export type IEdge = {
+export interface IEdge {
   id: number;
   type: EdgeType;
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-};
+}
 
 export type TransitionEdge = IEdge & {
   type: "transitionEdge";

@@ -1,6 +1,6 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { Diagram } from "../diagram/diagram";
+import { DiagramContainer } from "../diagram/diagram";
 import "./main.css";
 
 export function Main(): JSXElement {
@@ -21,7 +21,7 @@ export function Main(): JSXElement {
     <div class="main">
       <h5>{selectedProcess().name}</h5>
       <div class="main__diagram">
-        <Diagram />
+        <DiagramContainer />
       </div>
       <div class="main__zoom">
         <button onClick={handleAutoZoomButtonClick}>Auto</button>
