@@ -16,12 +16,12 @@ import "./toolbar.css";
 export type ToolbarType =
   | "cursor"
   | "transition"
-  | "manual"
-  | "auto"
-  | "hand"
-  | "start"
-  | "end"
-  | "comment";
+  | "addManualActivity"
+  | "addAutoActivity"
+  | "addUserActivity"
+  | "addStartNode"
+  | "addEndNode"
+  | "addCommentNode";
 
 export function Toolbar(): JSXElement {
   const {
@@ -71,8 +71,8 @@ export function Toolbar(): JSXElement {
             name="toolbar"
             id="toolbar-manual"
             value="manual"
-            checked={toolbar() === "manual"}
-            onChange={() => setToolbar("manual")}
+            checked={toolbar() === "addManualActivity"}
+            onChange={() => setToolbar("addManualActivity")}
           />
           <div class="toolbar__icon" title={t("manualActivity")}>
             <ManualActivityIcon />
@@ -87,8 +87,8 @@ export function Toolbar(): JSXElement {
             name="toolbar"
             id="toolbar-auto"
             value="auto"
-            checked={toolbar() === "auto"}
-            onChange={() => setToolbar("auto")}
+            checked={toolbar() === "addAutoActivity"}
+            onChange={() => setToolbar("addAutoActivity")}
           />
           <div class="toolbar__icon" title={t("autoActivity")}>
             <AutoActivityIcon />
@@ -103,8 +103,8 @@ export function Toolbar(): JSXElement {
             name="toolbar"
             id="toolbar-hand"
             value="hand"
-            checked={toolbar() === "hand"}
-            onChange={() => setToolbar("hand")}
+            checked={toolbar() === "addUserActivity"}
+            onChange={() => setToolbar("addUserActivity")}
           />
           <div class="toolbar__icon" title={t("handWork")}>
             <UserActivityIcon />
@@ -119,8 +119,8 @@ export function Toolbar(): JSXElement {
             name="toolbar"
             id="toolbar-start"
             value="start"
-            checked={toolbar() === "start"}
-            onChange={() => setToolbar("start")}
+            checked={toolbar() === "addStartNode"}
+            onChange={() => setToolbar("addStartNode")}
           />
           <div class="toolbar__icon" title={t("start")}>
             <StartIcon />
@@ -135,8 +135,8 @@ export function Toolbar(): JSXElement {
             name="toolbar"
             id="toolbar-end"
             value="end"
-            checked={toolbar() === "end"}
-            onChange={() => setToolbar("end")}
+            checked={toolbar() === "addEndNode"}
+            onChange={() => setToolbar("addEndNode")}
           />
           <div class="toolbar__icon" title={t("end")}>
             <EndIcon />
@@ -151,8 +151,8 @@ export function Toolbar(): JSXElement {
             name="toolbar"
             id="toolbar-comment"
             value="comment"
-            checked={toolbar() === "comment"}
-            onChange={() => setToolbar("comment")}
+            checked={toolbar() === "addCommentNode"}
+            onChange={() => setToolbar("addCommentNode")}
           />
           <div class="toolbar__icon" title={t("comment")}>
             <CommentIcon />

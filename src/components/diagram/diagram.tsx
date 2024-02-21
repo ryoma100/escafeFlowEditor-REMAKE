@@ -81,7 +81,7 @@ export function DiagramContainer(): JSXElement {
             selectOtherEdges([]);
             setDragType("scroll");
             break;
-          case "manual":
+          case "addManualActivity":
             {
               const activity = addActivity(
                 "manualActivity",
@@ -93,7 +93,31 @@ export function DiagramContainer(): JSXElement {
               setDragType("addActivity");
             }
             break;
-          case "comment":
+          case "addAutoActivity":
+            {
+              const activity = addActivity(
+                "autoActivity",
+                viewBox.x + (e.clientX - svgRect.x) / zoom(),
+                viewBox.y + (e.clientY - svgRect.y) / zoom(),
+              );
+              layerTopActivity(activity.id);
+              selectActivities([activity.id]);
+              setDragType("addActivity");
+            }
+            break;
+          case "addUserActivity":
+            {
+              const activity = addActivity(
+                "userActivity",
+                viewBox.x + (e.clientX - svgRect.x) / zoom(),
+                viewBox.y + (e.clientY - svgRect.y) / zoom(),
+              );
+              layerTopActivity(activity.id);
+              selectActivities([activity.id]);
+              setDragType("addActivity");
+            }
+            break;
+          case "addCommentNode":
             {
               const comment = addCommentNode(
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
@@ -103,7 +127,7 @@ export function DiagramContainer(): JSXElement {
               setDragType("addCommentNode");
             }
             break;
-          case "start":
+          case "addStartNode":
             {
               const startEnd = addStartNode(
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
@@ -113,7 +137,7 @@ export function DiagramContainer(): JSXElement {
               setDragType("addStartNode");
             }
             break;
-          case "end":
+          case "addEndNode":
             {
               const startEnd = addEndNode(
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),

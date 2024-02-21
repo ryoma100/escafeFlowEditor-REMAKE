@@ -1,8 +1,14 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 import { ACTIVITY_MIN_HEIGHT } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
-import { ActivityNode, JoinType, SplitType } from "../../data-source/data-type";
-import { ManualActivityIcon } from "../icons/material-icons";
+import { ActivityNode, ActivityNodeType, JoinType, SplitType } from "../../data-source/data-type";
+import {
+  AutoActivityIcon,
+  AutoTimerActivityIcon,
+  ManualActivityIcon,
+  ManualTimerActivityIcon,
+  UserActivityIcon,
+} from "../icons/material-icons";
 import "./activity-node.css";
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
@@ -16,7 +22,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
     otherNodeModel: { selectNodes },
-    otherEdgeModel: { addCommentEdge, addStartEdge },
+    otherEdgeModel: { addCommentEdge, addStartEdge, selectOtherEdges },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
@@ -52,6 +58,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
           if (!props.activity.selected) {
             selectActivities([props.activity.id]);
             selectNodes([]);
+            selectOtherEdges([]);
           }
           layerTopActivity(props.activity.id);
           setDragType("moveNodes");
@@ -100,7 +107,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
       onMouseUp={handleMouseUp}
     >
       <ActivityNodeView
-        type="manualActivity"
+        type={props.activity.type}
         name={props.activity.name}
         actorName={actorList.find((it) => it.id === props.activity.actorId)?.name ?? ""}
         joinType={joinType()}
@@ -118,7 +125,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
 }
 
 export function ActivityNodeView(props: {
-  type: string;
+  type: ActivityNodeType;
   name: string;
   actorName: string;
   joinType: JoinType;
@@ -177,7 +184,23 @@ export function ActivityNodeView(props: {
       >
         <div class="activity__actor">{props.actorName}</div>
         <div class="activity__icon">
-          <ManualActivityIcon />
+          <Switch>
+            <Match when={props.type === "manualActivity"}>
+              <ManualActivityIcon />
+            </Match>
+            <Match when={props.type === "autoActivity"}>
+              <AutoActivityIcon />
+            </Match>
+            <Match when={props.type === "manualTimerActivity"}>
+              <ManualTimerActivityIcon />
+            </Match>
+            <Match when={props.type === "autoTimerActivity"}>
+              <AutoTimerActivityIcon />
+            </Match>
+            <Match when={props.type === "userActivity"}>
+              <UserActivityIcon />
+            </Match>
+          </Switch>
         </div>
         <div ref={titleDiv} class="activity__title">
           {props.name}
