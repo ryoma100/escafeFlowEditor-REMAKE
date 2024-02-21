@@ -5,14 +5,29 @@ import "./transition-edge.css";
 
 export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
   const {
-    activityModel: { activityList },
+    activityModel: { getActivityNode, selectActivities },
+    transitionModel: { selectTransitions, toggleSelectTransition },
+    otherNodeModel: { selectNodes },
+    diagram: { setDragType },
     dialog: { setOpenTransitionDialog },
   } = useAppContext();
 
-  const fromActivity = () => activityList.find((it) => it.id === props.transition.fromActivityId)!;
-  const toActivity = () => activityList.find((it) => it.id === props.transition.toActivityId)!;
+  const fromActivity = () => getActivityNode(props.transition.fromActivityId);
+  const toActivity = () => getActivityNode(props.transition.toActivityId);
 
-  function onDlbClick(_e: MouseEvent) {
+  function handleMouseDown(e: MouseEvent) {
+    e.stopPropagation();
+    if (e.shiftKey) {
+      toggleSelectTransition(props.transition.id);
+      setDragType("none");
+    } else if (!props.transition.selected) {
+      selectTransitions([props.transition.id]);
+      selectActivities([]);
+      selectNodes([]);
+    }
+  }
+
+  function handleDlbClick(_e: MouseEvent) {
     setOpenTransitionDialog(props.transition);
   }
 
@@ -28,7 +43,9 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
       />
       <line
         class="transition--hover"
-        onDblClick={onDlbClick}
+        classList={{ "transition--selected": props.transition.selected }}
+        onDblClick={handleDlbClick}
+        onMouseDown={handleMouseDown}
         x1={fromActivity().x + fromActivity().width}
         y1={fromActivity().y + fromActivity().height / 2}
         x2={toActivity().x}

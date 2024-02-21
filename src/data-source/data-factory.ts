@@ -122,6 +122,7 @@ function createTransition(
     type: "transitionEdge",
     fromActivityId,
     toActivityId,
+    selected: false,
   };
 }
 
@@ -180,6 +181,7 @@ function createCommentEdge(
     type: "commentEdge",
     fromCommentId,
     toActivityId,
+    selected: false,
   };
 }
 
@@ -195,6 +197,7 @@ function createStartEdge(
     type: "startEdge",
     fromStartId,
     toActivityId,
+    selected: false,
   };
 }
 
@@ -206,6 +209,7 @@ function createEndEdge(process: ProcessEntity, fromActivityId: number, toEndId: 
     type: "endEdge",
     fromActivityId,
     toEndId,
+    selected: false,
   };
 }
 

@@ -6,7 +6,9 @@ import "./other-edge.css";
 export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndEdge }): JSXElement {
   const {
     otherNodeModel: { getCommentNode, getStartNode, getEndNode },
-    activityModel: { getActivityNode },
+    otherEdgeModel: { toggleSelectOtherEdge, selectOtherEdges },
+    activityModel: { getActivityNode, selectActivities },
+    transitionModel: { selectTransitions },
   } = useAppContext();
 
   const fromToNode = () => {
@@ -20,12 +22,25 @@ export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndE
     }
   };
 
+  function handleMouseDown(e: MouseEvent) {
+    e.stopPropagation();
+    if (e.shiftKey) {
+      toggleSelectOtherEdge(props.edge.id);
+    } else if (!props.edge.selected) {
+      selectOtherEdges([props.edge.id]);
+      selectActivities([]);
+      selectTransitions([]);
+    }
+  }
+
   return (
     <OtherEdgeView
       fromX={fromToNode()[0].x + fromToNode()[0].width / 2}
       fromY={fromToNode()[0].y + fromToNode()[0].height / 2}
       toX={fromToNode()[1].x + fromToNode()[1].width / 2}
       toY={fromToNode()[1].y + fromToNode()[1].height / 2}
+      selected={props.edge.selected}
+      onMouseDown={handleMouseDown}
     />
   );
 }
@@ -35,8 +50,21 @@ export function OtherEdgeView(props: {
   fromY: number;
   toX: number;
   toY: number;
+  selected: boolean;
+  onMouseDown: (e: MouseEvent) => void;
 }): JSXElement {
   return (
-    <line class="other-edge" x1={props.fromX} y1={props.fromY} x2={props.toX} y2={props.toY} />
+    <>
+      <line class="other-edge" x1={props.fromX} y1={props.fromY} x2={props.toX} y2={props.toY} />
+      <line
+        class="other-edge--hover"
+        classList={{ "other-edge--selected": props.selected }}
+        onMouseDown={(e) => props.onMouseDown(e)}
+        x1={props.fromX}
+        y1={props.fromY}
+        x2={props.toX}
+        y2={props.toY}
+      />
+    </>
   );
 }

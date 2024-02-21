@@ -4,3 +4,20 @@
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
 }
+
+.other-edge--hover {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 5px;
+}
+
+.other-edge--hover:hover {
+  cursor: pointer;
+  stroke: var(--app-hover-color);
+}
+
+.other-edge--selected {
+  fill: none;
+  stroke: var(--app-selected-color);
+  stroke-width: 5px;
+}

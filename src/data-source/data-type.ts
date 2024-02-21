@@ -105,6 +105,7 @@ export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge
 export interface IEdge {
   id: number;
   type: EdgeType;
+  selected: boolean;
 }
 
 export type TransitionEdge = IEdge & {

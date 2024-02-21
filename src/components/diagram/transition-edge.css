@@ -13,13 +13,11 @@
 
 .transition--hover:hover {
   cursor: pointer;
+  stroke: var(--app-hover-color);
+}
+
+.transition--selected {
+  fill: none;
   stroke: var(--app-selected-color);
-}
-
-.transition-arrow {
-  fill: lightgray;
-}
-
-.transition__hover:hover {
-  stroke: gray;
+  stroke-width: 5px;
 }

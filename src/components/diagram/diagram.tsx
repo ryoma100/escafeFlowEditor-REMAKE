@@ -34,7 +34,7 @@ export function DiagramContainer(): JSXElement {
       resizeLeft,
       resizeRight,
     },
-    transitionModel: { transitionList },
+    transitionModel: { transitionList, selectTransitions },
     otherNodeModel: {
       otherNodeList,
       addCommentNode,
@@ -43,7 +43,7 @@ export function DiagramContainer(): JSXElement {
       addStartNode,
       addEndNode,
     },
-    otherEdgeModel: { otherEdgeList },
+    otherEdgeModel: { otherEdgeList, selectOtherEdges },
     diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLineTo },
   } = useAppContext();
 
@@ -77,6 +77,8 @@ export function DiagramContainer(): JSXElement {
           case "cursor":
             selectActivities([]);
             selectNodes([]);
+            selectTransitions([]);
+            selectOtherEdges([]);
             setDragType("scroll");
             break;
           case "manual":
