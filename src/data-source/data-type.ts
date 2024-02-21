@@ -24,16 +24,12 @@ export type ProcessEntity = {
   _lastApplicationId: number;
   applications: ApplicationEntity[];
 
-  _lastActivityNodeId: number;
+  _lastNodeId: number;
   activityNodes: ActivityNode[];
-
-  _lastTransitionEdgeId: number;
-  transitionEdges: TransitionEdge[];
-
-  _lastOtherNodeId: number;
   otherNodes: (CommentNode | StartNode | EndNode)[];
 
-  _lastOtherEdgeId: number;
+  _lastEdgeId: number;
+  transitionEdges: TransitionEdge[];
   otherEdges: (CommentEdge | StartEdge | EndEdge)[];
 };
 

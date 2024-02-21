@@ -67,37 +67,6 @@ export function makeOtherNodeModel() {
     );
   }
 
-  function moveSelectedNodes(moveX: number, moveY: number) {
-    setOtherNodeList(
-      (it) => it.selected,
-      produce((it) => {
-        it.x += moveX;
-        it.y += moveY;
-      }),
-    );
-  }
-
-  function selectNodes(ids: number[]) {
-    setOtherNodeList(
-      () => true,
-      produce((it) => {
-        const selected = ids.includes(it.id);
-        if (it.selected !== selected) {
-          it.selected = selected;
-        }
-      }),
-    );
-  }
-
-  function toggleSelectNode(id: number) {
-    setOtherNodeList(
-      (it) => it.id === id,
-      produce((it) => {
-        it.selected = !it.selected;
-      }),
-    );
-  }
-
   function updateComment(node: CommentNode) {
     setOtherNodeList(
       (it) => it.id === node.id,
@@ -115,12 +84,10 @@ export function makeOtherNodeModel() {
     addStartNode,
     addEndNode,
     resizeCommentNode,
-    moveSelectedNodes,
-    selectNodes,
-    toggleSelectNode,
     updateComment,
     getCommentNode,
     getStartNode,
     getEndNode,
+    setOtherNodeList,
   };
 }

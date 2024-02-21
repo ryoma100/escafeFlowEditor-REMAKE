@@ -6,9 +6,9 @@ import "./other-node.css";
 
 export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndNode }): JSXElement {
   const {
-    otherNodeModel: { selectNodes, toggleSelectNode, resizeCommentNode },
+    otherNodeModel: { resizeCommentNode },
     otherEdgeModel: { addEndEdge },
-    activityModel: { selectActivities },
+    baseNodeModel: { changeSelectNodes },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
     dialog: { setOpenCommentDialog },
   } = useAppContext();
@@ -17,20 +17,18 @@ export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndN
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
-          toggleSelectNode(props.node.id);
+          changeSelectNodes("toggle", [props.node.id]);
           setDragType("none");
           e.stopPropagation();
         } else {
           if (!props.node.selected) {
-            selectNodes([props.node.id]);
-            selectActivities([]);
+            changeSelectNodes("select", [props.node.id]);
           }
           setDragType("moveNodes");
         }
         break;
       case "transition":
-        selectActivities([]);
-        selectNodes([props.node.id]);
+        changeSelectNodes("select", [props.node.id]);
         setAddingLineFrom(
           props.node.x + props.node.width / 2,
           props.node.y + props.node.height / 2,

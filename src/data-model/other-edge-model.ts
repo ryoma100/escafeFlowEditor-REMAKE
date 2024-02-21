@@ -1,4 +1,4 @@
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { dataFactory } from "../data-source/data-factory";
 import { CommentEdge, EndEdge, ProcessEntity, StartEdge } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
@@ -41,27 +41,6 @@ export function makeOtherEdgeModel(
     return edge;
   }
 
-  function selectOtherEdges(ids: number[]) {
-    setOtherEdgeList(
-      () => true,
-      produce((it) => {
-        const selected = ids.includes(it.id);
-        if (it.selected !== selected) {
-          it.selected = selected;
-        }
-      }),
-    );
-  }
-
-  function toggleSelectOtherEdge(id: number) {
-    setOtherEdgeList(
-      (it) => it.id === id,
-      produce((it) => {
-        it.selected = !it.selected;
-      }),
-    );
-  }
-
   return {
     load,
     save,
@@ -69,7 +48,6 @@ export function makeOtherEdgeModel(
     addCommentEdge,
     addStartEdge,
     addEndEdge,
-    selectOtherEdges,
-    toggleSelectOtherEdge,
+    setOtherEdgeList,
   };
 }

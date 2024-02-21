@@ -25,25 +25,12 @@ export type DragType =
 
 export function DiagramContainer(): JSXElement {
   const {
-    activityModel: {
-      activityList,
-      addActivity,
-      moveSelectedActivities,
-      layerTopActivity,
-      selectActivities,
-      resizeLeft,
-      resizeRight,
-    },
-    transitionModel: { transitionList, selectTransitions },
-    otherNodeModel: {
-      otherNodeList,
-      addCommentNode,
-      selectNodes,
-      moveSelectedNodes,
-      addStartNode,
-      addEndNode,
-    },
-    otherEdgeModel: { otherEdgeList, selectOtherEdges },
+    activityModel: { activityList, addActivity, layerTopActivity, resizeLeft, resizeRight },
+    transitionModel: { transitionList },
+    otherNodeModel: { otherNodeList, addCommentNode, addStartNode, addEndNode },
+    otherEdgeModel: { otherEdgeList },
+    baseNodeModel: { changeSelectNodes, moveSelectedNodes },
+    baseEdgeModel: { changeSelectEdges },
     diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLineTo },
   } = useAppContext();
 
@@ -75,10 +62,8 @@ export function DiagramContainer(): JSXElement {
       case "none":
         switch (toolbar()) {
           case "cursor":
-            selectActivities([]);
-            selectNodes([]);
-            selectTransitions([]);
-            selectOtherEdges([]);
+            changeSelectNodes("clearAll");
+            changeSelectEdges("clearAll");
             setDragType("scroll");
             break;
           case "addManualActivity":
@@ -89,7 +74,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
               layerTopActivity(activity.id);
-              selectActivities([activity.id]);
+              changeSelectNodes("select", [activity.id]);
               setDragType("addActivity");
             }
             break;
@@ -101,7 +86,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
               layerTopActivity(activity.id);
-              selectActivities([activity.id]);
+              changeSelectNodes("select", [activity.id]);
               setDragType("addActivity");
             }
             break;
@@ -113,7 +98,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
               layerTopActivity(activity.id);
-              selectActivities([activity.id]);
+              changeSelectNodes("select", [activity.id]);
               setDragType("addActivity");
             }
             break;
@@ -123,7 +108,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              selectNodes([comment.id]);
+              changeSelectNodes("select", [comment.id]);
               setDragType("addCommentNode");
             }
             break;
@@ -133,7 +118,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              selectNodes([startEnd.id]);
+              changeSelectNodes("select", [startEnd.id]);
               setDragType("addStartNode");
             }
             break;
@@ -143,7 +128,7 @@ export function DiagramContainer(): JSXElement {
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              selectNodes([startEnd.id]);
+              changeSelectNodes("select", [startEnd.id]);
               setDragType("addEndNode");
             }
             break;
@@ -168,7 +153,6 @@ export function DiagramContainer(): JSXElement {
       case "addStartNode":
       case "addEndNode":
       case "moveNodes":
-        moveSelectedActivities(moveX, moveY);
         moveSelectedNodes(moveX, moveY);
         break;
       case "resizeActivityLeft":

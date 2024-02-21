@@ -43,37 +43,6 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     );
   }
 
-  function moveSelectedActivities(moveX: number, moveY: number) {
-    setActivityList(
-      (it) => it.selected,
-      produce((it) => {
-        it.x += moveX;
-        it.y += moveY;
-      }),
-    );
-  }
-
-  function selectActivities(ids: number[]) {
-    setActivityList(
-      () => true,
-      produce((it) => {
-        const selected = ids.includes(it.id);
-        if (it.selected !== selected) {
-          it.selected = selected;
-        }
-      }),
-    );
-  }
-
-  function toggleSelectActivity(id: number) {
-    setActivityList(
-      (it) => it.id === id,
-      produce((it) => {
-        it.selected = !it.selected;
-      }),
-    );
-  }
-
   function layerTopActivity(id: number) {
     const target = activityList.find((it) => it.id === id)!;
     const listWithoutTarget = activityList.filter((it) => it.id !== id);
@@ -110,12 +79,9 @@ export function makeActivityModel(actorModel: ReturnType<typeof makeActorModel>)
     setActivityList,
     addActivity,
     resizeActivityHeight,
-    moveSelectedActivities,
     resizeLeft,
     resizeRight,
     layerTopActivity,
-    selectActivities,
-    toggleSelectActivity,
     getActivityNode,
   };
 }

@@ -45,15 +45,16 @@ function createProcess(project: ProjectEntity): ProcessEntity {
 
     _lastActorId: 0,
     actors: [],
+
     _lastApplicationId: 0,
     applications: [],
-    _lastActivityNodeId: 0,
+
+    _lastNodeId: 0,
     activityNodes: [],
-    _lastTransitionEdgeId: 0,
-    transitionEdges: [],
-    _lastOtherNodeId: 0,
     otherNodes: [],
-    _lastOtherEdgeId: 0,
+
+    _lastEdgeId: 0,
+    transitionEdges: [],
     otherEdges: [],
   };
   process.actors = [createActor(process)];
@@ -83,7 +84,7 @@ function createActivity(
   let id = 0;
   let xpdlId = "";
   do {
-    id = ++process._lastActivityNodeId;
+    id = ++process._lastNodeId;
     xpdlId = `${process.xpdlId}_act${id}`;
   } while (process.activityNodes.some((it) => it.xpdlId === xpdlId));
 
@@ -112,7 +113,7 @@ function createTransition(
   let id = 0;
   let xpdlId = "";
   do {
-    id = ++process._lastTransitionEdgeId;
+    id = ++process._lastEdgeId;
     xpdlId = `${process.xpdlId}_tra${id}`;
   } while (process.transitionEdges.some((it) => it.xpdlId === xpdlId));
 
@@ -127,7 +128,7 @@ function createTransition(
 }
 
 function createComment(process: ProcessEntity, x: number, y: number): CommentNode {
-  const id = ++process._lastOtherNodeId;
+  const id = ++process._lastNodeId;
 
   return {
     id,
@@ -142,7 +143,7 @@ function createComment(process: ProcessEntity, x: number, y: number): CommentNod
 }
 
 function createStartNode(process: ProcessEntity, x: number, y: number): StartNode {
-  const id = ++process._lastOtherNodeId;
+  const id = ++process._lastNodeId;
 
   return {
     id,
@@ -156,7 +157,7 @@ function createStartNode(process: ProcessEntity, x: number, y: number): StartNod
 }
 
 function createEndNode(process: ProcessEntity, x: number, y: number): EndNode {
-  const id = ++process._lastOtherNodeId;
+  const id = ++process._lastNodeId;
 
   return {
     id,
@@ -174,7 +175,7 @@ function createCommentEdge(
   fromCommentId: number,
   toActivityId: number,
 ): CommentEdge {
-  const id = ++process._lastOtherEdgeId;
+  const id = ++process._lastEdgeId;
 
   return {
     id,
@@ -190,7 +191,7 @@ function createStartEdge(
   fromStartId: number,
   toActivityId: number,
 ): StartEdge {
-  const id = ++process._lastOtherEdgeId;
+  const id = ++process._lastEdgeId;
 
   return {
     id,
@@ -202,7 +203,7 @@ function createStartEdge(
 }
 
 function createEndEdge(process: ProcessEntity, fromActivityId: number, toEndId: number): EndEdge {
-  const id = ++process._lastOtherEdgeId;
+  const id = ++process._lastEdgeId;
 
   return {
     id,

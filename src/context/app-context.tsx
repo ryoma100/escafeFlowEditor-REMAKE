@@ -6,6 +6,8 @@ import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-model";
 import { makeActorModel } from "../data-model/actor-model";
+import { makeBaseEdgeModel } from "../data-model/base-edge-model";
+import { makeBaseNodeModel } from "../data-model/base-node-model";
 import { makeOtherEdgeModel } from "../data-model/other-edge-model";
 import { makeOtherNodeModel } from "../data-model/other-node-model";
 import { makeProcessModel } from "../data-model/process-model";
@@ -23,9 +25,11 @@ import {
 function makeModelContext() {
   const actorModel = makeActorModel();
   const activityModel = makeActivityModel(actorModel);
-  const transitionModel = makeTransitionModel(activityModel);
   const otherNodeModel = makeOtherNodeModel();
+  const baseNodeModel = makeBaseNodeModel(activityModel, otherNodeModel);
+  const transitionModel = makeTransitionModel(activityModel);
   const otherEdgeModel = makeOtherEdgeModel(otherNodeModel, activityModel);
+  const baseEdgeModel = makeBaseEdgeModel(transitionModel, otherEdgeModel);
   const processModel = makeProcessModel(
     actorModel,
     activityModel,
@@ -43,6 +47,8 @@ function makeModelContext() {
     transitionModel,
     otherNodeModel,
     otherEdgeModel,
+    baseNodeModel,
+    baseEdgeModel,
   };
 }
 
@@ -117,9 +123,11 @@ const AppContext = createContext<{
   processModel: ReturnType<typeof makeProcessModel>;
   actorModel: ReturnType<typeof makeActorModel>;
   activityModel: ReturnType<typeof makeActivityModel>;
-  transitionModel: ReturnType<typeof makeTransitionModel>;
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>;
+  baseNodeModel: ReturnType<typeof makeBaseNodeModel>;
+  transitionModel: ReturnType<typeof makeTransitionModel>;
   otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>;
+  baseEdgeModel: ReturnType<typeof makeBaseEdgeModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
   i18n: ReturnType<typeof makeI18nContext>;
@@ -128,9 +136,11 @@ const AppContext = createContext<{
   processModel: undefined as never,
   actorModel: undefined as never,
   activityModel: undefined as never,
-  transitionModel: undefined as never,
   otherNodeModel: undefined as never,
+  baseNodeModel: undefined as never,
+  transitionModel: undefined as never,
   otherEdgeModel: undefined as never,
+  baseEdgeModel: undefined as never,
   dialog: undefined as never,
   diagram: undefined as never,
   i18n: undefined as never,

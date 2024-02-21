@@ -6,9 +6,9 @@ import "./other-edge.css";
 export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndEdge }): JSXElement {
   const {
     otherNodeModel: { getCommentNode, getStartNode, getEndNode },
-    otherEdgeModel: { toggleSelectOtherEdge, selectOtherEdges },
-    activityModel: { getActivityNode, selectActivities },
-    transitionModel: { selectTransitions },
+    activityModel: { getActivityNode },
+    baseNodeModel: { changeSelectNodes },
+    baseEdgeModel: { changeSelectEdges },
   } = useAppContext();
 
   const fromToNode = () => {
@@ -25,11 +25,10 @@ export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndE
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
     if (e.shiftKey) {
-      toggleSelectOtherEdge(props.edge.id);
+      changeSelectEdges("toggle", [props.edge.id]);
     } else if (!props.edge.selected) {
-      selectOtherEdges([props.edge.id]);
-      selectActivities([]);
-      selectTransitions([]);
+      changeSelectEdges("select", [props.edge.id]);
+      changeSelectNodes("clearAll");
     }
   }
 

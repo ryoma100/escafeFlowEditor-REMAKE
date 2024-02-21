@@ -13,16 +13,12 @@ import "./activity-node.css";
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
-    activityModel: {
-      layerTopActivity,
-      selectActivities,
-      toggleSelectActivity,
-      resizeActivityHeight,
-    },
+    activityModel: { layerTopActivity, resizeActivityHeight },
     actorModel: { actorList },
     transitionModel: { addTransition, transitionList },
-    otherNodeModel: { selectNodes },
-    otherEdgeModel: { addCommentEdge, addStartEdge, selectOtherEdges },
+    otherEdgeModel: { addCommentEdge, addStartEdge },
+    baseNodeModel: { changeSelectNodes },
+    baseEdgeModel: { changeSelectEdges },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
@@ -38,12 +34,12 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   };
 
   function handleLeftMouseDown(_e: MouseEvent) {
-    selectActivities([props.activity.id]);
+    changeSelectNodes("select", [props.activity.id]);
     setDragType("resizeActivityLeft");
   }
 
   function handleRightMouseDown(_e: MouseEvent) {
-    selectActivities([props.activity.id]);
+    changeSelectNodes("select", [props.activity.id]);
     setDragType("resizeActivityRight");
   }
 
@@ -51,22 +47,20 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
-          toggleSelectActivity(props.activity.id);
+          changeSelectNodes("toggle", [props.activity.id]);
           setDragType("none");
           e.stopPropagation();
         } else {
           if (!props.activity.selected) {
-            selectActivities([props.activity.id]);
-            selectNodes([]);
-            selectOtherEdges([]);
+            changeSelectNodes("select", [props.activity.id]);
+            changeSelectEdges("clearAll");
           }
           layerTopActivity(props.activity.id);
           setDragType("moveNodes");
         }
         break;
       case "transition":
-        selectActivities([props.activity.id]);
-        selectNodes([]);
+        changeSelectNodes("select", [props.activity.id]);
         setAddingLineFrom(
           props.activity.x + props.activity.width,
           props.activity.y + props.activity.height / 2,

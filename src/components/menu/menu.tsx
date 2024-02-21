@@ -8,6 +8,7 @@ export function Menu(): JSXElement {
     projectModel: { project, initProject },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
+    baseNodeModel: { changeSelectNodes },
     dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog, setOpenSaveDialog },
     i18n: { dict },
   } = useAppContext();
@@ -28,6 +29,7 @@ export function Menu(): JSXElement {
   }
 
   function handleEditSelectAllClick() {
+    changeSelectNodes("selectAll");
     return false;
   }
 
