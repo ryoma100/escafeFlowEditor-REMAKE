@@ -56,5 +56,12 @@ export function makeBaseEdgeModel(
     otherEdgeModel.setOtherEdgeList(otherEdgeModel.otherEdgeList.filter((it) => !it.selected));
   }
 
-  return { changeSelectEdges, removeSelectedEdge };
+  function selectedEdges() {
+    return [
+      ...transitionModel.transitionList.filter((it) => it.selected),
+      ...otherEdgeModel.otherEdgeList.filter((it) => it.selected),
+    ];
+  }
+
+  return { changeSelectEdges, removeSelectedEdge, selectedEdges };
 }

@@ -107,5 +107,12 @@ export function makeBaseNodeModel(
     otherNodeModel.setOtherNodeList(otherNodeModel.otherNodeList.filter((it) => !it.selected));
   }
 
-  return { changeSelectNodes, moveSelectedNodes, removeSelectedNodes };
+  function selectedNodes() {
+    return [
+      ...activityModel.activityList.filter((it) => it.selected),
+      ...otherNodeModel.otherNodeList.filter((it) => it.selected),
+    ];
+  }
+
+  return { changeSelectNodes, moveSelectedNodes, removeSelectedNodes, selectedNodes };
 }

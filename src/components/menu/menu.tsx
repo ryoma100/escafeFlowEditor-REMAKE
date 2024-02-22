@@ -8,9 +8,16 @@ export function Menu(): JSXElement {
     projectModel: { project, initProject },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    baseNodeModel: { changeSelectNodes, removeSelectedNodes },
-    baseEdgeModel: { removeSelectedEdge },
-    dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog, setOpenSaveDialog },
+    baseNodeModel: { changeSelectNodes, removeSelectedNodes, selectedNodes },
+    baseEdgeModel: { removeSelectedEdge, selectedEdges },
+    dialog: {
+      setOpenProjectDialog,
+      setOpenProcessDialog,
+      setOpenActorDialog,
+      setOpenSaveDialog,
+      setOpenCommentDialog,
+      setOpenTransitionDialog,
+    },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -41,6 +48,29 @@ export function Menu(): JSXElement {
   }
 
   function handleEditPropertyClick() {
+    if (selectedNodes().length + selectedEdges().length === 1) {
+      selectedNodes().forEach((it) => {
+        switch (it.type) {
+          case "manualActivity":
+          case "autoActivity":
+          case "manualTimerActivity":
+          case "autoTimerActivity":
+          case "userActivity":
+            setOpenActorDialog(it);
+            break;
+          case "commentNode":
+            setOpenCommentDialog(it);
+            break;
+        }
+      });
+      selectedEdges().forEach((it) => {
+        switch (it.type) {
+          case "transitionEdge":
+            setOpenTransitionDialog(it);
+            break;
+        }
+      });
+    }
     return false;
   }
 
