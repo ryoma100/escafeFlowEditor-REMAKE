@@ -7,7 +7,7 @@ import "./list.css";
 export function ActorList(): JSXElement {
   const {
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
-    dialog: { setOpenActorDialog },
+    dialog: { setOpenActorDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -25,7 +25,10 @@ export function ActorList(): JSXElement {
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    removeSelectedActor();
+    const err = removeSelectedActor();
+    if (err != null) {
+      setOpenMessageDialog(err);
+    }
   }
 
   return (

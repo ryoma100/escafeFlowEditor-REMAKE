@@ -3,6 +3,7 @@ import "./app.css";
 import { ActivityDialog } from "./components/dialog/activity-dialog";
 import { ActorDialog } from "./components/dialog/actor-dialog";
 import { CommentDialog } from "./components/dialog/comment-dialog";
+import { MessageDialog } from "./components/dialog/message-dialog";
 import { ProcessDialog } from "./components/dialog/process-dialog";
 import { ProjectDialog } from "./components/dialog/project-dialog";
 import { SaveDialog } from "./components/dialog/save-dialog";
@@ -41,6 +42,7 @@ function App(): JSXElement {
       <TransitionDialog />
       <CommentDialog />
       <SaveDialog />
+      <MessageDialog />
     </>
   );
 }

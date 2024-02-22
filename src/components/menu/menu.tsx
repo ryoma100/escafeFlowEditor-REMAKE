@@ -17,6 +17,7 @@ export function Menu(): JSXElement {
       setOpenSaveDialog,
       setOpenCommentDialog,
       setOpenTransitionDialog,
+      setOpenMessageDialog,
     },
     i18n: { dict },
   } = useAppContext();
@@ -100,7 +101,10 @@ export function Menu(): JSXElement {
   }
 
   function handleActorRemoveClick() {
-    removeSelectedActor();
+    const err = removeSelectedActor();
+    if (err != null) {
+      setOpenMessageDialog(err);
+    }
     return false;
   }
 

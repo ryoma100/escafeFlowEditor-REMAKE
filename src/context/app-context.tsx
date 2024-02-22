@@ -23,8 +23,8 @@ import {
 } from "../data-source/data-type";
 
 function makeModelContext() {
-  const actorModel = makeActorModel();
-  const activityModel = makeActivityModel(actorModel);
+  const activityModel = makeActivityModel();
+  const actorModel = makeActorModel(activityModel);
   const otherNodeModel = makeOtherNodeModel();
   const transitionModel = makeTransitionModel(activityModel);
   const otherEdgeModel = makeOtherEdgeModel(otherNodeModel, activityModel);
@@ -65,6 +65,7 @@ function makeDialogContext() {
   const [openTransitionDialog, setOpenTransitionDialog] = createSignal<TransitionEdge | null>(null);
   const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNode | null>(null);
   const [openSaveDialog, setOpenSaveDialog] = createSignal<ProjectEntity | null>(null);
+  const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
 
   return {
     openProjectDialog,
@@ -81,6 +82,8 @@ function makeDialogContext() {
     setOpenCommentDialog,
     openSaveDialog,
     setOpenSaveDialog,
+    openMessageDialog,
+    setOpenMessageDialog,
   };
 }
 

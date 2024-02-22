@@ -26,6 +26,7 @@ export type DragType =
 export function DiagramContainer(): JSXElement {
   const {
     activityModel: { activityList, addActivity, layerTopActivity, resizeLeft, resizeRight },
+    actorModel: { selectedActor },
     transitionModel: { transitionList },
     otherNodeModel: { otherNodeList, addCommentNode, addStartNode, addEndNode },
     otherEdgeModel: { otherEdgeList },
@@ -70,6 +71,7 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "manualActivity",
+                selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
@@ -82,6 +84,7 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "autoActivity",
+                selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
@@ -94,6 +97,7 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "userActivity",
+                selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );

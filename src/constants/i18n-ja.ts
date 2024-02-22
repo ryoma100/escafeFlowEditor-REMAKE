@@ -28,6 +28,8 @@ export const jaDict: typeof enDict = {
   comment: "コメント",
 
   idExists: "このIDは既に存在します。",
+  actorCannotDelete: "このアクアーの仕事が残っているので、削除できません。",
+
   editActivity: "仕事の編集",
   jobTitle: "仕事名",
   editTransition: "接続の編集",

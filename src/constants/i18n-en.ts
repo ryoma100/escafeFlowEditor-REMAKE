@@ -26,6 +26,8 @@ export const enDict = {
   comment: "Comment",
 
   idExists: "This ID already exists.",
+  actorCannotDelete: "This actor has work to do and cannot be removed.",
+
   editActivity: "Job Editing",
   jobTitle: "Job Title",
   editTransition: "Edit Transition",

@@ -65,6 +65,8 @@ export function makeProcessModel(
   }
 
   function removeSelectedProcess() {
+    if (processList().length <= 1) return;
+
     const nextSelectedIndex = Math.min(
       processList().findIndex((it) => it.id === selectedProcess().id),
       processList().length - 2,
