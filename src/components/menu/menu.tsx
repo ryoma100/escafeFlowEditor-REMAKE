@@ -5,7 +5,7 @@ import "./menu.css";
 
 export function Menu(): JSXElement {
   const {
-    projectModel: { project, initProject },
+    projectModel: { project },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     baseNodeModel: { changeSelectNodes, removeSelectedNodes, selectedNodes },
@@ -19,13 +19,14 @@ export function Menu(): JSXElement {
       setOpenTransitionDialog,
       setOpenMessageDialog,
       setOpenAboutDialog,
+      setOpenInitDialog,
     },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {
-    initProject();
+    setOpenInitDialog(true);
     return false;
   }
 

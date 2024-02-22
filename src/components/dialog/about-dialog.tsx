@@ -1,13 +1,10 @@
-import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 
 export function AboutDialog(): JSXElement {
   const {
     dialog: { openAboutDialog, setOpenAboutDialog },
-    i18n: { dict },
   } = useAppContext();
-  const t = i18n.translator(dict);
 
   createEffect(() => {
     if (openAboutDialog()) {
@@ -24,9 +21,9 @@ export function AboutDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
-      <h5>tiny-es-flow-editor beta</h5>
+      <h5>tiny esFlow Diagram Editor</h5>
       <form>
-        <div>version: 0.1</div>
+        <div>version: 0.1 beta</div>
         <div>author: Ryouichi Matsuda</div>
         <div>
           web:&nbsp;
