@@ -18,6 +18,7 @@ export function Menu(): JSXElement {
       setOpenCommentDialog,
       setOpenTransitionDialog,
       setOpenMessageDialog,
+      setOpenAboutDialog,
     },
     i18n: { dict },
   } = useAppContext();
@@ -114,6 +115,7 @@ export function Menu(): JSXElement {
   }
 
   function handleHelpAboutClick() {
+    setOpenAboutDialog(true);
     return false;
   }
 

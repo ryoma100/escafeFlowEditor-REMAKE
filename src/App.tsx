@@ -1,5 +1,6 @@
 import { JSXElement } from "solid-js";
 import "./app.css";
+import { AboutDialog } from "./components/dialog/about-dialog";
 import { ActivityDialog } from "./components/dialog/activity-dialog";
 import { ActorDialog } from "./components/dialog/actor-dialog";
 import { CommentDialog } from "./components/dialog/comment-dialog";
@@ -43,6 +44,7 @@ function App(): JSXElement {
       <CommentDialog />
       <SaveDialog />
       <MessageDialog />
+      <AboutDialog />
     </>
   );
 }

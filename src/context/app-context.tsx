@@ -66,6 +66,7 @@ function makeDialogContext() {
   const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNode | null>(null);
   const [openSaveDialog, setOpenSaveDialog] = createSignal<ProjectEntity | null>(null);
   const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
+  const [openAboutDialog, setOpenAboutDialog] = createSignal<boolean>(false);
 
   return {
     openProjectDialog,
@@ -84,6 +85,8 @@ function makeDialogContext() {
     setOpenSaveDialog,
     openMessageDialog,
     setOpenMessageDialog,
+    openAboutDialog,
+    setOpenAboutDialog,
   };
 }
 
