@@ -8,7 +8,8 @@ export function Menu(): JSXElement {
     projectModel: { project, initProject },
     processModel: { addProcess, removeSelectedProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    baseNodeModel: { changeSelectNodes },
+    baseNodeModel: { changeSelectNodes, removeSelectedNodes },
+    baseEdgeModel: { removeSelectedEdge },
     dialog: { setOpenProjectDialog, setOpenProcessDialog, setOpenActorDialog, setOpenSaveDialog },
     i18n: { dict },
   } = useAppContext();
@@ -34,6 +35,8 @@ export function Menu(): JSXElement {
   }
 
   function handleEditRemoveClick() {
+    removeSelectedEdge();
+    removeSelectedNodes();
     return false;
   }
 

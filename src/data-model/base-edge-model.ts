@@ -51,5 +51,10 @@ export function makeBaseEdgeModel(
     );
   }
 
-  return { changeSelectEdges };
+  function removeSelectedEdge() {
+    transitionModel.setTransitionList(transitionModel.transitionList.filter((it) => !it.selected));
+    otherEdgeModel.setOtherEdgeList(otherEdgeModel.otherEdgeList.filter((it) => !it.selected));
+  }
+
+  return { changeSelectEdges, removeSelectedEdge };
 }

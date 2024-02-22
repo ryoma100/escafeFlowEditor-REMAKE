@@ -1,10 +1,14 @@
 import { produce } from "solid-js/store";
 import { makeActivityModel } from "./activity-model";
+import { makeOtherEdgeModel } from "./other-edge-model";
 import { makeOtherNodeModel } from "./other-node-model";
+import { makeTransitionModel } from "./transition-model";
 
 export function makeBaseNodeModel(
   activityModel: ReturnType<typeof makeActivityModel>,
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
+  transitionModel: ReturnType<typeof makeTransitionModel>,
+  otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>,
 ) {
   function changeSelectNodes(
     type: "select" | "selectAll" | "toggle" | "clearAll",
@@ -69,5 +73,39 @@ export function makeBaseNodeModel(
     );
   }
 
-  return { changeSelectNodes, moveSelectedNodes };
+  function removeSelectedNodes() {
+    transitionModel.setTransitionList(
+      transitionModel.transitionList.filter(
+        (it) =>
+          !activityModel.getActivityNode(it.fromActivityId).selected &&
+          !activityModel.getActivityNode(it.toActivityId).selected,
+      ),
+    );
+    otherEdgeModel.setOtherEdgeList(
+      otherEdgeModel.otherEdgeList.filter((it) => {
+        switch (it.type) {
+          case "commentEdge":
+            return (
+              !otherNodeModel.getCommentNode(it.fromCommentId).selected &&
+              !activityModel.getActivityNode(it.toActivityId).selected
+            );
+          case "startEdge":
+            return (
+              !otherNodeModel.getStartNode(it.fromStartId).selected &&
+              !activityModel.getActivityNode(it.toActivityId).selected
+            );
+          case "endEdge":
+            return (
+              !activityModel.getActivityNode(it.fromActivityId).selected &&
+              !otherNodeModel.getEndNode(it.toEndId).selected
+            );
+        }
+      }),
+    );
+
+    activityModel.setActivityList(activityModel.activityList.filter((it) => !it.selected));
+    otherNodeModel.setOtherNodeList(otherNodeModel.otherNodeList.filter((it) => !it.selected));
+  }
+
+  return { changeSelectNodes, moveSelectedNodes, removeSelectedNodes };
 }
