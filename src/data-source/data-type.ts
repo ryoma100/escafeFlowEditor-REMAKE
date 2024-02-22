@@ -60,13 +60,16 @@ export type ActivityNodeType =
   | "userActivity";
 export type NodeType = ActivityNodeType | "commentNode" | "startNode" | "endNode";
 
-export interface INode {
-  id: number;
-  type: NodeType;
+export type Rectangle = {
   x: number;
   y: number;
   width: number;
   height: number;
+};
+
+export interface INode extends Rectangle {
+  id: number;
+  type: NodeType;
   selected: boolean;
 }
 

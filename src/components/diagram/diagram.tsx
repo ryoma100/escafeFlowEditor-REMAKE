@@ -1,6 +1,4 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
-import { createStore } from "solid-js/store";
-import { defaultRectangle } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeContainer } from "./activity-node";
 import "./diagram.css";
@@ -32,17 +30,25 @@ export function DiagramContainer(): JSXElement {
     otherEdgeModel: { otherEdgeList },
     baseNodeModel: { changeSelectNodes, moveSelectedNodes },
     baseEdgeModel: { changeSelectEdges },
-    diagram: { toolbar, zoom, dragType, setDragType, addingLine, setAddingLineTo },
+    diagram: {
+      svgRect,
+      setSvgRect,
+      viewBox,
+      setViewBox,
+      toolbar,
+      zoom,
+      dragType,
+      setDragType,
+      addingLine,
+      setAddingLineTo,
+    },
   } = useAppContext();
-
-  const [svgRect, setRect] = createStore({ ...defaultRectangle });
-  const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
 
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (diagram) {
         const rect = diagram.getBoundingClientRect();
-        setRect({
+        setSvgRect({
           x: rect.left,
           y: rect.top,
           width: rect.width,

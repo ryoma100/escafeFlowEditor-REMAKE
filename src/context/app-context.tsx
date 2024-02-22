@@ -1,7 +1,9 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSX, createContext, createMemo, createSignal, useContext } from "solid-js";
+import { createStore } from "solid-js/store";
 import { DragType } from "../components/diagram/diagram";
 import { ToolbarType } from "../components/toolbar/toolbar";
+import { defaultRectangle } from "../constants/app-const";
 import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-model";
@@ -19,6 +21,7 @@ import {
   CommentNode,
   ProcessEntity,
   ProjectEntity,
+  Rectangle,
   TransitionEdge,
 } from "../data-source/data-type";
 
@@ -103,6 +106,8 @@ function makeDiagramContext() {
     toX: number;
     toY: number;
   }>(undefined as never);
+  const [svgRect, setSvgRect] = createStore({ ...defaultRectangle });
+  const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
 
   function setAddingLineFrom(x: number, y: number) {
     setAddingLine({ fromX: x, fromY: y, toX: x, toY: y });
@@ -110,6 +115,11 @@ function makeDiagramContext() {
 
   function setAddingLineTo(x: number, y: number) {
     setAddingLine({ fromX: addingLine().fromX, fromY: addingLine().fromY, toX: x, toY: y });
+  }
+
+  function autoRectangle(rect: Rectangle) {
+    setZoom(Math.min(svgRect.width / rect.width, svgRect.height / rect.height));
+    setViewBox({ x: rect.x, y: rect.y, width: viewBox.width, height: viewBox.height });
   }
 
   return {
@@ -122,6 +132,11 @@ function makeDiagramContext() {
     addingLine,
     setAddingLineFrom,
     setAddingLineTo,
+    svgRect,
+    setSvgRect,
+    autoRectangle,
+    viewBox,
+    setViewBox,
   };
 }
 

@@ -6,11 +6,15 @@ import "./main.css";
 export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
-    diagram: { zoom, setZoom },
+    baseNodeModel: { maxRectangle },
+    diagram: { zoom, setZoom, autoRectangle },
   } = useAppContext();
 
   function handleAutoZoomButtonClick() {
-    // TODO: auto zoom
+    const rect = maxRectangle();
+    if (rect) {
+      autoRectangle(rect);
+    }
   }
 
   function handleNormalZoomButtonClick() {

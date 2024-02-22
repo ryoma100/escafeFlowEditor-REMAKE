@@ -1,4 +1,5 @@
 import { produce } from "solid-js/store";
+import { INode } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeOtherEdgeModel } from "./other-edge-model";
 import { makeOtherNodeModel } from "./other-node-model";
@@ -114,5 +115,34 @@ export function makeBaseNodeModel(
     ];
   }
 
-  return { changeSelectNodes, moveSelectedNodes, removeSelectedNodes, selectedNodes };
+  function maxRectangle() {
+    const nodes: INode[] = [...activityModel.activityList, ...otherNodeModel.otherNodeList];
+    if (nodes.length === 0) return null;
+
+    const area = nodes.reduce(
+      (rect, node) => {
+        return {
+          left: Math.min(rect.left, node.x),
+          top: Math.min(rect.top, node.y),
+          right: Math.max(rect.right, node.x + node.width),
+          bottom: Math.max(rect.bottom, node.y + node.height),
+        };
+      },
+      {
+        left: Number.MAX_SAFE_INTEGER,
+        top: Number.MAX_SAFE_INTEGER,
+        right: Number.MIN_SAFE_INTEGER,
+        bottom: Number.MIN_SAFE_INTEGER,
+      },
+    );
+
+    return {
+      x: area.left,
+      y: area.top,
+      width: area.right - area.left,
+      height: area.bottom - area.top,
+    };
+  }
+
+  return { changeSelectNodes, moveSelectedNodes, removeSelectedNodes, selectedNodes, maxRectangle };
 }
