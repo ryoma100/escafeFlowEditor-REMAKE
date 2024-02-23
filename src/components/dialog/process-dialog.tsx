@@ -1,5 +1,5 @@
-import { JSXElement, createEffect, createSignal } from "solid-js";
-import { createStore } from "solid-js/store";
+import { For, JSXElement, createEffect, createSignal } from "solid-js";
+import { createStore, produce, unwrap } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProcessEntity } from "../../data-source/data-type";
 import "./dialog.css";
@@ -32,8 +32,36 @@ export function ProcessDialog(): JSXElement {
     );
   }
 
+  function handleEnvClick(id: number, _e: MouseEvent) {
+    setFormData(
+      "environments",
+      () => true,
+      produce((it) => {
+        it.selected = it.id === id;
+        console.log(it.id, it.selected);
+      }),
+    );
+  }
+
+  function handleAddEnvButtonClick() {
+    const id = formData._lastEnvironmentId + 1;
+    setFormData("_lastEnvironmentId", id);
+    setFormData("environments", [
+      ...formData.environments,
+      { id, name: "name", value: "value", selected: false },
+    ]);
+  }
+
+  function handleRemoveEnvButtonClick() {
+    setFormData(
+      "environments",
+      formData.environments.filter((it) => !it.selected),
+    );
+  }
+
   function handleOkButtonClick() {
-    updateProcess({ ...formData });
+    console.log(unwrap(formData));
+    updateProcess(unwrap(formData));
     setOpenProcessDialog(null);
   }
 
@@ -63,6 +91,41 @@ export function ProcessDialog(): JSXElement {
           />
           <p />
         </div>
+        <div>拡張設定：</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <td>名前</td>
+              <td>値</td>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={formData.environments}>
+              {(it) => (
+                <tr
+                  onClick={[handleEnvClick, it.id]}
+                  classList={{ "table__row--selected": it.selected }}
+                >
+                  <td>
+                    <input type="text" value={it.name} />
+                  </td>
+                  <td>
+                    <input type="text" value={it.value} />
+                  </td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+        <div class="table__buttons">
+          <button type="button" onClick={handleAddEnvButtonClick}>
+            追加
+          </button>
+          <button type="button" onClick={handleRemoveEnvButtonClick}>
+            削除
+          </button>
+        </div>
+
         <div class="dialog__buttons">
           <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
             OK

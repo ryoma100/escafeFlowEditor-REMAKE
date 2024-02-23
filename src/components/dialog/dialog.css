@@ -48,3 +48,41 @@
   width: 600px;
   height: 400px;
 }
+
+.table {
+  width: 400px;
+  border-collapse: collapse;
+  border: 1px solid gray;
+}
+
+.table thead {
+  display: block;
+  padding-right: 15px;
+  background-color: lightgray;
+}
+
+.table tbody {
+  display: block;
+  height: 88px;
+  overflow: hidden scroll;
+}
+
+.table td {
+  width: 1%;
+  padding: 0 0 0 8px;
+}
+
+.table input {
+  width: 170px;
+}
+
+.table__buttons {
+  display: flex;
+  column-gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.table__row--selected {
+  background-color: var(--app-selected-color);
+}

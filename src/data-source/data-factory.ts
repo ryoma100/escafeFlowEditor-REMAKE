@@ -39,9 +39,11 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     xpdlId,
     name: `プロセス${id}`,
     created: new Date().toISOString(),
-    environments: [],
     validFrom: "",
     validTo: "",
+
+    _lastEnvironmentId: 0,
+    environments: [],
 
     _lastActorId: 0,
     actors: [],

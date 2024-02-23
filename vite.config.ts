@@ -10,6 +10,12 @@ export default defineConfig(async () => ({
     devtools({
       /* features options - all disabled by default */
       autoname: true, // e.g. enable autoname
+      locator: {
+        targetIDE: "vscode",
+        key: "Ctrl",
+        jsxLocation: true,
+        componentLocation: true,
+      },
     }),
     solid(),
     solidSvg(),

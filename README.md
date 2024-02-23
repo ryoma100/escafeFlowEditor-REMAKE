@@ -1,4 +1,4 @@
-# tiny-workflow-editor
+# tiny-es-flow-editor
 
 This is a simple workflow editor. This is made to practice for developing a diagram editor.
 
@@ -9,7 +9,7 @@ This template should help get you started developing with Tauri, Solid and Types
 ## Setup
 
 ```
-npm install
+pnpm install
 ```
 
 ## Development
@@ -17,13 +17,13 @@ npm install
 - for Web Browser
 
 ```
-npm run dev
+pnpm dev
 ```
 
 - for PC Application
 
 ```
-npm run tauri dev
+pnpm tauri dev
 ```
 
 ## Build
@@ -31,14 +31,14 @@ npm run tauri dev
 - for Web Browser
 
 ```
-npm run build
-npm run preview
+pnpm build
+pnpm serve
 ```
 
 - for PC Application
 
 ```
-npm run tauri build
+pnpm tauri build
 ```
 
 ## Recommended IDE Setup
