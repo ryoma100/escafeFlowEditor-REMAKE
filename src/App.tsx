@@ -1,5 +1,5 @@
 import { JSXElement } from "solid-js";
-import "./app.css";
+import "./App.css";
 import { AboutDialog } from "./components/dialog/about-dialog";
 import { ActivityDialog } from "./components/dialog/activity-dialog";
 import { ActorDialog } from "./components/dialog/actor-dialog";
