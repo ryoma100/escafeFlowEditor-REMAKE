@@ -5,6 +5,7 @@ import solidSvg from "vite-plugin-solid-svg";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
+  base: process.env.VITE_BASE_PATH,
   plugins: [
     devtools({
       /* features options - all disabled by default */

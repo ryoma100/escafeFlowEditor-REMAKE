@@ -21,7 +21,8 @@
     "serde",
     "solidjs",
     "stylelint",
-    "tauri"
+    "tauri",
+    "VITE"
   ],
   // flagWords - list of words to be always considered incorrect
   "flagWords": [],

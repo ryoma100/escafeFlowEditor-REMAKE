@@ -13,6 +13,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  VITE_BASE_PATH: ${{ vars.BASE_PATH }}
+
 jobs:
   deploy:
     runs-on: ubuntu-20.04
