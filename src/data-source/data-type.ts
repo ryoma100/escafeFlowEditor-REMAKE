@@ -9,22 +9,25 @@ export type ProjectEntity = {
   processes: ProcessEntity[];
 };
 
-export type ProcessEntity = {
+export interface IProcessDetailEntity {
   id: number;
   xpdlId: string;
   name: string;
-  created: datetime;
   validFrom: string;
   validTo: string;
 
   _lastEnvironmentId: number;
   environments: EnvironmentEntity[];
 
-  _lastActorId: number;
-  actors: ActorEntity[];
-
   _lastApplicationId: number;
   applications: ApplicationEntity[];
+}
+
+export interface IProcessDiagramEntity {
+  id: number;
+
+  _lastActorId: number;
+  actors: ActorEntity[];
 
   _lastNodeId: number;
   activityNodes: ActivityNode[];
@@ -33,7 +36,9 @@ export type ProcessEntity = {
   _lastEdgeId: number;
   transitionEdges: TransitionEdge[];
   otherEdges: (CommentEdge | StartEdge | EndEdge)[];
-};
+}
+
+export type ProcessEntity = IProcessDetailEntity & IProcessDiagramEntity & { created: datetime };
 
 export type ActorEntity = {
   id: number;

@@ -1,22 +1,33 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce, unwrap } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { ProcessEntity } from "../../data-source/data-type";
+import { IProcessDetailEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
 export function ProcessDialog(): JSXElement {
   const {
-    processModel: { updateProcess, processList },
+    processModel: { updateProcessDetail, processList },
     dialog: { openProcessDialog, setOpenProcessDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ProcessEntity>(undefined as never);
+  const [formData, setFormData] = createStore<IProcessDetailEntity>(undefined as never);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
     const process = openProcessDialog();
     if (process != null) {
-      setFormData({ ...process });
+      const cloneProcess: IProcessDetailEntity = {
+        id: process.id,
+        xpdlId: process.xpdlId,
+        name: process.name,
+        validFrom: process.validFrom,
+        validTo: process.validTo,
+        _lastEnvironmentId: process._lastEnvironmentId,
+        environments: process.environments.map((it) => ({ ...it, selected: false })),
+        _lastApplicationId: process._lastApplicationId,
+        applications: process.applications.map((it) => ({ ...it, selected: false })),
+      };
+      setFormData(cloneProcess);
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -38,7 +49,6 @@ export function ProcessDialog(): JSXElement {
       () => true,
       produce((it) => {
         it.selected = it.id === id;
-        console.log(it.id, it.selected);
       }),
     );
   }
@@ -60,8 +70,11 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleOkButtonClick() {
-    console.log(unwrap(formData));
-    updateProcess(unwrap(formData));
+    updateProcessDetail({
+      ...formData,
+      environments: unwrap(formData.environments),
+      applications: unwrap(formData.applications),
+    });
     setOpenProcessDialog(null);
   }
 
@@ -101,16 +114,28 @@ export function ProcessDialog(): JSXElement {
           </thead>
           <tbody>
             <For each={formData.environments}>
-              {(it) => (
+              {(it, index) => (
                 <tr
                   onClick={[handleEnvClick, it.id]}
                   classList={{ "table__row--selected": it.selected }}
                 >
                   <td>
-                    <input type="text" value={it.name} />
+                    <input
+                      type="text"
+                      value={it.name}
+                      onChange={(e) =>
+                        setFormData("environments", [index()], "name", e.target.value)
+                      }
+                    />
                   </td>
                   <td>
-                    <input type="text" value={it.value} />
+                    <input
+                      type="text"
+                      value={it.value}
+                      onChange={(e) =>
+                        setFormData("environments", [index()], "value", e.target.value)
+                      }
+                    />
                   </td>
                 </tr>
               )}

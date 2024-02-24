@@ -45,11 +45,11 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     _lastEnvironmentId: 0,
     environments: [],
 
-    _lastActorId: 0,
-    actors: [],
-
     _lastApplicationId: 0,
     applications: [],
+
+    _lastActorId: 0,
+    actors: [],
 
     _lastNodeId: 0,
     activityNodes: [],
