@@ -144,34 +144,79 @@ export function ActivityDialog(): JSXElement {
           </div>
         </div>
 
-        <div class="dialog__input">
-          <div>ID</div>
-          <input
-            type="text"
-            value={formData.xpdlId}
-            onInput={handleXpdlIdInput}
-            onChange={(e) => setFormData("xpdlId", e.target.value)}
-          />
-          <p>{xpdlIdError()}</p>
-          <div>{t("jobTitle")}</div>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData("name", e.target.value)}
-          />
-          <p />
-          <div>{t("actor")}</div>
-          <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
-            <For each={actorList}>
-              {(actor) => (
-                <option value={actor.id} selected={actor.id === formData.actorId}>
-                  {actor.name}
-                </option>
-              )}
-            </For>
-          </select>
-          <p />
+        <div class="tab-wrap">
+          <input id="TAB-01" type="radio" name="TAB" class="tab-switch" />
+          <label class="tab-label" for="TAB-01">
+            はじまり
+          </label>
+          <div class="tab-content">
+            <div>
+              <div>前の仕事が・・・</div>
+              <div>
+                <input type="radio" id="joinOne" value="joinOne" name="joinRadio" />
+                <label for="joinOne">ひとつでも終わったら</label>
+              </div>
+              <div>
+                <input type="radio" id="joinMany" value="joinMany" name="joinRadio" />
+                <label for="joinMany">すべて終わったら</label>
+              </div>
+              <div>この仕事を行う。</div>
+            </div>
+          </div>
+          <input id="TAB-02" type="radio" name="TAB" class="tab-switch" checked />
+          <label class="tab-label" for="TAB-02">
+            仕事
+          </label>
+          <div class="tab-content">
+            <div class="dialog__input">
+              <div>ID</div>
+              <input
+                type="text"
+                value={formData.xpdlId}
+                onInput={handleXpdlIdInput}
+                onChange={(e) => setFormData("xpdlId", e.target.value)}
+              />
+              <p>{xpdlIdError()}</p>
+              <div>{t("jobTitle")}</div>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData("name", e.target.value)}
+              />
+              <p />
+              <div>{t("actor")}</div>
+              <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
+                <For each={actorList}>
+                  {(actor) => (
+                    <option value={actor.id} selected={actor.id === formData.actorId}>
+                      {actor.name}
+                    </option>
+                  )}
+                </For>
+              </select>
+              <p />
+            </div>
+          </div>
+          <input id="TAB-03" type="radio" name="TAB" class="tab-switch" />
+          <label class="tab-label" for="TAB-03">
+            終わったら
+          </label>
+          <div class="tab-content">
+            <div>
+              <div>後続の仕事への接続条件を満たす・・・</div>
+              <div>
+                <input type="radio" id="splitOne" value="splitOne" name="splitRadio" />
+                <label for="splitOne">どれかひとつ</label>
+              </div>
+              <div>
+                <input type="radio" id="splitMany" value="splitMany" name="splitRadio" />
+                <label for="splitMany">すべて</label>
+              </div>
+              <div>に続く</div>
+            </div>
+          </div>
         </div>
+
         <div class="dialog__buttons">
           <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
             OK

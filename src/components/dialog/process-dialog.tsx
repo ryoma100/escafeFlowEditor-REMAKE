@@ -108,7 +108,7 @@ export function ProcessDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="dialog dialog--process" ref={dialogRef} onClose={handleClose}>
       <h5>ワークフロープロセスの編集</h5>
       <form method="dialog">
         <div class="dialog__input">

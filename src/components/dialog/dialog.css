@@ -1,8 +1,12 @@
 .dialog {
   box-sizing: content-box;
-  width: 500px;
+  width: 388px;
   padding: 0 8px 8px;
   background-color: lightgray;
+}
+
+.dialog--process {
+  width: 500px;
 }
 
 .dialog > form {
@@ -96,4 +100,46 @@
 
 .table__row--selected {
   background-color: var(--app-selected-color);
+}
+
+.tab-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tab-label {
+  order: -1;
+  padding: 0 12px;
+  margin-right: 5px;
+  background: lightgray;
+}
+
+.tab-content {
+  box-sizing: border-box;
+  display: none;
+  width: 100%;
+  height: 160px;
+  padding: 16px 0 0 8px;
+  border: solid 1px lightgray;
+}
+
+.tab-switch:checked + .tab-label {
+  background: var(--app-selected-color);
+}
+
+.tab-switch:checked + .tab-label + .tab-content {
+  display: block;
+}
+
+.tab-switch {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
