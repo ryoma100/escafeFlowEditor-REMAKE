@@ -49,7 +49,7 @@ export function ProcessList(): JSXElement {
                 onMouseDown={[handleItemMouseDown, it]}
                 onDblClick={handleItemDblClick}
               >
-                {it.name}
+                {it.detail.name}
               </li>
             )}
           </For>

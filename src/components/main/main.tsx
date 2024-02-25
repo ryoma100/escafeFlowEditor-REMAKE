@@ -23,7 +23,7 @@ export function Main(): JSXElement {
 
   return (
     <div class="main">
-      <h5>{selectedProcess().name}</h5>
+      <h5>{selectedProcess().detail.name}</h5>
       <div class="main__diagram">
         <DiagramContainer />
       </div>

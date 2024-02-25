@@ -1,7 +1,7 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
-import { createStore, produce, unwrap } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { IProcessDetailEntity } from "../../data-source/data-type";
+import { ProcessDetailEntity, ProcessEntity } from "../../data-source/data-type";
 import "./dialog.css";
 
 export function ProcessDialog(): JSXElement {
@@ -10,24 +10,15 @@ export function ProcessDialog(): JSXElement {
     dialog: { openProcessDialog, setOpenProcessDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<IProcessDetailEntity>(undefined as never);
+  let process: ProcessEntity | null = null;
+  const [formData, setFormData] = createStore<ProcessDetailEntity>(undefined as never);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
-    const process = openProcessDialog();
+    process = openProcessDialog();
     if (process != null) {
-      const cloneProcess: IProcessDetailEntity = {
-        id: process.id,
-        xpdlId: process.xpdlId,
-        name: process.name,
-        validFrom: process.validFrom,
-        validTo: process.validTo,
-        _lastEnvironmentId: process._lastEnvironmentId,
-        environments: process.environments.map((it) => ({ ...it, selected: false })),
-        _lastApplicationId: process._lastApplicationId,
-        applications: process.applications.map((it) => ({ ...it, selected: false })),
-      };
-      setFormData(cloneProcess);
+      const cloneDetail: ProcessDetailEntity = JSON.parse(JSON.stringify(process.detail));
+      setFormData(cloneDetail);
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -37,7 +28,7 @@ export function ProcessDialog(): JSXElement {
   function handleXpdlIdInput(e: InputEvent) {
     const text = (e.target as HTMLInputElement).value;
     setXpdlIdError(
-      processList().some((it) => it.id !== openProcessDialog()?.id && it.xpdlId === text)
+      processList().some((it) => it.id !== openProcessDialog()?.id && it.detail.xpdlId === text)
         ? "このIDは既に存在します"
         : "",
     );
@@ -69,13 +60,46 @@ export function ProcessDialog(): JSXElement {
     );
   }
 
+  function handleAppClick(id: number, _e: MouseEvent) {
+    setFormData(
+      "applications",
+      () => true,
+      produce((it) => {
+        it.selected = it.id === id;
+      }),
+    );
+  }
+
+  function handleAddAppButtonClick() {
+    const id = formData._lastApplicationId + 1;
+    setFormData("_lastApplicationId", id);
+    setFormData("applications", [
+      ...formData.applications,
+      {
+        id,
+        xpdlId: "", // TODO
+        name: "name",
+        value: "value",
+        extendedName: "",
+        extendedValue: "",
+        selected: false,
+      },
+    ]);
+  }
+
+  function handleRemoveAppButtonClick() {
+    setFormData(
+      "environments",
+      formData.environments.filter((it) => !it.selected),
+    );
+  }
+
   function handleOkButtonClick() {
-    updateProcessDetail({
-      ...formData,
-      environments: unwrap(formData.environments),
-      applications: unwrap(formData.applications),
-    });
-    setOpenProcessDialog(null);
+    if (process) {
+      const detail = JSON.parse(JSON.stringify(formData));
+      updateProcessDetail({ ...process, detail });
+      setOpenProcessDialog(null);
+    }
   }
 
   function handleClose() {
@@ -96,6 +120,7 @@ export function ProcessDialog(): JSXElement {
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
           <p>{xpdlIdError()}</p>
+
           <div>名前：</div>
           <input
             type="text"
@@ -104,10 +129,11 @@ export function ProcessDialog(): JSXElement {
           />
           <p />
         </div>
+
         <div>拡張設定：</div>
         <table class="table">
           <thead>
-            <tr>
+            <tr class="table--tr2">
               <td>名前</td>
               <td>値</td>
             </tr>
@@ -116,6 +142,7 @@ export function ProcessDialog(): JSXElement {
             <For each={formData.environments}>
               {(it, index) => (
                 <tr
+                  class="table--tr2"
                   onClick={[handleEnvClick, it.id]}
                   classList={{ "table__row--selected": it.selected }}
                 >
@@ -149,6 +176,93 @@ export function ProcessDialog(): JSXElement {
           <button type="button" onClick={handleRemoveEnvButtonClick}>
             削除
           </button>
+        </div>
+
+        <div>アプリケーション：</div>
+        <table class="table">
+          <thead>
+            <tr class="table--tr4">
+              <td>ID</td>
+              <td>名前</td>
+              <td>拡張名</td>
+              <td>拡張値</td>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={formData.applications}>
+              {(it, index) => (
+                <tr
+                  class="table--tr4"
+                  onClick={[handleAppClick, it.id]}
+                  classList={{ "table__row--selected": it.selected }}
+                >
+                  <td>
+                    <input
+                      type="text"
+                      value={it.name}
+                      onChange={(e) =>
+                        setFormData("applications", [index()], "name", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={it.value}
+                      onChange={(e) =>
+                        setFormData("applications", [index()], "value", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={it.extendedName}
+                      onChange={(e) =>
+                        setFormData("applications", [index()], "extendedName", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={it.extendedValue}
+                      onChange={(e) =>
+                        setFormData("applications", [index()], "extendedValue", e.target.value)
+                      }
+                    />
+                  </td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
+        <div class="table__buttons">
+          <button type="button" onClick={handleAddAppButtonClick}>
+            追加
+          </button>
+          <button type="button" onClick={handleRemoveAppButtonClick}>
+            削除
+          </button>
+        </div>
+
+        <div>有効期限</div>
+        <div class="dialog__input">
+          <div>From：</div>
+          <input
+            type="text"
+            value={formData.validFrom}
+            onChange={(e) => setFormData("validFrom", e.target.value)}
+          />
+          <div>入力例：2009/1/2</div>
+
+          <div>To：</div>
+          <input
+            type="text"
+            value={formData.validTo}
+            onChange={(e) => setFormData("validTo", e.target.value)}
+          />
+          <div>入力例：2009/1/2</div>
         </div>
 
         <div class="dialog__buttons">

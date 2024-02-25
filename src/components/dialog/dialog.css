@@ -1,4 +1,6 @@
 .dialog {
+  box-sizing: content-box;
+  width: 500px;
   padding: 0 8px 8px;
   background-color: lightgray;
 }
@@ -10,7 +12,7 @@
 
 .dialog__input {
   display: grid;
-  grid-template-columns: 64px 256px 64px;
+  grid-template-columns: 80px 220px 180px;
   gap: 8px;
 }
 
@@ -50,7 +52,7 @@
 }
 
 .table {
-  width: 400px;
+  width: 484px;
   border-collapse: collapse;
   border: 1px solid gray;
 }
@@ -67,13 +69,22 @@
   overflow: hidden scroll;
 }
 
-.table td {
-  width: 1%;
-  padding: 0 0 0 8px;
+.table--tr2 > td {
+  width: 240px;
+  padding-left: 4px;
 }
 
-.table input {
-  width: 170px;
+.table--tr2 input {
+  width: 220px;
+}
+
+.table--tr4 > td {
+  width: 120px;
+  padding-left: 4px;
+}
+
+.table--tr4 input {
+  width: 100px;
 }
 
 .table__buttons {

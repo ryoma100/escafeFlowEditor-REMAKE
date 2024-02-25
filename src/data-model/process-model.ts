@@ -1,6 +1,6 @@
 import { batch, createSignal } from "solid-js";
 import { dataFactory } from "../data-source/data-factory";
-import { IProcessDetailEntity, ProcessEntity, ProjectEntity } from "../data-source/data-type";
+import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
 import { makeOtherEdgeModel } from "./other-edge-model";
@@ -59,8 +59,8 @@ export function makeProcessModel(
     changeProcess(newProcess);
   }
 
-  function updateProcessDetail(process: IProcessDetailEntity) {
-    const newList = processList().map((it) => (process.id === it.id ? { ...it, ...process } : it));
+  function updateProcessDetail(process: ProcessEntity) {
+    const newList = processList().map((it) => (process.id === it.id ? process : it));
     setProcessList(newList);
     setSelectedProcess(newList.find((it) => it.id === process.id)!);
   }

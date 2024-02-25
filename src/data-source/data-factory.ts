@@ -7,6 +7,7 @@ import {
   CommentNode,
   EndEdge,
   EndNode,
+  ProcessDetailEntity,
   ProcessEntity,
   ProjectEntity,
   StartEdge,
@@ -32,13 +33,11 @@ function createProcess(project: ProjectEntity): ProcessEntity {
   do {
     id = ++project._lastProcessId;
     xpdlId = `${project.xpdlId}_wp${id}`;
-  } while (project.processes.some((it) => it.xpdlId === xpdlId));
+  } while (project.processes.some((it) => it.detail.xpdlId === xpdlId));
 
-  const process: ProcessEntity = {
-    id,
+  const detail: ProcessDetailEntity = {
     xpdlId,
     name: `プロセス${id}`,
-    created: new Date().toISOString(),
     validFrom: "",
     validTo: "",
 
@@ -47,6 +46,12 @@ function createProcess(project: ProjectEntity): ProcessEntity {
 
     _lastApplicationId: 0,
     applications: [],
+  };
+
+  const process: ProcessEntity = {
+    id,
+    created: new Date().toISOString(),
+    detail,
 
     _lastActorId: 0,
     actors: [],
@@ -68,7 +73,7 @@ function createActor(process: ProcessEntity): ActorEntity {
   let xpdlId = "";
   do {
     id = ++process._lastActorId;
-    xpdlId = `${process.xpdlId}_par${id}`;
+    xpdlId = `${process.detail.xpdlId}_par${id}`;
   } while (process.actors.some((it) => it.xpdlId === xpdlId));
 
   return {
@@ -87,7 +92,7 @@ function createActivity(
   let xpdlId = "";
   do {
     id = ++process._lastNodeId;
-    xpdlId = `${process.xpdlId}_act${id}`;
+    xpdlId = `${process.detail.xpdlId}_act${id}`;
   } while (process.activityNodes.some((it) => it.xpdlId === xpdlId));
 
   return {
@@ -116,7 +121,7 @@ function createTransition(
   let xpdlId = "";
   do {
     id = ++process._lastEdgeId;
-    xpdlId = `${process.xpdlId}_tra${id}`;
+    xpdlId = `${process.detail.xpdlId}_tra${id}`;
   } while (process.transitionEdges.some((it) => it.xpdlId === xpdlId));
 
   return {
