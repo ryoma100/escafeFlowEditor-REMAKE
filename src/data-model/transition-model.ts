@@ -20,8 +20,17 @@ export function makeTransitionModel(activityModel: ReturnType<typeof makeActivit
     const fromActivityId = activityModel.activityList.find((it) => it.selected)!.id;
     const transition = dataFactory.createTransition(process, fromActivityId, toActivityId);
     setTransitionList([...transitionList, transition]);
-    const proxyTransition = transitionList[transitionList.length - 1];
-    return proxyTransition;
+
+    activityModel.updateJoinType(
+      toActivityId,
+      transitionList.filter((it) => it.toActivityId === toActivityId).length,
+    );
+    activityModel.updateSplitType(
+      fromActivityId,
+      transitionList.filter((it) => it.fromActivityId === fromActivityId).length,
+    );
+
+    return transition;
   }
 
   return {

@@ -15,23 +15,13 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   const {
     activityModel: { layerTopActivity, resizeActivityHeight },
     actorModel: { actorList },
-    transitionModel: { addTransition, transitionList },
+    transitionModel: { addTransition },
     otherEdgeModel: { addCommentEdge, addStartEdge },
     baseNodeModel: { changeSelectNodes },
     baseEdgeModel: { changeSelectEdges },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
-
-  const joinType = () => {
-    const length = transitionList.filter((it) => it.toActivityId === props.activity.id).length;
-    return length > 1 ? "xorJoin" : length > 0 ? "oneJoin" : "notJoin";
-  };
-
-  const splitType = () => {
-    const length = transitionList.filter((it) => it.fromActivityId === props.activity.id).length;
-    return length > 1 ? "xorSplit" : length > 0 ? "oneSplit" : "notSplit";
-  };
 
   function handleLeftMouseDown(_e: MouseEvent) {
     changeSelectNodes("select", [props.activity.id]);
@@ -104,8 +94,8 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
         type={props.activity.type}
         name={props.activity.name}
         actorName={actorList.find((it) => it.id === props.activity.actorId)?.name ?? ""}
-        joinType={joinType()}
-        splitType={splitType()}
+        joinType={props.activity.joinType}
+        splitType={props.activity.splitType}
         selected={props.activity.selected}
         width={props.activity.width}
         onLeftMouseDown={handleLeftMouseDown}

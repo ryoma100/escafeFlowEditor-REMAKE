@@ -1,7 +1,12 @@
 import { createStore, produce } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import { dataFactory } from "../data-source/data-factory";
-import { ActivityNode, ActivityNodeType, ProcessEntity } from "../data-source/data-type";
+import {
+  ActivityNode,
+  ActivityNodeType,
+  ProcessEntity,
+  TransitionEdge,
+} from "../data-source/data-type";
 
 export function makeActivityModel() {
   let _process: ProcessEntity;
@@ -76,6 +81,61 @@ export function makeActivityModel() {
     );
   }
 
+  function updateJoinType(activityId: number, joinCount: number) {
+    setActivityList(
+      (it) => it.id === activityId,
+      produce((it) => {
+        switch (joinCount) {
+          case 0:
+            it.joinType = "notJoin";
+            break;
+          case 1:
+            it.joinType = "oneJoin";
+            break;
+          default:
+            if (it.joinType !== "andJoin") {
+              it.joinType = "xorJoin";
+            }
+            break;
+        }
+      }),
+    );
+  }
+
+  function updateSplitType(activityId: number, splitCount: number) {
+    setActivityList(
+      (it) => it.id === activityId,
+      produce((it) => {
+        switch (splitCount) {
+          case 0:
+            it.splitType = "notSplit";
+            break;
+          case 1:
+            it.splitType = "oneSplit";
+            break;
+          default:
+            if (it.splitType !== "andSplit") {
+              it.splitType = "xorSplit";
+            }
+            break;
+        }
+      }),
+    );
+  }
+
+  function updateAllJoinSplitType(transitions: TransitionEdge[]) {
+    activityList.forEach((activity) => {
+      updateJoinType(
+        activity.id,
+        transitions.filter((it) => it.toActivityId === activity.id).length,
+      );
+      updateSplitType(
+        activity.id,
+        transitions.filter((it) => it.fromActivityId === activity.id).length,
+      );
+    });
+  }
+
   return {
     load,
     save,
@@ -87,5 +147,8 @@ export function makeActivityModel() {
     resizeRight,
     layerTopActivity,
     getActivityNode,
+    updateJoinType,
+    updateSplitType,
+    updateAllJoinSplitType,
   };
 }

@@ -10,6 +10,8 @@ export function Menu(): JSXElement {
     actorModel: { addActor, removeSelectedActor, selectedActor },
     baseNodeModel: { changeSelectNodes, removeSelectedNodes, selectedNodes },
     baseEdgeModel: { removeSelectedEdge, selectedEdges },
+    activityModel: { updateAllJoinSplitType },
+    transitionModel: { transitionList },
     dialog: {
       setOpenProjectDialog,
       setOpenProcessDialog,
@@ -47,6 +49,7 @@ export function Menu(): JSXElement {
   function handleEditRemoveClick() {
     removeSelectedEdge();
     removeSelectedNodes();
+    updateAllJoinSplitType(transitionList);
     return false;
   }
 

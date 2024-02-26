@@ -118,7 +118,7 @@
   box-sizing: border-box;
   display: none;
   width: 100%;
-  height: 160px;
+  height: 280px;
   padding: 16px 0 0 8px;
   border: solid 1px lightgray;
 }
@@ -142,4 +142,8 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+.tab-content--disabled {
+  color: gray;
 }

@@ -1,6 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
-import { createStore, produce, unwrap } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNode } from "../../data-source/data-type";
 import {
@@ -27,8 +27,11 @@ export function ActivityDialog(): JSXElement {
   createEffect(() => {
     const activity = openActivityDialog();
     if (activity != null) {
-      setFormData({ ...unwrap(activity) });
+      setFormData(JSON.parse(JSON.stringify(activity)));
       dialogRef?.showModal();
+      if (radioTabCenterRef) {
+        radioTabCenterRef.checked = true;
+      }
     } else {
       dialogRef?.close();
     }
@@ -51,6 +54,8 @@ export function ActivityDialog(): JSXElement {
         it.type = formData.type;
         it.actorId = formData.actorId;
         it.name = formData.name;
+        it.joinType = formData.joinType;
+        it.splitType = formData.splitType;
       }),
     );
     setOpenActivityDialog(null);
@@ -61,6 +66,7 @@ export function ActivityDialog(): JSXElement {
   }
 
   let dialogRef: HTMLDialogElement | undefined;
+  let radioTabCenterRef: HTMLInputElement | undefined;
   return (
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>{t("editActivity")}</h5>
@@ -145,26 +151,55 @@ export function ActivityDialog(): JSXElement {
         </div>
 
         <div class="tab-wrap">
-          <input id="TAB-01" type="radio" name="TAB" class="tab-switch" />
-          <label class="tab-label" for="TAB-01">
+          <input id="tab-join" type="radio" name="tab-switch" class="tab-switch" />
+          <label class="tab-label" for="tab-join">
             はじまり
           </label>
-          <div class="tab-content">
+          <div
+            class="tab-content"
+            classList={{
+              "tab-content--disabled":
+                formData.joinType === "notJoin" || formData.joinType === "oneJoin",
+            }}
+          >
             <div>
               <div>前の仕事が・・・</div>
               <div>
-                <input type="radio" id="joinOne" value="joinOne" name="joinRadio" />
+                <input
+                  type="radio"
+                  id="joinOne"
+                  value="joinOne"
+                  name="joinRadio"
+                  disabled={formData.joinType === "notJoin" || formData.joinType === "oneJoin"}
+                  checked={formData.joinType === "xorJoin"}
+                  onChange={() => setFormData("joinType", "xorJoin")}
+                />
                 <label for="joinOne">ひとつでも終わったら</label>
               </div>
               <div>
-                <input type="radio" id="joinMany" value="joinMany" name="joinRadio" />
+                <input
+                  type="radio"
+                  id="joinMany"
+                  value="joinMany"
+                  name="joinRadio"
+                  disabled={formData.joinType === "notJoin" || formData.joinType === "oneJoin"}
+                  checked={formData.joinType === "andJoin"}
+                  onChange={() => setFormData("joinType", "andJoin")}
+                />
                 <label for="joinMany">すべて終わったら</label>
               </div>
               <div>この仕事を行う。</div>
             </div>
           </div>
-          <input id="TAB-02" type="radio" name="TAB" class="tab-switch" checked />
-          <label class="tab-label" for="TAB-02">
+
+          <input
+            id="tab-work"
+            type="radio"
+            name="tab-switch"
+            class="tab-switch"
+            ref={radioTabCenterRef}
+          />
+          <label class="tab-label" for="tab-work">
             仕事
           </label>
           <div class="tab-content">
@@ -197,19 +232,42 @@ export function ActivityDialog(): JSXElement {
               <p />
             </div>
           </div>
-          <input id="TAB-03" type="radio" name="TAB" class="tab-switch" />
-          <label class="tab-label" for="TAB-03">
+
+          <input id="tab-split" type="radio" name="tab-switch" class="tab-switch" />
+          <label class="tab-label" for="tab-split">
             終わったら
           </label>
-          <div class="tab-content">
+          <div
+            class="tab-content"
+            classList={{
+              "tab-content--disabled":
+                formData.splitType === "notSplit" || formData.splitType === "oneSplit",
+            }}
+          >
             <div>
               <div>後続の仕事への接続条件を満たす・・・</div>
               <div>
-                <input type="radio" id="splitOne" value="splitOne" name="splitRadio" />
+                <input
+                  type="radio"
+                  id="splitOne"
+                  value="splitOne"
+                  name="splitRadio"
+                  disabled={formData.splitType === "notSplit" || formData.splitType === "oneSplit"}
+                  checked={formData.splitType === "xorSplit"}
+                  onChange={() => setFormData("splitType", "xorSplit")}
+                />
                 <label for="splitOne">どれかひとつ</label>
               </div>
               <div>
-                <input type="radio" id="splitMany" value="splitMany" name="splitRadio" />
+                <input
+                  type="radio"
+                  id="splitMany"
+                  value="splitMany"
+                  name="splitRadio"
+                  disabled={formData.splitType === "notSplit" || formData.splitType === "oneSplit"}
+                  checked={formData.splitType === "andSplit"}
+                  onChange={() => setFormData("splitType", "andSplit")}
+                />
                 <label for="splitMany">すべて</label>
               </div>
               <div>に続く</div>
