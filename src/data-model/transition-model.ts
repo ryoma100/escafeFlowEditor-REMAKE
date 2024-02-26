@@ -16,11 +16,21 @@ export function makeTransitionModel(activityModel: ReturnType<typeof makeActivit
     process.transitionEdges = [...transitionList];
   }
 
-  function addTransition(toActivityId: number): TransitionEdge {
+  function addTransition(toActivityId: number): TransitionEdge | null {
     const fromActivityId = activityModel.activityList.find((it) => it.selected)!.id;
+
+    // Exclude duplicate transitions
+    if (
+      fromActivityId === toActivityId ||
+      transitionList.find((it) => it.fromActivityId === fromActivityId)?.toActivityId ===
+        toActivityId ||
+      transitionList.find((it) => it.toActivityId === toActivityId)?.fromActivityId ===
+        fromActivityId
+    )
+      return null;
+
     const transition = dataFactory.createTransition(process, fromActivityId, toActivityId);
     setTransitionList([...transitionList, transition]);
-
     activityModel.updateJoinType(
       toActivityId,
       transitionList.filter((it) => it.toActivityId === toActivityId).length,
