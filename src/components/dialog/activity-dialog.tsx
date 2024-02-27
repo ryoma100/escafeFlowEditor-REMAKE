@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { For, JSXElement, createEffect, createSignal } from "solid-js";
+import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNode } from "../../data-source/data-type";
@@ -203,7 +203,7 @@ export function ActivityDialog(): JSXElement {
             仕事
           </label>
           <div class="tab-content">
-            <div class="dialog__input">
+            <div class="dialog__activity-input">
               <div>ID</div>
               <input
                 type="text"
@@ -211,7 +211,6 @@ export function ActivityDialog(): JSXElement {
                 onInput={handleXpdlIdInput}
                 onChange={(e) => setFormData("xpdlId", e.target.value)}
               />
-              <div>{xpdlIdError()}</div>
 
               <div>{t("jobTitle")}</div>
               <input
@@ -219,7 +218,6 @@ export function ActivityDialog(): JSXElement {
                 value={formData.name}
                 onChange={(e) => setFormData("name", e.target.value)}
               />
-              <div />
 
               <div>{t("actor")}</div>
               <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
@@ -231,11 +229,28 @@ export function ActivityDialog(): JSXElement {
                   )}
                 </For>
               </select>
-              <div />
 
-              <div>OGNL</div>
-
-              <div />
+              <Switch>
+                <Match when={formData.type === "autoActivity"}>
+                  <div>処理内容 (OGNL)</div>
+                  <div class="dialog__auto-activity-ognl-box">
+                    <select>
+                      <option>aaa</option>
+                    </select>
+                    <textarea />
+                  </div>
+                </Match>
+                <Match
+                  when={
+                    formData.type === "manualTimerActivity" || formData.type === "autoTimerActivity"
+                  }
+                >
+                  <div>自動で実行するのはいつ？ (OGNL)</div>
+                  <div class="dialog__timer-activity-ognl-box">
+                    <textarea />
+                  </div>
+                </Match>
+              </Switch>
             </div>
           </div>
 
