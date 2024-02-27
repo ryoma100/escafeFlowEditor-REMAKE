@@ -56,7 +56,6 @@ export type ApplicationEntity = {
   id: number;
   xpdlId: string;
   name: string;
-  value: string;
   extendedName: string;
   extendedValue: string;
   selected: boolean;
@@ -91,6 +90,10 @@ export type ActivityNode = INode & {
   xpdlId: string;
   actorId: number;
   name: string;
+  tools: {
+    xpdlId: string;
+    ognl: string;
+  }[];
   ognl: string;
   joinType: JoinType;
   splitType: SplitType;

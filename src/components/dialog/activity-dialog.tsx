@@ -211,14 +211,16 @@ export function ActivityDialog(): JSXElement {
                 onInput={handleXpdlIdInput}
                 onChange={(e) => setFormData("xpdlId", e.target.value)}
               />
-              <p>{xpdlIdError()}</p>
+              <div>{xpdlIdError()}</div>
+
               <div>{t("jobTitle")}</div>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData("name", e.target.value)}
               />
-              <p />
+              <div />
+
               <div>{t("actor")}</div>
               <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
                 <For each={actorList}>
@@ -229,7 +231,11 @@ export function ActivityDialog(): JSXElement {
                   )}
                 </For>
               </select>
-              <p />
+              <div />
+
+              <div>OGNL</div>
+
+              <div />
             </div>
           </div>
 

@@ -7,7 +7,7 @@ import "./dialog.css";
 export function ProcessDialog(): JSXElement {
   const {
     processModel: { updateProcessDetail, processList },
-    dialog: { openProcessDialog, setOpenProcessDialog },
+    dialog: { openProcessDialog, setOpenProcessDialog, setOpenMessageDialog },
   } = useAppContext();
 
   let process: ProcessEntity | null = null;
@@ -46,10 +46,11 @@ export function ProcessDialog(): JSXElement {
 
   function handleAddEnvButtonClick() {
     const id = formData._lastEnvironmentId + 1;
+    9;
     setFormData("_lastEnvironmentId", id);
     setFormData("environments", [
       ...formData.environments,
-      { id, name: "name", value: "value", selected: false },
+      { id, name: `name${id}`, value: `value${id}`, selected: false },
     ]);
   }
 
@@ -77,9 +78,8 @@ export function ProcessDialog(): JSXElement {
       ...formData.applications,
       {
         id,
-        xpdlId: "", // TODO
-        name: "name",
-        value: "value",
+        xpdlId: `xpdlId${id}`,
+        name: `name${id}`,
         extendedName: "",
         extendedValue: "",
         selected: false,
@@ -95,6 +95,13 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleOkButtonClick() {
+    if (
+      new Set(formData.applications.map((it) => it.xpdlId)).size !== formData.applications.length
+    ) {
+      setOpenMessageDialog("duplicateApplicationId");
+      return;
+    }
+
     if (process) {
       const detail = JSON.parse(JSON.stringify(formData));
       updateProcessDetail({ ...process, detail });
@@ -199,18 +206,18 @@ export function ProcessDialog(): JSXElement {
                   <td>
                     <input
                       type="text"
-                      value={it.name}
+                      value={it.xpdlId}
                       onChange={(e) =>
-                        setFormData("applications", [index()], "name", e.target.value)
+                        setFormData("applications", [index()], "xpdlId", e.target.value)
                       }
                     />
                   </td>
                   <td>
                     <input
                       type="text"
-                      value={it.value}
+                      value={it.name}
                       onChange={(e) =>
-                        setFormData("applications", [index()], "value", e.target.value)
+                        setFormData("applications", [index()], "name", e.target.value)
                       }
                     />
                   </td>

@@ -101,6 +101,7 @@ function createActivity(
     type,
     name: "",
     actorId,
+    tools: [],
     ognl: "",
     joinType: "notJoin",
     splitType: "notSplit",
