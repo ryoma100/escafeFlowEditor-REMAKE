@@ -159,7 +159,7 @@
   flex-direction: column;
   width: 270px;
   height: 160px;
-  border: solid 1px gray;
+  border: solid 1px lightgray;
 }
 
 .dialog__auto-activity-ognl-box > select {
