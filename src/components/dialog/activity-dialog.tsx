@@ -14,6 +14,7 @@ import "./dialog.css";
 
 export function ActivityDialog(): JSXElement {
   const {
+    processModel: { selectedProcess },
     actorModel: { actorList },
     activityModel: { activityList, setActivityList },
     dialog: { openActivityDialog, setOpenActivityDialog },
@@ -27,7 +28,13 @@ export function ActivityDialog(): JSXElement {
   createEffect(() => {
     const activity = openActivityDialog();
     if (activity != null) {
-      setFormData(JSON.parse(JSON.stringify(activity)));
+      const cloneActivity: ActivityNode = JSON.parse(JSON.stringify(activity));
+      cloneActivity.applications = selectedProcess().detail.applications.map((app) => ({
+        id: app.id,
+        ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
+      }));
+      setFormData(cloneActivity);
+
       dialogRef?.showModal();
       if (radioTabCenterRef) {
         radioTabCenterRef.checked = true;
@@ -235,7 +242,9 @@ export function ActivityDialog(): JSXElement {
                   <div>処理内容 (OGNL)</div>
                   <div class="dialog__auto-activity-ognl-box">
                     <select>
-                      <option>aaa</option>
+                      <For each={selectedProcess().detail.applications}>
+                        {(app) => <option>{`${app.name} (${app.xpdlId})`}</option>}
+                      </For>
                     </select>
                     <textarea />
                   </div>

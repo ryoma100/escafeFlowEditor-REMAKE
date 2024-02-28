@@ -90,8 +90,8 @@ export type ActivityNode = INode & {
   xpdlId: string;
   actorId: number;
   name: string;
-  tools: {
-    xpdlId: string;
+  applications: {
+    id: number;
     ognl: string;
   }[];
   ognl: string;
