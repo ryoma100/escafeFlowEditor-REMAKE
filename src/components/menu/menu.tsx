@@ -6,7 +6,7 @@ import "./menu.css";
 export function Menu(): JSXElement {
   const {
     projectModel: { project },
-    processModel: { addProcess, removeSelectedProcess, selectedProcess },
+    processModel: { addProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     baseNodeModel: { changeSelectNodes, removeSelectedNodes, selectedNodes },
     baseEdgeModel: { removeSelectedEdge, selectedEdges },
@@ -21,14 +21,14 @@ export function Menu(): JSXElement {
       setOpenTransitionDialog,
       setOpenMessageDialog,
       setOpenAboutDialog,
-      setOpenInitDialog,
+      setOpenConfirmDialog,
     },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {
-    setOpenInitDialog(true);
+    setOpenConfirmDialog("initAll");
     return false;
   }
 
@@ -91,7 +91,7 @@ export function Menu(): JSXElement {
   }
 
   function handleProcessRemoveClick() {
-    removeSelectedProcess();
+    setOpenConfirmDialog("deleteProcess");
     return false;
   }
 

@@ -6,14 +6,8 @@ import "./list.css";
 
 export function ProcessList(): JSXElement {
   const {
-    processModel: {
-      processList,
-      selectedProcess,
-      addProcess,
-      removeSelectedProcess,
-      changeProcess,
-    },
-    dialog: { setOpenProcessDialog },
+    processModel: { processList, selectedProcess, addProcess, changeProcess },
+    dialog: { setOpenProcessDialog, setOpenConfirmDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -31,7 +25,7 @@ export function ProcessList(): JSXElement {
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    removeSelectedProcess();
+    setOpenConfirmDialog("deleteProcess");
   }
 
   return (

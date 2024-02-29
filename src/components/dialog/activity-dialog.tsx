@@ -260,7 +260,9 @@ export function ActivityDialog(): JSXElement {
                     </select>
                     <textarea
                       disabled={selectedAppIndex() < 0}
-                      value={formData.applications[selectedAppIndex()]?.ognl ?? "nothing"}
+                      value={
+                        formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")
+                      }
                       onChange={(e) =>
                         setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)
                       }

@@ -4,7 +4,7 @@ import { AboutDialog } from "./components/dialog/about-dialog";
 import { ActivityDialog } from "./components/dialog/activity-dialog";
 import { ActorDialog } from "./components/dialog/actor-dialog";
 import { CommentDialog } from "./components/dialog/comment-dialog";
-import { InitDialog } from "./components/dialog/init-dialog";
+import { ConfirmDialog } from "./components/dialog/confirm-dialog";
 import { MessageDialog } from "./components/dialog/message-dialog";
 import { ProcessDialog } from "./components/dialog/process-dialog";
 import { ProjectDialog } from "./components/dialog/project-dialog";
@@ -46,7 +46,7 @@ function App(): JSXElement {
       <SaveDialog />
       <MessageDialog />
       <AboutDialog />
-      <InitDialog />
+      <ConfirmDialog />
     </>
   );
 }

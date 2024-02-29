@@ -70,7 +70,9 @@ function makeDialogContext() {
   const [openSaveDialog, setOpenSaveDialog] = createSignal<ProjectEntity | null>(null);
   const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
   const [openAboutDialog, setOpenAboutDialog] = createSignal<boolean>(false);
-  const [openInitDialog, setOpenInitDialog] = createSignal<boolean>(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = createSignal<
+    "initAll" | "deleteProcess" | null
+  >(null);
 
   return {
     openProjectDialog,
@@ -91,8 +93,8 @@ function makeDialogContext() {
     setOpenMessageDialog,
     openAboutDialog,
     setOpenAboutDialog,
-    openInitDialog,
-    setOpenInitDialog,
+    openConfirmDialog,
+    setOpenConfirmDialog,
   };
 }
 

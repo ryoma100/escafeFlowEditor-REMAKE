@@ -29,9 +29,11 @@ export const jaDict: typeof enDict = {
 
   idExists: "このIDは既に存在します。",
   actorCannotDelete: "このアクアーの仕事が残っているので、削除できません。",
-  initConfirm: "全てを削除します。よろしいですか？",
+  initAllConfirm: "全てを削除します。よろしいですか？",
+  deleteProcessConfirm: "このプロセスを削除します。よろしいですか？",
   duplicateApplicationId: "ApplicationのIDは重複しないようにして下さい。",
   applicationCannotDelete: "このアプリケーションは既に使われているので、削除できません。",
+  registerProcessApp: "プロセスのアプリケーションを登録して下さい。",
 
   editActivity: "仕事の編集",
   jobTitle: "仕事名",

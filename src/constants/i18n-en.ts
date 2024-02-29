@@ -27,9 +27,11 @@ export const enDict = {
 
   idExists: "This ID already exists.",
   actorCannotDelete: "This actor has work to do and cannot be removed.",
-  initConfirm: "Delete all. Are you sure?",
+  initAllConfirm: "Delete all. Are you sure?",
+  deleteProcessConfirm: "Delete this process. Are you sure?",
   duplicateApplicationId: "Please do not duplicate Application IDs.",
   applicationCannotDelete: "This Application is already in use and cannot be removed.",
+  registerProcessApp: "Register process application.",
 
   editActivity: "Job Editing",
   jobTitle: "Job Title",
