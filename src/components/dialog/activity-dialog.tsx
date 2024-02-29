@@ -17,14 +17,13 @@ export function ActivityDialog(): JSXElement {
     processModel: { selectedProcess },
     actorModel: { actorList },
     activityModel: { activityList, setActivityList },
-    dialog: { openActivityDialog, setOpenActivityDialog },
+    dialog: { openActivityDialog, setOpenActivityDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
 
   const [formData, setFormData] = createStore<ActivityNode>(undefined as never);
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
-  const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
     const activity = openActivityDialog();
@@ -46,16 +45,12 @@ export function ActivityDialog(): JSXElement {
     }
   });
 
-  function handleXpdlIdInput(e: InputEvent) {
-    const text = (e.target as HTMLInputElement).value;
-    setXpdlIdError(
-      activityList.some((it) => it.id !== openActivityDialog()?.id && it.xpdlId === text)
-        ? t("idExists")
-        : "",
-    );
-  }
-
   function handleOkButtonClick() {
+    if (activityList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
+      setOpenMessageDialog("idExists");
+      return;
+    }
+
     setActivityList(
       (it) => it.id === openActivityDialog()?.id,
       produce((it) => {
@@ -63,9 +58,16 @@ export function ActivityDialog(): JSXElement {
         it.type = formData.type;
         it.actorId = formData.actorId;
         it.name = formData.name;
+        it.applications =
+          formData.type === "autoActivity"
+            ? formData.applications.filter((it) => it.ognl !== "")
+            : [];
+        it.ognl =
+          formData.type === "manualTimerActivity" || formData.type === "autoTimerActivity"
+            ? formData.ognl
+            : "";
         it.joinType = formData.joinType;
         it.splitType = formData.splitType;
-        it.applications = formData.applications;
       }),
     );
     setOpenActivityDialog(null);
@@ -218,7 +220,6 @@ export function ActivityDialog(): JSXElement {
               <input
                 type="text"
                 value={formData.xpdlId}
-                onInput={handleXpdlIdInput}
                 onChange={(e) => setFormData("xpdlId", e.target.value)}
               />
 
@@ -260,7 +261,7 @@ export function ActivityDialog(): JSXElement {
                     <textarea
                       disabled={selectedAppIndex() < 0}
                       value={formData.applications[selectedAppIndex()]?.ognl ?? "nothing"}
-                      onInput={(e) =>
+                      onChange={(e) =>
                         setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)
                       }
                     />
@@ -273,7 +274,10 @@ export function ActivityDialog(): JSXElement {
                 >
                   <div>自動で実行するのはいつ？ (OGNL)</div>
                   <div class="dialog__timer-activity-ognl-box">
-                    <textarea />
+                    <textarea
+                      value={formData.ognl}
+                      onChange={(e) => setFormData("ognl", e.target.value)}
+                    />
                   </div>
                 </Match>
               </Switch>
@@ -323,7 +327,7 @@ export function ActivityDialog(): JSXElement {
         </div>
 
         <div class="dialog__buttons">
-          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
+          <button type="button" onClick={handleOkButtonClick}>
             OK
           </button>
           <button type="button" onClick={handleClose}>

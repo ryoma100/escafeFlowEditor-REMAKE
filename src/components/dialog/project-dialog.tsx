@@ -36,21 +36,19 @@ export function ProjectDialog(): JSXElement {
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>パッケージの編集</h5>
       <form method="dialog">
-        <div class="dialog__input">
+        <div class="dialog__activity-input">
           <div>ID：</div>
           <input
             type="text"
             value={formData.xpdlId}
             onInput={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <div />
           <div>名前：</div>
           <input
             type="text"
             value={formData.name}
             onInput={(e) => setFormData("name", e.target.value)}
           />
-          <div />
         </div>
         <div class="dialog__buttons">
           <button type="button" onClick={handleOkButtonClick}>

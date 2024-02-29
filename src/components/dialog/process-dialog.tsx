@@ -7,6 +7,7 @@ import "./dialog.css";
 export function ProcessDialog(): JSXElement {
   const {
     processModel: { updateProcessDetail, processList },
+    activityModel: { activityList },
     dialog: { openProcessDialog, setOpenProcessDialog, setOpenMessageDialog },
   } = useAppContext();
 
@@ -88,6 +89,18 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleRemoveAppButtonClick() {
+    const selectedApp = formData.applications.find((it) => it.selected);
+    if (selectedApp) {
+      if (
+        activityList.some((activity) =>
+          activity.applications.some((app) => app.id === selectedApp.id),
+        )
+      ) {
+        setOpenMessageDialog("applicationCannotDelete");
+        return;
+      }
+    }
+
     setFormData(
       "applications",
       formData.applications.filter((it) => !it.selected),

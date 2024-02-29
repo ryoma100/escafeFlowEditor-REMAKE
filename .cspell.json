@@ -23,6 +23,7 @@
     "solidjs",
     "stylelint",
     "tauri",
+    "textareas",
     "VITE"
   ],
   // flagWords - list of words to be always considered incorrect

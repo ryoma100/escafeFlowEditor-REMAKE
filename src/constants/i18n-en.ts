@@ -29,6 +29,7 @@ export const enDict = {
   actorCannotDelete: "This actor has work to do and cannot be removed.",
   initConfirm: "Delete all. Are you sure?",
   duplicateApplicationId: "Please do not duplicate Application IDs.",
+  applicationCannotDelete: "This Application is already in use and cannot be removed.",
 
   editActivity: "Job Editing",
   jobTitle: "Job Title",

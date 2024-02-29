@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSXElement, createEffect, createSignal } from "solid-js";
+import { JSXElement, createEffect } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { TransitionEdge } from "../../data-source/data-type";
@@ -7,13 +7,12 @@ import { TransitionEdge } from "../../data-source/data-type";
 export function TransitionDialog(): JSXElement {
   const {
     transitionModel: { transitionList, setTransitionList },
-    dialog: { openTransitionDialog, setOpenTransitionDialog },
+    dialog: { openTransitionDialog, setOpenTransitionDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
 
   const [formData, setFormData] = createStore<TransitionEdge>(undefined as never);
-  const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
     const transition = openTransitionDialog();
@@ -26,6 +25,11 @@ export function TransitionDialog(): JSXElement {
   });
 
   function handleOkButtonClick(_e: MouseEvent) {
+    if (transitionList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
+      setOpenMessageDialog("idExists");
+      return;
+    }
+
     setTransitionList(
       (it) => it.id === openTransitionDialog()?.id,
       produce((it) => {
@@ -33,15 +37,6 @@ export function TransitionDialog(): JSXElement {
       }),
     );
     setOpenTransitionDialog(null);
-  }
-
-  function handleXpdlIdInput(e: InputEvent) {
-    const text = (e.target as HTMLInputElement).value;
-    setXpdlIdError(
-      transitionList.some((it) => it.id !== openTransitionDialog()?.id && it.xpdlId === text)
-        ? t("idExists")
-        : "",
-    );
   }
 
   function handleClose() {
@@ -53,18 +48,16 @@ export function TransitionDialog(): JSXElement {
     <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
       <h5>{t("editTransition")}</h5>
       <form method="dialog">
-        <div class="dialog__input">
+        <div class="dialog__activity-input">
           <div>ID：</div>
           <input
             type="text"
             value={formData.xpdlId}
-            onInput={handleXpdlIdInput}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <p>{xpdlIdError()}</p>
         </div>
         <div class="dialog__buttons">
-          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
+          <button type="button" onClick={handleOkButtonClick}>
             OK
           </button>
           <button type="button" onClick={handleClose}>
