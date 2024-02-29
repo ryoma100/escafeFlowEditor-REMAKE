@@ -23,6 +23,7 @@ export function ActivityDialog(): JSXElement {
   const t = i18n.translator(dict);
 
   const [formData, setFormData] = createStore<ActivityNode>(undefined as never);
+  const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
   const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
@@ -34,6 +35,7 @@ export function ActivityDialog(): JSXElement {
         ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
       }));
       setFormData(cloneActivity);
+      setSelectedAppIndex(cloneActivity.applications.length > 0 ? 0 : -1);
 
       dialogRef?.showModal();
       if (radioTabCenterRef) {
@@ -63,6 +65,7 @@ export function ActivityDialog(): JSXElement {
         it.name = formData.name;
         it.joinType = formData.joinType;
         it.splitType = formData.splitType;
+        it.applications = formData.applications;
       }),
     );
     setOpenActivityDialog(null);
@@ -241,12 +244,26 @@ export function ActivityDialog(): JSXElement {
                 <Match when={formData.type === "autoActivity"}>
                   <div>処理内容 (OGNL)</div>
                   <div class="dialog__auto-activity-ognl-box">
-                    <select>
+                    <select
+                      disabled={selectedAppIndex() < 0}
+                      value={selectedAppIndex()}
+                      onChange={(e) => {
+                        setSelectedAppIndex(Number(e.target.value));
+                      }}
+                    >
                       <For each={selectedProcess().detail.applications}>
-                        {(app) => <option>{`${app.name} (${app.xpdlId})`}</option>}
+                        {(app, index) => (
+                          <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>
+                        )}
                       </For>
                     </select>
-                    <textarea />
+                    <textarea
+                      disabled={selectedAppIndex() < 0}
+                      value={formData.applications[selectedAppIndex()]?.ognl ?? "nothing"}
+                      onInput={(e) =>
+                        setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)
+                      }
+                    />
                   </div>
                 </Match>
                 <Match

@@ -89,8 +89,8 @@ export function ProcessDialog(): JSXElement {
 
   function handleRemoveAppButtonClick() {
     setFormData(
-      "environments",
-      formData.environments.filter((it) => !it.selected),
+      "applications",
+      formData.applications.filter((it) => !it.selected),
     );
   }
 
