@@ -1,7 +1,6 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ActivityNodeContainer } from "./activity-node";
-import "./diagram.css";
 import { OtherEdgeContainer } from "./other-edge";
 import { OtherNodeContainer } from "./other-node";
 import { TransitionEdgeContainer } from "./transition-edge";
@@ -195,8 +194,9 @@ export function DiagramContainer(): JSXElement {
 
   let diagram: HTMLDivElement | undefined;
   return (
-    <div class="diagram" ref={diagram}>
+    <div class="relative h-full w-full" ref={diagram}>
       <svg
+        class="absolute inset-0 h-full w-full"
         width={svgRect.width}
         height={svgRect.height}
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
@@ -237,7 +237,7 @@ export function DiagramContainer(): JSXElement {
             }
           >
             <line
-              class="adding-line"
+              class="pointer-events-none fill-none stroke-black stroke-2"
               x1={addingLine().fromX}
               y1={addingLine().fromY}
               x2={addingLine().toX}

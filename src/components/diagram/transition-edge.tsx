@@ -1,7 +1,6 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { TransitionEdge } from "../../data-source/data-type";
-import "./transition-edge.css";
 
 export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
   const {
@@ -33,7 +32,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
   return (
     <>
       <line
-        class="transition"
+        class="fill-none stroke-gray-500 stroke-1 [vector-effect:non-scaling-stroke]"
         x1={fromActivity().x + fromActivity().width}
         y1={fromActivity().y + fromActivity().height / 2}
         x2={toActivity().x}
@@ -41,8 +40,13 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
         marker-end="url(#arrow-end)"
       />
       <line
-        class="transition--hover"
-        classList={{ "transition--selected": props.transition.selected }}
+        data-select={props.transition.selected}
+        class="
+          fill-none stroke-transparent stroke-[5]
+          hover:cursor-pointer hover:stroke-primary2
+          data-[select=true]:fill-none
+          data-[select=true]:stroke-primary1
+          data-[select=true]:stroke-[5]"
         onDblClick={handleDlbClick}
         onMouseDown={handleMouseDown}
         x1={fromActivity().x + fromActivity().width}

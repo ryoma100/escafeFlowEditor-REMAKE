@@ -2,7 +2,6 @@ import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProcessDetailEntity, ProcessEntity } from "../../data-source/data-type";
-import "./dialog.css";
 
 export function ProcessDialog(): JSXElement {
   const {
@@ -128,10 +127,10 @@ export function ProcessDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog dialog--process" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[512px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
       <h5>ワークフロープロセスの編集</h5>
       <form method="dialog">
-        <div class="dialog__input">
+        <div class="grid grid-cols-[80px_220px_180px]">
           <div>ID：</div>
           <input
             type="text"
@@ -151,23 +150,20 @@ export function ProcessDialog(): JSXElement {
         </div>
 
         <div>拡張設定：</div>
-        <table class="table">
-          <thead>
-            <tr class="table--tr2">
-              <td>名前</td>
-              <td>値</td>
+        <table class="w-[484px] border-collapse border border-solid border-gray-500 bg-white">
+          <thead class="block bg-gray-300 pr-4">
+            <tr>
+              <td class="w-[240px] pl-1">名前</td>
+              <td class="w-[240px] pl-1">値</td>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="block h-[88px] overflow-x-hidden overflow-y-scroll">
             <For each={formData.environments}>
               {(it, index) => (
-                <tr
-                  class="table--tr2"
-                  onClick={[handleEnvClick, it.id]}
-                  classList={{ "table__row--selected": it.selected }}
-                >
-                  <td>
+                <tr onClick={[handleEnvClick, it.id]} classList={{ "bg-primary1": it.selected }}>
+                  <td class="w-[240px] pl-1">
                     <input
+                      class="w-[220px]"
                       type="text"
                       value={it.name}
                       onChange={(e) =>
@@ -175,8 +171,9 @@ export function ProcessDialog(): JSXElement {
                       }
                     />
                   </td>
-                  <td>
+                  <td class="w-[240px] pl-1">
                     <input
+                      class="w-[220px]"
                       type="text"
                       value={it.value}
                       onChange={(e) =>
@@ -189,7 +186,7 @@ export function ProcessDialog(): JSXElement {
             </For>
           </tbody>
         </table>
-        <div class="table__buttons">
+        <div class="mt-2 flex justify-end gap-x-2">
           <button type="button" onClick={handleAddEnvButtonClick}>
             追加
           </button>
@@ -199,25 +196,22 @@ export function ProcessDialog(): JSXElement {
         </div>
 
         <div>アプリケーション：</div>
-        <table class="table">
-          <thead>
-            <tr class="table--tr4">
-              <td>ID</td>
-              <td>名前</td>
-              <td>拡張名</td>
-              <td>拡張値</td>
+        <table class="w-[484px] border-collapse border border-solid border-gray-500 bg-white">
+          <thead class="block bg-gray-300 pr-4">
+            <tr>
+              <td class="w-[120px] pl-1">ID</td>
+              <td class="w-[120px] pl-1">名前</td>
+              <td class="w-[120px] pl-1">拡張名</td>
+              <td class="w-[120px] pl-1">拡張値</td>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="block h-[88px] overflow-x-hidden overflow-y-scroll">
             <For each={formData.applications}>
               {(it, index) => (
-                <tr
-                  class="table--tr4"
-                  onClick={[handleAppClick, it.id]}
-                  classList={{ "table__row--selected": it.selected }}
-                >
-                  <td>
+                <tr onClick={[handleAppClick, it.id]} classList={{ "bg-primary1": it.selected }}>
+                  <td class="w-[120px] pl-1">
                     <input
+                      class="w-[100px]"
                       type="text"
                       value={it.xpdlId}
                       onChange={(e) =>
@@ -225,8 +219,9 @@ export function ProcessDialog(): JSXElement {
                       }
                     />
                   </td>
-                  <td>
+                  <td class="w-[120px] pl-1">
                     <input
+                      class="w-[100px]"
                       type="text"
                       value={it.name}
                       onChange={(e) =>
@@ -234,8 +229,9 @@ export function ProcessDialog(): JSXElement {
                       }
                     />
                   </td>
-                  <td>
+                  <td class="w-[120px] pl-1">
                     <input
+                      class="w-[100px]"
                       type="text"
                       value={it.extendedName}
                       onChange={(e) =>
@@ -243,8 +239,9 @@ export function ProcessDialog(): JSXElement {
                       }
                     />
                   </td>
-                  <td>
+                  <td class="w-[120px] pl-1">
                     <input
+                      class="w-[100px]"
                       type="text"
                       value={it.extendedValue}
                       onChange={(e) =>
@@ -257,7 +254,7 @@ export function ProcessDialog(): JSXElement {
             </For>
           </tbody>
         </table>
-        <div class="table__buttons">
+        <div class="mt-2 flex justify-end gap-x-2">
           <button type="button" onClick={handleAddAppButtonClick}>
             追加
           </button>
@@ -267,7 +264,7 @@ export function ProcessDialog(): JSXElement {
         </div>
 
         <div>有効期限</div>
-        <div class="dialog__input">
+        <div class="grid grid-cols-[80px_220px_180px] gap-x-2">
           <div>From：</div>
           <input
             type="text"
@@ -285,7 +282,7 @@ export function ProcessDialog(): JSXElement {
           <div>入力例：2009/1/2</div>
         </div>
 
-        <div class="dialog__buttons">
+        <div class="mt-4 flex justify-center gap-x-2">
           <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
             OK
           </button>

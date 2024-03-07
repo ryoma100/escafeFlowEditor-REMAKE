@@ -2,7 +2,6 @@ import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProjectEntity } from "../../data-source/data-type";
-import "./dialog.css";
 
 export function ProjectDialog(): JSXElement {
   const {
@@ -33,10 +32,10 @@ export function ProjectDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
       <h5>パッケージの編集</h5>
-      <form method="dialog">
-        <div class="dialog__activity-input">
+      <form method="dialog" class="bg-white">
+        <div class="grid grid-cols-[72px_272px] gap-x-2">
           <div>ID：</div>
           <input
             type="text"
@@ -50,7 +49,7 @@ export function ProjectDialog(): JSXElement {
             onInput={(e) => setFormData("name", e.target.value)}
           />
         </div>
-        <div class="dialog__buttons">
+        <div class="mt-4 flex justify-center gap-x-2">
           <button type="button" onClick={handleOkButtonClick}>
             OK
           </button>

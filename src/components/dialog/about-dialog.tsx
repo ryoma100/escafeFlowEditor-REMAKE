@@ -20,9 +20,9 @@ export function AboutDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-96 bg-gray-300 px-2 py-1" ref={dialogRef} onClose={handleClose}>
       <h5>tiny esFlow Diagram Editor</h5>
-      <form>
+      <form class="my-1 bg-white p-2">
         <div>version: 0.1 beta</div>
         <div>author: Ryouichi Matsuda</div>
         <div>
@@ -33,7 +33,7 @@ export function AboutDialog(): JSXElement {
         </div>
       </form>
 
-      <div class="dialog__buttons">
+      <div class="my-2 flex justify-center">
         <button type="button" onClick={handleClose}>
           OK
         </button>

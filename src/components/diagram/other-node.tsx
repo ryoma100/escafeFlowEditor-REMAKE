@@ -2,7 +2,6 @@ import { JSXElement, Match, Switch, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { CommentNode, EndNode, StartNode } from "../../data-source/data-type";
 import { CommentIcon, EndIcon, StartIcon } from "../icons/material-icons";
-import "./other-node.css";
 
 export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndNode }): JSXElement {
   const {
@@ -115,17 +114,19 @@ export function CommentNodeView(props: {
   let titleDiv: HTMLDivElement | undefined;
   return (
     <div
-      class="comment"
-      classList={{
-        "comment--selected": props.selected,
-      }}
+      data-select={props.selected}
+      class="
+        m-px flex flex-row border border-solid
+        border-gray-500 bg-background p-0.5
+        hover:cursor-move hover:bg-primary3
+        data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onDblClick={(e) => props.onDblClick?.(e)}
     >
-      <div class="comment__icon">
+      <div class="flex items-center">
         <CommentIcon />
       </div>
-      <div ref={titleDiv} class="comment__title">
+      <div ref={titleDiv} class="whitespace-pre text-[11px] leading-[1.1]">
         {props.comment}
       </div>
     </div>
@@ -135,8 +136,11 @@ export function CommentNodeView(props: {
 export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: MouseEvent) => void }) {
   return (
     <div
-      class="start-end"
-      classList={{ "start-end--selected": props.selected }}
+      data-select={props.selected}
+      class="
+        m-px rounded border border-solid border-gray-500 bg-background p-0.5
+        hover:cursor-move hover:bg-primary3
+        data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
       onMouseDown={(e) => props.onMouseDown?.(e)}
     >
       <StartIcon />
@@ -151,8 +155,11 @@ export function EndNodeView(props: {
 }) {
   return (
     <div
-      class="start-end"
-      classList={{ "start-end--selected": props.selected }}
+      data-select={props.selected}
+      class="
+        m-px rounded border border-solid border-gray-500 bg-background p-0.5
+        hover:cursor-move hover:bg-primary3
+        data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onMouseUp={(e) => props.onMouseUp?.(e)}
     >

@@ -10,7 +10,7 @@ import {
   ManualTimerActivityIcon,
   UserActivityIcon,
 } from "../icons/material-icons";
-import "./dialog.css";
+import { ToggleIconButton } from "../parts/toggle-icon-button";
 
 export function ActivityDialog(): JSXElement {
   const {
@@ -80,98 +80,82 @@ export function ActivityDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   let radioTabCenterRef: HTMLInputElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
       <h5>{t("editActivity")}</h5>
 
-      <form method="dialog">
-        <div class="dialog__toolbar">
-          <div class="toolbar__button">
-            <label for="manual-activity">
-              <input
-                type="radio"
-                name="activityType"
-                id="manual-activity"
-                value="manualActivity"
-                checked={formData.type === "manualActivity"}
-                onChange={() => setFormData("type", "manualActivity")}
-              />
-              <div class="dialog__toolbar-icon" title={t("manualActivity")}>
-                <ManualActivityIcon />
-              </div>
-            </label>
-          </div>
-          <div class="toolbar__button">
-            <label for="auto-activity">
-              <input
-                type="radio"
-                name="activityType"
-                id="auto-activity"
-                value="autoActivity"
-                checked={formData.type === "autoActivity"}
-                onChange={() => setFormData("type", "autoActivity")}
-              />
-              <div class="dialog__toolbar-icon" title={t("autoActivity")}>
-                <AutoActivityIcon />
-              </div>
-            </label>
-          </div>
-          <div class="toolbar__button">
-            <label for="manual-timer-activity">
-              <input
-                type="radio"
-                name="activityType"
-                id="manual-timer-activity"
-                value="manualTimerActivity"
-                checked={formData.type === "manualTimerActivity"}
-                onChange={() => setFormData("type", "manualTimerActivity")}
-              />
-              <div class="dialog__toolbar-icon" title={t("manualTimerActivity")}>
-                <ManualTimerActivityIcon />
-              </div>
-            </label>
-          </div>
-          <div class="toolbar__button">
-            <label for="auto-timer-activity">
-              <input
-                type="radio"
-                name="activityType"
-                id="auto-timer-activity"
-                value="autoTimerActivity"
-                checked={formData.type === "autoTimerActivity"}
-                onChange={() => setFormData("type", "autoTimerActivity")}
-              />
-              <div class="dialog__toolbar-icon" title={t("autoTimerActivity")}>
-                <AutoTimerActivityIcon />
-              </div>
-            </label>
-          </div>
-          <div class="toolbar__button">
-            <label for="user-activity">
-              <input
-                type="radio"
-                name="activityType"
-                id="user-activity"
-                value="userActivity"
-                checked={formData.type === "userActivity"}
-                onChange={() => setFormData("type", "userActivity")}
-              />
-              <div class="dialog__toolbar-icon" title={t("handWork")}>
-                <UserActivityIcon />
-              </div>
-            </label>
-          </div>
+      <form class="mb- bg-white p-2" method="dialog">
+        <div class="mb-2 flex flex-row">
+          <ToggleIconButton
+            id="manual-activity"
+            title={t("manualActivity")}
+            checked={formData.type === "manualActivity"}
+            onChange={() => setFormData("type", "manualActivity")}
+            margin="0 4px 0 0"
+          >
+            <ManualActivityIcon />
+          </ToggleIconButton>
+          <ToggleIconButton
+            id="auto-activity"
+            title={t("autoActivity")}
+            checked={formData.type === "autoActivity"}
+            onChange={() => setFormData("type", "autoActivity")}
+            margin="0 4px 0 0"
+          >
+            <AutoActivityIcon />
+          </ToggleIconButton>
+          <ToggleIconButton
+            id="manual-timer-activity"
+            title={t("manualTimerActivity")}
+            checked={formData.type === "manualTimerActivity"}
+            onChange={() => setFormData("type", "manualTimerActivity")}
+            margin="0 4px 0 0"
+          >
+            <ManualTimerActivityIcon />
+          </ToggleIconButton>
+          <ToggleIconButton
+            id="auto-timer-activity"
+            title={t("autoTimerActivity")}
+            checked={formData.type === "autoTimerActivity"}
+            onChange={() => setFormData("type", "autoTimerActivity")}
+            margin="0 4px 0 0"
+          >
+            <AutoTimerActivityIcon />
+          </ToggleIconButton>
+          <ToggleIconButton
+            id="user-activity"
+            title={t("handWork")}
+            checked={formData.type === "userActivity"}
+            onChange={() => setFormData("type", "userActivity")}
+          >
+            <UserActivityIcon />
+          </ToggleIconButton>
         </div>
 
-        <div class="tab-wrap">
-          <input id="tab-join" type="radio" name="tab-switch" class="tab-switch" />
-          <label class="tab-label" for="tab-join">
+        <div class="flex flex-wrap">
+          <input
+            id="tab-join"
+            type="radio"
+            name="tab-switch"
+            class="
+              peer/tab-switch1
+              b-0 absolute m-[-1px] h-[1px]
+              w-[1px] overflow-hidden whitespace-nowrap p-0
+              [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+          />
+          <label
+            class="
+              -order-1 mr-1 bg-gray-300 px-2 py-1
+              peer-checked/tab-switch1:bg-primary1"
+            for="tab-join"
+          >
             はじまり
           </label>
           <div
-            class="tab-content"
+            class="
+              hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
+              peer-checked/tab-switch1:block"
             classList={{
-              "tab-content--disabled":
-                formData.joinType === "notJoin" || formData.joinType === "oneJoin",
+              "bg-gray-100": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
             }}
           >
             <div>
@@ -208,14 +192,27 @@ export function ActivityDialog(): JSXElement {
             id="tab-work"
             type="radio"
             name="tab-switch"
-            class="tab-switch"
+            class="
+              peer/tab-switch2
+              b-0 absolute m-[-1px] h-[1px]
+              w-[1px] overflow-hidden whitespace-nowrap p-0
+              [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
             ref={radioTabCenterRef}
           />
-          <label class="tab-label" for="tab-work">
+          <label
+            class="
+              -order-1 mr-1 bg-gray-300 px-2 py-1
+              peer-checked/tab-switch2:bg-primary1"
+            for="tab-work"
+          >
             仕事
           </label>
-          <div class="tab-content">
-            <div class="dialog__activity-input">
+          <div
+            class="
+              hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
+              peer-checked/tab-switch2:block"
+          >
+            <div class="grid grid-cols-[72px_272px] gap-2">
               <div>ID</div>
               <input
                 type="text"
@@ -244,8 +241,9 @@ export function ActivityDialog(): JSXElement {
               <Switch>
                 <Match when={formData.type === "autoActivity"}>
                   <div>処理内容 (OGNL)</div>
-                  <div class="dialog__auto-activity-ognl-box">
+                  <div class="flex h-[160px] w-[270px] flex-col border-solid border-gray-300">
                     <select
+                      class="m-2 w-[254px] p-0"
                       disabled={selectedAppIndex() < 0}
                       value={selectedAppIndex()}
                       onChange={(e) => {
@@ -259,6 +257,7 @@ export function ActivityDialog(): JSXElement {
                       </For>
                     </select>
                     <textarea
+                      class="b-0 h-full resize-none border-t-gray-300"
                       disabled={selectedAppIndex() < 0}
                       value={
                         formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")
@@ -275,8 +274,9 @@ export function ActivityDialog(): JSXElement {
                   }
                 >
                   <div>自動で実行するのはいつ？ (OGNL)</div>
-                  <div class="dialog__timer-activity-ognl-box">
+                  <div class="h-[160px] w-[266px]">
                     <textarea
+                      class="b-0 h-full w-full resize-none"
                       value={formData.ognl}
                       onChange={(e) => setFormData("ognl", e.target.value)}
                     />
@@ -286,15 +286,30 @@ export function ActivityDialog(): JSXElement {
             </div>
           </div>
 
-          <input id="tab-split" type="radio" name="tab-switch" class="tab-switch" />
-          <label class="tab-label" for="tab-split">
+          <input
+            id="tab-split"
+            type="radio"
+            name="tab-switch"
+            class="
+              peer/tab-switch3
+              b-0 absolute m-[-1px] h-[1px]
+              w-[1px] overflow-hidden whitespace-nowrap p-0
+              [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+          />
+          <label
+            class="
+              -order-1 mr-1 bg-gray-300 px-2 py-1
+              peer-checked/tab-switch3:bg-primary1"
+            for="tab-split"
+          >
             終わったら
           </label>
           <div
-            class="tab-content"
+            class="
+              hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
+              peer-checked/tab-switch3:block"
             classList={{
-              "tab-content--disabled":
-                formData.splitType === "notSplit" || formData.splitType === "oneSplit",
+              "bg-gray-100": formData.splitType === "notSplit" || formData.splitType === "oneSplit",
             }}
           >
             <div>
@@ -328,7 +343,7 @@ export function ActivityDialog(): JSXElement {
           </div>
         </div>
 
-        <div class="dialog__buttons">
+        <div class="mt-4 flex justify-center gap-x-2">
           <button type="button" onClick={handleOkButtonClick}>
             OK
           </button>

@@ -2,7 +2,6 @@ import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
-import "./dialog.css";
 
 export function ActorDialog(): JSXElement {
   const {
@@ -43,10 +42,10 @@ export function ActorDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[388px] bg-gray-300 px-2 py-1" ref={dialogRef} onClose={handleClose}>
       <h5>アクターの編集</h5>
       <form method="dialog">
-        <div class="dialog__input">
+        <div class="my-1 grid grid-cols-[72px_272px] bg-white p-2">
           <div>ID：</div>
           <input
             type="text"
@@ -54,14 +53,12 @@ export function ActorDialog(): JSXElement {
             onInput={handleXpdlIdInput}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <p>{xpdlIdError()}</p>
           <div>名前：</div>
           <input
             type="text"
             value={formData.name}
             onChange={(e) => setFormData("name", e.target.value)}
           />
-          <p />
         </div>
         <div class="dialog__buttons">
           <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>

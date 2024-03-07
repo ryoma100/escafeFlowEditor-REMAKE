@@ -35,11 +35,13 @@ export function SaveDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
       <h5>{t("xpdlSave")}</h5>
-      <textarea readOnly>{data()}</textarea>
+      <textarea class="h-[300px] w-[368px]" readOnly>
+        {data()}
+      </textarea>
 
-      <div class="dialog__buttons">
+      <div class="mt-4 flex justify-center gap-x-2">
         <button type="button" onClick={handleSaveButtonClick}>
           Save
         </button>

@@ -2,7 +2,6 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
-import "./list.css";
 
 export function ActorList(): JSXElement {
   const {
@@ -32,17 +31,15 @@ export function ActorList(): JSXElement {
   }
 
   return (
-    <div class="list">
+    <div class="flex h-full flex-col">
       <h5>{t("actor")}</h5>
-      <div class="list__scroll--outer">
-        <ul class="list__scroll--inner">
+      <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
+        <ul class="list-none">
           <For each={actorList}>
             {(it) => (
               <li
-                class="list__item"
-                classList={{
-                  "list__item--selected": it.id === selectedActor().id,
-                }}
+                data-select={it.id === selectedActor().id}
+                class="p-1 hover:bg-primary2 data-[select=true]:bg-primary1"
                 onMouseDown={[handleItemMouseDown, it]}
                 onDblClick={handleItemDblClick}
               >
@@ -52,7 +49,7 @@ export function ActorList(): JSXElement {
           </For>
         </ul>
       </div>
-      <div class="list__buttons">
+      <div class="mt-1 flex w-full justify-center gap-x-2">
         <button onClick={handleAddButtonClick}>{t("add")}</button>
         <button onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
           {t("delete")}

@@ -2,7 +2,6 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ProcessEntity } from "../../data-source/data-type";
-import "./list.css";
 
 export function ProcessList(): JSXElement {
   const {
@@ -29,17 +28,15 @@ export function ProcessList(): JSXElement {
   }
 
   return (
-    <div class="list">
+    <div class="flex h-full flex-col">
       <h5>{t("process")}</h5>
-      <div class="list__scroll--outer">
-        <ul class="list__scroll--inner">
+      <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
+        <ul class="list-none">
           <For each={processList()}>
             {(it) => (
               <li
-                class="list__item"
-                classList={{
-                  "list__item--selected": it.id === selectedProcess().id,
-                }}
+                data-select={it.id === selectedProcess().id}
+                class="p-1 hover:bg-primary2 data-[select=true]:bg-primary1"
                 onMouseDown={[handleItemMouseDown, it]}
                 onDblClick={handleItemDblClick}
               >
@@ -49,7 +46,7 @@ export function ProcessList(): JSXElement {
           </For>
         </ul>
       </div>
-      <div class="list__buttons">
+      <div class="mt-1 flex w-full justify-center gap-x-2">
         <button onClick={handleAddButtonClick}>{t("add")}</button>
         <button onClick={handleRemoveButtonClick} disabled={processList().length === 1}>
           {t("delete")}

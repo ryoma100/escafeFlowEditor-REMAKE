@@ -28,9 +28,9 @@ export function MessageDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
-      <div class="dialog__message">{message()}</div>
-      <div class="dialog__buttons">
+    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
+      <div class="mt-4">{message()}</div>
+      <div class="mt-4 flex justify-center gap-x-2">
         <button type="button" onClick={handleClose}>
           OK
         </button>

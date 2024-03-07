@@ -11,7 +11,7 @@ import {
   StartIcon,
   UserActivityIcon,
 } from "../icons/material-icons";
-import "./toolbar.css";
+import { ToggleIconButton } from "../parts/toggle-icon-button";
 
 export type ToolbarType =
   | "cursor"
@@ -31,134 +31,85 @@ export function Toolbar(): JSXElement {
   const t = i18n.translator(dict);
 
   return (
-    <div class="toolbar">
-      <div class="toolbar__button">
-        <label for="toolbar-cursor">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-cursor"
-            value="cursor"
-            checked={toolbar() === "cursor"}
-            onChange={() => setToolbar("cursor")}
-          />
-          <div class="toolbar__icon" title={t("select")}>
-            <PointIcon />
-          </div>
-        </label>
-      </div>
+    <div class="mx-2 flex-col">
+      <ToggleIconButton
+        id="toolbar-select"
+        title={t("select")}
+        checked={toolbar() === "cursor"}
+        onChange={() => setToolbar("cursor")}
+        margin="0 0 4px 0"
+      >
+        <PointIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button toolbar__button--margin-bottom">
-        <label for="toolbar-transition">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-transition"
-            value="transition"
-            checked={toolbar() === "transition"}
-            onChange={() => setToolbar("transition")}
-          />
-          <div class="toolbar__icon" title={t("transition")}>
-            <LineIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-transition"
+        title={t("transition")}
+        checked={toolbar() === "transition"}
+        onChange={() => setToolbar("transition")}
+        margin="0 0 8px 0"
+      >
+        <LineIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button">
-        <label for="toolbar-manual">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-manual"
-            value="manual"
-            checked={toolbar() === "addManualActivity"}
-            onChange={() => setToolbar("addManualActivity")}
-          />
-          <div class="toolbar__icon" title={t("manualActivity")}>
-            <ManualActivityIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-manual"
+        title={t("manualActivity")}
+        checked={toolbar() === "addManualActivity"}
+        onChange={() => setToolbar("addManualActivity")}
+        margin="0 0 4px 0"
+      >
+        <ManualActivityIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button">
-        <label for="toolbar-auto">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-auto"
-            value="auto"
-            checked={toolbar() === "addAutoActivity"}
-            onChange={() => setToolbar("addAutoActivity")}
-          />
-          <div class="toolbar__icon" title={t("autoActivity")}>
-            <AutoActivityIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-auto"
+        title={t("autoActivity")}
+        checked={toolbar() === "addAutoActivity"}
+        onChange={() => setToolbar("addAutoActivity")}
+        margin="0 0 4px 0"
+      >
+        <AutoActivityIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button toolbar__button--margin-bottom">
-        <label for="toolbar-hand">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-hand"
-            value="hand"
-            checked={toolbar() === "addUserActivity"}
-            onChange={() => setToolbar("addUserActivity")}
-          />
-          <div class="toolbar__icon" title={t("handWork")}>
-            <UserActivityIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-hand"
+        title={t("handWork")}
+        checked={toolbar() === "addUserActivity"}
+        onChange={() => setToolbar("addUserActivity")}
+        margin="0 0 8px 0"
+      >
+        <UserActivityIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button">
-        <label for="toolbar-start">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-start"
-            value="start"
-            checked={toolbar() === "addStartNode"}
-            onChange={() => setToolbar("addStartNode")}
-          />
-          <div class="toolbar__icon" title={t("start")}>
-            <StartIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-start"
+        title={t("start")}
+        checked={toolbar() === "addStartNode"}
+        onChange={() => setToolbar("addStartNode")}
+        margin="0 0 4px 0"
+      >
+        <StartIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button">
-        <label for="toolbar-end">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-end"
-            value="end"
-            checked={toolbar() === "addEndNode"}
-            onChange={() => setToolbar("addEndNode")}
-          />
-          <div class="toolbar__icon" title={t("end")}>
-            <EndIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-end"
+        title={t("end")}
+        checked={toolbar() === "addEndNode"}
+        onChange={() => setToolbar("addEndNode")}
+        margin="0 0 4px 0"
+      >
+        <EndIcon />
+      </ToggleIconButton>
 
-      <div class="toolbar__button">
-        <label for="toolbar-comment">
-          <input
-            type="radio"
-            name="toolbar"
-            id="toolbar-comment"
-            value="comment"
-            checked={toolbar() === "addCommentNode"}
-            onChange={() => setToolbar("addCommentNode")}
-          />
-          <div class="toolbar__icon" title={t("comment")}>
-            <CommentIcon />
-          </div>
-        </label>
-      </div>
+      <ToggleIconButton
+        id="toolbar-comment"
+        title={t("comment")}
+        checked={toolbar() === "addCommentNode"}
+        onChange={() => setToolbar("addCommentNode")}
+      >
+        <CommentIcon />
+      </ToggleIconButton>
     </div>
   );
 }

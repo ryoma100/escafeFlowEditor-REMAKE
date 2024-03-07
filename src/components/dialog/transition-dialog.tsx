@@ -45,10 +45,10 @@ export function TransitionDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="dialog" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
       <h5>{t("editTransition")}</h5>
-      <form method="dialog">
-        <div class="dialog__activity-input">
+      <form method="dialog" class="bg-white">
+        <div class="grid grid-cols-[71px_272px] gap-x-2">
           <div>ID：</div>
           <input
             type="text"
@@ -56,7 +56,7 @@ export function TransitionDialog(): JSXElement {
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
         </div>
-        <div class="dialog__buttons">
+        <div class="mt-4 flex justify-center gap-x-2">
           <button type="button" onClick={handleOkButtonClick}>
             OK
           </button>

@@ -1,7 +1,6 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { CommentEdge, EndEdge, StartEdge } from "../../data-source/data-type";
-import "./other-edge.css";
 
 export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndEdge }): JSXElement {
   const {
@@ -54,10 +53,19 @@ export function OtherEdgeView(props: {
 }): JSXElement {
   return (
     <>
-      <line class="other-edge" x1={props.fromX} y1={props.fromY} x2={props.toX} y2={props.toY} />
       <line
-        class="other-edge--hover"
-        classList={{ "other-edge--selected": props.selected }}
+        class="stroke fill-none stroke-gray-300 [vector-effect:non-scaling-stroke]"
+        x1={props.fromX}
+        y1={props.fromY}
+        x2={props.toX}
+        y2={props.toY}
+      />
+      <line
+        data-select={props.selected}
+        class="
+          fill-none stroke-transparent stroke-[5px]
+          hover:cursor-pointer hover:stroke-primary2
+          data-[select=true]:fill-none data-[select=true]:stroke-primary1 data-[select=true]:stroke-[5px]"
         onMouseDown={(e) => props.onMouseDown(e)}
         x1={props.fromX}
         y1={props.fromY}

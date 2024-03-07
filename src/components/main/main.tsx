@@ -1,7 +1,6 @@
 import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { DiagramContainer } from "../diagram/diagram";
-import "./main.css";
 
 export function Main(): JSXElement {
   const {
@@ -22,12 +21,12 @@ export function Main(): JSXElement {
   }
 
   return (
-    <div class="main">
+    <div class="flex h-full flex-col">
       <h5>{selectedProcess().detail.name}</h5>
-      <div class="main__diagram">
+      <div class="flex-grow bg-background">
         <DiagramContainer />
       </div>
-      <div class="main__zoom">
+      <div class="mt-1 flex w-full flex-row justify-center gap-x-2">
         <button onClick={handleAutoZoomButtonClick}>Auto</button>
         <input
           type="range"
