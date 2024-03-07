@@ -1,17 +1,17 @@
-import { JSXElement, createEffect, createSignal } from "solid-js";
+import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ActorDialog(): JSXElement {
   const {
     actorModel: { updateActor, actorList },
-    dialog: { openActorDialog, setOpenActorDialog },
+    dialog: { openActorDialog, setOpenActorDialog, setOpenMessageDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ActorEntity>(undefined as never);
-  const [xpdlIdError, setXpdlIdError] = createSignal("");
-
   createEffect(() => {
     const actor = openActorDialog();
     if (actor != null) {
@@ -22,16 +22,12 @@ export function ActorDialog(): JSXElement {
     }
   });
 
-  function handleXpdlIdInput(e: InputEvent) {
-    const text = (e.target as HTMLInputElement).value;
-    setXpdlIdError(
-      actorList.some((it) => it.id !== openActorDialog()?.id && it.xpdlId === text)
-        ? "このIDは既に存在します"
-        : "",
-    );
-  }
-
   function handleOkButtonClick() {
+    if (actorList.some((it) => it.id !== openActorDialog()?.id && it.xpdlId === formData.xpdlId)) {
+      setOpenMessageDialog("idExists");
+      return;
+    }
+
     updateActor(formData);
     setOpenActorDialog(null);
   }
@@ -50,7 +46,6 @@ export function ActorDialog(): JSXElement {
           <input
             type="text"
             value={formData.xpdlId}
-            onInput={handleXpdlIdInput}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
           <div>名前：</div>
@@ -60,14 +55,11 @@ export function ActorDialog(): JSXElement {
             onChange={(e) => setFormData("name", e.target.value)}
           />
         </div>
-        <div class="dialog__buttons">
-          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
-            OK
-          </button>
-          <button type="button" onClick={handleClose}>
-            Cancel
-          </button>
-        </div>
+
+        <ButtonsContainer>
+          <Button onClick={handleOkButtonClick}>OK</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+        </ButtonsContainer>
       </form>
     </dialog>
   );

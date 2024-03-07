@@ -1,6 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { useAppContext } from "../../context/app-context";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 
 export function SaveDialog(): JSXElement {
   const {
@@ -41,14 +43,10 @@ export function SaveDialog(): JSXElement {
         {data()}
       </textarea>
 
-      <div class="mt-4 flex justify-center gap-x-2">
-        <button type="button" onClick={handleSaveButtonClick}>
-          Save
-        </button>
-        <button type="button" onClick={handleClose}>
-          Cancel
-        </button>
-      </div>
+      <ButtonsContainer>
+        <Button onClick={handleSaveButtonClick}>Save</Button>
+        <Button onClick={handleClose}>Cancel</Button>
+      </ButtonsContainer>
     </dialog>
   );
 }

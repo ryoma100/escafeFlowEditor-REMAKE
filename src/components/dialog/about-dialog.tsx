@@ -1,5 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { useAppContext } from "../../context/app-context";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 
 export function AboutDialog(): JSXElement {
   const {
@@ -33,11 +35,9 @@ export function AboutDialog(): JSXElement {
         </div>
       </form>
 
-      <div class="my-2 flex justify-center">
-        <button type="button" onClick={handleClose}>
-          OK
-        </button>
-      </div>
+      <ButtonsContainer>
+        <Button onClick={handleClose}>OK</Button>
+      </ButtonsContainer>
     </dialog>
   );
 }

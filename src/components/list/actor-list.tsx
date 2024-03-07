@@ -2,6 +2,8 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ActorList(): JSXElement {
   const {
@@ -49,12 +51,13 @@ export function ActorList(): JSXElement {
           </For>
         </ul>
       </div>
-      <div class="mt-1 flex w-full justify-center gap-x-2">
-        <button onClick={handleAddButtonClick}>{t("add")}</button>
-        <button onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
+
+      <ButtonsContainer margin="4px 0 0 0">
+        <Button onClick={handleAddButtonClick}>{t("add")}</Button>
+        <Button onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
           {t("delete")}
-        </button>
-      </div>
+        </Button>
+      </ButtonsContainer>
     </div>
   );
 }

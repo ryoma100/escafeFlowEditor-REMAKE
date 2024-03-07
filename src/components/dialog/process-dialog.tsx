@@ -2,6 +2,8 @@ import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProcessDetailEntity, ProcessEntity } from "../../data-source/data-type";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProcessDialog(): JSXElement {
   const {
@@ -186,14 +188,14 @@ export function ProcessDialog(): JSXElement {
             </For>
           </tbody>
         </table>
-        <div class="mt-2 flex justify-end gap-x-2">
+        <ButtonsContainer justify="end">
           <button type="button" onClick={handleAddEnvButtonClick}>
             追加
           </button>
           <button type="button" onClick={handleRemoveEnvButtonClick}>
             削除
           </button>
-        </div>
+        </ButtonsContainer>
 
         <div>アプリケーション：</div>
         <table class="w-[484px] border-collapse border border-solid border-gray-500 bg-white">
@@ -254,14 +256,14 @@ export function ProcessDialog(): JSXElement {
             </For>
           </tbody>
         </table>
-        <div class="mt-2 flex justify-end gap-x-2">
+        <ButtonsContainer justify="end">
           <button type="button" onClick={handleAddAppButtonClick}>
             追加
           </button>
           <button type="button" onClick={handleRemoveAppButtonClick}>
             削除
           </button>
-        </div>
+        </ButtonsContainer>
 
         <div>有効期限</div>
         <div class="grid grid-cols-[80px_220px_180px] gap-x-2">
@@ -282,14 +284,10 @@ export function ProcessDialog(): JSXElement {
           <div>入力例：2009/1/2</div>
         </div>
 
-        <div class="mt-4 flex justify-center gap-x-2">
-          <button type="button" onClick={handleOkButtonClick} disabled={xpdlIdError() !== ""}>
-            OK
-          </button>
-          <button type="button" onClick={handleClose}>
-            Cancel
-          </button>
-        </div>
+        <ButtonsContainer>
+          <Button onClick={handleOkButtonClick}>OK</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+        </ButtonsContainer>
       </form>
     </dialog>
   );

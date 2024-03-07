@@ -10,6 +10,8 @@ import {
   ManualTimerActivityIcon,
   UserActivityIcon,
 } from "../icons/material-icons";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 import { ToggleIconButton } from "../parts/toggle-icon-button";
 
 export function ActivityDialog(): JSXElement {
@@ -343,14 +345,10 @@ export function ActivityDialog(): JSXElement {
           </div>
         </div>
 
-        <div class="mt-4 flex justify-center gap-x-2">
-          <button type="button" onClick={handleOkButtonClick}>
-            OK
-          </button>
-          <button type="button" onClick={handleClose}>
-            Cancel
-          </button>
-        </div>
+        <ButtonsContainer>
+          <Button onClick={handleOkButtonClick}>OK</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+        </ButtonsContainer>
       </form>
     </dialog>
   );

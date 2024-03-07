@@ -2,6 +2,8 @@ import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProjectEntity } from "../../data-source/data-type";
+import { Button } from "../parts/button";
+import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProjectDialog(): JSXElement {
   const {
@@ -49,14 +51,11 @@ export function ProjectDialog(): JSXElement {
             onInput={(e) => setFormData("name", e.target.value)}
           />
         </div>
-        <div class="mt-4 flex justify-center gap-x-2">
-          <button type="button" onClick={handleOkButtonClick}>
-            OK
-          </button>
-          <button type="button" onClick={handleClose}>
-            Cancel
-          </button>
-        </div>
+
+        <ButtonsContainer>
+          <Button onClick={handleOkButtonClick}>OK</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+        </ButtonsContainer>
       </form>
     </dialog>
   );
