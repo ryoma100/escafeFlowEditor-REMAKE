@@ -25,9 +25,10 @@ export function SaveDialog(): JSXElement {
     }
   });
 
-  function handleSaveButtonClick() {
-    //
+  function handleSubmit(e: Event) {
+    e.preventDefault();
 
+    //
     setOpenSaveDialog(null);
   }
 
@@ -40,13 +41,13 @@ export function SaveDialog(): JSXElement {
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">{t("xpdlSave")}</h5>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <textarea class="mb-2 h-[300px] w-full" readOnly>
           {data()}
         </textarea>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleSaveButtonClick} ref={okButtonRef}>
+          <button type="submit" ref={okButtonRef}>
             Save
           </button>
           <button type="button" onClick={handleClose}>

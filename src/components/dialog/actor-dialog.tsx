@@ -21,7 +21,9 @@ export function ActorDialog(): JSXElement {
     }
   });
 
-  function handleOkButtonClick() {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     if (actorList.some((it) => it.id !== openActorDialog()?.id && it.xpdlId === formData.xpdlId)) {
       setOpenMessageDialog("idExists");
       return;
@@ -39,7 +41,7 @@ export function ActorDialog(): JSXElement {
   return (
     <dialog class="w-[388px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">アクターの編集</h5>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] gap-y-2">
           <div>ID：</div>
           <input
@@ -56,9 +58,7 @@ export function ActorDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleOkButtonClick}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

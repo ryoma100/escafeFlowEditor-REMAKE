@@ -22,7 +22,9 @@ export function ProjectDialog(): JSXElement {
     }
   });
 
-  function handleOkButtonClick() {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     setProject({ ...formData });
     setOpenProjectDialog(null);
   }
@@ -35,7 +37,7 @@ export function ProjectDialog(): JSXElement {
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">パッケージの編集</h5>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID：</div>
           <input
@@ -52,9 +54,7 @@ export function ProjectDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleOkButtonClick}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

@@ -46,7 +46,9 @@ export function ActivityDialog(): JSXElement {
     }
   });
 
-  function handleSubmit() {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     if (activityList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
       setOpenMessageDialog("idExists");
       return;
@@ -84,7 +86,7 @@ export function ActivityDialog(): JSXElement {
     <dialog class="w-[388px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">{t("editActivity")}</h5>
 
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-2 flex flex-row">
           <ToggleIconButton
             id="manual-activity"
@@ -344,9 +346,7 @@ export function ActivityDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleSubmit}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

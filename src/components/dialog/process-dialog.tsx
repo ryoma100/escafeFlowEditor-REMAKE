@@ -97,7 +97,9 @@ export function ProcessDialog(): JSXElement {
     );
   }
 
-  function handleOkButtonClick() {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     if (
       processList().some(
         (it) => it.id !== openProcessDialog()?.id && it.detail.xpdlId === formData.xpdlId,
@@ -128,7 +130,7 @@ export function ProcessDialog(): JSXElement {
   return (
     <dialog class="w-[520px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">ワークフロープロセスの編集</h5>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
           <p>ID：</p>
           <input
@@ -278,9 +280,7 @@ export function ProcessDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleOkButtonClick}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

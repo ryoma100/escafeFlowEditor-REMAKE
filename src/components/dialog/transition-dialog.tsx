@@ -25,7 +25,9 @@ export function TransitionDialog(): JSXElement {
     }
   });
 
-  function handleOkButtonClick(_e: MouseEvent) {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     if (transitionList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
       setOpenMessageDialog("idExists");
       return;
@@ -48,7 +50,7 @@ export function TransitionDialog(): JSXElement {
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">{t("editTransition")}</h5>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center">
           <div>ID：</div>
           <input
@@ -59,9 +61,7 @@ export function TransitionDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleOkButtonClick}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

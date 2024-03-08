@@ -22,7 +22,9 @@ export function CommentDialog(): JSXElement {
     }
   });
 
-  function handleOkButtonClick() {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     updateComment(formData);
     setOpenCommentDialog(null);
   }
@@ -35,7 +37,7 @@ export function CommentDialog(): JSXElement {
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">コメントの編集</h5>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <textarea
           class="mb-2 h-48 w-full resize-none"
           value={formData.comment}
@@ -43,9 +45,7 @@ export function CommentDialog(): JSXElement {
         />
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleOkButtonClick}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

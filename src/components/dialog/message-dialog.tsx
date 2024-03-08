@@ -18,6 +18,11 @@ export function MessageDialog(): JSXElement {
     }
   });
 
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+    setOpenMessageDialog(null);
+  }
+
   function handleClose() {
     setOpenMessageDialog(null);
   }
@@ -30,13 +35,11 @@ export function MessageDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4">{message()}</div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleClose}>
-            OK
-          </button>
+          <button type="submit">OK</button>
         </ButtonsContainer>
       </form>
     </dialog>

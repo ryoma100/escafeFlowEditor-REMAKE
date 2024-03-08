@@ -16,6 +16,11 @@ export function AboutDialog(): JSXElement {
     }
   });
 
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+    setOpenAboutDialog(false);
+  }
+
   function handleClose() {
     setOpenAboutDialog(false);
   }
@@ -25,7 +30,7 @@ export function AboutDialog(): JSXElement {
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">tiny esFlow Diagram Editor</h5>
-      <form class="my-1 bg-white p-2">
+      <form class="my-1 bg-white p-2" onClick={handleSubmit}>
         <div>version: 0.1 beta</div>
         <div>author: Ryouichi Matsuda</div>
         <div class="mb-4">
@@ -40,7 +45,7 @@ export function AboutDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleClose} ref={okButtonRef}>
+          <button type="submit" ref={okButtonRef}>
             OK
           </button>
         </ButtonsContainer>

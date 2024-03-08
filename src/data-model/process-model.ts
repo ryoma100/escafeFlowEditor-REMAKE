@@ -22,7 +22,7 @@ export function makeProcessModel(
     project = newProject;
     setProcessList(project.processes);
     batch(() => {
-      const firstProcess = project.processes[0];
+      const firstProcess = processList()[0];
       setSelectedProcess(firstProcess);
       actorModel.load(firstProcess);
       activityModel.load(firstProcess);

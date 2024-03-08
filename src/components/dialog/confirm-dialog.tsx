@@ -20,7 +20,9 @@ export function ConfirmDialog(): JSXElement {
     }
   });
 
-  function handleOkClick() {
+  function handleSubmit(e: Event) {
+    e.preventDefault();
+
     switch (openConfirmDialog()) {
       case "initAll":
         initProject();
@@ -29,7 +31,7 @@ export function ConfirmDialog(): JSXElement {
         removeSelectedProcess();
         break;
     }
-    handleClose();
+    setOpenConfirmDialog(null);
   }
 
   function handleClose() {
@@ -50,13 +52,11 @@ export function ConfirmDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
-      <form class="bg-white p-2">
+      <form class="bg-white p-2" onSubmit={handleSubmit}>
         <p class="mb-4">{dialogMessage()}</p>
 
         <ButtonsContainer>
-          <button type="submit" onClick={handleOkClick}>
-            OK
-          </button>
+          <button type="submit">OK</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>
