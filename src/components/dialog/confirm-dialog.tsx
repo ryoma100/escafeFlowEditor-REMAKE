@@ -1,7 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ConfirmDialog(): JSXElement {
@@ -50,13 +49,19 @@ export function ConfirmDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
-      <div class="mt-4">{dialogMessage()}</div>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <form class="bg-white p-2">
+        <p class="mb-4">{dialogMessage()}</p>
 
-      <ButtonsContainer>
-        <Button onClick={handleOkClick}>OK</Button>
-        <Button onClick={handleClose}>Cancel</Button>
-      </ButtonsContainer>
+        <ButtonsContainer>
+          <button type="submit" onClick={handleOkClick}>
+            OK
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
+        </ButtonsContainer>
+      </form>
     </dialog>
   );
 }

@@ -2,7 +2,6 @@ import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { CommentNode } from "../../data-source/data-type";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function CommentDialog(): JSXElement {
@@ -34,18 +33,22 @@ export function CommentDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5>コメントの編集</h5>
-      <form method="dialog">
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <h5 class="mb-2">コメントの編集</h5>
+      <form class="bg-white p-2">
         <textarea
-          class="h-[128px] w-[372px]"
+          class="mb-2 h-48 w-full resize-none"
           value={formData.comment}
           onChange={(e) => setFormData("comment", e.target.value)}
         />
 
         <ButtonsContainer>
-          <Button onClick={handleOkButtonClick}>OK</Button>
-          <Button onClick={handleClose}>Cancel</Button>
+          <button type="submit" onClick={handleOkButtonClick}>
+            OK
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
         </ButtonsContainer>
       </form>
     </dialog>

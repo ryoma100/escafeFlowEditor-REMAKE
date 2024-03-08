@@ -1,7 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function MessageDialog(): JSXElement {
@@ -30,12 +29,16 @@ export function MessageDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
-      <div class="mt-4">{message()}</div>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <form class="bg-white p-2">
+        <div class="mb-4">{message()}</div>
 
-      <ButtonsContainer>
-        <Button onClick={handleClose}>OK</Button>
-      </ButtonsContainer>
+        <ButtonsContainer>
+          <button type="submit" onClick={handleClose}>
+            OK
+          </button>
+        </ButtonsContainer>
+      </form>
     </dialog>
   );
 }

@@ -2,7 +2,6 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { ActorEntity } from "../../data-source/data-type";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ActorList(): JSXElement {
@@ -53,10 +52,12 @@ export function ActorList(): JSXElement {
       </div>
 
       <ButtonsContainer margin="4px 0 0 0">
-        <Button onClick={handleAddButtonClick}>{t("add")}</Button>
-        <Button onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
+        <button type="submit" onClick={handleAddButtonClick}>
+          {t("add")}
+        </button>
+        <button type="button" onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
           {t("delete")}
-        </Button>
+        </button>
       </ButtonsContainer>
     </div>
   );

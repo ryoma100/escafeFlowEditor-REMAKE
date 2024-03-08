@@ -10,7 +10,6 @@ import {
   ManualTimerActivityIcon,
   UserActivityIcon,
 } from "../icons/material-icons";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 import { ToggleIconButton } from "../parts/toggle-icon-button";
 
@@ -47,7 +46,7 @@ export function ActivityDialog(): JSXElement {
     }
   });
 
-  function handleOkButtonClick() {
+  function handleSubmit() {
     if (activityList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
       setOpenMessageDialog("idExists");
       return;
@@ -82,10 +81,10 @@ export function ActivityDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   let radioTabCenterRef: HTMLInputElement | undefined;
   return (
-    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5>{t("editActivity")}</h5>
+    <dialog class="w-[388px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <h5 class="mb-2">{t("editActivity")}</h5>
 
-      <form class="mb- bg-white p-2" method="dialog">
+      <form class="bg-white p-2">
         <div class="mb-2 flex flex-row">
           <ToggleIconButton
             id="manual-activity"
@@ -133,7 +132,7 @@ export function ActivityDialog(): JSXElement {
           </ToggleIconButton>
         </div>
 
-        <div class="flex flex-wrap">
+        <div class="mb-2 flex flex-wrap border border-gray-300">
           <input
             id="tab-join"
             type="radio"
@@ -154,7 +153,7 @@ export function ActivityDialog(): JSXElement {
           </label>
           <div
             class="
-              hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
+              hidden w-full border-solid border-gray-300 py-4 pl-2
               peer-checked/tab-switch1:block"
             classList={{
               "bg-gray-100": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
@@ -214,7 +213,7 @@ export function ActivityDialog(): JSXElement {
               hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
               peer-checked/tab-switch2:block"
           >
-            <div class="grid grid-cols-[72px_272px] gap-2">
+            <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
               <input
                 type="text"
@@ -243,9 +242,8 @@ export function ActivityDialog(): JSXElement {
               <Switch>
                 <Match when={formData.type === "autoActivity"}>
                   <div>処理内容 (OGNL)</div>
-                  <div class="flex h-[160px] w-[270px] flex-col border-solid border-gray-300">
+                  <div class="flex h-[160px] flex-col border-solid border-gray-300">
                     <select
-                      class="m-2 w-[254px] p-0"
                       disabled={selectedAppIndex() < 0}
                       value={selectedAppIndex()}
                       onChange={(e) => {
@@ -259,7 +257,7 @@ export function ActivityDialog(): JSXElement {
                       </For>
                     </select>
                     <textarea
-                      class="b-0 h-full resize-none border-t-gray-300"
+                      class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
                       value={
                         formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")
@@ -346,8 +344,12 @@ export function ActivityDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <Button onClick={handleOkButtonClick}>OK</Button>
-          <Button onClick={handleClose}>Cancel</Button>
+          <button type="submit" onClick={handleSubmit}>
+            OK
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
         </ButtonsContainer>
       </form>
     </dialog>

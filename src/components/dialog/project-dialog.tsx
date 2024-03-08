@@ -2,7 +2,6 @@ import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProjectEntity } from "../../data-source/data-type";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProjectDialog(): JSXElement {
@@ -34,10 +33,10 @@ export function ProjectDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[388px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5>パッケージの編集</h5>
-      <form method="dialog" class="bg-white">
-        <div class="grid grid-cols-[72px_272px] gap-x-2">
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <h5 class="mb-2">パッケージの編集</h5>
+      <form class="bg-white p-2">
+        <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID：</div>
           <input
             type="text"
@@ -53,8 +52,12 @@ export function ProjectDialog(): JSXElement {
         </div>
 
         <ButtonsContainer>
-          <Button onClick={handleOkButtonClick}>OK</Button>
-          <Button onClick={handleClose}>Cancel</Button>
+          <button type="submit" onClick={handleOkButtonClick}>
+            OK
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
         </ButtonsContainer>
       </form>
     </dialog>

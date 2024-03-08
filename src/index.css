@@ -17,3 +17,36 @@
   color: var(--font-color);
   background-color: var(--primary3-color);
 }
+
+button,
+select,
+input,
+textarea {
+  border-radius: 4px;
+  border: solid 1px var(--primary2-color);
+}
+
+button,
+input,
+textarea {
+  padding: 4px 8px;
+}
+
+select {
+  padding: 4px;
+}
+
+button:disabled,
+select:disabled,
+input:disabled,
+textarea:disabled {
+  background-color: lightgray;
+  color: gray;
+}
+
+button:focus,
+select:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--primary2-color);
+}

@@ -1,6 +1,5 @@
 import { JSXElement, createEffect } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function AboutDialog(): JSXElement {
@@ -11,6 +10,7 @@ export function AboutDialog(): JSXElement {
   createEffect(() => {
     if (openAboutDialog()) {
       dialogRef?.showModal();
+      okButtonRef?.focus();
     } else {
       dialogRef?.close();
     }
@@ -21,23 +21,30 @@ export function AboutDialog(): JSXElement {
   }
 
   let dialogRef: HTMLDialogElement | undefined;
+  let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="w-96 bg-gray-300 px-2 py-1" ref={dialogRef} onClose={handleClose}>
-      <h5>tiny esFlow Diagram Editor</h5>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <h5 class="mb-2">tiny esFlow Diagram Editor</h5>
       <form class="my-1 bg-white p-2">
         <div>version: 0.1 beta</div>
         <div>author: Ryouichi Matsuda</div>
-        <div>
+        <div class="mb-4">
           web:&nbsp;
-          <a href="https://github.com/ryoma100/tiny-es-flow-editor" target="_blank">
+          <a
+            href="https://github.com/ryoma100/tiny-es-flow-editor"
+            class="underline"
+            target="_blank"
+          >
             https://github.com/ryoma100/tiny-es-flow-editor
           </a>
         </div>
-      </form>
 
-      <ButtonsContainer>
-        <Button onClick={handleClose}>OK</Button>
-      </ButtonsContainer>
+        <ButtonsContainer>
+          <button type="submit" onClick={handleClose} ref={okButtonRef}>
+            OK
+          </button>
+        </ButtonsContainer>
+      </form>
     </dialog>
   );
 }

@@ -1,8 +1,7 @@
-import { For, JSXElement, createEffect, createSignal } from "solid-js";
+import { For, JSXElement, createEffect } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { ProcessDetailEntity, ProcessEntity } from "../../data-source/data-type";
-import { Button } from "../parts/button";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProcessDialog(): JSXElement {
@@ -14,7 +13,6 @@ export function ProcessDialog(): JSXElement {
 
   let process: ProcessEntity | null = null;
   const [formData, setFormData] = createStore<ProcessDetailEntity>(undefined as never);
-  const [xpdlIdError, setXpdlIdError] = createSignal("");
 
   createEffect(() => {
     process = openProcessDialog();
@@ -26,15 +24,6 @@ export function ProcessDialog(): JSXElement {
       dialogRef?.close();
     }
   });
-
-  function handleXpdlIdInput(e: InputEvent) {
-    const text = (e.target as HTMLInputElement).value;
-    setXpdlIdError(
-      processList().some((it) => it.id !== openProcessDialog()?.id && it.detail.xpdlId === text)
-        ? "このIDは既に存在します"
-        : "",
-    );
-  }
 
   function handleEnvClick(id: number, _e: MouseEvent) {
     setFormData(
@@ -110,6 +99,14 @@ export function ProcessDialog(): JSXElement {
 
   function handleOkButtonClick() {
     if (
+      processList().some(
+        (it) => it.id !== openProcessDialog()?.id && it.detail.xpdlId === formData.xpdlId,
+      )
+    ) {
+      setOpenMessageDialog("idExists");
+      return;
+    }
+    if (
       new Set(formData.applications.map((it) => it.xpdlId)).size !== formData.applications.length
     ) {
       setOpenMessageDialog("duplicateApplicationId");
@@ -129,31 +126,27 @@ export function ProcessDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[512px] bg-gray-300 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5>ワークフロープロセスの編集</h5>
-      <form method="dialog">
-        <div class="grid grid-cols-[80px_220px_180px]">
-          <div>ID：</div>
+    <dialog class="w-[520px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+      <h5 class="mb-2">ワークフロープロセスの編集</h5>
+      <form class="bg-white p-2">
+        <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
+          <p>ID：</p>
           <input
             type="text"
             value={formData.xpdlId}
-            onInput={handleXpdlIdInput}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <p>{xpdlIdError()}</p>
-
-          <div>名前：</div>
+          <p>名前：</p>
           <input
             type="text"
             value={formData.name}
             onChange={(e) => setFormData("name", e.target.value)}
           />
-          <p />
         </div>
 
-        <div>拡張設定：</div>
-        <table class="w-[484px] border-collapse border border-solid border-gray-500 bg-white">
-          <thead class="block bg-gray-300 pr-4">
+        <p class="mb-1 mt-2">拡張設定：</p>
+        <table class="mb-2 w-full border-collapse border border-solid border-primary3 bg-white">
+          <thead class="block bg-primary3 pr-4">
             <tr>
               <td class="w-[240px] pl-1">名前</td>
               <td class="w-[240px] pl-1">値</td>
@@ -163,20 +156,20 @@ export function ProcessDialog(): JSXElement {
             <For each={formData.environments}>
               {(it, index) => (
                 <tr onClick={[handleEnvClick, it.id]} classList={{ "bg-primary1": it.selected }}>
-                  <td class="w-[240px] pl-1">
+                  <td class="w-[240px]">
                     <input
-                      class="w-[220px]"
                       type="text"
+                      class="ml-1 w-[228px]"
                       value={it.name}
                       onChange={(e) =>
                         setFormData("environments", [index()], "name", e.target.value)
                       }
                     />
                   </td>
-                  <td class="w-[240px] pl-1">
+                  <td class="w-[240px]">
                     <input
-                      class="w-[220px]"
                       type="text"
+                      class="ml-1 w-[228px]"
                       value={it.value}
                       onChange={(e) =>
                         setFormData("environments", [index()], "value", e.target.value)
@@ -197,9 +190,9 @@ export function ProcessDialog(): JSXElement {
           </button>
         </ButtonsContainer>
 
-        <div>アプリケーション：</div>
-        <table class="w-[484px] border-collapse border border-solid border-gray-500 bg-white">
-          <thead class="block bg-gray-300 pr-4">
+        <p>アプリケーション：</p>
+        <table class="mb-2 mt-1 border-collapse border border-solid border-primary3 bg-white">
+          <thead class="block bg-primary3 pr-4">
             <tr>
               <td class="w-[120px] pl-1">ID</td>
               <td class="w-[120px] pl-1">名前</td>
@@ -213,7 +206,7 @@ export function ProcessDialog(): JSXElement {
                 <tr onClick={[handleAppClick, it.id]} classList={{ "bg-primary1": it.selected }}>
                   <td class="w-[120px] pl-1">
                     <input
-                      class="w-[100px]"
+                      class="w-[112px]"
                       type="text"
                       value={it.xpdlId}
                       onChange={(e) =>
@@ -223,7 +216,7 @@ export function ProcessDialog(): JSXElement {
                   </td>
                   <td class="w-[120px] pl-1">
                     <input
-                      class="w-[100px]"
+                      class="w-[112px]"
                       type="text"
                       value={it.name}
                       onChange={(e) =>
@@ -233,7 +226,7 @@ export function ProcessDialog(): JSXElement {
                   </td>
                   <td class="w-[120px] pl-1">
                     <input
-                      class="w-[100px]"
+                      class="w-[112px]"
                       type="text"
                       value={it.extendedName}
                       onChange={(e) =>
@@ -243,7 +236,7 @@ export function ProcessDialog(): JSXElement {
                   </td>
                   <td class="w-[120px] pl-1">
                     <input
-                      class="w-[100px]"
+                      class="w-[112px]"
                       type="text"
                       value={it.extendedValue}
                       onChange={(e) =>
@@ -265,28 +258,32 @@ export function ProcessDialog(): JSXElement {
           </button>
         </ButtonsContainer>
 
-        <div>有効期限</div>
-        <div class="grid grid-cols-[80px_220px_180px] gap-x-2">
-          <div>From：</div>
+        <p class="mb-2">有効期限</p>
+        <div class="mb-4 grid grid-cols-[80px_220px_180px] items-center gap-y-2">
+          <p>From：</p>
           <input
             type="text"
             value={formData.validFrom}
             onChange={(e) => setFormData("validFrom", e.target.value)}
           />
-          <div>入力例：2009/1/2</div>
+          <p class="ml-2">入力例：2009/1/2</p>
 
-          <div>To：</div>
+          <p>To：</p>
           <input
             type="text"
             value={formData.validTo}
             onChange={(e) => setFormData("validTo", e.target.value)}
           />
-          <div>入力例：2009/1/2</div>
+          <p class="ml-2">入力例：2009/1/2</p>
         </div>
 
         <ButtonsContainer>
-          <Button onClick={handleOkButtonClick}>OK</Button>
-          <Button onClick={handleClose}>Cancel</Button>
+          <button type="submit" onClick={handleOkButtonClick}>
+            OK
+          </button>
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
         </ButtonsContainer>
       </form>
     </dialog>
