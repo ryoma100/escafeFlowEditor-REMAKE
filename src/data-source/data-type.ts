@@ -49,7 +49,6 @@ export type EnvironmentEntity = {
   id: number;
   name: string;
   value: string;
-  selected: boolean;
 };
 
 export type ApplicationEntity = {
@@ -58,7 +57,6 @@ export type ApplicationEntity = {
   name: string;
   extendedName: string;
   extendedValue: string;
-  selected: boolean;
 };
 
 export type ActivityNodeType =

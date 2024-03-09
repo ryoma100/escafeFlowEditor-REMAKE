@@ -1,7 +1,12 @@
-import { For, JSXElement, createEffect } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { For, JSXElement, createEffect, createSignal } from "solid-js";
+import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { ProcessDetailEntity, ProcessEntity } from "../../data-source/data-type";
+import {
+  ApplicationEntity,
+  EnvironmentEntity,
+  ProcessDetailEntity,
+  ProcessEntity,
+} from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProcessDialog(): JSXElement {
@@ -13,6 +18,8 @@ export function ProcessDialog(): JSXElement {
 
   let process: ProcessEntity | null = null;
   const [formData, setFormData] = createStore<ProcessDetailEntity>(undefined as never);
+  const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
+  const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
 
   createEffect(() => {
     process = openProcessDialog();
@@ -25,14 +32,8 @@ export function ProcessDialog(): JSXElement {
     }
   });
 
-  function handleEnvClick(id: number, _e: MouseEvent) {
-    setFormData(
-      "environments",
-      () => true,
-      produce((it) => {
-        it.selected = it.id === id;
-      }),
-    );
+  function handleEnvClick(env: EnvironmentEntity, _e: MouseEvent) {
+    setSelectedEnv(env);
   }
 
   function handleAddEnvButtonClick() {
@@ -41,25 +42,19 @@ export function ProcessDialog(): JSXElement {
     setFormData("_lastEnvironmentId", id);
     setFormData("environments", [
       ...formData.environments,
-      { id, name: `name${id}`, value: `value${id}`, selected: false },
+      { id, name: `name${id}`, value: `value${id}` },
     ]);
   }
 
   function handleRemoveEnvButtonClick() {
     setFormData(
       "environments",
-      formData.environments.filter((it) => !it.selected),
+      formData.environments.filter((it) => it.id !== selectedEnv()?.id),
     );
   }
 
-  function handleAppClick(id: number, _e: MouseEvent) {
-    setFormData(
-      "applications",
-      () => true,
-      produce((it) => {
-        it.selected = it.id === id;
-      }),
-    );
+  function handleAppClick(app: ApplicationEntity, _e: MouseEvent) {
+    setSelectedApp(app);
   }
 
   function handleAddAppButtonClick() {
@@ -73,17 +68,15 @@ export function ProcessDialog(): JSXElement {
         name: `name${id}`,
         extendedName: "",
         extendedValue: "",
-        selected: false,
       },
     ]);
   }
 
   function handleRemoveAppButtonClick() {
-    const selectedApp = formData.applications.find((it) => it.selected);
-    if (selectedApp) {
+    if (selectedApp()) {
       if (
         activityList.some((activity) =>
-          activity.applications.some((app) => app.id === selectedApp.id),
+          activity.applications.some((app) => app.id === selectedApp()?.id),
         )
       ) {
         setOpenMessageDialog("applicationCannotDelete");
@@ -93,7 +86,7 @@ export function ProcessDialog(): JSXElement {
 
     setFormData(
       "applications",
-      formData.applications.filter((it) => !it.selected),
+      formData.applications.filter((it) => it.id !== selectedApp()?.id),
     );
   }
 
@@ -157,7 +150,10 @@ export function ProcessDialog(): JSXElement {
           <tbody class="block h-[88px] overflow-x-hidden overflow-y-scroll">
             <For each={formData.environments}>
               {(it, index) => (
-                <tr onClick={[handleEnvClick, it.id]} classList={{ "bg-primary1": it.selected }}>
+                <tr
+                  onClick={[handleEnvClick, it]}
+                  classList={{ "bg-primary1": it.id === selectedEnv()?.id }}
+                >
                   <td class="w-[240px]">
                     <input
                       type="text"
@@ -205,7 +201,10 @@ export function ProcessDialog(): JSXElement {
           <tbody class="block h-[88px] overflow-x-hidden overflow-y-scroll">
             <For each={formData.applications}>
               {(it, index) => (
-                <tr onClick={[handleAppClick, it.id]} classList={{ "bg-primary1": it.selected }}>
+                <tr
+                  onClick={[handleAppClick, it]}
+                  classList={{ "bg-primary1": it.id === selectedApp()?.id }}
+                >
                   <td class="w-[120px] pl-1">
                     <input
                       class="w-[112px]"
