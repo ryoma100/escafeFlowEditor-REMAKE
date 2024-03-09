@@ -166,7 +166,7 @@ function Menu(props: { title: string; children: JSXElement }): JSXElement {
   return (
     <li
       class="
-        group relative
+        group relative z-10
         hover:bg-primary1"
     >
       <a class="px-2 no-underline" href="#">

@@ -134,7 +134,7 @@ export function ActivityDialog(): JSXElement {
           </ToggleIconButton>
         </div>
 
-        <div class="mb-2 flex flex-wrap border border-gray-300">
+        <div class="mb-2 flex flex-wrap">
           <input
             id="tab-join"
             type="radio"
@@ -155,7 +155,7 @@ export function ActivityDialog(): JSXElement {
           </label>
           <div
             class="
-              hidden w-full border-solid border-gray-300 py-4 pl-2
+              hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2
               peer-checked/tab-switch1:block"
             classList={{
               "bg-gray-100": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
@@ -212,7 +212,7 @@ export function ActivityDialog(): JSXElement {
           </label>
           <div
             class="
-              hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
+              hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2
               peer-checked/tab-switch2:block"
           >
             <div class="grid grid-cols-[64px_266px] gap-2">
@@ -308,7 +308,7 @@ export function ActivityDialog(): JSXElement {
           </label>
           <div
             class="
-              hidden h-[300px] w-full border-solid border-gray-300 py-4 pl-2
+              hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2
               peer-checked/tab-switch3:block"
             classList={{
               "bg-gray-100": formData.splitType === "notSplit" || formData.splitType === "oneSplit",

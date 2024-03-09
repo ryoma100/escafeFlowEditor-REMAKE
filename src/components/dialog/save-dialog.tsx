@@ -42,7 +42,7 @@ export function SaveDialog(): JSXElement {
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">{t("xpdlSave")}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
-        <textarea class="mb-2 h-[300px] w-full" readOnly>
+        <textarea class="mb-2 h-[300px] w-full resize-none" readOnly>
           {data()}
         </textarea>
 
