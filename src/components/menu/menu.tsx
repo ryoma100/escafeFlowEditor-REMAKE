@@ -8,9 +8,8 @@ export function AppMenu(): JSXElement {
     processModel: { addProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     baseNodeModel: { changeSelectNodes, removeSelectedNodes, selectedNodes },
-    baseEdgeModel: { removeSelectedEdge, selectedEdges },
+    baseEdgeModel: { removeSelectedEdge, selectedEdges, edgeList },
     activityModel: { updateAllJoinSplitType },
-    transitionModel: { transitionList },
     dialog: {
       setOpenProjectDialog,
       setOpenProcessDialog,
@@ -48,7 +47,7 @@ export function AppMenu(): JSXElement {
   function handleEditRemoveClick() {
     removeSelectedEdge();
     removeSelectedNodes();
-    updateAllJoinSplitType(transitionList);
+    updateAllJoinSplitType(edgeList);
     return false;
   }
 

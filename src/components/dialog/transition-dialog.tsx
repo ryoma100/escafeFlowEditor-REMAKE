@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function TransitionDialog(): JSXElement {
   const {
-    transitionModel: { transitionList, setTransitionList },
+    baseEdgeModel: { edgeList, setEdgeList },
     dialog: { openTransitionDialog, setOpenTransitionDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
@@ -28,15 +28,22 @@ export function TransitionDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (transitionList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
+    if (
+      edgeList.some(
+        (it) =>
+          it.type === "transitionEdge" && it.id !== formData.id && it.xpdlId === formData.xpdlId,
+      )
+    ) {
       setOpenMessageDialog("idExists");
       return;
     }
 
-    setTransitionList(
+    setEdgeList(
       (it) => it.id === openTransitionDialog()?.id,
       produce((it) => {
-        it.xpdlId = formData.xpdlId;
+        if (it.type === "transitionEdge") {
+          it.xpdlId = formData.xpdlId;
+        }
       }),
     );
     setOpenTransitionDialog(null);

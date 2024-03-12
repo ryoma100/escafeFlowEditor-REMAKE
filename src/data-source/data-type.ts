@@ -35,8 +35,7 @@ export type ProcessEntity = {
   otherNodes: (CommentNode | StartNode | EndNode)[];
 
   _lastEdgeId: number;
-  transitionEdges: TransitionEdge[];
-  otherEdges: (CommentEdge | StartEdge | EndEdge)[];
+  edges: (TransitionEdge | CommentEdge | StartEdge | EndEdge)[];
 };
 
 export type ActorEntity = {

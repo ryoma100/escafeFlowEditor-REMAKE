@@ -12,12 +12,11 @@ import {
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
+    processModel: { selectedProcess },
     activityModel: { layerTopActivity, resizeActivityHeight },
     actorModel: { actorList },
-    transitionModel: { addTransition },
-    otherEdgeModel: { addCommentEdge, addStartEdge },
     baseNodeModel: { changeSelectNodes },
-    baseEdgeModel: { changeSelectEdges },
+    baseEdgeModel: { changeSelectEdges, addTransitionEdge, addCommentEdge, addStartEdge },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
@@ -62,7 +61,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   function handleMouseUp(_e: MouseEvent) {
     switch (dragType()) {
       case "addTransition":
-        addTransition(props.activity.id);
+        addTransitionEdge(selectedProcess().detail.xpdlId, props.activity.id);
         setDragType("none");
         break;
       case "addCommentEdge":

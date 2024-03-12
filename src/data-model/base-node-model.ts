@@ -1,15 +1,13 @@
 import { produce } from "solid-js/store";
 import { INode } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
-import { makeOtherEdgeModel } from "./other-edge-model";
+import { makeBaseEdgeModel } from "./base-edge-model";
 import { makeOtherNodeModel } from "./other-node-model";
-import { makeTransitionModel } from "./transition-model";
 
 export function makeBaseNodeModel(
   activityModel: ReturnType<typeof makeActivityModel>,
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
-  transitionModel: ReturnType<typeof makeTransitionModel>,
-  otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>,
+  edgeModel: ReturnType<typeof makeBaseEdgeModel>,
 ) {
   function changeSelectNodes(
     type: "select" | "selectAll" | "toggle" | "clearAll",
@@ -75,16 +73,14 @@ export function makeBaseNodeModel(
   }
 
   function removeSelectedNodes() {
-    transitionModel.setTransitionList(
-      transitionModel.transitionList.filter(
-        (it) =>
-          !activityModel.getActivityNode(it.fromActivityId).selected &&
-          !activityModel.getActivityNode(it.toActivityId).selected,
-      ),
-    );
-    otherEdgeModel.setOtherEdgeList(
-      otherEdgeModel.otherEdgeList.filter((it) => {
+    edgeModel.setEdgeList(
+      edgeModel.edgeList.filter((it) => {
         switch (it.type) {
+          case "transitionEdge":
+            return (
+              !activityModel.getActivityNode(it.fromActivityId).selected &&
+              !activityModel.getActivityNode(it.toActivityId).selected
+            );
           case "commentEdge":
             return (
               !otherNodeModel.getCommentNode(it.fromCommentId).selected &&

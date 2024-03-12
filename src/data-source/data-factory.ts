@@ -61,8 +61,7 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     otherNodes: [],
 
     _lastEdgeId: 0,
-    transitionEdges: [],
-    otherEdges: [],
+    edges: [],
   };
   process.actors = [createActor(process)];
   return process;
@@ -114,16 +113,17 @@ function createActivity(
 }
 
 function createTransition(
-  process: ProcessEntity,
+  processXpdlId: string,
+  transitions: TransitionEdge[],
   fromActivityId: number,
   toActivityId: number,
 ): TransitionEdge {
-  let id = 0;
+  let id = transitions.reduce((maxId, it) => Math.max(it.id, maxId), 0);
   let xpdlId = "";
   do {
-    id = ++process._lastEdgeId;
-    xpdlId = `${process.detail.xpdlId}_tra${id}`;
-  } while (process.transitionEdges.some((it) => it.xpdlId === xpdlId));
+    id++;
+    xpdlId = `${processXpdlId}_tra${id}`;
+  } while (transitions.some((it) => it.xpdlId === xpdlId));
 
   return {
     id,
@@ -178,13 +178,7 @@ function createEndNode(process: ProcessEntity, x: number, y: number): EndNode {
   };
 }
 
-function createCommentEdge(
-  process: ProcessEntity,
-  fromCommentId: number,
-  toActivityId: number,
-): CommentEdge {
-  const id = ++process._lastEdgeId;
-
+function createCommentEdge(id: number, fromCommentId: number, toActivityId: number): CommentEdge {
   return {
     id,
     type: "commentEdge",
@@ -194,13 +188,7 @@ function createCommentEdge(
   };
 }
 
-function createStartEdge(
-  process: ProcessEntity,
-  fromStartId: number,
-  toActivityId: number,
-): StartEdge {
-  const id = ++process._lastEdgeId;
-
+function createStartEdge(id: number, fromStartId: number, toActivityId: number): StartEdge {
   return {
     id,
     type: "startEdge",
@@ -210,9 +198,7 @@ function createStartEdge(
   };
 }
 
-function createEndEdge(process: ProcessEntity, fromActivityId: number, toEndId: number): EndEdge {
-  const id = ++process._lastEdgeId;
-
+function createEndEdge(id: number, fromActivityId: number, toEndId: number): EndEdge {
   return {
     id,
     type: "endEdge",

@@ -3,16 +3,14 @@ import { dataFactory } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
-import { makeOtherEdgeModel } from "./other-edge-model";
+import { makeBaseEdgeModel } from "./base-edge-model";
 import { makeOtherNodeModel } from "./other-node-model";
-import { makeTransitionModel } from "./transition-model";
 
 export function makeProcessModel(
   actorModel: ReturnType<typeof makeActorModel>,
   activityModel: ReturnType<typeof makeActivityModel>,
-  transitionModel: ReturnType<typeof makeTransitionModel>,
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
-  otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>,
+  baseEdgeModel: ReturnType<typeof makeBaseEdgeModel>,
 ) {
   let _project: ProjectEntity;
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
@@ -26,29 +24,34 @@ export function makeProcessModel(
       setSelectedProcess(firstProcess);
       actorModel.load(firstProcess);
       activityModel.load(firstProcess);
-      transitionModel.load(firstProcess);
       otherNodeModel.load(firstProcess);
-      otherEdgeModel.load(firstProcess);
+
+      baseEdgeModel.load(firstProcess);
     });
   }
 
   function sync() {
     actorModel.sync();
     activityModel.sync();
-    transitionModel.sync();
     otherNodeModel.sync();
-    otherEdgeModel.sync();
+
+    const process = { ...selectedProcess(), edges: baseEdgeModel.save() };
+    setProcessList(processList().map((it) => (it.id === process.id ? process : it)));
+    setSelectedProcess(processList().find((it) => it.id === process.id)!);
   }
 
-  function changeProcess(process: ProcessEntity) {
+  function changeProcess(newProcess: ProcessEntity) {
     sync();
+
+    const process = processList().find((it) => it.id === newProcess.id)!;
+
     batch(() => {
       setSelectedProcess(process);
       actorModel.load(process);
       activityModel.load(process);
-      transitionModel.load(process);
       otherNodeModel.load(process);
-      otherEdgeModel.load(process);
+
+      baseEdgeModel.load(process);
     });
   }
 

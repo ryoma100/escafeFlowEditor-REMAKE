@@ -6,7 +6,7 @@ import { CommentIcon, EndIcon, StartIcon } from "../icons/material-icons";
 export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndNode }): JSXElement {
   const {
     otherNodeModel: { resizeCommentNode },
-    otherEdgeModel: { addEndEdge },
+    baseEdgeModel: { addEndEdge },
     baseNodeModel: { changeSelectNodes },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
     dialog: { setOpenCommentDialog },

@@ -10,11 +10,9 @@ import { makeActivityModel } from "../data-model/activity-model";
 import { makeActorModel } from "../data-model/actor-model";
 import { makeBaseEdgeModel } from "../data-model/base-edge-model";
 import { makeBaseNodeModel } from "../data-model/base-node-model";
-import { makeOtherEdgeModel } from "../data-model/other-edge-model";
 import { makeOtherNodeModel } from "../data-model/other-node-model";
 import { makeProcessModel } from "../data-model/process-model";
 import { makeProjectModel } from "../data-model/project-model";
-import { makeTransitionModel } from "../data-model/transition-model";
 import {
   ActivityNode,
   ActorEntity,
@@ -29,22 +27,9 @@ function makeModelContext() {
   const activityModel = makeActivityModel();
   const actorModel = makeActorModel(activityModel);
   const otherNodeModel = makeOtherNodeModel();
-  const transitionModel = makeTransitionModel(activityModel);
-  const otherEdgeModel = makeOtherEdgeModel(otherNodeModel, activityModel);
-  const baseEdgeModel = makeBaseEdgeModel(transitionModel, otherEdgeModel);
-  const baseNodeModel = makeBaseNodeModel(
-    activityModel,
-    otherNodeModel,
-    transitionModel,
-    otherEdgeModel,
-  );
-  const processModel = makeProcessModel(
-    actorModel,
-    activityModel,
-    transitionModel,
-    otherNodeModel,
-    otherEdgeModel,
-  );
+  const baseEdgeModel = makeBaseEdgeModel(activityModel, otherNodeModel);
+  const baseNodeModel = makeBaseNodeModel(activityModel, otherNodeModel, baseEdgeModel);
+  const processModel = makeProcessModel(actorModel, activityModel, otherNodeModel, baseEdgeModel);
   const projectModel = makeProjectModel(processModel);
 
   return {
@@ -52,9 +37,7 @@ function makeModelContext() {
     processModel,
     actorModel,
     activityModel,
-    transitionModel,
     otherNodeModel,
-    otherEdgeModel,
     baseNodeModel,
     baseEdgeModel,
   };
@@ -156,8 +139,6 @@ const AppContext = createContext<{
   activityModel: ReturnType<typeof makeActivityModel>;
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>;
   baseNodeModel: ReturnType<typeof makeBaseNodeModel>;
-  transitionModel: ReturnType<typeof makeTransitionModel>;
-  otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>;
   baseEdgeModel: ReturnType<typeof makeBaseEdgeModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
@@ -169,8 +150,6 @@ const AppContext = createContext<{
   activityModel: undefined as never,
   otherNodeModel: undefined as never,
   baseNodeModel: undefined as never,
-  transitionModel: undefined as never,
-  otherEdgeModel: undefined as never,
   baseEdgeModel: undefined as never,
   dialog: undefined as never,
   diagram: undefined as never,

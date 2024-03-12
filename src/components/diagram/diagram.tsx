@@ -1,5 +1,6 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
+import { CommentEdge, EndEdge, StartEdge, TransitionEdge } from "../../data-source/data-type";
 import { ActivityNodeContainer } from "./activity-node";
 import { OtherEdgeContainer } from "./other-edge";
 import { OtherNodeContainer } from "./other-node";
@@ -24,11 +25,9 @@ export function DiagramContainer(): JSXElement {
   const {
     activityModel: { activityList, addActivity, layerTopActivity, resizeLeft, resizeRight },
     actorModel: { selectedActor },
-    transitionModel: { transitionList },
     otherNodeModel: { otherNodeList, addCommentNode, addStartNode, addEndNode },
-    otherEdgeModel: { otherEdgeList },
     baseNodeModel: { changeSelectNodes, moveSelectedNodes },
-    baseEdgeModel: { changeSelectEdges },
+    baseEdgeModel: { changeSelectEdges, edgeList },
     diagram: {
       svgRect,
       setSvgRect,
@@ -215,18 +214,23 @@ export function DiagramContainer(): JSXElement {
             <polygon points="10,0 0,5 0,-5" fill="gray" />
           </marker>
         </defs>
-        <g data-id="no-activity-edges">
-          <For each={otherEdgeList}>{(it) => <OtherEdgeContainer edge={it} />}</For>
+        <g data-id="other-edges">
+          <For each={edgeList.filter((it) => it.type !== "transitionEdge")}>
+            {(it) => <OtherEdgeContainer edge={it as StartEdge | EndEdge | CommentEdge} />}
+          </For>
         </g>
         <g data-id="activity-nodes">
           <For each={activityList}>{(it) => <ActivityNodeContainer activity={it} />}</For>
         </g>
-        <g data-id="no-activity-nodes">
+        <g data-id="other-nodes">
           <For each={otherNodeList}>{(it) => <OtherNodeContainer node={it} />}</For>
         </g>
-        <g data-id="transition-edges">
-          <For each={transitionList}>{(it) => <TransitionEdgeContainer transition={it} />}</For>
+        <g data-id="transitions">
+          <For each={edgeList.filter((it) => it.type === "transitionEdge")}>
+            {(it) => <TransitionEdgeContainer transition={it as TransitionEdge} />}
+          </For>
         </g>
+
         <g data-id="adding-line">
           <Show
             when={

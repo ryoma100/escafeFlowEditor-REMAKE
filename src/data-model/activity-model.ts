@@ -4,7 +4,10 @@ import { dataFactory } from "../data-source/data-factory";
 import {
   ActivityNode,
   ActivityNodeType,
+  CommentEdge,
+  EndEdge,
   ProcessEntity,
+  StartEdge,
   TransitionEdge,
 } from "../data-source/data-type";
 
@@ -123,15 +126,17 @@ export function makeActivityModel() {
     );
   }
 
-  function updateAllJoinSplitType(transitions: TransitionEdge[]) {
+  function updateAllJoinSplitType(edges: (TransitionEdge | CommentEdge | StartEdge | EndEdge)[]) {
     activityList.forEach((activity) => {
       updateJoinType(
         activity.id,
-        transitions.filter((it) => it.toActivityId === activity.id).length,
+        edges.filter((it) => it.type === "transitionEdge" && it.toActivityId === activity.id)
+          .length,
       );
       updateSplitType(
         activity.id,
-        transitions.filter((it) => it.fromActivityId === activity.id).length,
+        edges.filter((it) => it.type === "transitionEdge" && it.fromActivityId === activity.id)
+          .length,
       );
     });
   }
