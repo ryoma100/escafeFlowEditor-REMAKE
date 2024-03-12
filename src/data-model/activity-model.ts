@@ -17,7 +17,7 @@ export function makeActivityModel() {
     setActivityList(_process.activityNodes);
   }
 
-  function save() {
+  function sync() {
     _process.activityNodes = [...activityList];
   }
 
@@ -138,7 +138,7 @@ export function makeActivityModel() {
 
   return {
     load,
-    save,
+    sync,
     activityList,
     setActivityList,
     addActivity,

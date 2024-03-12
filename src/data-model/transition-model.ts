@@ -12,7 +12,7 @@ export function makeTransitionModel(activityModel: ReturnType<typeof makeActivit
     setTransitionList(process.transitionEdges);
   }
 
-  function save() {
+  function sync() {
     process.transitionEdges = [...transitionList];
   }
 
@@ -45,7 +45,7 @@ export function makeTransitionModel(activityModel: ReturnType<typeof makeActivit
 
   return {
     load,
-    save,
+    sync,
     addTransition,
     transitionList,
     setTransitionList,

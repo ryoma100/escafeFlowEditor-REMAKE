@@ -11,7 +11,7 @@ export function makeOtherNodeModel() {
     setOtherNodeList(process.otherNodes);
   }
 
-  function save() {
+  function sync() {
     process.otherNodes = [...otherNodeList];
   }
 
@@ -78,7 +78,7 @@ export function makeOtherNodeModel() {
 
   return {
     load,
-    save,
+    sync,
     otherNodeList,
     addCommentNode,
     addStartNode,

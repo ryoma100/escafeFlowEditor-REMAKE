@@ -16,7 +16,7 @@ export function makeOtherEdgeModel(
     setOtherEdgeList(process.otherEdges);
   }
 
-  function save() {
+  function sync() {
     process.otherEdges = [...otherEdgeList];
   }
 
@@ -43,7 +43,7 @@ export function makeOtherEdgeModel(
 
   return {
     load,
-    save,
+    sync,
     otherEdgeList,
     addCommentEdge,
     addStartEdge,

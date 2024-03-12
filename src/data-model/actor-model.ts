@@ -16,7 +16,7 @@ export function makeActorModel(activityModel: ReturnType<typeof makeActivityMode
     setSelectedActor(_process.actors[0]);
   }
 
-  function save() {
+  function sync() {
     _process.actors = [...actorList];
   }
 
@@ -55,7 +55,7 @@ export function makeActorModel(activityModel: ReturnType<typeof makeActivityMode
 
   return {
     load,
-    save,
+    sync,
     actorList,
     selectedActor,
     setSelectedActor,

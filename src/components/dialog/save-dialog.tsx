@@ -1,6 +1,7 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { useAppContext } from "../../context/app-context";
+import { exportYaml } from "../../data-source/data-converter";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function SaveDialog(): JSXElement {
@@ -19,7 +20,7 @@ export function SaveDialog(): JSXElement {
       dialogRef?.showModal();
       okButtonRef?.focus();
       save();
-      setData(JSON.stringify(project, null, 2));
+      setData(exportYaml(project));
     } else {
       dialogRef?.close();
     }
@@ -39,10 +40,10 @@ export function SaveDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-[512px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
       <h5 class="mb-2">{t("xpdlSave")}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
-        <textarea class="mb-2 h-[300px] w-full resize-none" readOnly>
+        <textarea class="mb-2 h-[512px] w-full resize-none" readOnly>
           {data()}
         </textarea>
 

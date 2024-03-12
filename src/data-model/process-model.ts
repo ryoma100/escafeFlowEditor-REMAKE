@@ -14,13 +14,13 @@ export function makeProcessModel(
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
   otherEdgeModel: ReturnType<typeof makeOtherEdgeModel>,
 ) {
-  let project: ProjectEntity;
+  let _project: ProjectEntity;
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
   const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(undefined as never);
 
   function load(newProject: ProjectEntity) {
-    project = newProject;
-    setProcessList(project.processes);
+    _project = newProject;
+    setProcessList(_project.processes);
     batch(() => {
       const firstProcess = processList()[0];
       setSelectedProcess(firstProcess);
@@ -32,16 +32,16 @@ export function makeProcessModel(
     });
   }
 
-  function save() {
-    actorModel.save();
-    activityModel.save();
-    transitionModel.save();
-    otherNodeModel.save();
-    otherEdgeModel.save();
+  function sync() {
+    actorModel.sync();
+    activityModel.sync();
+    transitionModel.sync();
+    otherNodeModel.sync();
+    otherEdgeModel.sync();
   }
 
   function changeProcess(process: ProcessEntity) {
-    save();
+    sync();
     batch(() => {
       setSelectedProcess(process);
       actorModel.load(process);
@@ -53,9 +53,8 @@ export function makeProcessModel(
   }
 
   function addProcess() {
-    const newProcess = dataFactory.createProcess(project);
+    const newProcess = dataFactory.createProcess(_project);
     setProcessList([...processList(), newProcess]);
-    project.processes = [...processList()];
     changeProcess(newProcess);
   }
 
@@ -75,13 +74,13 @@ export function makeProcessModel(
     const newList = processList().filter((it) => it.id !== selectedProcess().id);
     setProcessList(newList);
     setSelectedProcess(processList()[nextSelectedIndex]);
-    project.processes = [...processList()];
+    _project.processes = [...processList()];
     changeProcess(selectedProcess());
   }
 
   return {
     load,
-    save,
+    save: sync,
     processList,
     selectedProcess,
     changeProcess,
