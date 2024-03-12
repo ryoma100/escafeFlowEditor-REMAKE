@@ -78,7 +78,7 @@ export function makeBaseEdgeModel(
 
     const transition = dataFactory.createTransition(
       processXpdlId,
-      transitionList,
+      edgeList,
       fromActivityId,
       toActivityId,
     );

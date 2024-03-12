@@ -7,6 +7,7 @@ import {
   CommentNode,
   EndEdge,
   EndNode,
+  IEdge,
   ProcessDetailEntity,
   ProcessEntity,
   ProjectEntity,
@@ -114,16 +115,17 @@ function createActivity(
 
 function createTransition(
   processXpdlId: string,
-  transitions: TransitionEdge[],
+  edgeList: IEdge[],
   fromActivityId: number,
   toActivityId: number,
 ): TransitionEdge {
-  let id = transitions.reduce((maxId, it) => Math.max(it.id, maxId), 0);
+  const transitionList = edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
+  let id = edgeList.reduce((maxId, it) => Math.max(it.id, maxId), 0);
   let xpdlId = "";
   do {
     id++;
     xpdlId = `${processXpdlId}_tra${id}`;
-  } while (transitions.some((it) => it.xpdlId === xpdlId));
+  } while (transitionList.some((it: TransitionEdge) => it.xpdlId === xpdlId));
 
   return {
     id,
