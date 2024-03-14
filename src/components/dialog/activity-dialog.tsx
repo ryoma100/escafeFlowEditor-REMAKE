@@ -62,11 +62,12 @@ export function ActivityDialog(): JSXElement {
         it.actorId = formData.actorId;
         it.name = formData.name;
         it.applications =
-          formData.type === "autoActivity"
+          formData.activityType === "autoActivity"
             ? formData.applications.filter((it) => it.ognl !== "")
             : [];
         it.ognl =
-          formData.type === "manualTimerActivity" || formData.type === "autoTimerActivity"
+          formData.activityType === "manualTimerActivity" ||
+          formData.activityType === "autoTimerActivity"
             ? formData.ognl
             : "";
         it.joinType = formData.joinType;
@@ -91,8 +92,8 @@ export function ActivityDialog(): JSXElement {
           <ToggleIconButton
             id="manual-activity"
             title={t("manualActivity")}
-            checked={formData.type === "manualActivity"}
-            onChange={() => setFormData("type", "manualActivity")}
+            checked={formData.activityType === "manualActivity"}
+            onChange={() => setFormData("activityType", "manualActivity")}
             margin="0 4px 0 0"
           >
             <ManualActivityIcon />
@@ -100,8 +101,8 @@ export function ActivityDialog(): JSXElement {
           <ToggleIconButton
             id="auto-activity"
             title={t("autoActivity")}
-            checked={formData.type === "autoActivity"}
-            onChange={() => setFormData("type", "autoActivity")}
+            checked={formData.activityType === "autoActivity"}
+            onChange={() => setFormData("activityType", "autoActivity")}
             margin="0 4px 0 0"
           >
             <AutoActivityIcon />
@@ -109,8 +110,8 @@ export function ActivityDialog(): JSXElement {
           <ToggleIconButton
             id="manual-timer-activity"
             title={t("manualTimerActivity")}
-            checked={formData.type === "manualTimerActivity"}
-            onChange={() => setFormData("type", "manualTimerActivity")}
+            checked={formData.activityType === "manualTimerActivity"}
+            onChange={() => setFormData("activityType", "manualTimerActivity")}
             margin="0 4px 0 0"
           >
             <ManualTimerActivityIcon />
@@ -118,8 +119,8 @@ export function ActivityDialog(): JSXElement {
           <ToggleIconButton
             id="auto-timer-activity"
             title={t("autoTimerActivity")}
-            checked={formData.type === "autoTimerActivity"}
-            onChange={() => setFormData("type", "autoTimerActivity")}
+            checked={formData.activityType === "autoTimerActivity"}
+            onChange={() => setFormData("activityType", "autoTimerActivity")}
             margin="0 4px 0 0"
           >
             <AutoTimerActivityIcon />
@@ -127,8 +128,8 @@ export function ActivityDialog(): JSXElement {
           <ToggleIconButton
             id="user-activity"
             title={t("handWork")}
-            checked={formData.type === "userActivity"}
-            onChange={() => setFormData("type", "userActivity")}
+            checked={formData.activityType === "userActivity"}
+            onChange={() => setFormData("activityType", "userActivity")}
           >
             <UserActivityIcon />
           </ToggleIconButton>
@@ -242,7 +243,7 @@ export function ActivityDialog(): JSXElement {
               </select>
 
               <Switch>
-                <Match when={formData.type === "autoActivity"}>
+                <Match when={formData.activityType === "autoActivity"}>
                   <div>処理内容 (OGNL)</div>
                   <div class="flex h-[160px] flex-col border-solid border-gray-300">
                     <select
@@ -272,7 +273,8 @@ export function ActivityDialog(): JSXElement {
                 </Match>
                 <Match
                   when={
-                    formData.type === "manualTimerActivity" || formData.type === "autoTimerActivity"
+                    formData.activityType === "manualTimerActivity" ||
+                    formData.activityType === "autoTimerActivity"
                   }
                 >
                   <div>自動で実行するのはいつ？ (OGNL)</div>

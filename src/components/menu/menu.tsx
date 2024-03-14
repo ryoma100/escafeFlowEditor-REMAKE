@@ -55,11 +55,7 @@ export function AppMenu(): JSXElement {
     if (selectedNodes().length + selectedEdges().length === 1) {
       selectedNodes().forEach((it) => {
         switch (it.type) {
-          case "manualActivity":
-          case "autoActivity":
-          case "manualTimerActivity":
-          case "autoTimerActivity":
-          case "userActivity":
+          case "activityNode":
             setOpenActorDialog(it);
             break;
           case "commentNode":

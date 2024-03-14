@@ -7,7 +7,7 @@ const meta = {
   parameters: { layout: "centered" },
   tags: ["autodocs"],
   argTypes: {
-    type: {
+    activityType: {
       control: "select",
       options: [
         "manualActivity",
@@ -36,7 +36,7 @@ type Story = StoryObj<typeof ActivityNodeView>;
 
 export const ManualActivity: Story = {
   args: {
-    type: "manualActivity",
+    activityType: "manualActivity",
     name: "Manual Activity",
     actorName: "Actor 1",
     joinType: "notJoin",
@@ -48,7 +48,7 @@ export const ManualActivity: Story = {
 
 export const AutoActivity: Story = {
   args: {
-    type: "autoActivity",
+    activityType: "autoActivity",
     name: "Auto Activity",
     actorName: "Actor 1",
     joinType: "notJoin",
@@ -60,7 +60,7 @@ export const AutoActivity: Story = {
 
 export const ManualTimerActivity: Story = {
   args: {
-    type: "manualTimerActivity",
+    activityType: "manualTimerActivity",
     name: "Manual Timer Activity",
     actorName: "Actor 1",
     joinType: "notJoin",
@@ -72,7 +72,7 @@ export const ManualTimerActivity: Story = {
 
 export const AutoTimerActivity: Story = {
   args: {
-    type: "autoTimerActivity",
+    activityType: "autoTimerActivity",
     name: "Auto Timer Activity",
     actorName: "Actor 1",
     joinType: "notJoin",
@@ -84,7 +84,7 @@ export const AutoTimerActivity: Story = {
 
 export const UserActivity: Story = {
   args: {
-    type: "userActivity",
+    activityType: "userActivity",
     name: "User Activity",
     actorName: "Actor 1",
     joinType: "notJoin",

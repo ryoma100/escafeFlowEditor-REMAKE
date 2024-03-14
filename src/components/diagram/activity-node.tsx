@@ -89,7 +89,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
       onMouseUp={handleMouseUp}
     >
       <ActivityNodeView
-        type={props.activity.type}
+        activityType={props.activity.activityType}
         name={props.activity.name}
         actorName={actorList.find((it) => it.id === props.activity.actorId)?.name ?? ""}
         joinType={props.activity.joinType}
@@ -107,7 +107,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
 }
 
 export function ActivityNodeView(props: {
-  type: ActivityNodeType;
+  activityType: ActivityNodeType;
   name: string;
   actorName: string;
   joinType: JoinType;
@@ -182,19 +182,19 @@ export function ActivityNodeView(props: {
         </div>
         <div class="flex h-full w-full justify-center">
           <Switch>
-            <Match when={props.type === "manualActivity"}>
+            <Match when={props.activityType === "manualActivity"}>
               <ManualActivityIcon />
             </Match>
-            <Match when={props.type === "autoActivity"}>
+            <Match when={props.activityType === "autoActivity"}>
               <AutoActivityIcon />
             </Match>
-            <Match when={props.type === "manualTimerActivity"}>
+            <Match when={props.activityType === "manualTimerActivity"}>
               <ManualTimerActivityIcon />
             </Match>
-            <Match when={props.type === "autoTimerActivity"}>
+            <Match when={props.activityType === "autoTimerActivity"}>
               <AutoTimerActivityIcon />
             </Match>
-            <Match when={props.type === "userActivity"}>
+            <Match when={props.activityType === "userActivity"}>
               <UserActivityIcon />
             </Match>
           </Switch>

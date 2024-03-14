@@ -7,7 +7,7 @@ import {
   CommentNode,
   EndEdge,
   EndNode,
-  IBaseEdge,
+  IEdge,
   ProcessDetailEntity,
   ProcessEntity,
   ProjectEntity,
@@ -86,7 +86,7 @@ function createActor(process: ProcessEntity): ActorEntity {
 function createActivity(
   process: ProcessEntity,
   actorId: number,
-  type: ActivityNodeType,
+  activityType: ActivityNodeType,
 ): ActivityNode {
   let id = 0;
   let xpdlId = "";
@@ -98,7 +98,8 @@ function createActivity(
   return {
     id,
     xpdlId,
-    type,
+    type: "activityNode",
+    activityType,
     name: "",
     actorId,
     applications: [],
@@ -115,7 +116,7 @@ function createActivity(
 
 function createTransition(
   processXpdlId: string,
-  edgeList: IBaseEdge[],
+  edgeList: IEdge[],
   fromNodeId: number,
   toNodeId: number,
 ): TransitionEdge {

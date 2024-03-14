@@ -67,18 +67,6 @@ export type Graph = {
   edges: IEdge[];
 };
 
-//
-// Node
-//
-
-export type ActivityNodeType =
-  | "manualActivity"
-  | "manualTimerActivity"
-  | "autoActivity"
-  | "autoTimerActivity"
-  | "userActivity";
-export type NodeType = ActivityNodeType | "commentNode" | "startNode" | "endNode";
-
 export type Rectangle = {
   x: number;
   y: number;
@@ -86,17 +74,31 @@ export type Rectangle = {
   height: number;
 };
 
-export interface INode extends Rectangle {
+//
+// Node
+//
+
+export type NodeType = "activityNode" | "startNode" | "endNode" | "commentNode";
+
+type IBaseNode = Rectangle & {
   id: number;
   type: NodeType;
   selected: boolean;
-}
+};
+
+export type ActivityNodeType =
+  | "manualActivity"
+  | "manualTimerActivity"
+  | "autoActivity"
+  | "autoTimerActivity"
+  | "userActivity";
 
 export type JoinType = "notJoin" | "oneJoin" | "xorJoin" | "andJoin";
 export type SplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit";
 
-export type ActivityNode = INode & {
-  type: ActivityNodeType;
+export type ActivityNode = IBaseNode & {
+  type: "activityNode";
+  activityType: ActivityNodeType;
   xpdlId: string;
   actorId: number;
   name: string;
@@ -109,32 +111,34 @@ export type ActivityNode = INode & {
   splitType: SplitType;
 };
 
-export type CommentNode = INode & {
+export type StartNode = IBaseNode & {
+  type: "startNode";
+};
+
+export type EndNode = IBaseNode & {
+  type: "endNode";
+};
+
+export type CommentNode = IBaseNode & {
   type: "commentNode";
   comment: string;
 };
 
-export type StartNode = INode & {
-  type: "startNode";
-};
-
-export type EndNode = INode & {
-  type: "endNode";
-};
+export type INode = ActivityNode | StartNode | EndNode | CommentNode;
 
 //
 // Edge
 //
 
-export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge";
+export type EdgeType = "transitionEdge" | "startEdge" | "endEdge" | "commentEdge";
 
-export interface IBaseEdge {
+type IBaseEdge = {
   id: number;
   type: EdgeType;
   fromNodeId: number;
   toNodeId: number;
   selected: boolean;
-}
+};
 
 export type TransitionEdge = IBaseEdge & {
   type: "transitionEdge";
