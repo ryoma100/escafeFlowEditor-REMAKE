@@ -67,10 +67,8 @@ export function makeBaseEdgeModel(
 
     if (
       fromActivityId === toActivityId ||
-      transitionList.find((it) => it.fromActivityId === fromActivityId)?.toActivityId ===
-        toActivityId ||
-      transitionList.find((it) => it.toActivityId === toActivityId)?.fromActivityId ===
-        fromActivityId
+      transitionList.find((it) => it.fromNodeId === fromActivityId)?.toNodeId === toActivityId ||
+      transitionList.find((it) => it.toNodeId === toActivityId)?.fromNodeId === fromActivityId
     ) {
       // Exclude duplicate transitions
       return null;
@@ -86,11 +84,11 @@ export function makeBaseEdgeModel(
 
     activityModel.updateJoinType(
       toActivityId,
-      transitionList.filter((it) => it.toActivityId === toActivityId).length,
+      transitionList.filter((it) => it.toNodeId === toActivityId).length,
     );
     activityModel.updateSplitType(
       fromActivityId,
-      transitionList.filter((it) => it.fromActivityId === fromActivityId).length,
+      transitionList.filter((it) => it.fromNodeId === fromActivityId).length,
     );
 
     return transition;

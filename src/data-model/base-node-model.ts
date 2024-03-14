@@ -78,23 +78,23 @@ export function makeBaseNodeModel(
         switch (it.type) {
           case "transitionEdge":
             return (
-              !activityModel.getActivityNode(it.fromActivityId).selected &&
-              !activityModel.getActivityNode(it.toActivityId).selected
+              !activityModel.getActivityNode(it.fromNodeId).selected &&
+              !activityModel.getActivityNode(it.toNodeId).selected
             );
           case "commentEdge":
             return (
-              !otherNodeModel.getCommentNode(it.fromCommentId).selected &&
-              !activityModel.getActivityNode(it.toActivityId).selected
+              !otherNodeModel.getCommentNode(it.fromNodeId).selected &&
+              !activityModel.getActivityNode(it.toNodeId).selected
             );
           case "startEdge":
             return (
-              !otherNodeModel.getStartNode(it.fromStartId).selected &&
-              !activityModel.getActivityNode(it.toActivityId).selected
+              !otherNodeModel.getStartNode(it.fromNodeId).selected &&
+              !activityModel.getActivityNode(it.toNodeId).selected
             );
           case "endEdge":
             return (
-              !activityModel.getActivityNode(it.fromActivityId).selected &&
-              !otherNodeModel.getEndNode(it.toEndId).selected
+              !activityModel.getActivityNode(it.fromNodeId).selected &&
+              !otherNodeModel.getEndNode(it.toNodeId).selected
             );
         }
       }),

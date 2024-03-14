@@ -58,6 +58,19 @@ export type ApplicationEntity = {
   extendedValue: string;
 };
 
+//
+// Graph
+//
+
+export type Graph = {
+  nodes: ActivityNode[];
+  edges: IEdge[];
+};
+
+//
+// Node
+//
+
 export type ActivityNodeType =
   | "manualActivity"
   | "manualTimerActivity"
@@ -109,35 +122,35 @@ export type EndNode = INode & {
   type: "endNode";
 };
 
+//
+// Edge
+//
+
 export type EdgeType = "transitionEdge" | "commentEdge" | "startEdge" | "endEdge";
 
-export interface IEdge {
+export interface IBaseEdge {
   id: number;
   type: EdgeType;
+  fromNodeId: number;
+  toNodeId: number;
   selected: boolean;
 }
 
-export type TransitionEdge = IEdge & {
+export type TransitionEdge = IBaseEdge & {
   type: "transitionEdge";
   xpdlId: string;
-  fromActivityId: number;
-  toActivityId: number;
 };
 
-export type CommentEdge = IEdge & {
-  type: "commentEdge";
-  fromCommentId: number;
-  toActivityId: number;
-};
-
-export type StartEdge = IEdge & {
+export type StartEdge = IBaseEdge & {
   type: "startEdge";
-  fromStartId: number;
-  toActivityId: number;
 };
 
-export type EndEdge = IEdge & {
+export type EndEdge = IBaseEdge & {
   type: "endEdge";
-  fromActivityId: number;
-  toEndId: number;
 };
+
+export type CommentEdge = IBaseEdge & {
+  type: "commentEdge";
+};
+
+export type IEdge = TransitionEdge | StartEdge | IBaseEdge | CommentEdge;

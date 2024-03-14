@@ -13,11 +13,11 @@ export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndE
   const fromToNode = () => {
     switch (props.edge.type) {
       case "commentEdge":
-        return [getCommentNode(props.edge.fromCommentId), getActivityNode(props.edge.toActivityId)];
+        return [getCommentNode(props.edge.fromNodeId), getActivityNode(props.edge.toNodeId)];
       case "startEdge":
-        return [getStartNode(props.edge.fromStartId), getActivityNode(props.edge.toActivityId)];
+        return [getStartNode(props.edge.fromNodeId), getActivityNode(props.edge.toNodeId)];
       case "endEdge":
-        return [getActivityNode(props.edge.fromActivityId), getEndNode(props.edge.toEndId)];
+        return [getActivityNode(props.edge.fromNodeId), getEndNode(props.edge.toNodeId)];
     }
   };
 

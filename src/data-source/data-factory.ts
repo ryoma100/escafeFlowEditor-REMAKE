@@ -7,7 +7,7 @@ import {
   CommentNode,
   EndEdge,
   EndNode,
-  IEdge,
+  IBaseEdge,
   ProcessDetailEntity,
   ProcessEntity,
   ProjectEntity,
@@ -115,9 +115,9 @@ function createActivity(
 
 function createTransition(
   processXpdlId: string,
-  edgeList: IEdge[],
-  fromActivityId: number,
-  toActivityId: number,
+  edgeList: IBaseEdge[],
+  fromNodeId: number,
+  toNodeId: number,
 ): TransitionEdge {
   const transitionList = edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   let id = edgeList.reduce((maxId, it) => Math.max(it.id, maxId), 0);
@@ -131,8 +131,8 @@ function createTransition(
     id,
     xpdlId,
     type: "transitionEdge",
-    fromActivityId,
-    toActivityId,
+    fromNodeId,
+    toNodeId,
     selected: false,
   };
 }
@@ -180,32 +180,32 @@ function createEndNode(process: ProcessEntity, x: number, y: number): EndNode {
   };
 }
 
-function createCommentEdge(id: number, fromCommentId: number, toActivityId: number): CommentEdge {
+function createCommentEdge(id: number, fromNodeId: number, toNodeId: number): CommentEdge {
   return {
     id,
     type: "commentEdge",
-    fromCommentId,
-    toActivityId,
+    fromNodeId,
+    toNodeId,
     selected: false,
   };
 }
 
-function createStartEdge(id: number, fromStartId: number, toActivityId: number): StartEdge {
+function createStartEdge(id: number, fromNodeId: number, toNodeId: number): StartEdge {
   return {
     id,
     type: "startEdge",
-    fromStartId,
-    toActivityId,
+    fromNodeId,
+    toNodeId,
     selected: false,
   };
 }
 
-function createEndEdge(id: number, fromActivityId: number, toEndId: number): EndEdge {
+function createEndEdge(id: number, fromNodeId: number, toNodeId: number): EndEdge {
   return {
     id,
     type: "endEdge",
-    fromActivityId,
-    toEndId,
+    fromNodeId,
+    toNodeId,
     selected: false,
   };
 }

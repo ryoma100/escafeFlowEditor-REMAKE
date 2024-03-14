@@ -130,13 +130,11 @@ export function makeActivityModel() {
     activityList.forEach((activity) => {
       updateJoinType(
         activity.id,
-        edges.filter((it) => it.type === "transitionEdge" && it.toActivityId === activity.id)
-          .length,
+        edges.filter((it) => it.type === "transitionEdge" && it.toNodeId === activity.id).length,
       );
       updateSplitType(
         activity.id,
-        edges.filter((it) => it.type === "transitionEdge" && it.fromActivityId === activity.id)
-          .length,
+        edges.filter((it) => it.type === "transitionEdge" && it.fromNodeId === activity.id).length,
       );
     });
   }

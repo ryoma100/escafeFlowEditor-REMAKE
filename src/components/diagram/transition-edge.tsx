@@ -11,8 +11,8 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     dialog: { setOpenTransitionDialog },
   } = useAppContext();
 
-  const fromActivity = () => getActivityNode(props.transition.fromActivityId);
-  const toActivity = () => getActivityNode(props.transition.toActivityId);
+  const fromActivity = () => getActivityNode(props.transition.fromNodeId);
+  const toActivity = () => getActivityNode(props.transition.toNodeId);
 
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
