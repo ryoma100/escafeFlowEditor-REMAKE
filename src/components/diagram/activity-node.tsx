@@ -1,7 +1,12 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 import { ACTIVITY_MIN_HEIGHT } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
-import { ActivityNode, ActivityNodeType, JoinType, SplitType } from "../../data-source/data-type";
+import {
+  ActivityJoinType,
+  ActivityNode,
+  ActivityNodeType,
+  ActivitySplitType,
+} from "../../data-source/data-type";
 import {
   AutoActivityIcon,
   AutoTimerActivityIcon,
@@ -110,8 +115,8 @@ export function ActivityNodeView(props: {
   activityType: ActivityNodeType;
   name: string;
   actorName: string;
-  joinType: JoinType;
-  splitType: SplitType;
+  joinType: ActivityJoinType;
+  splitType: ActivitySplitType;
   selected: boolean;
   width: number;
   onLeftMouseDown?: (e: MouseEvent) => void;

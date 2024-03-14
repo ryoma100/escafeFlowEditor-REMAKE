@@ -1,15 +1,7 @@
 import { createStore, produce } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import { dataFactory } from "../data-source/data-factory";
-import {
-  ActivityNode,
-  ActivityNodeType,
-  CommentEdge,
-  EndEdge,
-  ProcessEntity,
-  StartEdge,
-  TransitionEdge,
-} from "../data-source/data-type";
+import { ActivityNode, ActivityNodeType, IEdge, ProcessEntity } from "../data-source/data-type";
 
 export function makeActivityModel() {
   let _process: ProcessEntity;
@@ -126,7 +118,7 @@ export function makeActivityModel() {
     );
   }
 
-  function updateAllJoinSplitType(edges: (TransitionEdge | CommentEdge | StartEdge | EndEdge)[]) {
+  function updateAllJoinSplitType(edges: IEdge[]) {
     activityList.forEach((activity) => {
       updateJoinType(
         activity.id,

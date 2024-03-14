@@ -34,8 +34,7 @@ export type ProcessEntity = {
   activityNodes: ActivityNode[];
   otherNodes: (CommentNode | StartNode | EndNode)[];
 
-  _lastEdgeId: number;
-  edges: (TransitionEdge | CommentEdge | StartEdge | EndEdge)[];
+  edges: IEdge[];
 };
 
 export type ActorEntity = {
@@ -63,7 +62,7 @@ export type ApplicationEntity = {
 //
 
 export type Graph = {
-  nodes: ActivityNode[];
+  nodes: INode[];
   edges: IEdge[];
 };
 
@@ -92,9 +91,8 @@ export type ActivityNodeType =
   | "autoActivity"
   | "autoTimerActivity"
   | "userActivity";
-
-export type JoinType = "notJoin" | "oneJoin" | "xorJoin" | "andJoin";
-export type SplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit";
+export type ActivityJoinType = "notJoin" | "oneJoin" | "xorJoin" | "andJoin";
+export type ActivitySplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit";
 
 export type ActivityNode = IBaseNode & {
   type: "activityNode";
@@ -107,8 +105,8 @@ export type ActivityNode = IBaseNode & {
     ognl: string;
   }[];
   ognl: string;
-  joinType: JoinType;
-  splitType: SplitType;
+  joinType: ActivityJoinType;
+  splitType: ActivitySplitType;
 };
 
 export type StartNode = IBaseNode & {
@@ -157,4 +155,4 @@ export type CommentEdge = IBaseEdge & {
   type: "commentEdge";
 };
 
-export type IEdge = TransitionEdge | StartEdge | IBaseEdge | CommentEdge;
+export type IEdge = TransitionEdge | StartEdge | EndEdge | CommentEdge;

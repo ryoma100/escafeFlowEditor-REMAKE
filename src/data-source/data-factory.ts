@@ -61,7 +61,6 @@ function createProcess(project: ProjectEntity): ProcessEntity {
     activityNodes: [],
     otherNodes: [],
 
-    _lastEdgeId: 0,
     edges: [],
   };
   process.actors = [createActor(process)];

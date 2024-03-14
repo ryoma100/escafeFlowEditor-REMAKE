@@ -3,6 +3,7 @@ import { dataFactory } from "../data-source/data-factory";
 import {
   CommentEdge,
   EndEdge,
+  IEdge,
   ProcessEntity,
   StartEdge,
   TransitionEdge,
@@ -14,9 +15,7 @@ export function makeBaseEdgeModel(
   activityModel: ReturnType<typeof makeActivityModel>,
   otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
 ) {
-  const [edgeList, setEdgeList] = createStore<
-    (TransitionEdge | CommentEdge | StartEdge | EndEdge)[]
-  >([]);
+  const [edgeList, setEdgeList] = createStore<IEdge[]>([]);
 
   function load(process: ProcessEntity) {
     setEdgeList(process.edges);
