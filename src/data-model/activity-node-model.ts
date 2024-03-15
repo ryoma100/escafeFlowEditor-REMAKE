@@ -21,7 +21,7 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
     nodeModel.setNodeList([...nodeModel.nodeList, activity]);
     return activity;
   }
-
+  1;
   function getActivityNode(nodeId: number): ActivityNode {
     const node = nodeModel.getNode(nodeId);
     if (node.type !== "activityNode") {
