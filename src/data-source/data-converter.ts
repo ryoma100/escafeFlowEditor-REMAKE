@@ -1,10 +1,14 @@
 import { XMLBuilder } from "fast-xml-parser";
-import { ProjectEntity } from "./data-type";
+import { ActivityNode, ProjectEntity } from "./data-type";
 
 const alwaysArray = [
   "WorkflowProcesses",
   "WorkflowProcesses.WorkflowProcess.Participants",
   "WorkflowProcesses.WorkflowProcess.Applications",
+  "WorkflowProcesses.WorkflowProcess.Activities",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity.TransitionRestrictions",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity.TransitionRestrictions.TransitionRestriction.Split.TransitionRefs",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity.ExtendedAttributes",
 ];
 
 const fxpOption = {
@@ -42,17 +46,40 @@ export function exportYaml(project: ProjectEntity): string {
                 ParticipantType: { "@_Type": "ROLE" },
               },
             })),
-            Applications: process.detail.applications.map((app) => {
-              return {
-                Application: {
-                  "@_Id": app.xpdlId,
-                  "@_Name": app.name,
-                  ExtendedAttributes: {
-                    ExtendedAttribute: { "@_Name": app.extendedName, "@_Value": app.extendedValue },
-                  },
+            Applications: process.detail.applications.map((app) => ({
+              Application: {
+                "@_Id": app.xpdlId,
+                "@_Name": app.name,
+                ExtendedAttributes: {
+                  ExtendedAttribute: { "@_Name": app.extendedName, "@_Value": app.extendedValue },
                 },
-              };
-            }),
+              },
+            })),
+            Activities: process.nodes
+              .filter((it) => it.type === "activityNode")
+              .map((it) => {
+                const activity = it as ActivityNode;
+                return {
+                  Activity: {
+                    "@_Id": activity.xpdlId,
+                    "@_Name": activity.name,
+                    Implementation: { No: null },
+                    Performer: activity.xpdlId,
+                    FinishMode: { Manual: null },
+                    TransitionRestrictions: {
+                      TransitionRestriction: {
+                        Split: {
+                          "@_Type": "XOR",
+                          TransitionRefs: [
+                            { TransitionRef: { "@_Id": "newpkg_wp1_act2" } },
+                            { TransitionRef: { "@_Id": "newpkg_wp1_act3" } },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                };
+              }),
           },
         };
       }),

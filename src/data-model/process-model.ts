@@ -34,15 +34,12 @@ export function makeProcessModel(
     };
     setProcessList(processList().map((it) => (it.id === process.id ? process : it)));
     setSelectedProcess(processList().find((it) => it.id === process.id)!);
-
     return deepCopy(processList());
   }
 
   function changeProcess(newProcess: ProcessEntity) {
     save();
-
     const process = processList().find((it) => it.id === newProcess.id)!;
-
     batch(() => {
       setSelectedProcess(process);
       actorModel.load(process);
