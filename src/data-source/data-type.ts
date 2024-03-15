@@ -1,10 +1,14 @@
 type datetime = string;
 
 export type ProjectEntity = {
+  created: datetime;
+  detail: ProjectDetailEntity;
+  processes: ProcessEntity[];
+};
+
+export type ProjectDetailEntity = {
   xpdlId: string;
   name: string;
-  created: datetime;
-  processes: ProcessEntity[];
 };
 
 export type ProcessEntity = Graph & {

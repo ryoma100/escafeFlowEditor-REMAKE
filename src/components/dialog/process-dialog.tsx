@@ -6,27 +6,23 @@ import {
   ApplicationEntity,
   EnvironmentEntity,
   ProcessDetailEntity,
-  ProcessEntity,
 } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProcessDialog(): JSXElement {
   const {
-    processModel: { updateProcessDetail, processList },
+    processModel: { selectedProcess, updateProcessDetail, processList },
     activityNodeModel: { getActivityNodes },
     dialog: { openProcessDialog, setOpenProcessDialog, setOpenMessageDialog },
   } = useAppContext();
 
-  let process: ProcessEntity | null = null;
   const [formData, setFormData] = createStore<ProcessDetailEntity>(undefined as never);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
   const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
 
   createEffect(() => {
-    process = openProcessDialog();
-    if (process != null) {
-      const cloneDetail: ProcessDetailEntity = JSON.parse(JSON.stringify(process.detail));
-      setFormData(cloneDetail);
+    if (openProcessDialog() != null) {
+      setFormData(JSON.parse(JSON.stringify(selectedProcess().detail)));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -38,10 +34,8 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleAddEnvButtonClick() {
-    if (process) {
-      const environment = dataFactory.createEnvironment(process);
-      setFormData("environments", [...formData.environments, environment]);
-    }
+    const environment = dataFactory.createEnvironment(formData.environments);
+    setFormData("environments", [...formData.environments, environment]);
   }
 
   function handleRemoveEnvButtonClick() {
@@ -57,7 +51,7 @@ export function ProcessDialog(): JSXElement {
 
   function handleAddAppButtonClick() {
     if (process) {
-      const application = dataFactory.createApplication(process);
+      const application = dataFactory.createApplication(formData.applications);
       setFormData("applications", [...formData.applications, application]);
     }
   }
@@ -79,12 +73,9 @@ export function ProcessDialog(): JSXElement {
 
   function handleSubmit(e: Event) {
     e.preventDefault();
+    const process = selectedProcess();
 
-    if (
-      processList().some(
-        (it) => it.id !== openProcessDialog()?.id && it.detail.xpdlId === formData.xpdlId,
-      )
-    ) {
+    if (processList().some((it) => it.id !== process.id && it.detail.xpdlId === formData.xpdlId)) {
       setOpenMessageDialog("idExists");
       return;
     }
@@ -95,11 +86,9 @@ export function ProcessDialog(): JSXElement {
       return;
     }
 
-    if (process) {
-      const detail = JSON.parse(JSON.stringify(formData));
-      updateProcessDetail({ ...process, detail });
-      setOpenProcessDialog(null);
-    }
+    const detail: ProcessDetailEntity = JSON.parse(JSON.stringify(formData));
+    updateProcessDetail({ ...process, detail });
+    setOpenProcessDialog(null);
   }
 
   function handleClose() {

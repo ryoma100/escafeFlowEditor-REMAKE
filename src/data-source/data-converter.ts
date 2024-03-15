@@ -20,8 +20,8 @@ export function exportYaml(project: ProjectEntity): string {
     Package: {
       "@_xmlns": "http://www.wfmc.org/2002/XPDL1.0",
       "@_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-      "@_Id": project.xpdlId,
-      "@_Name": project.name,
+      "@_Id": project.detail.xpdlId,
+      "@_Name": project.detail.name,
       "@_xsi:schemaLocation":
         "http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd",
       PackageHeader: {

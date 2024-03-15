@@ -8,8 +8,8 @@ export function ExtendNodeContainer(props: {
 }): JSXElement {
   const {
     extendNodeModel: { resizeCommentNode },
-    baseEdgeModel: { addEndEdge },
-    baseNodeModel: { changeSelectNodes },
+    extendEdgeModel: { addEndEdge },
+    nodeModel: { changeSelectNodes },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
     dialog: { setOpenCommentDialog },
   } = useAppContext();

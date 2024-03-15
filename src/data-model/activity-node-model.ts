@@ -2,35 +2,20 @@ import { produce } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
 import { dataFactory } from "../data-source/data-factory";
 import { ActivityNode, ActivityNodeType, IEdge } from "../data-source/data-type";
-import { BaseNodeModel } from "./base-node-model";
+import { makeNodeModel } from "./node-model";
 
-export type ActivityNodeModel = ReturnType<typeof makeActivityModel>;
-
-export function makeActivityModel(nodeModel: BaseNodeModel) {
-  // let _process: ProcessEntity;
-  // const [activityList, setActivityList] = createStore<ActivityNode[]>([]);
-
-  // function load(newProcess: ProcessEntity) {
-  //   _process = newProcess;
-  //   setActivityList(_process.activityNodes);
-  // }
-
-  // function sync() {
-  //   _process.activityNodes = [...activityList];
-  // }
-
+export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   function getActivityNodes(): ActivityNode[] {
     return nodeModel.nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
   }
 
   function addActivity(
     type: ActivityNodeType,
-    processXpdlId: string,
     actorId: number,
     cx: number,
     cy: number,
   ): ActivityNode {
-    const activity = dataFactory.createActivity(processXpdlId, nodeModel.nodeList, actorId, type);
+    const activity = dataFactory.createActivityNode(nodeModel.nodeList, actorId, type);
     activity.x = cx - activity.width / 2;
     activity.y = cy - activity.height / 2;
     nodeModel.setNodeList([...nodeModel.nodeList, activity]);

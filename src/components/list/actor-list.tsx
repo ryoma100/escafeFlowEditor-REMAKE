@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 export function ActorList(): JSXElement {
   const {
     processModel: { selectedProcess },
-    baseNodeModel: { nodeList },
+    nodeModel: { nodeList },
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
     dialog: { setOpenActorDialog, setOpenMessageDialog },
     i18n: { dict },

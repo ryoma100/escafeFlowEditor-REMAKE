@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
-import { EndNodeView } from "../components/diagram/other-node";
+import { EndNodeView } from "../components/diagram/extend-node";
 
 const meta = {
   title: "Node/End",

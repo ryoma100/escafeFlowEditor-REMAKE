@@ -1,21 +1,24 @@
-import { createSignal } from "solid-js";
 import { dataFactory } from "../data-source/data-factory";
-import { ProjectEntity } from "../data-source/data-type";
+import { ProjectDetailEntity, ProjectEntity } from "../data-source/data-type";
 import { makeProcessModel } from "./process-model";
 
 export function makeProjectModel(processModel: ReturnType<typeof makeProcessModel>) {
-  function initProject() {
-    const newProject = dataFactory.createProject();
-    setProject(newProject);
-    processModel.load(newProject);
-  }
-
-  const [project, setProject] = createSignal<ProjectEntity>(undefined as never);
+  let project: ProjectEntity = dataFactory.createProject();
   initProject();
 
-  function save() {
-    processModel.save();
+  function initProject() {
+    project = dataFactory.createProject();
+    processModel.load(project);
   }
 
-  return { project, setProject, initProject, save };
+  function setProjectDetail(detail: ProjectDetailEntity) {
+    project = { ...project, detail };
+  }
+
+  function save() {
+    const processes = processModel.save();
+    project = { ...project, processes };
+  }
+
+  return { initProject, project, setProjectDetail, save };
 }

@@ -11,8 +11,8 @@ import {
   TransitionEdge,
 } from "../../data-source/data-type";
 import { ActivityNodeContainer } from "./activity-node";
-import { ExtendEdgeContainer } from "./other-edge";
-import { ExtendNodeContainer } from "./other-node";
+import { ExtendEdgeContainer } from "./extend-edge";
+import { ExtendNodeContainer } from "./extend-node";
 import { TransitionEdgeContainer } from "./transition-edge";
 
 export type DragType =
@@ -32,17 +32,16 @@ export type DragType =
 
 export function DiagramContainer(): JSXElement {
   const {
-    processModel: { selectedProcess },
     activityNodeModel: { addActivity, resizeLeft, resizeRight },
     actorModel: { selectedActor },
     extendNodeModel: { addCommentNode, addStartNode, addEndNode },
-    baseNodeModel: {
+    nodeModel: {
       changeSelectNodes,
       moveSelectedNodesPosition: moveSelectedNodes,
       changeTopLayer,
       nodeList,
     },
-    baseEdgeModel: { setSelectedEdges: changeSelectEdges, edgeList },
+    edgeModel: { changeSelectEdges, edgeList },
     diagram: {
       svgRect,
       setSvgRect,
@@ -90,7 +89,6 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "manualActivity",
-                selectedProcess().detail.xpdlId,
                 selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
@@ -104,7 +102,6 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "autoActivity",
-                selectedProcess().detail.xpdlId,
                 selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
@@ -118,7 +115,6 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "userActivity",
-                selectedProcess().detail.xpdlId,
                 selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),

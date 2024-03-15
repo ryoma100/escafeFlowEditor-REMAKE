@@ -18,7 +18,7 @@ export function makeActorModel() {
   }
 
   function addActor(process: ProcessEntity) {
-    const actor = dataFactory.createActor(process);
+    const actor = dataFactory.createActorEntity(process.actors);
     setActorList([...actorList, actor]);
     const proxyActor = actorList[actorList.length - 1];
     setSelectedActor(proxyActor);

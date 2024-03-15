@@ -1,9 +1,7 @@
 import { createStore, produce } from "solid-js/store";
 import { INode, ProcessEntity } from "../data-source/data-type";
 
-export type BaseNodeModel = ReturnType<typeof makeBaseNodeModel>;
-
-export function makeBaseNodeModel() {
+export function makeNodeModel() {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
 
   function load(newProcess: ProcessEntity) {
@@ -57,12 +55,9 @@ export function makeBaseNodeModel() {
     return node;
   }
 
-  function addNode(node: INode) {
+  function addNode<T extends INode>(node: T): T {
     setNodeList([...nodeList, node]);
-  }
-
-  function computeNextId(): number {
-    return nodeList.reduce((maxId, it) => Math.max(maxId, it.id), 0) + 1;
+    return node;
   }
 
   function deleteSelectedNodes() {
@@ -119,7 +114,6 @@ export function makeBaseNodeModel() {
     deleteSelectedNodes,
     moveSelectedNodesPosition,
     changeTopLayer,
-    computeNextId,
     computeMaxRectangle,
   };
 }

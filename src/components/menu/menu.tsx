@@ -7,9 +7,9 @@ export function AppMenu(): JSXElement {
     projectModel: { project },
     processModel: { addProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    baseNodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
+    nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
     activityNodeModel: { updateAllJoinSplitType },
-    baseEdgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
+    edgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
     dialog: {
       setOpenProjectDialog,
       setOpenProcessDialog,
@@ -80,7 +80,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProcessAddClick() {
-    addProcess();
+    addProcess(project);
     return false;
   }
 

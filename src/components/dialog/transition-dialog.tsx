@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function TransitionDialog(): JSXElement {
   const {
-    baseEdgeModel: { edgeList, setEdgeList },
+    edgeModel: { edgeList, setEdgeList },
     dialog: { openTransitionDialog, setOpenTransitionDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();

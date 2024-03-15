@@ -8,8 +8,8 @@ export function ExtendEdgeContainer(props: {
   const {
     extendNodeModel: { getCommentNode, getStartNode, getEndNode },
     activityNodeModel: { getActivityNode },
-    baseNodeModel: { changeSelectNodes },
-    baseEdgeModel: { setSelectedEdges: changeSelectEdges },
+    nodeModel: { changeSelectNodes },
+    edgeModel: { changeSelectEdges },
   } = useAppContext();
 
   const fromToNode = () => {

@@ -8,11 +8,13 @@ import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-node-model";
 import { makeActorModel } from "../data-model/actor-model";
-import { makeBaseEdgeModel } from "../data-model/base-edge-model";
-import { makeBaseNodeModel } from "../data-model/base-node-model";
+import { makeEdgeModel } from "../data-model/edge-model";
+import { makeExtendEdgeModel } from "../data-model/extend-edge-model";
 import { makeExtendNodeModel } from "../data-model/extend-node-model";
+import { makeNodeModel } from "../data-model/node-model";
 import { makeProcessModel } from "../data-model/process-model";
 import { makeProjectModel } from "../data-model/project-model";
+import { makeTransactionEdgeModel } from "../data-model/transaction-edge-model";
 import {
   ActivityNode,
   ActorEntity,
@@ -24,22 +26,27 @@ import {
 } from "../data-source/data-type";
 
 function makeModelContext() {
-  const baseNodeModel = makeBaseNodeModel();
-  const activityNodeModel = makeActivityModel(baseNodeModel);
-  const baseEdgeModel = makeBaseEdgeModel(baseNodeModel, activityNodeModel);
-  const extendNodeModel = makeExtendNodeModel(baseNodeModel);
   const actorModel = makeActorModel();
-  const processModel = makeProcessModel(actorModel, baseNodeModel, baseEdgeModel);
+  const nodeModel = makeNodeModel();
+  const edgeModel = makeEdgeModel(nodeModel);
+  const processModel = makeProcessModel(actorModel, nodeModel, edgeModel);
   const projectModel = makeProjectModel(processModel);
 
+  const activityNodeModel = makeActivityModel(nodeModel);
+  const transitionEdgeModel = makeTransactionEdgeModel(edgeModel, nodeModel);
+  const extendNodeModel = makeExtendNodeModel(nodeModel);
+  const extendEdgeModel = makeExtendEdgeModel(edgeModel, nodeModel);
+
   return {
-    projectModel,
-    processModel,
     actorModel,
+    nodeModel,
+    edgeModel,
+    processModel,
+    projectModel,
     activityNodeModel,
+    transitionEdgeModel,
     extendNodeModel,
-    baseNodeModel,
-    baseEdgeModel,
+    extendEdgeModel,
   };
 }
 
@@ -133,24 +140,28 @@ function makeI18nContext() {
 }
 
 const AppContext = createContext<{
-  projectModel: ReturnType<typeof makeProjectModel>;
-  processModel: ReturnType<typeof makeProcessModel>;
   actorModel: ReturnType<typeof makeActorModel>;
+  nodeModel: ReturnType<typeof makeNodeModel>;
+  edgeModel: ReturnType<typeof makeEdgeModel>;
+  processModel: ReturnType<typeof makeProcessModel>;
+  projectModel: ReturnType<typeof makeProjectModel>;
   activityNodeModel: ReturnType<typeof makeActivityModel>;
+  transitionEdgeModel: ReturnType<typeof makeTransactionEdgeModel>;
   extendNodeModel: ReturnType<typeof makeExtendNodeModel>;
-  baseNodeModel: ReturnType<typeof makeBaseNodeModel>;
-  baseEdgeModel: ReturnType<typeof makeBaseEdgeModel>;
+  extendEdgeModel: ReturnType<typeof makeExtendEdgeModel>;
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
   i18n: ReturnType<typeof makeI18nContext>;
 }>({
-  projectModel: undefined as never,
-  processModel: undefined as never,
   actorModel: undefined as never,
+  nodeModel: undefined as never,
+  edgeModel: undefined as never,
+  processModel: undefined as never,
+  projectModel: undefined as never,
   activityNodeModel: undefined as never,
+  transitionEdgeModel: undefined as never,
   extendNodeModel: undefined as never,
-  baseNodeModel: undefined as never,
-  baseEdgeModel: undefined as never,
+  extendEdgeModel: undefined as never,
   dialog: undefined as never,
   diagram: undefined as never,
   i18n: undefined as never,

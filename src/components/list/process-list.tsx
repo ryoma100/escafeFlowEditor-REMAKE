@@ -6,6 +6,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProcessList(): JSXElement {
   const {
+    projectModel: { project },
     processModel: { processList, selectedProcess, addProcess, changeProcess },
     dialog: { setOpenProcessDialog, setOpenConfirmDialog },
     i18n: { dict },
@@ -21,7 +22,7 @@ export function ProcessList(): JSXElement {
   }
 
   function handleAddButtonClick(_: MouseEvent) {
-    addProcess();
+    addProcess(project);
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {

@@ -17,16 +17,12 @@ import {
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
-    processModel: { selectedProcess },
-    activityNodeModel: { resizeActivityHeight },
+    activityNodeModel: { resizeActivityHeight, updateJoinType, updateSplitType },
     actorModel: { actorList },
-    baseNodeModel: { changeSelectNodes, changeTopLayer },
-    baseEdgeModel: {
-      setSelectedEdges: changeSelectEdges,
-      addTransitionEdge,
-      addCommentEdge,
-      addStartEdge,
-    },
+    nodeModel: { changeSelectNodes, changeTopLayer },
+    edgeModel: { changeSelectEdges },
+    extendEdgeModel: { addCommentEdge, addStartEdge },
+    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
@@ -71,8 +67,20 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   function handleMouseUp(_e: MouseEvent) {
     switch (dragType()) {
       case "addTransition":
-        addTransitionEdge(selectedProcess().detail.xpdlId, props.activity.id);
-        setDragType("none");
+        {
+          const transition = addTransitionEdge(props.activity.id);
+          if (transition) {
+            updateJoinType(
+              transition.toNodeId,
+              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
+            );
+            updateSplitType(
+              transition.fromNodeId,
+              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
+            );
+          }
+          setDragType("none");
+        }
         break;
       case "addCommentEdge":
         addCommentEdge(props.activity.id);
@@ -172,7 +180,7 @@ export function ActivityNodeView(props: {
           <Match when={props.joinType === "andJoin"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
               <path
-                class="stroke-black [vector-effect:non-scaling-stroke]"
+                class="fill-none stroke-black [vector-effect:non-scaling-stroke]"
                 d="M 0 0 L 10 50 L 0 100 M 5 25 L 5 75"
               />
             </svg>
@@ -235,7 +243,7 @@ export function ActivityNodeView(props: {
           <Match when={props.splitType === "andSplit"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
               <path
-                class="stroke-black [vector-effect:non-scaling-stroke]"
+                class="fill-none stroke-black [vector-effect:non-scaling-stroke]"
                 d="M 10 0 L 0 50 L 10 100 M 5 25 L 5 75"
               />
             </svg>

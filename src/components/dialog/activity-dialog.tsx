@@ -17,7 +17,7 @@ export function ActivityDialog(): JSXElement {
   const {
     processModel: { selectedProcess },
     actorModel: { actorList },
-    baseNodeModel: { nodeList, setNodeList },
+    nodeModel: { nodeList, setNodeList },
     dialog: { openActivityDialog, setOpenActivityDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
