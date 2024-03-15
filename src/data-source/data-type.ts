@@ -4,9 +4,14 @@ export type ProjectEntity = {
   xpdlId: string;
   name: string;
   created: datetime;
-
-  _lastProcessId: number;
   processes: ProcessEntity[];
+};
+
+export type ProcessEntity = Graph & {
+  id: number;
+  created: datetime;
+  detail: ProcessDetailEntity;
+  actors: ActorEntity[];
 };
 
 export type ProcessDetailEntity = {
@@ -14,33 +19,8 @@ export type ProcessDetailEntity = {
   name: string;
   validFrom: string;
   validTo: string;
-
-  _lastEnvironmentId: number;
   environments: EnvironmentEntity[];
-
-  _lastApplicationId: number;
   applications: ApplicationEntity[];
-};
-
-export type ProcessEntity = {
-  id: number;
-  created: datetime;
-  detail: ProcessDetailEntity;
-
-  _lastActorId: number;
-  actors: ActorEntity[];
-
-  _lastNodeId: number;
-  activityNodes: ActivityNode[];
-  otherNodes: (CommentNode | StartNode | EndNode)[];
-
-  edges: IEdge[];
-};
-
-export type ActorEntity = {
-  id: number;
-  xpdlId: string;
-  name: string;
 };
 
 export type EnvironmentEntity = {
@@ -57,11 +37,17 @@ export type ApplicationEntity = {
   extendedValue: string;
 };
 
+export type ActorEntity = {
+  id: number;
+  xpdlId: string;
+  name: string;
+};
+
 //
 // Graph
 //
 
-export type Graph = {
+type Graph = {
   nodes: INode[];
   edges: IEdge[];
 };

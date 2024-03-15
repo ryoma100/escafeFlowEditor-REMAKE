@@ -18,10 +18,15 @@ import {
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
     processModel: { selectedProcess },
-    activityModel: { layerTopActivity, resizeActivityHeight },
+    activityNodeModel: { resizeActivityHeight },
     actorModel: { actorList },
-    baseNodeModel: { changeSelectNodes },
-    baseEdgeModel: { changeSelectEdges, addTransitionEdge, addCommentEdge, addStartEdge },
+    baseNodeModel: { changeSelectNodes, changeTopLayer },
+    baseEdgeModel: {
+      setSelectedEdges: changeSelectEdges,
+      addTransitionEdge,
+      addCommentEdge,
+      addStartEdge,
+    },
     dialog: { setOpenActivityDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
@@ -48,7 +53,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
             changeSelectNodes("select", [props.activity.id]);
             changeSelectEdges("clearAll");
           }
-          layerTopActivity(props.activity.id);
+          changeTopLayer(props.activity.id);
           setDragType("moveNodes");
         }
         break;

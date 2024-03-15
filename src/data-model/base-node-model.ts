@@ -1,39 +1,24 @@
-import { produce } from "solid-js/store";
-import { INode } from "../data-source/data-type";
-import { makeActivityModel } from "./activity-model";
-import { makeBaseEdgeModel } from "./base-edge-model";
-import { makeOtherNodeModel } from "./other-node-model";
+import { createStore, produce } from "solid-js/store";
+import { INode, ProcessEntity } from "../data-source/data-type";
 
-export function makeBaseNodeModel(
-  activityModel: ReturnType<typeof makeActivityModel>,
-  otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
-  edgeModel: ReturnType<typeof makeBaseEdgeModel>,
-) {
+export type BaseNodeModel = ReturnType<typeof makeBaseNodeModel>;
+
+export function makeBaseNodeModel() {
+  const [nodeList, setNodeList] = createStore<INode[]>([]);
+
+  function load(newProcess: ProcessEntity) {
+    setNodeList(newProcess.nodes);
+  }
+
+  function save(): INode[] {
+    return JSON.parse(JSON.stringify(nodeList));
+  }
+
   function changeSelectNodes(
     type: "select" | "selectAll" | "toggle" | "clearAll",
     ids: number[] = [],
   ) {
-    activityModel.setActivityList(
-      (it) => type !== "toggle" || (type === "toggle" && ids.includes(it.id)),
-      produce((it) => {
-        switch (type) {
-          case "select":
-            it.selected = ids.includes(it.id);
-            break;
-          case "selectAll":
-            it.selected = true;
-            break;
-          case "toggle":
-            it.selected = !it.selected;
-            break;
-          case "clearAll":
-            it.selected = false;
-            break;
-        }
-      }),
-    );
-
-    otherNodeModel.setOtherNodeList(
+    setNodeList(
       (it) => type !== "toggle" || (type === "toggle" && ids.includes(it.id)),
       produce((it) => {
         switch (type) {
@@ -54,16 +39,8 @@ export function makeBaseNodeModel(
     );
   }
 
-  function moveSelectedNodes(moveX: number, moveY: number) {
-    activityModel.setActivityList(
-      (it) => it.selected,
-      produce((it) => {
-        it.x += moveX;
-        it.y += moveY;
-      }),
-    );
-
-    otherNodeModel.setOtherNodeList(
+  function moveSelectedNodesPosition(moveX: number, moveY: number) {
+    setNodeList(
       (it) => it.selected,
       produce((it) => {
         it.x += moveX;
@@ -72,50 +49,40 @@ export function makeBaseNodeModel(
     );
   }
 
-  function removeSelectedNodes() {
-    edgeModel.setEdgeList(
-      edgeModel.edgeList.filter((it) => {
-        switch (it.type) {
-          case "transitionEdge":
-            return (
-              !activityModel.getActivityNode(it.fromNodeId).selected &&
-              !activityModel.getActivityNode(it.toNodeId).selected
-            );
-          case "commentEdge":
-            return (
-              !otherNodeModel.getCommentNode(it.fromNodeId).selected &&
-              !activityModel.getActivityNode(it.toNodeId).selected
-            );
-          case "startEdge":
-            return (
-              !otherNodeModel.getStartNode(it.fromNodeId).selected &&
-              !activityModel.getActivityNode(it.toNodeId).selected
-            );
-          case "endEdge":
-            return (
-              !activityModel.getActivityNode(it.fromNodeId).selected &&
-              !otherNodeModel.getEndNode(it.toNodeId).selected
-            );
-        }
-      }),
-    );
-
-    activityModel.setActivityList(activityModel.activityList.filter((it) => !it.selected));
-    otherNodeModel.setOtherNodeList(otherNodeModel.otherNodeList.filter((it) => !it.selected));
+  function getNode(nodeId: number): INode {
+    const node = nodeList.find((it) => it.id === nodeId);
+    if (node == null) {
+      throw new Error(`getNode(${nodeId}) is not found.`);
+    }
+    return node;
   }
 
-  function selectedNodes() {
-    return [
-      ...activityModel.activityList.filter((it) => it.selected),
-      ...otherNodeModel.otherNodeList.filter((it) => it.selected),
-    ];
+  function addNode(node: INode) {
+    setNodeList([...nodeList, node]);
   }
 
-  function maxRectangle() {
-    const nodes: INode[] = [...activityModel.activityList, ...otherNodeModel.otherNodeList];
-    if (nodes.length === 0) return null;
+  function computeNextId(): number {
+    return nodeList.reduce((maxId, it) => Math.max(maxId, it.id), 0) + 1;
+  }
 
-    const area = nodes.reduce(
+  function deleteSelectedNodes() {
+    setNodeList(nodeList.filter((it) => !it.selected));
+  }
+
+  function getSelectedNodes() {
+    return nodeList.filter((it) => it.selected);
+  }
+
+  function changeTopLayer(id: number) {
+    const target = getNode(id);
+    const listWithoutTarget = nodeList.filter((it) => it.id !== id);
+    setNodeList([...listWithoutTarget, target]);
+  }
+
+  function computeMaxRectangle() {
+    if (nodeList.length === 0) return null;
+
+    const area = nodeList.reduce(
       (rect, node) => {
         return {
           left: Math.min(rect.left, node.x),
@@ -140,5 +107,19 @@ export function makeBaseNodeModel(
     };
   }
 
-  return { changeSelectNodes, moveSelectedNodes, removeSelectedNodes, selectedNodes, maxRectangle };
+  return {
+    load,
+    save,
+    nodeList,
+    setNodeList,
+    addNode,
+    getNode,
+    getSelectedNodes,
+    changeSelectNodes,
+    deleteSelectedNodes,
+    moveSelectedNodesPosition,
+    changeTopLayer,
+    computeNextId,
+    computeMaxRectangle,
+  };
 }

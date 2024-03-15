@@ -2,12 +2,14 @@ import { JSXElement } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { CommentEdge, EndEdge, StartEdge } from "../../data-source/data-type";
 
-export function OtherEdgeContainer(props: { edge: CommentEdge | StartEdge | EndEdge }): JSXElement {
+export function ExtendEdgeContainer(props: {
+  edge: CommentEdge | StartEdge | EndEdge;
+}): JSXElement {
   const {
-    otherNodeModel: { getCommentNode, getStartNode, getEndNode },
-    activityModel: { getActivityNode },
+    extendNodeModel: { getCommentNode, getStartNode, getEndNode },
+    activityNodeModel: { getActivityNode },
     baseNodeModel: { changeSelectNodes },
-    baseEdgeModel: { changeSelectEdges },
+    baseEdgeModel: { setSelectedEdges: changeSelectEdges },
   } = useAppContext();
 
   const fromToNode = () => {

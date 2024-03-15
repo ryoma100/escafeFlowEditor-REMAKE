@@ -1,9 +1,18 @@
 import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { CommentEdge, EndEdge, StartEdge, TransitionEdge } from "../../data-source/data-type";
+import {
+  ActivityNode,
+  CommentEdge,
+  CommentNode,
+  EndEdge,
+  EndNode,
+  StartEdge,
+  StartNode,
+  TransitionEdge,
+} from "../../data-source/data-type";
 import { ActivityNodeContainer } from "./activity-node";
-import { OtherEdgeContainer } from "./other-edge";
-import { OtherNodeContainer } from "./other-node";
+import { ExtendEdgeContainer } from "./other-edge";
+import { ExtendNodeContainer } from "./other-node";
 import { TransitionEdgeContainer } from "./transition-edge";
 
 export type DragType =
@@ -23,11 +32,17 @@ export type DragType =
 
 export function DiagramContainer(): JSXElement {
   const {
-    activityModel: { activityList, addActivity, layerTopActivity, resizeLeft, resizeRight },
+    processModel: { selectedProcess },
+    activityNodeModel: { addActivity, resizeLeft, resizeRight },
     actorModel: { selectedActor },
-    otherNodeModel: { otherNodeList, addCommentNode, addStartNode, addEndNode },
-    baseNodeModel: { changeSelectNodes, moveSelectedNodes },
-    baseEdgeModel: { changeSelectEdges, edgeList },
+    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
+    baseNodeModel: {
+      changeSelectNodes,
+      moveSelectedNodesPosition: moveSelectedNodes,
+      changeTopLayer,
+      nodeList,
+    },
+    baseEdgeModel: { setSelectedEdges: changeSelectEdges, edgeList },
     diagram: {
       svgRect,
       setSvgRect,
@@ -75,11 +90,12 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "manualActivity",
+                selectedProcess().detail.xpdlId,
                 selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              layerTopActivity(activity.id);
+              changeTopLayer(activity.id);
               changeSelectNodes("select", [activity.id]);
               setDragType("addActivity");
             }
@@ -88,11 +104,12 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "autoActivity",
+                selectedProcess().detail.xpdlId,
                 selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              layerTopActivity(activity.id);
+              changeTopLayer(activity.id);
               changeSelectNodes("select", [activity.id]);
               setDragType("addActivity");
             }
@@ -101,11 +118,12 @@ export function DiagramContainer(): JSXElement {
             {
               const activity = addActivity(
                 "userActivity",
+                selectedProcess().detail.xpdlId,
                 selectedActor().id,
                 viewBox.x + (e.clientX - svgRect.x) / zoom(),
                 viewBox.y + (e.clientY - svgRect.y) / zoom(),
               );
-              layerTopActivity(activity.id);
+              changeTopLayer(activity.id);
               changeSelectNodes("select", [activity.id]);
               setDragType("addActivity");
             }
@@ -214,18 +232,22 @@ export function DiagramContainer(): JSXElement {
             <polygon points="10,0 0,5 0,-5" fill="gray" />
           </marker>
         </defs>
-        <g data-id="other-edges">
+        <g data-id="extend-edges">
           <For each={edgeList.filter((it) => it.type !== "transitionEdge")}>
-            {(it) => <OtherEdgeContainer edge={it as StartEdge | EndEdge | CommentEdge} />}
+            {(it) => <ExtendEdgeContainer edge={it as StartEdge | EndEdge | CommentEdge} />}
           </For>
         </g>
         <g data-id="activity-nodes">
-          <For each={activityList}>{(it) => <ActivityNodeContainer activity={it} />}</For>
+          <For each={nodeList.filter((it) => it.type === "activityNode")}>
+            {(it) => <ActivityNodeContainer activity={it as ActivityNode} />}
+          </For>
         </g>
-        <g data-id="other-nodes">
-          <For each={otherNodeList}>{(it) => <OtherNodeContainer node={it} />}</For>
+        <g data-id="extend-nodes">
+          <For each={nodeList.filter((it) => it.type !== "activityNode")}>
+            {(it) => <ExtendNodeContainer node={it as StartNode | EndNode | CommentNode} />}
+          </For>
         </g>
-        <g data-id="transitions">
+        <g data-id="transition-edges">
           <For each={edgeList.filter((it) => it.type === "transitionEdge")}>
             {(it) => <TransitionEdgeContainer transition={it as TransitionEdge} />}
           </For>

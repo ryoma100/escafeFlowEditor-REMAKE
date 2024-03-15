@@ -17,7 +17,7 @@ export function ActivityDialog(): JSXElement {
   const {
     processModel: { selectedProcess },
     actorModel: { actorList },
-    activityModel: { activityList, setActivityList },
+    baseNodeModel: { nodeList, setNodeList },
     dialog: { openActivityDialog, setOpenActivityDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
@@ -49,29 +49,36 @@ export function ActivityDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (activityList.some((it) => it.id !== formData.id && it.xpdlId === formData.xpdlId)) {
+    if (
+      nodeList.some(
+        (it) =>
+          it.type === "activityNode" && it.id !== formData.id && it.xpdlId === formData.xpdlId,
+      )
+    ) {
       setOpenMessageDialog("idExists");
       return;
     }
 
-    setActivityList(
+    setNodeList(
       (it) => it.id === openActivityDialog()?.id,
       produce((it) => {
-        it.xpdlId = formData.xpdlId;
-        it.type = formData.type;
-        it.actorId = formData.actorId;
-        it.name = formData.name;
-        it.applications =
-          formData.activityType === "autoActivity"
-            ? formData.applications.filter((it) => it.ognl !== "")
-            : [];
-        it.ognl =
-          formData.activityType === "manualTimerActivity" ||
-          formData.activityType === "autoTimerActivity"
-            ? formData.ognl
-            : "";
-        it.joinType = formData.joinType;
-        it.splitType = formData.splitType;
+        if (it.type === "activityNode") {
+          it.xpdlId = formData.xpdlId;
+          it.type = formData.type;
+          it.actorId = formData.actorId;
+          it.name = formData.name;
+          it.applications =
+            formData.activityType === "autoActivity"
+              ? formData.applications.filter((it) => it.ognl !== "")
+              : [];
+          it.ognl =
+            formData.activityType === "manualTimerActivity" ||
+            formData.activityType === "autoTimerActivity"
+              ? formData.ognl
+              : "";
+          it.joinType = formData.joinType;
+          it.splitType = formData.splitType;
+        }
       }),
     );
     setOpenActivityDialog(null);

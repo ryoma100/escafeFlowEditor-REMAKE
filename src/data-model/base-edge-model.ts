@@ -8,12 +8,14 @@ import {
   StartEdge,
   TransitionEdge,
 } from "../data-source/data-type";
-import { makeActivityModel } from "./activity-model";
-import { makeOtherNodeModel } from "./other-node-model";
+import { ActivityNodeModel } from "./activity-node-model";
+import { BaseNodeModel } from "./base-node-model";
+
+export type BaseEdgeModel = ReturnType<typeof makeBaseEdgeModel>;
 
 export function makeBaseEdgeModel(
-  activityModel: ReturnType<typeof makeActivityModel>,
-  otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
+  baseNodeModel: BaseNodeModel,
+  activityNodeModel: ActivityNodeModel,
 ) {
   const [edgeList, setEdgeList] = createStore<IEdge[]>([]);
 
@@ -25,7 +27,7 @@ export function makeBaseEdgeModel(
     return JSON.parse(JSON.stringify(edgeList));
   }
 
-  function changeSelectEdges(
+  function setSelectedEdges(
     type: "select" | "selectAll" | "toggle" | "clearAll",
     ids: number[] = [],
   ) {
@@ -50,8 +52,15 @@ export function makeBaseEdgeModel(
     );
   }
 
-  function removeSelectedEdge() {
-    setEdgeList(edgeList.filter((it) => !it.selected));
+  function deleteSelectedEdge() {
+    setEdgeList(
+      edgeList.filter(
+        (it) =>
+          !it.selected &&
+          !baseNodeModel.getNode(it.fromNodeId).selected &&
+          !baseNodeModel.getNode(it.toNodeId).selected,
+      ),
+    );
   }
 
   function selectedEdges() {
@@ -59,7 +68,7 @@ export function makeBaseEdgeModel(
   }
 
   function addTransitionEdge(processXpdlId: string, toActivityId: number): TransitionEdge | null {
-    const fromActivityId = activityModel.activityList.find((it) => it.selected)!.id;
+    const fromActivityId = baseNodeModel.nodeList.find((it) => it.selected)!.id;
     const transitionList: TransitionEdge[] = edgeList.filter(
       (it) => it.type === "transitionEdge",
     ) as TransitionEdge[]; // TODO:type
@@ -81,11 +90,11 @@ export function makeBaseEdgeModel(
     );
     setEdgeList([...edgeList, transition]);
 
-    activityModel.updateJoinType(
+    activityNodeModel.updateJoinType(
       toActivityId,
       transitionList.filter((it) => it.toNodeId === toActivityId).length,
     );
-    activityModel.updateSplitType(
+    activityNodeModel.updateSplitType(
       fromActivityId,
       transitionList.filter((it) => it.fromNodeId === fromActivityId).length,
     );
@@ -94,7 +103,7 @@ export function makeBaseEdgeModel(
   }
 
   function addCommentEdge(toActivityId: number): CommentEdge {
-    const fromCommentId = otherNodeModel.otherNodeList.find((it) => it.selected)!.id;
+    const fromCommentId = baseNodeModel.nodeList.find((it) => it.selected)!.id;
     const edgeId = edgeList.reduce((maxId, it) => Math.max(it.id, maxId), 0) + 1;
     const edge = dataFactory.createCommentEdge(edgeId, fromCommentId, toActivityId);
     setEdgeList([...edgeList, edge]);
@@ -103,7 +112,7 @@ export function makeBaseEdgeModel(
   }
 
   function addStartEdge(toActivityId: number): StartEdge {
-    const fromStartId = otherNodeModel.otherNodeList.find((it) => it.selected)!.id;
+    const fromStartId = baseNodeModel.nodeList.find((it) => it.selected)!.id;
     const edgeId = edgeList.reduce((maxId, it) => Math.max(it.id, maxId), 0) + 1;
     const edge = dataFactory.createStartEdge(edgeId, fromStartId, toActivityId);
     setEdgeList([...edgeList, edge]);
@@ -112,7 +121,7 @@ export function makeBaseEdgeModel(
   }
 
   function addEndEdge(toEndNodeId: number): EndEdge {
-    const fromActivityId = activityModel.activityList.find((it) => it.selected)!.id;
+    const fromActivityId = baseNodeModel.nodeList.find((it) => it.selected)!.id;
     const edgeId = edgeList.reduce((maxId, it) => Math.max(it.id, maxId), 0) + 1;
     const edge = dataFactory.createEndEdge(edgeId, fromActivityId, toEndNodeId);
     setEdgeList([...edgeList, edge]);
@@ -125,8 +134,8 @@ export function makeBaseEdgeModel(
     save,
     edgeList,
     setEdgeList,
-    changeSelectEdges,
-    removeSelectedEdge,
+    setSelectedEdges,
+    deleteSelectedEdge,
     selectedEdges,
     addTransitionEdge,
     addCommentEdge,

@@ -1,6 +1,7 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
+import { dataFactory } from "../../data-source/data-factory";
 import {
   ApplicationEntity,
   EnvironmentEntity,
@@ -12,7 +13,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 export function ProcessDialog(): JSXElement {
   const {
     processModel: { updateProcessDetail, processList },
-    activityModel: { activityList },
+    activityNodeModel: { getActivityNodes },
     dialog: { openProcessDialog, setOpenProcessDialog, setOpenMessageDialog },
   } = useAppContext();
 
@@ -37,13 +38,10 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleAddEnvButtonClick() {
-    const id = formData._lastEnvironmentId + 1;
-    9;
-    setFormData("_lastEnvironmentId", id);
-    setFormData("environments", [
-      ...formData.environments,
-      { id, name: `name${id}`, value: `value${id}` },
-    ]);
+    if (process) {
+      const environment = dataFactory.createEnvironment(process);
+      setFormData("environments", [...formData.environments, environment]);
+    }
   }
 
   function handleRemoveEnvButtonClick() {
@@ -58,36 +56,25 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleAddAppButtonClick() {
-    const id = formData._lastApplicationId + 1;
-    setFormData("_lastApplicationId", id);
-    setFormData("applications", [
-      ...formData.applications,
-      {
-        id,
-        xpdlId: `xpdlId${id}`,
-        name: `name${id}`,
-        extendedName: "",
-        extendedValue: "",
-      },
-    ]);
+    if (process) {
+      const application = dataFactory.createApplication(process);
+      setFormData("applications", [...formData.applications, application]);
+    }
   }
 
   function handleRemoveAppButtonClick() {
-    if (selectedApp()) {
-      if (
-        activityList.some((activity) =>
-          activity.applications.some((app) => app.id === selectedApp()?.id),
-        )
-      ) {
+    const app = selectedApp();
+    if (app) {
+      if (getActivityNodes().some((it) => it.applications.some((app) => app.id === app.id))) {
         setOpenMessageDialog("applicationCannotDelete");
         return;
       }
-    }
 
-    setFormData(
-      "applications",
-      formData.applications.filter((it) => it.id !== selectedApp()?.id),
-    );
+      setFormData(
+        "applications",
+        formData.applications.filter((it) => it.id !== app.id),
+      );
+    }
   }
 
   function handleSubmit(e: Event) {

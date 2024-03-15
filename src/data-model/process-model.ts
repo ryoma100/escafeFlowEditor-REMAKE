@@ -1,15 +1,13 @@
 import { batch, createSignal } from "solid-js";
 import { dataFactory } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
-import { makeActivityModel } from "./activity-model";
 import { makeActorModel } from "./actor-model";
 import { makeBaseEdgeModel } from "./base-edge-model";
-import { makeOtherNodeModel } from "./other-node-model";
+import { makeBaseNodeModel } from "./base-node-model";
 
 export function makeProcessModel(
   actorModel: ReturnType<typeof makeActorModel>,
-  activityModel: ReturnType<typeof makeActivityModel>,
-  otherNodeModel: ReturnType<typeof makeOtherNodeModel>,
+  baseNodeModel: ReturnType<typeof makeBaseNodeModel>,
   baseEdgeModel: ReturnType<typeof makeBaseEdgeModel>,
 ) {
   let _project: ProjectEntity;
@@ -23,19 +21,18 @@ export function makeProcessModel(
       const firstProcess = processList()[0];
       setSelectedProcess(firstProcess);
       actorModel.load(firstProcess);
-      activityModel.load(firstProcess);
-      otherNodeModel.load(firstProcess);
-
+      baseNodeModel.load(firstProcess);
       baseEdgeModel.load(firstProcess);
     });
   }
 
   function sync() {
-    actorModel.sync();
-    activityModel.sync();
-    otherNodeModel.sync();
-
-    const process = { ...selectedProcess(), edges: baseEdgeModel.save() };
+    const process: ProcessEntity = {
+      ...selectedProcess(),
+      actors: actorModel.save(),
+      nodes: baseNodeModel.save(),
+      edges: baseEdgeModel.save(),
+    };
     setProcessList(processList().map((it) => (it.id === process.id ? process : it)));
     setSelectedProcess(processList().find((it) => it.id === process.id)!);
   }
@@ -48,9 +45,7 @@ export function makeProcessModel(
     batch(() => {
       setSelectedProcess(process);
       actorModel.load(process);
-      activityModel.load(process);
-      otherNodeModel.load(process);
-
+      baseNodeModel.load(process);
       baseEdgeModel.load(process);
     });
   }

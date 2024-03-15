@@ -6,7 +6,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function CommentDialog(): JSXElement {
   const {
-    otherNodeModel: { updateComment },
+    extendNodeModel: { updateComment },
     dialog: { openCommentDialog, setOpenCommentDialog },
   } = useAppContext();
 

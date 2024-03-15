@@ -6,11 +6,11 @@ import { ToolbarType } from "../components/toolbar/toolbar";
 import { defaultRectangle } from "../constants/app-const";
 import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
-import { makeActivityModel } from "../data-model/activity-model";
+import { makeActivityModel } from "../data-model/activity-node-model";
 import { makeActorModel } from "../data-model/actor-model";
 import { makeBaseEdgeModel } from "../data-model/base-edge-model";
 import { makeBaseNodeModel } from "../data-model/base-node-model";
-import { makeOtherNodeModel } from "../data-model/other-node-model";
+import { makeExtendNodeModel } from "../data-model/extend-node-model";
 import { makeProcessModel } from "../data-model/process-model";
 import { makeProjectModel } from "../data-model/project-model";
 import {
@@ -24,20 +24,20 @@ import {
 } from "../data-source/data-type";
 
 function makeModelContext() {
-  const activityModel = makeActivityModel();
-  const actorModel = makeActorModel(activityModel);
-  const otherNodeModel = makeOtherNodeModel();
-  const baseEdgeModel = makeBaseEdgeModel(activityModel, otherNodeModel);
-  const baseNodeModel = makeBaseNodeModel(activityModel, otherNodeModel, baseEdgeModel);
-  const processModel = makeProcessModel(actorModel, activityModel, otherNodeModel, baseEdgeModel);
+  const baseNodeModel = makeBaseNodeModel();
+  const activityNodeModel = makeActivityModel(baseNodeModel);
+  const baseEdgeModel = makeBaseEdgeModel(baseNodeModel, activityNodeModel);
+  const extendNodeModel = makeExtendNodeModel(baseNodeModel);
+  const actorModel = makeActorModel();
+  const processModel = makeProcessModel(actorModel, baseNodeModel, baseEdgeModel);
   const projectModel = makeProjectModel(processModel);
 
   return {
     projectModel,
     processModel,
     actorModel,
-    activityModel,
-    otherNodeModel,
+    activityNodeModel,
+    extendNodeModel,
     baseNodeModel,
     baseEdgeModel,
   };
@@ -136,8 +136,8 @@ const AppContext = createContext<{
   projectModel: ReturnType<typeof makeProjectModel>;
   processModel: ReturnType<typeof makeProcessModel>;
   actorModel: ReturnType<typeof makeActorModel>;
-  activityModel: ReturnType<typeof makeActivityModel>;
-  otherNodeModel: ReturnType<typeof makeOtherNodeModel>;
+  activityNodeModel: ReturnType<typeof makeActivityModel>;
+  extendNodeModel: ReturnType<typeof makeExtendNodeModel>;
   baseNodeModel: ReturnType<typeof makeBaseNodeModel>;
   baseEdgeModel: ReturnType<typeof makeBaseEdgeModel>;
   dialog: ReturnType<typeof makeDialogContext>;
@@ -147,8 +147,8 @@ const AppContext = createContext<{
   projectModel: undefined as never,
   processModel: undefined as never,
   actorModel: undefined as never,
-  activityModel: undefined as never,
-  otherNodeModel: undefined as never,
+  activityNodeModel: undefined as never,
+  extendNodeModel: undefined as never,
   baseNodeModel: undefined as never,
   baseEdgeModel: undefined as never,
   dialog: undefined as never,

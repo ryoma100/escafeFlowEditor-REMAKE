@@ -3,12 +3,14 @@ import {
   ActivityNode,
   ActivityNodeType,
   ActorEntity,
+  ApplicationEntity,
   CommentEdge,
   CommentNode,
   EndEdge,
   EndNode,
+  EnvironmentEntity,
   IEdge,
-  ProcessDetailEntity,
+  INode,
   ProcessEntity,
   ProjectEntity,
   StartEdge,
@@ -21,7 +23,6 @@ function createProject(): ProjectEntity {
     xpdlId: "newpkg",
     name: "パッケージ",
     created: new Date().toISOString(),
-    _lastProcessId: 0,
     processes: [],
   };
   project.processes = [createProcess(project)];
@@ -29,49 +30,57 @@ function createProject(): ProjectEntity {
 }
 
 function createProcess(project: ProjectEntity): ProcessEntity {
-  let id = 0;
+  let id = project.processes.reduce((maxId, it) => Math.max(maxId, it.id), 0);
   let xpdlId = "";
   do {
-    id = ++project._lastProcessId;
+    id++;
     xpdlId = `${project.xpdlId}_wp${id}`;
   } while (project.processes.some((it) => it.detail.xpdlId === xpdlId));
-
-  const detail: ProcessDetailEntity = {
-    xpdlId,
-    name: `プロセス${id}`,
-    validFrom: "",
-    validTo: "",
-
-    _lastEnvironmentId: 0,
-    environments: [],
-
-    _lastApplicationId: 0,
-    applications: [],
-  };
 
   const process: ProcessEntity = {
     id,
     created: new Date().toISOString(),
-    detail,
-
-    _lastActorId: 0,
+    detail: {
+      xpdlId,
+      name: `プロセス${id}`,
+      validFrom: "",
+      validTo: "",
+      environments: [],
+      applications: [],
+    },
     actors: [],
-
-    _lastNodeId: 0,
-    activityNodes: [],
-    otherNodes: [],
-
+    nodes: [],
     edges: [],
   };
   process.actors = [createActor(process)];
   return process;
 }
 
+function createEnvironment(process: ProcessEntity): EnvironmentEntity {
+  const id = process.detail.environments.reduce((maxId, it) => Math.max(maxId, it.id), 0) + 1;
+  return {
+    id,
+    name: `name${id}`,
+    value: `value${id}`,
+  };
+}
+
+function createApplication(process: ProcessEntity): ApplicationEntity {
+  const id = process.detail.applications.reduce((maxId, it) => Math.max(maxId, it.id), 0) + 1;
+  return {
+    id,
+    xpdlId: `xpdlId${id}`,
+    name: `name${id}`,
+    extendedName: "",
+    extendedValue: "",
+  };
+}
+
 function createActor(process: ProcessEntity): ActorEntity {
-  let id = 0;
+  let id = process.actors.reduce((maxId, it) => Math.max(maxId, it.id), 0);
   let xpdlId = "";
   do {
-    id = ++process._lastActorId;
+    id++;
     xpdlId = `${process.detail.xpdlId}_par${id}`;
   } while (process.actors.some((it) => it.xpdlId === xpdlId));
 
@@ -83,16 +92,18 @@ function createActor(process: ProcessEntity): ActorEntity {
 }
 
 function createActivity(
-  process: ProcessEntity,
+  processXpdlId: string,
+  nodeList: INode[],
   actorId: number,
   activityType: ActivityNodeType,
 ): ActivityNode {
-  let id = 0;
+  const activityList = nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
+  let id = nodeList.reduce((maxId, it) => Math.max(it.id, maxId), 0);
   let xpdlId = "";
   do {
-    id = ++process._lastNodeId;
-    xpdlId = `${process.detail.xpdlId}_act${id}`;
-  } while (process.activityNodes.some((it) => it.xpdlId === xpdlId));
+    id++;
+    xpdlId = `${processXpdlId}_act${id}`;
+  } while (activityList.some((it) => it.xpdlId === xpdlId));
 
   return {
     id,
@@ -137,9 +148,7 @@ function createTransition(
   };
 }
 
-function createComment(process: ProcessEntity, x: number, y: number): CommentNode {
-  const id = ++process._lastNodeId;
-
+function createComment(id: number, x: number, y: number): CommentNode {
   return {
     id,
     type: "commentNode",
@@ -152,9 +161,7 @@ function createComment(process: ProcessEntity, x: number, y: number): CommentNod
   };
 }
 
-function createStartNode(process: ProcessEntity, x: number, y: number): StartNode {
-  const id = ++process._lastNodeId;
-
+function createStartNode(id: number, x: number, y: number): StartNode {
   return {
     id,
     type: "startNode",
@@ -166,9 +173,7 @@ function createStartNode(process: ProcessEntity, x: number, y: number): StartNod
   };
 }
 
-function createEndNode(process: ProcessEntity, x: number, y: number): EndNode {
-  const id = ++process._lastNodeId;
-
+function createEndNode(id: number, x: number, y: number): EndNode {
   return {
     id,
     type: "endNode",
@@ -213,6 +218,8 @@ function createEndEdge(id: number, fromNodeId: number, toNodeId: number): EndEdg
 export const dataFactory = {
   createProject,
   createProcess,
+  createEnvironment,
+  createApplication,
   createActor,
   createActivity,
   createTransition,

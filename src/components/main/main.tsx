@@ -5,7 +5,7 @@ import { DiagramContainer } from "../diagram/diagram";
 export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
-    baseNodeModel: { maxRectangle },
+    baseNodeModel: { computeMaxRectangle: maxRectangle },
     diagram: { zoom, setZoom, autoRectangle },
   } = useAppContext();
 

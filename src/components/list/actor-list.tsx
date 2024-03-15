@@ -6,6 +6,8 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ActorList(): JSXElement {
   const {
+    processModel: { selectedProcess },
+    baseNodeModel: { nodeList },
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
     dialog: { setOpenActorDialog, setOpenMessageDialog },
     i18n: { dict },
@@ -21,11 +23,11 @@ export function ActorList(): JSXElement {
   }
 
   function handleAddButtonClick(_: MouseEvent) {
-    addActor();
+    addActor(selectedProcess());
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    const err = removeSelectedActor();
+    const err = removeSelectedActor(nodeList);
     if (err != null) {
       setOpenMessageDialog(err);
     }

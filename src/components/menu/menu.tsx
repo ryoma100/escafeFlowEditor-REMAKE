@@ -7,9 +7,9 @@ export function AppMenu(): JSXElement {
     projectModel: { project },
     processModel: { addProcess, selectedProcess },
     actorModel: { addActor, removeSelectedActor, selectedActor },
-    baseNodeModel: { changeSelectNodes, removeSelectedNodes, selectedNodes },
-    baseEdgeModel: { removeSelectedEdge, selectedEdges, edgeList },
-    activityModel: { updateAllJoinSplitType },
+    baseNodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
+    activityNodeModel: { updateAllJoinSplitType },
+    baseEdgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
     dialog: {
       setOpenProjectDialog,
       setOpenProcessDialog,
@@ -45,15 +45,15 @@ export function AppMenu(): JSXElement {
   }
 
   function handleEditRemoveClick() {
-    removeSelectedEdge();
-    removeSelectedNodes();
+    deleteSelectedEdge();
+    deleteSelectedNodes();
     updateAllJoinSplitType(edgeList);
     return false;
   }
 
   function handleEditPropertyClick() {
-    if (selectedNodes().length + selectedEdges().length === 1) {
-      selectedNodes().forEach((it) => {
+    if (getSelectedNodes().length + selectedEdges().length === 1) {
+      getSelectedNodes().forEach((it) => {
         switch (it.type) {
           case "activityNode":
             setOpenActorDialog(it);
@@ -95,12 +95,12 @@ export function AppMenu(): JSXElement {
   }
 
   function handleActorAddClick() {
-    addActor();
+    addActor(selectedProcess());
     return false;
   }
 
   function handleActorRemoveClick() {
-    const err = removeSelectedActor();
+    const err = removeSelectedActor(nodeList);
     if (err != null) {
       setOpenMessageDialog(err);
     }

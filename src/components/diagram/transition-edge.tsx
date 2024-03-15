@@ -4,9 +4,9 @@ import { TransitionEdge } from "../../data-source/data-type";
 
 export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
   const {
-    activityModel: { getActivityNode },
+    activityNodeModel: { getActivityNode },
     baseNodeModel: { changeSelectNodes },
-    baseEdgeModel: { changeSelectEdges },
+    baseEdgeModel: { setSelectedEdges },
     diagram: { setDragType },
     dialog: { setOpenTransitionDialog },
   } = useAppContext();
@@ -17,11 +17,11 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
     if (e.shiftKey) {
-      changeSelectEdges("toggle", [props.transition.id]);
+      setSelectedEdges("toggle", [props.transition.id]);
       setDragType("none");
     } else if (!props.transition.selected) {
       changeSelectNodes("clearAll");
-      changeSelectEdges("select", [props.transition.id]);
+      setSelectedEdges("select", [props.transition.id]);
     }
   }
 

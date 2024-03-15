@@ -2,26 +2,23 @@ import { createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { enDict } from "../constants/i18n-en";
 import { dataFactory } from "../data-source/data-factory";
-import { ActorEntity, ProcessEntity } from "../data-source/data-type";
-import { makeActivityModel } from "./activity-model";
+import { ActorEntity, INode, ProcessEntity } from "../data-source/data-type";
 
-export function makeActorModel(activityModel: ReturnType<typeof makeActivityModel>) {
-  let _process: ProcessEntity;
+export function makeActorModel() {
   const [actorList, setActorList] = createStore<ActorEntity[]>([]);
   const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(undefined as never);
 
   function load(newProcess: ProcessEntity) {
-    _process = newProcess;
-    setActorList(_process.actors);
-    setSelectedActor(_process.actors[0]);
+    setActorList(newProcess.actors);
+    setSelectedActor(newProcess.actors[0]);
   }
 
-  function sync() {
-    _process.actors = [...actorList];
+  function save(): ActorEntity[] {
+    return JSON.parse(JSON.stringify(actorList));
   }
 
-  function addActor() {
-    const actor = dataFactory.createActor(_process);
+  function addActor(process: ProcessEntity) {
+    const actor = dataFactory.createActor(process);
     setActorList([...actorList, actor]);
     const proxyActor = actorList[actorList.length - 1];
     setSelectedActor(proxyActor);
@@ -37,10 +34,9 @@ export function makeActorModel(activityModel: ReturnType<typeof makeActivityMode
     );
   }
 
-  function removeSelectedActor(): keyof typeof enDict | null {
+  function removeSelectedActor(nodeList: INode[]): keyof typeof enDict | null {
     if (actorList.length <= 1) return null;
-    if (activityModel.activityList.some((it) => it.actorId === selectedActor().id))
-      return "actorCannotDelete";
+    if (nodeList.some((it) => it.id === selectedActor().id)) return "actorCannotDelete";
 
     const nextSelectedIndex = Math.min(
       actorList.findIndex((it) => it.id === selectedActor().id),
@@ -55,7 +51,7 @@ export function makeActorModel(activityModel: ReturnType<typeof makeActivityMode
 
   return {
     load,
-    sync,
+    save,
     actorList,
     selectedActor,
     setSelectedActor,

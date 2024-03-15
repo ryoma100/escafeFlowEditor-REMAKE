@@ -3,9 +3,11 @@ import { useAppContext } from "../../context/app-context";
 import { CommentNode, EndNode, StartNode } from "../../data-source/data-type";
 import { CommentIcon, EndIcon, StartIcon } from "../icons/material-icons";
 
-export function OtherNodeContainer(props: { node: CommentNode | StartNode | EndNode }): JSXElement {
+export function ExtendNodeContainer(props: {
+  node: CommentNode | StartNode | EndNode;
+}): JSXElement {
   const {
-    otherNodeModel: { resizeCommentNode },
+    extendNodeModel: { resizeCommentNode },
     baseEdgeModel: { addEndEdge },
     baseNodeModel: { changeSelectNodes },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
