@@ -2,6 +2,7 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
+import { deepCopy } from "../../data-source/data-converter";
 import { ActivityNode } from "../../data-source/data-type";
 import {
   AutoActivityIcon,
@@ -29,7 +30,7 @@ export function ActivityDialog(): JSXElement {
   createEffect(() => {
     const activity = openActivityDialog();
     if (activity != null) {
-      const cloneActivity: ActivityNode = JSON.parse(JSON.stringify(activity));
+      const cloneActivity: ActivityNode = deepCopy(activity);
       cloneActivity.applications = selectedProcess().detail.applications.map((app) => ({
         id: app.id,
         ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",

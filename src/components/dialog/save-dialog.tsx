@@ -6,7 +6,6 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function SaveDialog(): JSXElement {
   const {
-    projectModel: { save },
     dialog: { openSaveDialog, setOpenSaveDialog },
     i18n: { dict },
   } = useAppContext();
@@ -19,7 +18,6 @@ export function SaveDialog(): JSXElement {
     if (project != null) {
       dialogRef?.showModal();
       okButtonRef?.focus();
-      save();
       setData(exportYaml(project));
     } else {
       dialogRef?.close();

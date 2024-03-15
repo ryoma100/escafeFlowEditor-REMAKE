@@ -11,14 +11,19 @@ export function makeProjectModel(processModel: ReturnType<typeof makeProcessMode
     processModel.load(project);
   }
 
+  function getProjectDetail(): ProjectDetailEntity {
+    return project.detail;
+  }
+
   function setProjectDetail(detail: ProjectDetailEntity) {
     project = { ...project, detail };
   }
 
-  function save() {
+  function save(): ProjectEntity {
     const processes = processModel.save();
     project = { ...project, processes };
+    return project;
   }
 
-  return { initProject, project, setProjectDetail, save };
+  return { initProject, getProjectDetail, setProjectDetail, save };
 }

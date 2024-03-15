@@ -1,4 +1,5 @@
 import { batch, createSignal } from "solid-js";
+import { deepCopy } from "../data-source/data-converter";
 import { dataFactory } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActorModel } from "./actor-model";
@@ -34,7 +35,7 @@ export function makeProcessModel(
     setProcessList(processList().map((it) => (it.id === process.id ? process : it)));
     setSelectedProcess(processList().find((it) => it.id === process.id)!);
 
-    return JSON.parse(JSON.stringify(processList()));
+    return deepCopy(processList());
   }
 
   function changeProcess(newProcess: ProcessEntity) {
@@ -50,8 +51,8 @@ export function makeProcessModel(
     });
   }
 
-  function addProcess(project: ProjectEntity) {
-    const newProcess = dataFactory.createProcess(project.processes);
+  function addProcess(processes: ProcessEntity[]) {
+    const newProcess = dataFactory.createProcess(processes);
     setProcessList([...processList(), newProcess]);
     changeProcess(newProcess);
   }
@@ -62,7 +63,7 @@ export function makeProcessModel(
     setSelectedProcess(newList.find((it) => it.id === process.id)!);
   }
 
-  function removeSelectedProcess(project: ProjectEntity) {
+  function removeSelectedProcess() {
     if (processList().length <= 1) return;
 
     const nextSelectedIndex = Math.min(
@@ -72,7 +73,6 @@ export function makeProcessModel(
     const newList = processList().filter((it) => it.id !== selectedProcess().id);
     setProcessList(newList);
     setSelectedProcess(processList()[nextSelectedIndex]);
-    project.processes = [...processList()];
     changeProcess(selectedProcess());
   }
 

@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { enDict } from "../constants/i18n-en";
+import { deepCopy } from "../data-source/data-converter";
 import { dataFactory } from "../data-source/data-factory";
 import { ActorEntity, INode, ProcessEntity } from "../data-source/data-type";
 
@@ -14,7 +15,7 @@ export function makeActorModel() {
   }
 
   function save(): ActorEntity[] {
-    return JSON.parse(JSON.stringify(actorList));
+    return deepCopy(actorList);
   }
 
   function addActor(process: ProcessEntity) {

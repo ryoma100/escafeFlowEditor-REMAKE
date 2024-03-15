@@ -1,21 +1,21 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
+import { deepCopy } from "../../data-source/data-converter";
 import { ProjectDetailEntity } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ProjectDialog(): JSXElement {
   const {
-    projectModel: { setProjectDetail },
+    projectModel: { getProjectDetail, setProjectDetail },
     dialog: { openProjectDialog, setOpenProjectDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ProjectDetailEntity>(undefined as never);
 
   createEffect(() => {
-    const project = openProjectDialog();
-    if (project != null) {
-      setFormData({ ...project.detail });
+    if (openProjectDialog()) {
+      setFormData(deepCopy(getProjectDetail()));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -26,11 +26,11 @@ export function ProjectDialog(): JSXElement {
     e.preventDefault();
 
     setProjectDetail({ ...formData });
-    setOpenProjectDialog(null);
+    setOpenProjectDialog(false);
   }
 
   function handleClose() {
-    setOpenProjectDialog(null);
+    setOpenProjectDialog(false);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

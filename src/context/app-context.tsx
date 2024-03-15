@@ -51,7 +51,7 @@ function makeModelContext() {
 }
 
 function makeDialogContext() {
-  const [openProjectDialog, setOpenProjectDialog] = createSignal<ProjectEntity | null>(null);
+  const [openProjectDialog, setOpenProjectDialog] = createSignal<boolean>(false);
   const [openProcessDialog, setOpenProcessDialog] = createSignal<ProcessEntity | null>(null);
   const [openActorDialog, setOpenActorDialog] = createSignal<ActorEntity | null>(null);
   const [openActivityDialog, setOpenActivityDialog] = createSignal<ActivityNode | null>(null);

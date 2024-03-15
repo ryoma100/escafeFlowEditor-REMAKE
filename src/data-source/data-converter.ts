@@ -66,3 +66,7 @@ export function exportYaml(project: ProjectEntity): string {
 export function importYaml() {
   //
 }
+
+export function deepCopy<T extends object>(data: T): T {
+  return JSON.parse(JSON.stringify(data));
+}

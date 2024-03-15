@@ -5,7 +5,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ConfirmDialog(): JSXElement {
   const {
-    projectModel: { initProject, project },
+    projectModel: { initProject },
     processModel: { removeSelectedProcess },
     dialog: { openConfirmDialog, setOpenConfirmDialog },
     i18n: { dict },
@@ -28,7 +28,7 @@ export function ConfirmDialog(): JSXElement {
         initProject();
         break;
       case "deleteProcess":
-        removeSelectedProcess(project);
+        removeSelectedProcess();
         break;
     }
     setOpenConfirmDialog(null);

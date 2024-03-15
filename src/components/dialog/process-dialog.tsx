@@ -1,6 +1,7 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
+import { deepCopy } from "../../data-source/data-converter";
 import { dataFactory } from "../../data-source/data-factory";
 import {
   ApplicationEntity,
@@ -22,7 +23,7 @@ export function ProcessDialog(): JSXElement {
 
   createEffect(() => {
     if (openProcessDialog() != null) {
-      setFormData(JSON.parse(JSON.stringify(selectedProcess().detail)));
+      setFormData(deepCopy(selectedProcess().detail));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -86,7 +87,7 @@ export function ProcessDialog(): JSXElement {
       return;
     }
 
-    const detail: ProcessDetailEntity = JSON.parse(JSON.stringify(formData));
+    const detail: ProcessDetailEntity = deepCopy(formData);
     updateProcessDetail({ ...process, detail });
     setOpenProcessDialog(null);
   }

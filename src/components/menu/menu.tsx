@@ -4,8 +4,8 @@ import { useAppContext } from "../../context/app-context";
 
 export function AppMenu(): JSXElement {
   const {
-    projectModel: { project },
-    processModel: { addProcess, selectedProcess },
+    projectModel: { save },
+    processModel: { addProcess, selectedProcess, processList },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
     activityNodeModel: { updateAllJoinSplitType },
@@ -35,7 +35,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleFileSaveClick() {
-    setOpenSaveDialog(project);
+    setOpenSaveDialog(save());
     return false;
   }
 
@@ -75,12 +75,12 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProjectPropertyClick() {
-    setOpenProjectDialog(project);
+    setOpenProjectDialog(true);
     return false;
   }
 
   function handleProcessAddClick() {
-    addProcess(project);
+    addProcess(processList());
     return false;
   }
 
