@@ -274,6 +274,7 @@ describe("createTransitionEdge", () => {
       type: "transitionEdge",
       fromNodeId: 1,
       toNodeId: 2,
+      ognl: "",
       selected: false,
     });
   });
@@ -286,6 +287,7 @@ describe("createTransitionEdge", () => {
       type: "transitionEdge",
       fromNodeId: 11,
       toNodeId: 12,
+      ognl: "",
       selected: false,
     });
   });
@@ -299,6 +301,7 @@ describe("createTransitionEdge", () => {
       type: "transitionEdge",
       fromNodeId: 21,
       toNodeId: 22,
+      ognl: "",
       selected: false,
     });
   });

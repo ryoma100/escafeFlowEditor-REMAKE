@@ -131,6 +131,7 @@ type IBaseEdge = {
 export type TransitionEdge = IBaseEdge & {
   type: "transitionEdge";
   xpdlId: string;
+  ognl: string;
 };
 
 export type StartEdge = IBaseEdge & {

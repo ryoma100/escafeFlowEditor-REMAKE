@@ -5,10 +5,6 @@ import App from "./App";
 import { AppProvider } from "./context/app-context";
 import "./index.css";
 
-document.onselectstart = () => {
-  return false;
-};
-
 render(
   () => (
     <AppProvider>

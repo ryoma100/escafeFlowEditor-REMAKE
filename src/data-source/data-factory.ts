@@ -149,6 +149,7 @@ function createTransitionEdge(
     type: "transitionEdge",
     fromNodeId,
     toNodeId,
+    ognl: "",
     selected: false,
   };
 }

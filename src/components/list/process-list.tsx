@@ -13,7 +13,9 @@ export function ProcessList(): JSXElement {
   const t = i18n.translator(dict);
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {
-    changeProcess(process);
+    if (selectedProcess().id !== process.id) {
+      changeProcess(process);
+    }
   }
 
   function handleItemDblClick(_: MouseEvent) {

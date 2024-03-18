@@ -50,8 +50,10 @@ export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>)
     nodeModel.setNodeList(
       (it) => it.id === node.id,
       produce((it) => {
-        it.width = width;
-        it.height = height;
+        if (it.type === "commentNode") {
+          it.width = width;
+          it.height = height;
+        }
       }),
     );
   }

@@ -1,20 +1,25 @@
 import { XMLBuilder } from "fast-xml-parser";
-import { ActivityNode, ProjectEntity } from "./data-type";
+import { ActivityNode, ActorEntity, ProjectEntity, TransitionEdge } from "./data-type";
 
 const alwaysArray = [
-  "WorkflowProcesses",
-  "WorkflowProcesses.WorkflowProcess.Participants",
-  "WorkflowProcesses.WorkflowProcess.Applications",
-  "WorkflowProcesses.WorkflowProcess.Activities",
-  "WorkflowProcesses.WorkflowProcess.Activities.Activity.TransitionRestrictions",
-  "WorkflowProcesses.WorkflowProcess.Activities.Activity.TransitionRestrictions.TransitionRestriction.Split.TransitionRefs",
-  "WorkflowProcesses.WorkflowProcess.Activities.Activity.ExtendedAttributes",
+  "WorkflowProcesses.WorkflowProcess",
+  "WorkflowProcesses.WorkflowProcess.Participants.Participant",
+  "WorkflowProcesses.WorkflowProcess.Applications.Application",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity.TransitionRestrictions.TransitionRestriction",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity.TransitionRestrictions.TransitionRestriction.Split.TransitionRefs.TransitionRef",
+  "WorkflowProcesses.WorkflowProcess.Activities.Activity.ExtendedAttributes.ExtendedAttribute",
+  "ExtendedAttributes.ExtendedAttribute",
 ];
 
 const fxpOption = {
   ignoreAttributes: false,
+  attributeNamePrefix: "@_",
   format: true,
-  isArray: (_name: string, path: string) => alwaysArray.includes(path),
+  oneListGroup: true,
+  isArray: (_name: string, path: string, _isLeafNode: boolean, _isAttribute: boolean) => {
+    return alwaysArray.includes(path);
+  },
 };
 // const xp = new XMLParser(fxpOption);
 const xb = new XMLBuilder(fxpOption);
@@ -30,7 +35,7 @@ export function exportYaml(project: ProjectEntity): string {
         "http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd",
       PackageHeader: {
         XPDLVersion: "1.0",
-        Vendor: "guilab.jp",
+        Vendor: "escafe.org",
         Created: project.created,
       },
       WorkflowProcesses: project.processes.map((process) => {
@@ -59,6 +64,48 @@ export function exportYaml(project: ProjectEntity): string {
               .filter((it) => it.type === "activityNode")
               .map((it) => {
                 const activity = it as ActivityNode;
+                const join =
+                  activity.joinType === "xorJoin" || activity.joinType === "andJoin"
+                    ? {
+                        Join: {
+                          "@_Type": activity.joinType === "xorJoin" ? "XOR" : "AND",
+                          TransitionRefs: process.edges
+                            .filter(
+                              (it) => it.type === "transitionEdge" && it.toNodeId === activity.id,
+                            )
+                            .map((transition) => ({
+                              TransitionRef: {
+                                "@_Id": (
+                                  process.nodes.find(
+                                    (fromActivity) => fromActivity.id === transition.id,
+                                  ) as ActivityNode
+                                ).xpdlId,
+                              },
+                            })),
+                        },
+                      }
+                    : {};
+                const split =
+                  activity.splitType === "xorSplit" || activity.splitType === "andSplit"
+                    ? {
+                        Join: {
+                          "@_Type": activity.splitType === "xorSplit" ? "XOR" : "AND",
+                          TransitionRefs: process.edges
+                            .filter(
+                              (it) => it.type === "transitionEdge" && it.fromNodeId === activity.id,
+                            )
+                            .map((transition) => ({
+                              TransitionRef: {
+                                "@_Id": (
+                                  process.nodes.find(
+                                    (toActivity) => toActivity.id === transition.id,
+                                  ) as ActivityNode
+                                ).xpdlId,
+                              },
+                            })),
+                        },
+                      }
+                    : {};
                 return {
                   Activity: {
                     "@_Id": activity.xpdlId,
@@ -68,26 +115,89 @@ export function exportYaml(project: ProjectEntity): string {
                     FinishMode: { Manual: null },
                     TransitionRestrictions: {
                       TransitionRestriction: {
-                        Split: {
-                          "@_Type": "XOR",
-                          TransitionRefs: [
-                            { TransitionRef: { "@_Id": "newpkg_wp1_act2" } },
-                            { TransitionRef: { "@_Id": "newpkg_wp1_act3" } },
-                          ],
+                        ...join,
+                        ...split,
+                      },
+                    },
+                    ExtendedAttributes: [
+                      {
+                        ExtendedAttribute: {
+                          "@_Name": "JaWE_GRAPH_PARTICIPANT_ID",
+                          "@_Value": (
+                            process.actors.find((it) => it.id === activity.actorId) as ActorEntity
+                          ).xpdlId,
                         },
+                      },
+                      {
+                        ExtendedAttribute: {
+                          "@_Name": "JaWE_GRAPH_OFFSET",
+                          "@_Value": `${activity.x},${activity.y}`,
+                        },
+                      },
+                      {
+                        ExtendedAttribute: {
+                          "@_Name": "BURI_GRAPH_RECTANGLE",
+                          "@_Value": `${activity.x},${activity.y},${activity.width},${activity.height}`,
+                        },
+                      },
+                    ],
+                  },
+                };
+              }),
+            Transitions: process.edges
+              .filter((it) => it.type === "transitionEdge")
+              .map((it) => {
+                const transition = it as TransitionEdge;
+                const condition =
+                  transition.ognl !== ""
+                    ? {
+                        Condition: {
+                          "@_Type": "CONDITION",
+                          "#text": transition.ognl,
+                        },
+                      }
+                    : {};
+                return {
+                  Transition: {
+                    "@_from": (
+                      process.nodes.find(
+                        (it) => it.type === "activityNode" && it.id === transition.fromNodeId,
+                      ) as ActivityNode
+                    ).xpdlId,
+                    "@_Id": transition.xpdlId,
+                    "@_To": (
+                      process.nodes.find(
+                        (it) => it.type === "activityNode" && it.id === transition.toNodeId,
+                      ) as ActivityNode
+                    ).xpdlId,
+                    ...condition,
+                    ExtendedAttributes: {
+                      ExtendedAttribute: {
+                        "@_Name": "JaWE_GRAPH_TRANSITION_STYLE",
+                        "@_Value": "NO_ROUTING_SPLINE",
                       },
                     },
                   },
                 };
               }),
+            ExtendedAttributes: {
+              ExtendedAttribute: {
+                "@_Name": "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
+                "@_Value": process.actors.map((it) => it.xpdlId).join(";"),
+              },
+            },
           },
         };
       }),
+      ExtendedAttributes: [
+        { ExtendedAttribute: { "@_Name": "EDITING_TOOL", "@_Value": "EscafeFlow Editor" } },
+        { ExtendedAttribute: { "@_Name": "EDITING_TOOL_VERSION", "@_Value": "0.2.0" } },
+      ],
     },
   };
 
   const xmlContent = xb.build(obj);
-  return xmlContent;
+  return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + xmlContent;
 }
 
 export function importYaml() {

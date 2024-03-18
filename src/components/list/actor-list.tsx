@@ -15,7 +15,9 @@ export function ActorList(): JSXElement {
   const t = i18n.translator(dict);
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
-    setSelectedActor(actor);
+    if (selectedActor().id !== actor.id) {
+      setSelectedActor(actor);
+    }
   }
 
   function handleItemDblClick(_: MouseEvent) {
