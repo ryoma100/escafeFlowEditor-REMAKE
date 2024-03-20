@@ -203,19 +203,19 @@ describe("createActorEntity", () => {
 
 describe("createActivityNode", () => {
   it("one activity", () => {
-    expect(dataFactory.createActivityNode([], 1, "autoActivity")).toStrictEqual({
+    expect(dataFactory.createActivityNode([], 1, "autoActivity", 11, 12)).toStrictEqual({
       id: 1,
       xpdlId: "activity-1",
       type: "activityNode",
       activityType: "autoActivity",
-      name: "",
+      name: "仕事1",
       actorId: 1,
       applications: [],
       ognl: "",
       joinType: "notJoin",
       splitType: "notSplit",
-      x: 0,
-      y: 0,
+      x: 11 - ACTIVITY_MIN_WIDTH / 2,
+      y: 12,
       width: ACTIVITY_MIN_WIDTH,
       height: 0,
       selected: false,
@@ -223,20 +223,20 @@ describe("createActivityNode", () => {
   });
 
   it("two activity", () => {
-    const activity = dataFactory.createActivityNode([], 1, "autoActivity");
-    expect(dataFactory.createActivityNode([activity], 11, "manualActivity")).toStrictEqual({
+    const activity = dataFactory.createActivityNode([], 1, "autoActivity", 0, 0);
+    expect(dataFactory.createActivityNode([activity], 11, "manualActivity", 21, 22)).toStrictEqual({
       id: 2,
       xpdlId: "activity-2",
       type: "activityNode",
       activityType: "manualActivity",
-      name: "",
+      name: "仕事2",
       actorId: 11,
       applications: [],
       ognl: "",
       joinType: "notJoin",
       splitType: "notSplit",
-      x: 0,
-      y: 0,
+      x: 21 - ACTIVITY_MIN_WIDTH / 2,
+      y: 22,
       width: ACTIVITY_MIN_WIDTH,
       height: 0,
       selected: false,
@@ -244,21 +244,21 @@ describe("createActivityNode", () => {
   });
 
   it("duplicate activity", () => {
-    const activity = dataFactory.createActivityNode([], 1, "autoActivity");
+    const activity = dataFactory.createActivityNode([], 1, "autoActivity", 0, 0);
     activity.xpdlId = "activity-2";
-    expect(dataFactory.createActivityNode([activity], 21, "userActivity")).toStrictEqual({
-      id: 3,
+    expect(dataFactory.createActivityNode([activity], 21, "userActivity", 31, 32)).toStrictEqual({
+      id: 2,
       xpdlId: "activity-3",
       type: "activityNode",
       activityType: "userActivity",
-      name: "",
+      name: "仕事3",
       actorId: 21,
       applications: [],
       ognl: "",
       joinType: "notJoin",
       splitType: "notSplit",
-      x: 0,
-      y: 0,
+      x: 31 - ACTIVITY_MIN_WIDTH / 2,
+      y: 32,
       width: ACTIVITY_MIN_WIDTH,
       height: 0,
       selected: false,
@@ -296,7 +296,7 @@ describe("createTransitionEdge", () => {
     const transition = dataFactory.createTransitionEdge([], 1, 2);
     transition.xpdlId = "transition-2";
     expect(dataFactory.createTransitionEdge([transition], 21, 22)).toStrictEqual({
-      id: 3,
+      id: 2,
       xpdlId: "transition-3",
       type: "transitionEdge",
       fromNodeId: 21,

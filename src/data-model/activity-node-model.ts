@@ -15,9 +15,7 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
     cx: number,
     cy: number,
   ): ActivityNode {
-    const activity = dataFactory.createActivityNode(nodeModel.nodeList, actorId, type);
-    activity.x = cx - activity.width / 2;
-    activity.y = cy - activity.height / 2;
+    const activity = dataFactory.createActivityNode(nodeModel.nodeList, actorId, type, cx, cy);
     nodeModel.setNodeList([...nodeModel.nodeList, activity]);
     return activity;
   }

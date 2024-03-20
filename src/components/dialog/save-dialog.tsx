@@ -1,7 +1,7 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { exportYaml } from "../../data-source/data-converter";
+import { exportXml } from "../../data-source/data-converter";
 import { ButtonsContainer } from "../parts/buttons-container";
 
 export function SaveDialog(): JSXElement {
@@ -18,7 +18,7 @@ export function SaveDialog(): JSXElement {
     if (project != null) {
       dialogRef?.showModal();
       okButtonRef?.focus();
-      setData(exportYaml(project));
+      setData(exportXml(project));
     } else {
       dialogRef?.close();
     }

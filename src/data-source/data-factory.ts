@@ -104,27 +104,30 @@ function createActivityNode(
   nodeList: INode[],
   actorId: number,
   activityType: ActivityNodeType,
+  cx: number,
+  cy: number,
 ): ActivityNode {
-  let id = maxId(nodeList);
+  const activityList = nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
+  let activityId = activityList.length;
   let xpdlId = "";
   do {
-    id++;
-    xpdlId = `activity-${id}`;
-  } while (nodeList.some((it) => it.type === "activityNode" && it.xpdlId === xpdlId));
+    activityId++;
+    xpdlId = `activity-${activityId}`;
+  } while (activityList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id,
+    id: maxId(nodeList) + 1,
     xpdlId,
     type: "activityNode",
     activityType,
-    name: "",
+    name: `仕事${activityId}`,
     actorId,
     applications: [],
     ognl: "",
     joinType: "notJoin",
     splitType: "notSplit",
-    x: 0,
-    y: 0,
+    x: cx - ACTIVITY_MIN_WIDTH / 2,
+    y: cy,
     width: ACTIVITY_MIN_WIDTH,
     height: 0,
     selected: false,
@@ -136,15 +139,16 @@ function createTransitionEdge(
   fromNodeId: number,
   toNodeId: number,
 ): TransitionEdge {
-  let id = maxId(edgeList);
+  const transitionList = edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
+  let transitionId = transitionList.length;
   let xpdlId = "";
   do {
-    id++;
-    xpdlId = `transition-${id}`;
-  } while (edgeList.some((it) => it.type === "transitionEdge" && it.xpdlId === xpdlId));
+    transitionId++;
+    xpdlId = `transition-${transitionId}`;
+  } while (transitionList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id,
+    id: maxId(edgeList) + 1,
     xpdlId,
     type: "transitionEdge",
     fromNodeId,
