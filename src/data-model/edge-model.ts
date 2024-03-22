@@ -1,5 +1,5 @@
 import { createStore, produce } from "solid-js/store";
-import { deepCopy } from "../data-source/data-converter";
+import { deepCopy } from "../data-source/data-factory";
 import {
   CommentEdge,
   EndEdge,

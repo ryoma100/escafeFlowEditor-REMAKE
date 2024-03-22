@@ -1,13 +1,14 @@
 import { createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { enDict } from "../constants/i18n-en";
-import { deepCopy } from "../data-source/data-converter";
-import { dataFactory } from "../data-source/data-factory";
+import { dataFactory, deepCopy } from "../data-source/data-factory";
 import { ActorEntity, INode, ProcessEntity } from "../data-source/data-type";
+
+const dummy = dataFactory.createActorEntity([]);
 
 export function makeActorModel() {
   const [actorList, setActorList] = createStore<ActorEntity[]>([]);
-  const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(undefined as never);
+  const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(dummy);
 
   function load(newProcess: ProcessEntity) {
     setActorList(newProcess.actors);

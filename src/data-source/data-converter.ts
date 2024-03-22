@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
+import { dataFactory } from "./data-factory";
 import {
   ActivityJoinType,
   ActivityNode,
@@ -7,9 +8,17 @@ import {
   ActivitySplitType,
   ActorEntity,
   ApplicationEntity,
+  CommentEdge,
+  CommentNode,
+  EndEdge,
+  EndNode,
+  IEdge,
+  INode,
   ProcessDetailEntity,
   ProjectEntity,
   Rectangle,
+  StartEdge,
+  StartNode,
   TransitionEdge,
 } from "./data-type";
 
@@ -20,7 +29,7 @@ const alwaysArray = [
   "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity.",
   "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity.Implementation.Tool",
   "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity.ExtendedAttributes.ExtendedAttribute",
-  "Package.ExtendedAttributes.ExtendedAttribute",
+  "Package.WorkflowProcesses.WorkflowProcess.ExtendedAttributes.ExtendedAttribute",
 ];
 
 const fxpOption = {
@@ -205,12 +214,15 @@ export function exportXml(project: ProjectEntity): string {
                   },
                 };
               }),
-            ExtendedAttributes: {
-              ExtendedAttribute: {
-                "@_Name": "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
-                "@_Value": process.actors.map((it) => it.xpdlId).join(";"),
+            ExtendedAttributes: [
+              ...stringifyExtendNodes(process.nodes, process.edges),
+              {
+                ExtendedAttribute: {
+                  "@_Name": "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
+                  "@_Value": process.actors.map((it) => it.xpdlId).join(";"),
+                },
               },
-            },
+            ],
           },
         };
       }),
@@ -222,6 +234,51 @@ export function exportXml(project: ProjectEntity): string {
   };
   const xmlString = xb.build(xmlObject);
   return xmlString;
+}
+
+function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
+  const activityNodes = nodes.filter((it) => it.type === "activityNode") as ActivityNode[];
+
+  const startNodes = nodes.filter((it) => it.type === "startNode") as StartNode[];
+  const startEdges = edges.filter((it) => it.type === "startEdge") as StartEdge[];
+  const startXml = startNodes.map((it) => {
+    const activityId = startEdges.find((edge) => edge.fromNodeId === it.id)?.toNodeId ?? 0;
+    const activityXpdlId = activityNodes.find((act) => act.id === activityId)?.xpdlId ?? "";
+    return {
+      ExtendedAttribute: {
+        "@_Name": "JaWE_GRAPH_START_OF_WORKFLOW",
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${it.x},Y_OFFSET=${it.y}`,
+      },
+    };
+  });
+
+  const endNodes = nodes.filter((it) => it.type === "endNode") as EndNode[];
+  const endEdges = edges.filter((it) => it.type === "endEdge") as EndEdge[];
+  const endXml = endNodes.map((it) => {
+    const activityId = endEdges.find((edge) => edge.toNodeId === it.id)?.fromNodeId ?? 0;
+    const activityXpdlId = activityNodes.find((act) => act.id === activityId)?.xpdlId ?? "";
+    return {
+      ExtendedAttribute: {
+        "@_Name": "JaWE_GRAPH_END_OF_WORKFLOW",
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${it.x},Y_OFFSET=${it.y}`,
+      },
+    };
+  });
+
+  const commentNodes = nodes.filter((it) => it.type === "commentNode") as CommentNode[];
+  const commentEdges = edges.filter((it) => it.type === "commentEdge") as CommentEdge[];
+  const commentXml = commentNodes.map((it) => {
+    const activityId = commentEdges.find((edge) => edge.fromNodeId === it.id)?.toNodeId ?? 0;
+    const activityXpdlId = activityNodes.find((act) => act.id === activityId)?.xpdlId ?? "";
+    return {
+      ExtendedAttribute: {
+        "@_Name": "BURI_GRAPH_COMMENT",
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${it.x},Y_OFFSET=${it.y},COMMENT=${it.comment}`,
+      },
+    };
+  });
+
+  return [...startXml, ...endXml, ...commentXml];
 }
 
 export function importXml(xmlString: string): ProjectEntity {
@@ -294,19 +351,81 @@ export function importXml(xmlString: string): ProjectEntity {
           };
         },
       );
+      const { nodes, edges } = parseExtendNode(process, activityList, transitionList);
 
       return {
         id: processIdx + 1,
         created: process.ProcessHeader.Created,
         detail,
         actors,
-        nodes: activityList,
-        edges: transitionList,
+        nodes,
+        edges,
       };
     }),
   };
 
   return project;
+}
+
+function parseExtendNode(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  process: any,
+  nodes: INode[],
+  edges: IEdge[],
+) {
+  (process.ExtendedAttributes.ExtendedAttribute as [])
+    .filter((it) => it["@_Name"] === "JaWE_GRAPH_START_OF_WORKFLOW")
+    .forEach((it) => {
+      const val = String(it["@_Value"]).match(
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
+      );
+      if (val) {
+        const startNode = dataFactory.createStartNode(nodes, Number(val[2]), Number(val[3]));
+        nodes.push(startNode);
+        const activity = nodes.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
+        if (activity) {
+          const edge = dataFactory.createStartEdge(edges, startNode.id, activity.id);
+          edges.push(edge);
+        }
+      }
+    });
+
+  (process.ExtendedAttributes.ExtendedAttribute as [])
+    .filter((it) => it["@_Name"] === "JaWE_GRAPH_END_OF_WORKFLOW")
+    .forEach((it) => {
+      const val = String(it["@_Value"]).match(
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
+      );
+      if (val) {
+        const endNode = dataFactory.createEndNode(nodes, Number(val[2]), Number(val[3]));
+        nodes.push(endNode);
+        const activity = nodes.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
+        if (activity) {
+          const edge = dataFactory.createEndEdge(edges, activity.id, endNode.id);
+          edges.push(edge);
+        }
+      }
+    });
+
+  (process.ExtendedAttributes.ExtendedAttribute as [])
+    .filter((it) => it["@_Name"] === "BURI_GRAPH_COMMENT")
+    .forEach((it) => {
+      const val = String(it["@_Value"]).match(
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+),COMMENT=(.*)/,
+      );
+      if (val) {
+        const commentNode = dataFactory.createCommentNode(nodes, Number(val[2]), Number(val[3]));
+        commentNode.comment = val[4];
+        nodes.push(commentNode);
+        const activity = nodes.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
+        if (activity) {
+          const edge = dataFactory.createCommentEdge(edges, commentNode.id, activity.id);
+          edges.push(edge);
+        }
+      }
+    });
+
+  return { nodes, edges };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -387,8 +506,4 @@ function parseActivityRectangle(activity: any): Rectangle {
     width: Number(rect[2]),
     height: Number(rect[3]),
   };
-}
-
-export function deepCopy<T extends object>(data: T): T {
-  return JSON.parse(JSON.stringify(data));
 }

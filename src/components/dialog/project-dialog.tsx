@@ -1,9 +1,11 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { deepCopy } from "../../data-source/data-converter";
+import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import { ProjectDetailEntity } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
+
+const dummy = dataFactory.createProject();
 
 export function ProjectDialog(): JSXElement {
   const {
@@ -11,7 +13,7 @@ export function ProjectDialog(): JSXElement {
     dialog: { openProjectDialog, setOpenProjectDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ProjectDetailEntity>(undefined as never);
+  const [formData, setFormData] = createStore<ProjectDetailEntity>(dummy.detail);
 
   createEffect(() => {
     if (openProjectDialog()) {

@@ -1,14 +1,15 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { deepCopy } from "../../data-source/data-converter";
-import { dataFactory } from "../../data-source/data-factory";
+import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import {
   ApplicationEntity,
   EnvironmentEntity,
   ProcessDetailEntity,
 } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
+
+const dummy = dataFactory.createProcess([]);
 
 export function ProcessDialog(): JSXElement {
   const {
@@ -17,7 +18,7 @@ export function ProcessDialog(): JSXElement {
     dialog: { openProcessDialog, setOpenProcessDialog, setOpenMessageDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ProcessDetailEntity>(undefined as never);
+  const [formData, setFormData] = createStore<ProcessDetailEntity>(dummy.detail);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
   const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
 

@@ -1,8 +1,11 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
+import { dataFactory } from "../../data-source/data-factory";
 import { ActorEntity } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
+
+const dummy = dataFactory.createActorEntity([]);
 
 export function ActorDialog(): JSXElement {
   const {
@@ -10,7 +13,7 @@ export function ActorDialog(): JSXElement {
     dialog: { openActorDialog, setOpenActorDialog, setOpenMessageDialog },
   } = useAppContext();
 
-  const [formData, setFormData] = createStore<ActorEntity>(undefined as never);
+  const [formData, setFormData] = createStore<ActorEntity>(dummy);
   createEffect(() => {
     const actor = openActorDialog();
     if (actor != null) {

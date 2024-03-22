@@ -2,7 +2,7 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { deepCopy } from "../../data-source/data-converter";
+import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import { ActivityNode } from "../../data-source/data-type";
 import {
   AutoActivityIcon,
@@ -14,6 +14,8 @@ import {
 import { ButtonsContainer } from "../parts/buttons-container";
 import { ToggleIconButton } from "../parts/toggle-icon-button";
 
+const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
+
 export function ActivityDialog(): JSXElement {
   const {
     processModel: { selectedProcess },
@@ -24,7 +26,7 @@ export function ActivityDialog(): JSXElement {
   } = useAppContext();
   const t = i18n.translator(dict);
 
-  const [formData, setFormData] = createStore<ActivityNode>(undefined as never);
+  const [formData, setFormData] = createStore<ActivityNode>(dummy);
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
 
   createEffect(() => {

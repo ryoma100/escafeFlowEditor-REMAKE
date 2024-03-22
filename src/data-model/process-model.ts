@@ -1,10 +1,11 @@
 import { batch, createSignal } from "solid-js";
-import { deepCopy } from "../data-source/data-converter";
-import { dataFactory } from "../data-source/data-factory";
+import { dataFactory, deepCopy } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActorModel } from "./actor-model";
 import { makeEdgeModel } from "./edge-model";
 import { makeNodeModel } from "./node-model";
+
+const dummy = dataFactory.createProcess([]);
 
 export function makeProcessModel(
   actorModel: ReturnType<typeof makeActorModel>,
@@ -12,7 +13,7 @@ export function makeProcessModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
-  const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(undefined as never);
+  const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(dummy);
 
   function load(project: ProjectEntity) {
     setProcessList(project.processes);

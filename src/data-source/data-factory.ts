@@ -244,3 +244,7 @@ export const dataFactory = {
   createEndNode,
   createEndEdge,
 };
+
+export function deepCopy<T extends object>(data: T): T {
+  return JSON.parse(JSON.stringify(data));
+}

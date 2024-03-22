@@ -97,7 +97,7 @@ function makeDiagramContext() {
     fromY: number;
     toX: number;
     toY: number;
-  }>(undefined as never);
+  }>({ fromX: 0, fromY: 0, toX: 0, toY: 0 });
   const [svgRect, setSvgRect] = createStore({ ...defaultRectangle });
   const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
 
@@ -139,6 +139,13 @@ function makeI18nContext() {
   return { dict, setLocale };
 }
 
+const appContextValue = {
+  ...makeModelContext(),
+  dialog: makeDialogContext(),
+  diagram: makeDiagramContext(),
+  i18n: makeI18nContext(),
+};
+
 const AppContext = createContext<{
   actorModel: ReturnType<typeof makeActorModel>;
   nodeModel: ReturnType<typeof makeNodeModel>;
@@ -152,30 +159,10 @@ const AppContext = createContext<{
   dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
   i18n: ReturnType<typeof makeI18nContext>;
-}>({
-  actorModel: undefined as never,
-  nodeModel: undefined as never,
-  edgeModel: undefined as never,
-  processModel: undefined as never,
-  projectModel: undefined as never,
-  activityNodeModel: undefined as never,
-  transitionEdgeModel: undefined as never,
-  extendNodeModel: undefined as never,
-  extendEdgeModel: undefined as never,
-  dialog: undefined as never,
-  diagram: undefined as never,
-  i18n: undefined as never,
-});
+}>(appContextValue);
 
 export function AppProvider(props: { children: JSX.Element }) {
-  const value = {
-    ...makeModelContext(),
-    dialog: makeDialogContext(),
-    diagram: makeDiagramContext(),
-    i18n: makeI18nContext(),
-  };
-
-  return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>;
+  return <AppContext.Provider value={appContextValue}>{props.children}</AppContext.Provider>;
 }
 
 export function useAppContext() {
