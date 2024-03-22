@@ -66,8 +66,8 @@ export function ActivityDialog(): JSXElement {
       (it) => it.id === openActivityDialog()?.id,
       produce((it) => {
         if (it.type === "activityNode") {
+          it.activityType = formData.activityType;
           it.xpdlId = formData.xpdlId;
-          it.type = formData.type;
           it.actorId = formData.actorId;
           it.name = formData.name;
           it.applications =

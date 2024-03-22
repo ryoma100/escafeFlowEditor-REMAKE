@@ -10,6 +10,9 @@ describe("exportXml", () => {
   it("one process", () => {
     expect(exportXml(oneProcessData)).toEqual(oneProcessXml);
   });
+  it("two process", () => {
+    expect(exportXml(twoProcessData)).toEqual(twoProcessXml);
+  });
 });
 
 describe("importXml", () => {
@@ -18,6 +21,9 @@ describe("importXml", () => {
   });
   it("one process", () => {
     expect(importXml(oneProcessXml)).toStrictEqual(oneProcessData);
+  });
+  it("two process", () => {
+    expect(importXml(twoProcessXml)).toStrictEqual(twoProcessData);
   });
 });
 
@@ -68,9 +74,18 @@ const oneProcessData = (function () {
   const process = project.processes[0];
   process.detail.applications.push(dataFactory.createApplication(process.detail.applications));
   const application1 = process.detail.applications[0];
-  application1.name = "app1";
+  application1.xpdlId = "app1";
+  application1.name = "name1";
   application1.extendedName = "extName1";
   application1.extendedValue = "extValue1";
+  process.detail.applications.push(dataFactory.createApplication(process.detail.applications));
+  const application2 = process.detail.applications[1];
+  application2.xpdlId = "app2";
+  application2.name = "name2";
+  application2.extendedName = "extName2";
+  application2.extendedValue = "extValue2";
+  process.detail.environments.push(dataFactory.createEnvironment(process.detail.environments));
+  process.detail.environments.push(dataFactory.createEnvironment(process.detail.environments));
   process.actors.push(dataFactory.createActorEntity(process.actors));
   const actor1 = process.actors[0];
   const actor2 = process.actors[1];
@@ -83,6 +98,10 @@ const oneProcessData = (function () {
     dataFactory.createActivityNode(process.nodes, actor2.id, "autoActivity", 21, 22),
   );
   const autoActivity = process.nodes[1] as ActivityNode;
+  autoActivity.applications = [
+    { id: application1.id, ognl: "ognl1" },
+    { id: application2.id, ognl: "ognl2" },
+  ];
   process.nodes.push(
     dataFactory.createActivityNode(process.nodes, actor1.id, "manualTimerActivity", 31, 32),
   );
@@ -164,9 +183,14 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         </Participant>
       </Participants>
       <Applications>
-        <Application Id="application-1" Name="app1">
+        <Application Id="app1" Name="name1">
           <ExtendedAttributes>
             <ExtendedAttribute Name="extName1" Value="extValue1"></ExtendedAttribute>
+          </ExtendedAttributes>
+        </Application>
+        <Application Id="app2" Name="name2">
+          <ExtendedAttributes>
+            <ExtendedAttribute Name="extName2" Value="extValue2"></ExtendedAttribute>
           </ExtendedAttributes>
         </Application>
       </Applications>
@@ -190,7 +214,16 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         </Activity>
         <Activity Id="activity-2" Name="仕事2">
           <Implementation>
-            <No/>
+            <Tool Id="app1" Type="APPLICATION">
+              <ExtendedAttributes>
+                <ExtendedAttribute Name="ognl" Value="ognl1"></ExtendedAttribute>
+              </ExtendedAttributes>
+            </Tool>
+            <Tool Id="app2" Type="APPLICATION">
+              <ExtendedAttributes>
+                <ExtendedAttribute Name="ognl" Value="ognl2"></ExtendedAttribute>
+              </ExtendedAttributes>
+            </Tool>
           </Implementation>
           <Performer>actor-2</Performer>
           <FinishMode>
@@ -325,6 +358,64 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <ExtendedAttribute Name="JaWE_GRAPH_END_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=61,Y_OFFSET=62"></ExtendedAttribute>
         <ExtendedAttribute Name="BURI_GRAPH_COMMENT" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=71,Y_OFFSET=72,COMMENT=コメント"></ExtendedAttribute>
         <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="actor-1;actor-2"></ExtendedAttribute>
+        <ExtendedAttribute Name="name1" Value="value1"></ExtendedAttribute>
+        <ExtendedAttribute Name="name2" Value="value2"></ExtendedAttribute>
+      </ExtendedAttributes>
+    </WorkflowProcess>
+  </WorkflowProcesses>
+  <ExtendedAttributes>
+    <ExtendedAttribute Name="EDITING_TOOL" Value="EscafeFlow Editor"></ExtendedAttribute>
+    <ExtendedAttribute Name="EDITING_TOOL_VERSION" Value="0.2.0"></ExtendedAttribute>
+  </ExtendedAttributes>
+</Package>
+`;
+
+const twoProcessData = dataFactory.createProject("0001-01-01T00:00:00.000Z");
+twoProcessData.processes.push(
+  dataFactory.createProcess(twoProcessData.processes, "9999-01-01T00:00:00.000Z"),
+);
+const twoProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="project" Name="プロジェクト" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
+  <PackageHeader>
+    <XPDLVersion>1.0</XPDLVersion>
+    <Vendor>escafe.org</Vendor>
+    <Created>0001-01-01T00:00:00.000Z</Created>
+  </PackageHeader>
+  <WorkflowProcesses>
+    <WorkflowProcess Id="process-1" Name="プロセス1">
+      <ProcessHeader>
+        <Created>0001-01-01T00:00:00.000Z</Created>
+        <ValidFrom></ValidFrom>
+        <ValidTo></ValidTo>
+      </ProcessHeader>
+      <Participants>
+        <Participant Id="actor-1" Name="アクター1">
+          <ParticipantType Type="ROLE"></ParticipantType>
+        </Participant>
+      </Participants>
+      <Applications></Applications>
+      <Activities></Activities>
+      <Transitions></Transitions>
+      <ExtendedAttributes>
+        <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="actor-1"></ExtendedAttribute>
+      </ExtendedAttributes>
+    </WorkflowProcess>
+    <WorkflowProcess Id="process-2" Name="プロセス2">
+      <ProcessHeader>
+        <Created>9999-01-01T00:00:00.000Z</Created>
+        <ValidFrom></ValidFrom>
+        <ValidTo></ValidTo>
+      </ProcessHeader>
+      <Participants>
+        <Participant Id="actor-1" Name="アクター1">
+          <ParticipantType Type="ROLE"></ParticipantType>
+        </Participant>
+      </Participants>
+      <Applications></Applications>
+      <Activities></Activities>
+      <Transitions></Transitions>
+      <ExtendedAttributes>
+        <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="actor-1"></ExtendedAttribute>
       </ExtendedAttributes>
     </WorkflowProcess>
   </WorkflowProcesses>

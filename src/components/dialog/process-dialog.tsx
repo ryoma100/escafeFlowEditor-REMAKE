@@ -52,10 +52,8 @@ export function ProcessDialog(): JSXElement {
   }
 
   function handleAddAppButtonClick() {
-    if (process) {
-      const application = dataFactory.createApplication(formData.applications);
-      setFormData("applications", [...formData.applications, application]);
-    }
+    const application = dataFactory.createApplication(formData.applications);
+    setFormData("applications", [...formData.applications, application]);
   }
 
   function handleRemoveAppButtonClick() {

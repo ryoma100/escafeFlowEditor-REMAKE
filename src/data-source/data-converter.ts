@@ -12,6 +12,7 @@ import {
   CommentNode,
   EndEdge,
   EndNode,
+  EnvironmentEntity,
   IEdge,
   INode,
   ProcessDetailEntity,
@@ -89,6 +90,21 @@ export function exportXml(project: ProjectEntity): string {
               .filter((it) => it.type === "activityNode")
               .map((it) => {
                 const activity = it as ActivityNode;
+                const implementation =
+                  activity.applications.length > 0
+                    ? {
+                        Implementation: activity.applications.map((it) => ({
+                          Tool: {
+                            "@_Id": process.detail.applications.find((app) => app.id === it.id)
+                              ?.xpdlId,
+                            "@_Type": "APPLICATION",
+                            ExtendedAttributes: {
+                              ExtendedAttribute: { "@_Name": "ognl", "@_Value": it.ognl },
+                            },
+                          },
+                        })),
+                      }
+                    : { Implementation: { No: null } };
                 const join =
                   activity.joinType === "xorJoin" || activity.joinType === "andJoin"
                     ? {
@@ -143,7 +159,7 @@ export function exportXml(project: ProjectEntity): string {
                   Activity: {
                     "@_Id": activity.xpdlId,
                     "@_Name": activity.name,
-                    Implementation: { No: null },
+                    ...implementation,
                     Performer: process.actors.find((it) => it.id === activity.actorId)!.xpdlId,
                     ...finishMode,
                     ...limit,
@@ -222,6 +238,12 @@ export function exportXml(project: ProjectEntity): string {
                   "@_Value": process.actors.map((it) => it.xpdlId).join(";"),
                 },
               },
+              ...process.detail.environments.map((it) => ({
+                ExtendedAttribute: {
+                  "@_Name": it.name,
+                  "@_Value": it.value,
+                },
+              })),
             ],
           },
         };
@@ -302,14 +324,6 @@ export function importXml(xmlString: string): ProjectEntity {
           extendedValue: app.ExtendedAttributes.ExtendedAttribute["@_Value"],
         }),
       );
-      const detail: ProcessDetailEntity = {
-        xpdlId: process["@_Id"],
-        name: process["@_Name"],
-        validFrom: process.ProcessHeader.ValidFrom,
-        validTo: process.ProcessHeader.ValidTo,
-        environments: [], // TODO
-        applications,
-      };
       const actors: ActorEntity[] = process.Participants.Participant.map(
         // @ts-ignore
         (actor, actorIdx) => ({
@@ -351,7 +365,15 @@ export function importXml(xmlString: string): ProjectEntity {
           };
         },
       );
-      const { nodes, edges } = parseExtendNode(process, activityList, transitionList);
+      const { nodes, edges, envs } = parseExtendNode(process, activityList, transitionList);
+      const detail: ProcessDetailEntity = {
+        xpdlId: process["@_Id"],
+        name: process["@_Name"],
+        validFrom: process.ProcessHeader.ValidFrom,
+        validTo: process.ProcessHeader.ValidTo,
+        environments: envs,
+        applications,
+      };
 
       return {
         id: processIdx + 1,
@@ -425,7 +447,21 @@ function parseExtendNode(
       }
     });
 
-  return { nodes, edges };
+  const envs: EnvironmentEntity[] = (process.ExtendedAttributes.ExtendedAttribute as [])
+    .filter(
+      (it) =>
+        it["@_Name"] !== "JaWE_GRAPH_START_OF_WORKFLOW" &&
+        it["@_Name"] !== "JaWE_GRAPH_END_OF_WORKFLOW" &&
+        it["@_Name"] !== "BURI_GRAPH_COMMENT" &&
+        it["@_Name"] !== "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
+    )
+    .map((it, idx) => ({
+      id: idx + 1,
+      name: it["@_Name"],
+      value: it["@_Value"],
+    }));
+
+  return { nodes, edges, envs };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -456,9 +492,7 @@ function parseActivityApplication(
   return (activity.Implementation.Tool || []).map(
     // @ts-ignore
     (tool: toolIdx) => ({
-      id: applications.find(
-        (it) => it.name === tool.ExtendedAttributes.ExtendedAttribute["@_Name"],
-      )!.id,
+      id: applications.find((it) => it.xpdlId === tool["@_Id"])!.id,
       ognl: tool.ExtendedAttributes.ExtendedAttribute["@_Value"],
     }),
   );
