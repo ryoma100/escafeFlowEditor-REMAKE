@@ -108,15 +108,15 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   }
 
   function updateAllJoinSplitType(edges: IEdge[]) {
-    nodeModel.nodeList.forEach((it) => {
-      if (it.type === "activityNode") {
+    nodeModel.nodeList.forEach((node) => {
+      if (node.type === "activityNode") {
         updateJoinType(
-          it.id,
-          edges.filter((it) => it.type === "transitionEdge" && it.toNodeId === it.id).length,
+          node.id,
+          edges.filter((it) => it.type === "transitionEdge" && it.toNodeId === node.id).length,
         );
         updateSplitType(
-          it.id,
-          edges.filter((it) => it.type === "transitionEdge" && it.fromNodeId === it.id).length,
+          node.id,
+          edges.filter((it) => it.type === "transitionEdge" && it.fromNodeId === node.id).length,
         );
       }
     });

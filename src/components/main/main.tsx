@@ -31,6 +31,7 @@ export function Main(): JSXElement {
           Auto
         </button>
         <input
+          class="accent-primary1"
           type="range"
           min="0.1"
           max="2"
