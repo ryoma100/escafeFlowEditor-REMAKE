@@ -37,5 +37,6 @@ export const enDict = {
   jobTitle: "Job Title",
   editTransition: "Edit Transition",
 
+  xpdlLoad: "Load XPDL",
   xpdlSave: "Save XPDL",
 };

@@ -14,6 +14,7 @@ export function AppMenu(): JSXElement {
       setOpenProjectDialog,
       setOpenProcessDialog,
       setOpenActorDialog,
+      setOpenLoadDialog,
       setOpenSaveDialog,
       setOpenCommentDialog,
       setOpenTransitionDialog,
@@ -31,6 +32,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleFileOpenClick() {
+    setOpenLoadDialog(true);
     return false;
   }
 

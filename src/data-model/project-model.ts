@@ -25,5 +25,10 @@ export function makeProjectModel(processModel: ReturnType<typeof makeProcessMode
     return project;
   }
 
-  return { initProject, getProjectDetail, setProjectDetail, save };
+  function load(newProject: ProjectEntity) {
+    project = newProject;
+    processModel.load(project);
+  }
+
+  return { initProject, getProjectDetail, setProjectDetail, save, load };
 }

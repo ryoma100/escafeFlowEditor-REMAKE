@@ -57,6 +57,7 @@ function makeDialogContext() {
   const [openActivityDialog, setOpenActivityDialog] = createSignal<ActivityNode | null>(null);
   const [openTransitionDialog, setOpenTransitionDialog] = createSignal<TransitionEdge | null>(null);
   const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNode | null>(null);
+  const [openLoadDialog, setOpenLoadDialog] = createSignal<boolean>(false);
   const [openSaveDialog, setOpenSaveDialog] = createSignal<ProjectEntity | null>(null);
   const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
   const [openAboutDialog, setOpenAboutDialog] = createSignal<boolean>(false);
@@ -77,6 +78,8 @@ function makeDialogContext() {
     setOpenTransitionDialog,
     openCommentDialog,
     setOpenCommentDialog,
+    openLoadDialog,
+    setOpenLoadDialog,
     openSaveDialog,
     setOpenSaveDialog,
     openMessageDialog,
