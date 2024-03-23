@@ -1,6 +1,7 @@
 import { JSXElement, createSignal, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
 import { TransitionEdge } from "../../data-source/data-type";
+import { computeLine } from "../../utils/line-utils";
 
 export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
   const {
@@ -29,10 +30,18 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     setOpenTransitionDialog(props.transition);
   }
 
-  const x1 = () => fromActivity().x + fromActivity().width;
-  const y1 = () => fromActivity().y + fromActivity().height / 2;
-  const x2 = () => toActivity().x;
-  const y2 = () => toActivity().y + toActivity().height / 2;
+  const line = () =>
+    computeLine(fromActivity(), toActivity(), {
+      p1: {
+        x: fromActivity().x + fromActivity().width - 10,
+        y: fromActivity().y + fromActivity().height / 2,
+      },
+      p2: {
+        x: toActivity().x + 10,
+        y: toActivity().y + toActivity().height / 2,
+      },
+    });
+
   const [textWidth, setTextWidth] = createSignal(0);
 
   onMount(() => {
@@ -51,11 +60,11 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     <>
       <line
         class="fill-none stroke-gray-500 stroke-1 [vector-effect:non-scaling-stroke]"
-        x1={x1()}
-        y1={y1()}
-        x2={x2()}
-        y2={y2()}
-        marker-end="url(#arrow-end)"
+        x1={line().p1.x}
+        y1={line().p1.y}
+        x2={line().p2.x}
+        y2={line().p2.y}
+        marker-end={`url(#${props.transition.ognl !== "" ? "ognl-" : ""}arrow-end)`}
       />
       <line
         class="
@@ -64,14 +73,14 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
         classList={{ "fill-none stroke-primary1 stroke-[5]": props.transition.selected }}
         onDblClick={handleDlbClick}
         onMouseDown={handleMouseDown}
-        x1={x1()}
-        y1={y1()}
-        x2={x2()}
-        y2={y2()}
+        x1={line().p1.x}
+        y1={line().p1.y}
+        x2={line().p2.x}
+        y2={line().p2.y}
       />
       <text
-        x={(x1() + x2()) / 2 - textWidth() / 2}
-        y={(y1() + y2()) / 2}
+        x={(line().p1.x + line().p2.x) / 2 - textWidth() / 2}
+        y={(line().p1.y + line().p2.y) / 2}
         classList={{ hidden: props.transition.ognl === "" }}
         ref={textRef}
       >

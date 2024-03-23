@@ -218,14 +218,28 @@ export function DiagramContainer(): JSXElement {
         <defs>
           <marker
             id="arrow-end"
-            viewBox="0 -5 10 10"
-            refX="10"
-            refY="0"
+            viewBox="0 0 40 20"
+            refX="40"
+            refY="10"
             orient="auto"
-            markerWidth="15"
-            markerHeight="15"
+            markerWidth="20"
+            markerHeight="20"
           >
-            <polygon points="10,0 0,5 0,-5" fill="gray" />
+            <polygon points="20,0 40,10 20,20" fill="gray" />
+          </marker>
+          <marker
+            id="ognl-arrow-end"
+            viewBox="0 0 40 20"
+            refX="40"
+            refY="10"
+            markerUnits="strokeWidth"
+            orient="auto"
+            markerWidth="20"
+            markerHeight="20"
+          >
+            <polygon points="5,0 5,20, 8,20 8,0" fill="gray" />
+            <polygon points="12,0 12,20, 15,20 15,0" fill="gray" />
+            <polygon points="20,0 40,10 20,20" fill="gray" />
           </marker>
         </defs>
         <g data-id="extend-edges">
