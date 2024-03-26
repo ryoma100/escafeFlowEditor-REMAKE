@@ -50,44 +50,28 @@ function makeModelContext() {
   };
 }
 
+export type DialogType =
+  | { type: "load" }
+  | { type: "save"; project: ProjectEntity }
+  | { type: "about" }
+  | { type: "project"; project: ProjectEntity }
+  | { type: "process"; process: ProcessEntity }
+  | { type: "actor"; actor: ActorEntity }
+  | { type: "activity"; activity: ActivityNode }
+  | { type: "transition"; transition: TransitionEdge }
+  | { type: "comment"; comment: CommentNode }
+  | { type: "initAll" }
+  | { type: "deleteProcess"; process: ProcessEntity };
+
 function makeDialogContext() {
-  const [openProjectDialog, setOpenProjectDialog] = createSignal<boolean>(false);
-  const [openProcessDialog, setOpenProcessDialog] = createSignal<ProcessEntity | null>(null);
-  const [openActorDialog, setOpenActorDialog] = createSignal<ActorEntity | null>(null);
-  const [openActivityDialog, setOpenActivityDialog] = createSignal<ActivityNode | null>(null);
-  const [openTransitionDialog, setOpenTransitionDialog] = createSignal<TransitionEdge | null>(null);
-  const [openCommentDialog, setOpenCommentDialog] = createSignal<CommentNode | null>(null);
-  const [openLoadDialog, setOpenLoadDialog] = createSignal<boolean>(false);
-  const [openSaveDialog, setOpenSaveDialog] = createSignal<ProjectEntity | null>(null);
+  const [openDialog, setOpenDialog] = createSignal<DialogType | null>(null);
   const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
-  const [openAboutDialog, setOpenAboutDialog] = createSignal<boolean>(false);
-  const [openConfirmDialog, setOpenConfirmDialog] = createSignal<
-    "initAll" | "deleteProcess" | null
-  >(null);
 
   return {
-    openProjectDialog,
-    setOpenProjectDialog,
-    openProcessDialog,
-    setOpenProcessDialog,
-    openActorDialog,
-    setOpenActorDialog,
-    openActivityDialog,
-    setOpenActivityDialog,
-    openTransitionDialog,
-    setOpenTransitionDialog,
-    openCommentDialog,
-    setOpenCommentDialog,
-    openLoadDialog,
-    setOpenLoadDialog,
-    openSaveDialog,
-    setOpenSaveDialog,
+    openDialog,
+    setOpenDialog,
     openMessageDialog,
     setOpenMessageDialog,
-    openAboutDialog,
-    setOpenAboutDialog,
-    openConfirmDialog,
-    setOpenConfirmDialog,
   };
 }
 

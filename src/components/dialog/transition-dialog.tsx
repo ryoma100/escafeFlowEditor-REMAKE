@@ -1,8 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory } from "../../data-source/data-factory";
+import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import { TransitionEdge } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -10,8 +10,8 @@ const dummy = dataFactory.createTransitionEdge([], 0, 0);
 
 export function TransitionDialog(): JSXElement {
   const {
-    edgeModel: { edgeList, setEdgeList },
-    dialog: { openTransitionDialog, setOpenTransitionDialog, setOpenMessageDialog },
+    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
+    transitionEdgeModel: { updateTransitionEdge },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -20,10 +20,10 @@ export function TransitionDialog(): JSXElement {
   const [showOgnl, setShowOgnl] = createSignal<boolean>(false);
 
   createEffect(() => {
-    const transition = openTransitionDialog();
-    if (transition != null) {
-      setFormData({ ...transition });
-      setShowOgnl(transition.ognl !== "");
+    const dialog = openDialog();
+    if (dialog?.type === "transition") {
+      setFormData({ ...dialog.transition });
+      setShowOgnl(dialog.transition.ognl !== "");
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -33,30 +33,17 @@ export function TransitionDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (
-      edgeList.some(
-        (it) =>
-          it.type === "transitionEdge" && it.id !== formData.id && it.xpdlId === formData.xpdlId,
-      )
-    ) {
-      setOpenMessageDialog("idExists");
+    const errorMessage = updateTransitionEdge(deepCopy(formData));
+    if (errorMessage) {
+      setOpenMessageDialog(errorMessage);
       return;
     }
 
-    setEdgeList(
-      (it) => it.id === openTransitionDialog()?.id,
-      produce((it) => {
-        if (it.type === "transitionEdge") {
-          it.xpdlId = formData.xpdlId;
-          it.ognl = showOgnl() ? formData.ognl : "";
-        }
-      }),
-    );
-    setOpenTransitionDialog(null);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenTransitionDialog(null);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

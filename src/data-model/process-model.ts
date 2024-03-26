@@ -1,4 +1,5 @@
 import { batch, createSignal } from "solid-js";
+import { enDict } from "../constants/i18n-en";
 import { dataFactory, deepCopy } from "../data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
 import { makeActorModel } from "./actor-model";
@@ -55,20 +56,33 @@ export function makeProcessModel(
     changeProcess(newProcess);
   }
 
-  function updateProcessDetail(process: ProcessEntity) {
-    const newList = processList().map((it) => (process.id === it.id ? process : it));
-    setProcessList(newList);
-    setSelectedProcess(newList.find((it) => it.id === process.id)!);
+  function updateProcessDetail(process: ProcessEntity): keyof typeof enDict | undefined {
+    if (
+      processList().some((it) => it.id !== process.id && it.detail.xpdlId === process.detail.xpdlId)
+    ) {
+      return "idExists";
+    }
+    if (
+      new Set(process.detail.applications.map((it) => it.xpdlId)).size !==
+      process.detail.applications.length
+    ) {
+      return "duplicateApplicationId";
+    }
+
+    setProcessList(processList().map((it) => (process.id === it.id ? process : it)));
+    setSelectedProcess(processList().find((it) => it.id === process.id)!);
   }
 
-  function removeSelectedProcess() {
-    if (processList().length <= 1) return;
+  function removeProcess(process: ProcessEntity) {
+    if (processList().length <= 1) {
+      return;
+    }
 
     const nextSelectedIndex = Math.min(
-      processList().findIndex((it) => it.id === selectedProcess().id),
+      processList().findIndex((it) => it.id === process.id),
       processList().length - 2,
     );
-    const newList = processList().filter((it) => it.id !== selectedProcess().id);
+    const newList = processList().filter((it) => it.id !== process.id);
     setProcessList(newList);
     setSelectedProcess(processList()[nextSelectedIndex]);
     changeProcess(selectedProcess());
@@ -82,6 +96,6 @@ export function makeProcessModel(
     changeProcess,
     addProcess,
     updateProcessDetail,
-    removeSelectedProcess,
+    removeProcess,
   };
 }

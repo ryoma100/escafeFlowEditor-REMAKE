@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory } from "../../data-source/data-factory";
+import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import { ActorEntity } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -9,15 +9,16 @@ const dummy = dataFactory.createActorEntity([]);
 
 export function ActorDialog(): JSXElement {
   const {
-    actorModel: { updateActor, actorList },
-    dialog: { openActorDialog, setOpenActorDialog, setOpenMessageDialog },
+    actorModel: { updateActor },
+    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ActorEntity>(dummy);
+
   createEffect(() => {
-    const actor = openActorDialog();
-    if (actor != null) {
-      setFormData(actor);
+    const dialog = openDialog();
+    if (dialog?.type === "actor") {
+      setFormData(deepCopy(dialog.actor));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -27,17 +28,16 @@ export function ActorDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (actorList.some((it) => it.id !== openActorDialog()?.id && it.xpdlId === formData.xpdlId)) {
-      setOpenMessageDialog("idExists");
+    const errorMessage = updateActor(deepCopy(formData));
+    if (errorMessage) {
+      setOpenMessageDialog(errorMessage);
       return;
     }
-
-    updateActor(formData);
-    setOpenActorDialog(null);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenActorDialog(null);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

@@ -1,6 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
 import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import { ActivityNode } from "../../data-source/data-type";
@@ -20,8 +20,8 @@ export function ActivityDialog(): JSXElement {
   const {
     processModel: { selectedProcess },
     actorModel: { actorList },
-    nodeModel: { nodeList, setNodeList },
-    dialog: { openActivityDialog, setOpenActivityDialog, setOpenMessageDialog },
+    activityNodeModel: { updateActivity },
+    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -30,15 +30,15 @@ export function ActivityDialog(): JSXElement {
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
 
   createEffect(() => {
-    const activity = openActivityDialog();
-    if (activity != null) {
-      const cloneActivity: ActivityNode = deepCopy(activity);
-      cloneActivity.applications = selectedProcess().detail.applications.map((app) => ({
+    const dialog = openDialog();
+    if (dialog?.type === "activity") {
+      const activity = deepCopy(dialog.activity);
+      activity.applications = selectedProcess().detail.applications.map((app) => ({
         id: app.id,
         ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
       }));
-      setFormData(cloneActivity);
-      setSelectedAppIndex(cloneActivity.applications.length > 0 ? 0 : -1);
+      setFormData(activity);
+      setSelectedAppIndex(activity.applications.length > 0 ? 0 : -1);
 
       dialogRef?.showModal();
       if (radioTabCenterRef) {
@@ -52,43 +52,26 @@ export function ActivityDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (
-      nodeList.some(
-        (it) =>
-          it.type === "activityNode" && it.id !== formData.id && it.xpdlId === formData.xpdlId,
-      )
-    ) {
-      setOpenMessageDialog("idExists");
+    const activity: ActivityNode = deepCopy(formData);
+    activity.applications =
+      activity.activityType === "autoActivity"
+        ? formData.applications.filter((it) => it.ognl !== "")
+        : [];
+    activity.ognl =
+      formData.activityType === "manualTimerActivity" ||
+      formData.activityType === "autoTimerActivity"
+        ? formData.ognl
+        : "";
+    const errorMessage = updateActivity(activity);
+    if (errorMessage) {
+      setOpenMessageDialog(errorMessage);
       return;
     }
-
-    setNodeList(
-      (it) => it.id === openActivityDialog()?.id,
-      produce((it) => {
-        if (it.type === "activityNode") {
-          it.activityType = formData.activityType;
-          it.xpdlId = formData.xpdlId;
-          it.actorId = formData.actorId;
-          it.name = formData.name;
-          it.applications =
-            formData.activityType === "autoActivity"
-              ? formData.applications.filter((it) => it.ognl !== "")
-              : [];
-          it.ognl =
-            formData.activityType === "manualTimerActivity" ||
-            formData.activityType === "autoTimerActivity"
-              ? formData.ognl
-              : "";
-          it.joinType = formData.joinType;
-          it.splitType = formData.splitType;
-        }
-      }),
-    );
-    setOpenActivityDialog(null);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenActivityDialog(null);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

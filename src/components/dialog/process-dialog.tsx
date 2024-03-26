@@ -6,6 +6,7 @@ import {
   ApplicationEntity,
   EnvironmentEntity,
   ProcessDetailEntity,
+  ProcessEntity,
 } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -13,18 +14,21 @@ const dummy = dataFactory.createProcess([]);
 
 export function ProcessDialog(): JSXElement {
   const {
-    processModel: { selectedProcess, updateProcessDetail, processList },
+    processModel: { updateProcessDetail },
     activityNodeModel: { getActivityNodes },
-    dialog: { openProcessDialog, setOpenProcessDialog, setOpenMessageDialog },
+    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
   } = useAppContext();
 
+  let process: ProcessEntity = dummy;
   const [formData, setFormData] = createStore<ProcessDetailEntity>(dummy.detail);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
   const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
 
   createEffect(() => {
-    if (openProcessDialog() != null) {
-      setFormData(deepCopy(selectedProcess().detail));
+    const dialog = openDialog();
+    if (dialog?.type === "process") {
+      process = dialog.process;
+      setFormData(deepCopy(dialog.process.detail));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -63,7 +67,6 @@ export function ProcessDialog(): JSXElement {
         setOpenMessageDialog("applicationCannotDelete");
         return;
       }
-
       setFormData(
         "applications",
         formData.applications.filter((it) => it.id !== app.id),
@@ -73,26 +76,17 @@ export function ProcessDialog(): JSXElement {
 
   function handleSubmit(e: Event) {
     e.preventDefault();
-    const process = selectedProcess();
 
-    if (processList().some((it) => it.id !== process.id && it.detail.xpdlId === formData.xpdlId)) {
-      setOpenMessageDialog("idExists");
+    const errorMessage = updateProcessDetail({ ...process, detail: deepCopy(formData) });
+    if (errorMessage) {
+      setOpenMessageDialog(errorMessage);
       return;
     }
-    if (
-      new Set(formData.applications.map((it) => it.xpdlId)).size !== formData.applications.length
-    ) {
-      setOpenMessageDialog("duplicateApplicationId");
-      return;
-    }
-
-    const detail: ProcessDetailEntity = deepCopy(formData);
-    updateProcessDetail({ ...process, detail });
-    setOpenProcessDialog(null);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenProcessDialog(null);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

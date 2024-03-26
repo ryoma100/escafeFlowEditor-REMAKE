@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import { createStore, produce } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { enDict } from "../constants/i18n-en";
 import { dataFactory, deepCopy } from "../data-source/data-factory";
 import { ActorEntity, INode, ProcessEntity } from "../data-source/data-type";
@@ -22,18 +22,13 @@ export function makeActorModel() {
   function addActor(process: ProcessEntity) {
     const actor = dataFactory.createActorEntity(process.actors);
     setActorList([...actorList, actor]);
-    const proxyActor = actorList[actorList.length - 1];
-    setSelectedActor(proxyActor);
   }
 
-  function updateActor(actor: ActorEntity) {
-    setActorList(
-      (it) => it.id === actor.id,
-      produce((it) => {
-        it.xpdlId = actor.xpdlId;
-        it.name = actor.name;
-      }),
-    );
+  function updateActor(actor: ActorEntity): keyof typeof enDict | undefined {
+    if (actorList.some((it) => it.id !== actor.id && it.xpdlId === actor.xpdlId)) {
+      return "idExists";
+    }
+    setActorList([actorList.findIndex((it) => it.id === actor.id)], actor);
   }
 
   function removeSelectedActor(nodeList: INode[]): keyof typeof enDict | null {

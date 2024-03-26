@@ -9,7 +9,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     nodeModel: { changeSelectNodes },
     edgeModel: { changeSelectEdges },
     diagram: { setDragType },
-    dialog: { setOpenTransitionDialog },
+    dialog: { setOpenDialog },
   } = useAppContext();
 
   const fromActivity = () => getActivityNode(props.transition.fromNodeId);
@@ -27,7 +27,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
   }
 
   function handleDlbClick(_e: MouseEvent) {
-    setOpenTransitionDialog(props.transition);
+    setOpenDialog({ type: "transition", transition: props.transition });
   }
 
   const line = () =>
@@ -64,7 +64,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
         y1={line().p1.y}
         x2={line().p2.x}
         y2={line().p2.y}
-        marker-end={`url(#${props.transition.ognl !== "" ? "ognl-" : ""}arrow-end)`}
+        marker-end={props.transition.ognl !== "" ? "url(#ognl-arrow-end)" : "url(#arrow-end)"}
       />
       <line
         class="

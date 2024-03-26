@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory } from "../../data-source/data-factory";
+import { dataFactory, deepCopy } from "../../data-source/data-factory";
 import { CommentNode } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -10,15 +10,15 @@ const dummy = dataFactory.createCommentNode([], 0, 0);
 export function CommentDialog(): JSXElement {
   const {
     extendNodeModel: { updateComment },
-    dialog: { openCommentDialog, setOpenCommentDialog },
+    dialog: { openDialog, setOpenDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<CommentNode>(dummy);
 
   createEffect(() => {
-    const comment = openCommentDialog();
-    if (comment != null) {
-      setFormData({ ...comment });
+    const dialog = openDialog();
+    if (dialog?.type === "comment") {
+      setFormData(deepCopy(dialog.comment));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -28,12 +28,12 @@ export function CommentDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    updateComment(formData);
-    setOpenCommentDialog(null);
+    updateComment(deepCopy(formData));
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenCommentDialog(null);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

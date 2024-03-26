@@ -1,5 +1,6 @@
 import { produce } from "solid-js/store";
 import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
+import { enDict } from "../constants/i18n-en";
 import { dataFactory } from "../data-source/data-factory";
 import { ActivityNode, ActivityNodeType, IEdge } from "../data-source/data-type";
 import { makeNodeModel } from "./node-model";
@@ -19,7 +20,18 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
     nodeModel.setNodeList([...nodeModel.nodeList, activity]);
     return activity;
   }
-  1;
+
+  function updateActivity(activity: ActivityNode): keyof typeof enDict | undefined {
+    if (activityList().some((it) => it.id !== activity.id && it.xpdlId === activity.xpdlId)) {
+      return "idExists";
+    }
+    nodeModel.setNodeList([nodeModel.nodeList.findIndex((it) => it.id === activity.id)], activity);
+  }
+
+  function activityList(): ActivityNode[] {
+    return nodeModel.nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
+  }
+
   function getActivityNode(nodeId: number): ActivityNode {
     const node = nodeModel.getNode(nodeId);
     if (node.type !== "activityNode") {
@@ -124,6 +136,8 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
 
   return {
     addActivity,
+    updateActivity,
+    activityList,
     resizeActivityHeight,
     resizeLeft,
     resizeRight,

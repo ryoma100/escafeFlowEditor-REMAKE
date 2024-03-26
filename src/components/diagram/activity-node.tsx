@@ -23,7 +23,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
     edgeModel: { changeSelectEdges },
     extendEdgeModel: { addCommentEdge, addStartEdge },
     transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
-    dialog: { setOpenActivityDialog },
+    dialog: { setOpenDialog },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
 
@@ -94,7 +94,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   }
 
   function handleDblClick() {
-    setOpenActivityDialog(props.activity);
+    setOpenDialog({ type: "activity", activity: props.activity });
   }
 
   return (

@@ -6,7 +6,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function SaveDialog(): JSXElement {
   const {
-    dialog: { openSaveDialog, setOpenSaveDialog },
+    dialog: { openDialog, setOpenDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -14,11 +14,11 @@ export function SaveDialog(): JSXElement {
   const [data, setData] = createSignal<string>("");
 
   createEffect(() => {
-    const project = openSaveDialog();
-    if (project != null) {
+    const dialog = openDialog();
+    if (dialog?.type === "save") {
       dialogRef?.showModal();
       okButtonRef?.focus();
-      setData(exportXml(project));
+      setData(exportXml(dialog.project));
     } else {
       dialogRef?.close();
     }
@@ -28,11 +28,11 @@ export function SaveDialog(): JSXElement {
     e.preventDefault();
 
     //
-    setOpenSaveDialog(null);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenSaveDialog(null);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

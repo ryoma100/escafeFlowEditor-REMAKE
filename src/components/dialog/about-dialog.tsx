@@ -4,11 +4,11 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function AboutDialog(): JSXElement {
   const {
-    dialog: { openAboutDialog, setOpenAboutDialog },
+    dialog: { openDialog, setOpenDialog },
   } = useAppContext();
 
   createEffect(() => {
-    if (openAboutDialog()) {
+    if (openDialog()?.type === "about") {
       dialogRef?.showModal();
       okButtonRef?.focus();
     } else {
@@ -18,11 +18,11 @@ export function AboutDialog(): JSXElement {
 
   function handleSubmit(e: Event) {
     e.preventDefault();
-    setOpenAboutDialog(false);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenAboutDialog(false);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

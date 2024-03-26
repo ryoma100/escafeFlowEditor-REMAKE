@@ -9,7 +9,7 @@ export function ActorList(): JSXElement {
     processModel: { selectedProcess },
     nodeModel: { nodeList },
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
-    dialog: { setOpenActorDialog, setOpenMessageDialog },
+    dialog: { setOpenDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -21,7 +21,7 @@ export function ActorList(): JSXElement {
   }
 
   function handleItemDblClick(_: MouseEvent) {
-    setOpenActorDialog(selectedActor());
+    setOpenDialog({ type: "actor", actor: selectedActor() });
   }
 
   function handleAddButtonClick(_: MouseEvent) {

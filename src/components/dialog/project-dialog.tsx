@@ -9,15 +9,16 @@ const dummy = dataFactory.createProject();
 
 export function ProjectDialog(): JSXElement {
   const {
-    projectModel: { getProjectDetail, setProjectDetail },
-    dialog: { openProjectDialog, setOpenProjectDialog },
+    projectModel: { setProjectDetail },
+    dialog: { openDialog, setOpenDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ProjectDetailEntity>(dummy.detail);
 
   createEffect(() => {
-    if (openProjectDialog()) {
-      setFormData(deepCopy(getProjectDetail()));
+    const dialog = openDialog();
+    if (dialog?.type === "project") {
+      setFormData(deepCopy(dialog.project.detail));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -28,11 +29,11 @@ export function ProjectDialog(): JSXElement {
     e.preventDefault();
 
     setProjectDetail({ ...formData });
-    setOpenProjectDialog(false);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenProjectDialog(false);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;

@@ -4,40 +4,29 @@ import { useAppContext } from "../../context/app-context";
 
 export function AppMenu(): JSXElement {
   const {
-    projectModel: { save },
+    projectModel: { project },
     processModel: { addProcess, selectedProcess, processList },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
     activityNodeModel: { updateAllJoinSplitType },
     edgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
-    dialog: {
-      setOpenProjectDialog,
-      setOpenProcessDialog,
-      setOpenActorDialog,
-      setOpenLoadDialog,
-      setOpenSaveDialog,
-      setOpenCommentDialog,
-      setOpenTransitionDialog,
-      setOpenMessageDialog,
-      setOpenAboutDialog,
-      setOpenConfirmDialog,
-    },
+    dialog: { setOpenDialog, setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {
-    setOpenConfirmDialog("initAll");
+    setOpenDialog({ type: "initAll" });
     return false;
   }
 
   function handleFileOpenClick() {
-    setOpenLoadDialog(true);
+    setOpenDialog({ type: "load" });
     return false;
   }
 
   function handleFileSaveClick() {
-    setOpenSaveDialog(save());
+    setOpenDialog({ type: "save", project });
     return false;
   }
 
@@ -58,17 +47,17 @@ export function AppMenu(): JSXElement {
       getSelectedNodes().forEach((it) => {
         switch (it.type) {
           case "activityNode":
-            setOpenActorDialog(it);
+            setOpenDialog({ type: "activity", activity: it });
             break;
           case "commentNode":
-            setOpenCommentDialog(it);
+            setOpenDialog({ type: "comment", comment: it });
             break;
         }
       });
       selectedEdges().forEach((it) => {
         switch (it.type) {
           case "transitionEdge":
-            setOpenTransitionDialog(it);
+            setOpenDialog({ type: "transition", transition: it });
             break;
         }
       });
@@ -77,7 +66,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProjectPropertyClick() {
-    setOpenProjectDialog(true);
+    setOpenDialog({ type: "project", project });
     return false;
   }
 
@@ -87,12 +76,12 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProcessRemoveClick() {
-    setOpenConfirmDialog("deleteProcess");
+    setOpenDialog({ type: "deleteProcess", process: selectedProcess() });
     return false;
   }
 
   function handleProcessPropertyClick() {
-    setOpenProcessDialog(selectedProcess());
+    setOpenDialog({ type: "process", process: selectedProcess() });
     return false;
   }
 
@@ -110,12 +99,12 @@ export function AppMenu(): JSXElement {
   }
 
   function handleActorPropertyClick() {
-    setOpenActorDialog(selectedActor());
+    setOpenDialog({ type: "actor", actor: selectedActor() });
     return false;
   }
 
   function handleHelpAboutClick() {
-    setOpenAboutDialog(true);
+    setOpenDialog({ type: "about" });
     return false;
   }
 

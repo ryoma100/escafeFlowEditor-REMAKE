@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 export function ProcessList(): JSXElement {
   const {
     processModel: { processList, selectedProcess, addProcess, changeProcess },
-    dialog: { setOpenProcessDialog, setOpenConfirmDialog },
+    dialog: { setOpenDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
@@ -19,7 +19,7 @@ export function ProcessList(): JSXElement {
   }
 
   function handleItemDblClick(_: MouseEvent) {
-    setOpenProcessDialog(selectedProcess());
+    setOpenDialog({ type: "process", process: selectedProcess() });
   }
 
   function handleAddButtonClick(_: MouseEvent) {
@@ -27,7 +27,7 @@ export function ProcessList(): JSXElement {
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    setOpenConfirmDialog("deleteProcess");
+    setOpenDialog({ type: "deleteProcess", process: selectedProcess() });
   }
 
   return (

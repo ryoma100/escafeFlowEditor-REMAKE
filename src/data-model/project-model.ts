@@ -30,5 +30,5 @@ export function makeProjectModel(processModel: ReturnType<typeof makeProcessMode
     processModel.load(project);
   }
 
-  return { initProject, getProjectDetail, setProjectDetail, save, load };
+  return { initProject, getProjectDetail, setProjectDetail, save, load, project };
 }

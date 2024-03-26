@@ -11,7 +11,7 @@ export function ExtendNodeContainer(props: {
     extendEdgeModel: { addEndEdge },
     nodeModel: { changeSelectNodes },
     diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
-    dialog: { setOpenCommentDialog },
+    dialog: { setOpenDialog },
   } = useAppContext();
 
   function handleMouseDown(e: MouseEvent) {
@@ -57,7 +57,7 @@ export function ExtendNodeContainer(props: {
 
   function handleDblClick(_e: MouseEvent) {
     if (props.node.type === "commentNode") {
-      setOpenCommentDialog(props.node);
+      setOpenDialog({ type: "comment", comment: props.node });
     }
   }
 

@@ -1,3 +1,4 @@
+import { enDict } from "../constants/i18n-en";
 import { dataFactory } from "../data-source/data-factory";
 import { TransitionEdge } from "../data-source/data-type";
 import { makeEdgeModel } from "./edge-model";
@@ -34,5 +35,20 @@ export function makeTransactionEdgeModel(
     return transition;
   }
 
-  return { addTransitionEdge, getTransitionEdges };
+  function updateTransitionEdge(transition: TransitionEdge): keyof typeof enDict | undefined {
+    if (
+      edgeModel.edgeList.some(
+        (it) =>
+          it.type === "transitionEdge" &&
+          it.id !== transition.id &&
+          it.xpdlId === transition.xpdlId,
+      )
+    ) {
+      return "idExists";
+    }
+
+    edgeModel.setEdgeList([...edgeModel.edgeList, transition]);
+  }
+
+  return { addTransitionEdge, getTransitionEdges, updateTransitionEdge };
 }

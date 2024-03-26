@@ -6,14 +6,15 @@ import { ButtonsContainer } from "../parts/buttons-container";
 export function ConfirmDialog(): JSXElement {
   const {
     projectModel: { initProject },
-    processModel: { removeSelectedProcess },
-    dialog: { openConfirmDialog, setOpenConfirmDialog },
+    processModel: { removeProcess },
+    dialog: { openDialog, setOpenDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);
 
   createEffect(() => {
-    if (openConfirmDialog() != null) {
+    const dialog = openDialog();
+    if (dialog?.type === "initAll" || dialog?.type === "deleteProcess") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -23,23 +24,24 @@ export function ConfirmDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    switch (openConfirmDialog()) {
+    const dialog = openDialog();
+    switch (dialog?.type) {
       case "initAll":
         initProject();
         break;
       case "deleteProcess":
-        removeSelectedProcess();
+        removeProcess(dialog.process);
         break;
     }
-    setOpenConfirmDialog(null);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenConfirmDialog(null);
+    setOpenDialog(null);
   }
 
   const dialogMessage = () => {
-    switch (openConfirmDialog()) {
+    switch (openDialog()?.type) {
       case "initAll":
         return t("initAllConfirm");
       case "deleteProcess":

@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function LoadDialog(): JSXElement {
   const {
-    dialog: { openLoadDialog, setOpenLoadDialog },
+    dialog: { openDialog, setOpenDialog },
     processModel: { load },
     i18n: { dict },
   } = useAppContext();
@@ -16,7 +16,7 @@ export function LoadDialog(): JSXElement {
   const [data, setData] = createSignal<string>("");
 
   createEffect(() => {
-    if (openLoadDialog()) {
+    if (openDialog()?.type === "load") {
       dialogRef?.showModal();
       okButtonRef?.focus();
       setData("");
@@ -28,14 +28,14 @@ export function LoadDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
+    // TODO: parse error
     const project: ProjectEntity = importXml(data());
     load(project);
-
-    setOpenLoadDialog(false);
+    setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenLoadDialog(false);
+    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;
