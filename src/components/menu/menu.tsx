@@ -86,7 +86,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleActorAddClick() {
-    addActor(selectedProcess());
+    addActor();
     return false;
   }
 

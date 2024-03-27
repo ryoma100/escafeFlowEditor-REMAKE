@@ -6,7 +6,6 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function ActorList(): JSXElement {
   const {
-    processModel: { selectedProcess },
     nodeModel: { nodeList },
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
     dialog: { setOpenDialog, setOpenMessageDialog },
@@ -20,12 +19,12 @@ export function ActorList(): JSXElement {
     }
   }
 
-  function handleItemDblClick(_: MouseEvent) {
-    setOpenDialog({ type: "actor", actor: selectedActor() });
+  function handleItemDblClick(actor: ActorEntity, _: MouseEvent) {
+    setOpenDialog({ type: "actor", actor });
   }
 
   function handleAddButtonClick(_: MouseEvent) {
-    addActor(selectedProcess());
+    addActor();
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
@@ -43,10 +42,10 @@ export function ActorList(): JSXElement {
           <For each={actorList}>
             {(it) => (
               <li
-                data-select={it.id === selectedActor().id}
-                class="p-1 hover:bg-primary2 data-[select=true]:bg-primary1"
+                class="p-1 hover:bg-primary2"
+                classList={{ "bg-primary1": it.id === selectedActor().id }}
                 onMouseDown={[handleItemMouseDown, it]}
-                onDblClick={handleItemDblClick}
+                onDblClick={[handleItemDblClick, it]}
               >
                 {it.name}
               </li>

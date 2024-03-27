@@ -1,6 +1,6 @@
 import { JSXElement, createSignal, onMount } from "solid-js";
 import { useAppContext } from "../../context/app-context";
-import { TransitionEdge } from "../../data-source/data-type";
+import { Line, TransitionEdge } from "../../data-source/data-type";
 import { computeLine } from "../../utils/line-utils";
 
 export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
@@ -14,6 +14,17 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
 
   const fromActivity = () => getActivityNode(props.transition.fromNodeId);
   const toActivity = () => getActivityNode(props.transition.toNodeId);
+  const line = () =>
+    computeLine(fromActivity(), toActivity(), {
+      p1: {
+        x: fromActivity().x + fromActivity().width - 10,
+        y: fromActivity().y + fromActivity().height / 2,
+      },
+      p2: {
+        x: toActivity().x + 10,
+        y: toActivity().y + toActivity().height / 2,
+      },
+    });
 
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
@@ -30,24 +41,28 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     setOpenDialog({ type: "transition", transition: props.transition });
   }
 
-  const line = () =>
-    computeLine(fromActivity(), toActivity(), {
-      p1: {
-        x: fromActivity().x + fromActivity().width - 10,
-        y: fromActivity().y + fromActivity().height / 2,
-      },
-      p2: {
-        x: toActivity().x + 10,
-        y: toActivity().y + toActivity().height / 2,
-      },
-    });
+  return (
+    <TransitionEdgeView
+      line={line()}
+      ognl={props.transition.ognl}
+      selected={props.transition.selected}
+      handleMouseDown={handleMouseDown}
+      handleDblClick={handleDlbClick}
+    />
+  );
+}
 
-  const [textWidth, setTextWidth] = createSignal(0);
-
+export function TransitionEdgeView(props: {
+  line: Line;
+  ognl: string;
+  selected: boolean;
+  handleMouseDown: (e: MouseEvent) => void;
+  handleDblClick: (e: MouseEvent) => void;
+}): JSXElement {
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (textRef) {
-        setTextWidth(textRef.getBBox().width);
+        setOgnlTextWidth(textRef.getBBox().width);
       }
     });
     if (textRef) {
@@ -55,36 +70,37 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     }
   });
 
+  const [ognlTextWidth, setOgnlTextWidth] = createSignal(0);
   let textRef: SVGTextElement | undefined;
   return (
     <>
       <line
         class="fill-none stroke-gray-500 stroke-1 [vector-effect:non-scaling-stroke]"
-        x1={line().p1.x}
-        y1={line().p1.y}
-        x2={line().p2.x}
-        y2={line().p2.y}
-        marker-end={props.transition.ognl !== "" ? "url(#ognl-arrow-end)" : "url(#arrow-end)"}
+        x1={props.line.p1.x}
+        y1={props.line.p1.y}
+        x2={props.line.p2.x}
+        y2={props.line.p2.y}
+        marker-end={props.ognl !== "" ? "url(#ognl-arrow-end)" : "url(#arrow-end)"}
       />
       <line
         class="
           fill-none stroke-transparent stroke-[5]
           hover:cursor-pointer hover:stroke-primary2"
-        classList={{ "fill-none stroke-primary1 stroke-[5]": props.transition.selected }}
-        onDblClick={handleDlbClick}
-        onMouseDown={handleMouseDown}
-        x1={line().p1.x}
-        y1={line().p1.y}
-        x2={line().p2.x}
-        y2={line().p2.y}
+        classList={{ "fill-none stroke-primary1 stroke-[5]": props.selected }}
+        onDblClick={(e) => props.handleDblClick(e)}
+        onMouseDown={(e) => props.handleMouseDown(e)}
+        x1={props.line.p1.x}
+        y1={props.line.p1.y}
+        x2={props.line.p2.x}
+        y2={props.line.p2.y}
       />
       <text
-        x={(line().p1.x + line().p2.x) / 2 - textWidth() / 2}
-        y={(line().p1.y + line().p2.y) / 2}
-        classList={{ hidden: props.transition.ognl === "" }}
+        x={(props.line.p1.x + props.line.p2.x) / 2 - ognlTextWidth() / 2}
+        y={(props.line.p1.y + props.line.p2.y) / 2}
+        classList={{ hidden: props.ognl === "" }}
         ref={textRef}
       >
-        {props.transition.ognl}
+        {props.ognl}
       </text>
     </>
   );

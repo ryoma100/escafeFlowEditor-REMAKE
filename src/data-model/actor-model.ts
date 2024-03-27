@@ -19,9 +19,10 @@ export function makeActorModel() {
     return deepUnwrap(actorList);
   }
 
-  function addActor(process: ProcessEntity) {
-    const actor = dataFactory.createActorEntity(process.actors);
+  function addActor() {
+    const actor = dataFactory.createActorEntity(actorList);
     setActorList([...actorList, actor]);
+    setSelectedActor(actor);
   }
 
   function updateActor(actor: ActorEntity): keyof typeof enDict | undefined {

@@ -99,7 +99,7 @@ export function CommentNodeView(props: {
   onMouseDown?: (e: MouseEvent) => void;
   onDblClick?: (e: MouseEvent) => void;
   onChangeSize?: (width: number, height: number) => void;
-}) {
+}): JSXElement {
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (titleDiv) {

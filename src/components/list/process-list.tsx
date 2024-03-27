@@ -18,8 +18,8 @@ export function ProcessList(): JSXElement {
     }
   }
 
-  function handleItemDblClick(_: MouseEvent) {
-    setOpenDialog({ type: "process", process: selectedProcess() });
+  function handleItemDblClick(process: ProcessEntity, _: MouseEvent) {
+    setOpenDialog({ type: "process", process });
   }
 
   function handleAddButtonClick(_: MouseEvent) {
@@ -41,7 +41,7 @@ export function ProcessList(): JSXElement {
                 data-select={it.id === selectedProcess().id}
                 class="p-1 hover:bg-primary2 data-[select=true]:bg-primary1"
                 onMouseDown={[handleItemMouseDown, it]}
-                onDblClick={handleItemDblClick}
+                onDblClick={[handleItemDblClick, it]}
               >
                 {it.detail.name}
               </li>
