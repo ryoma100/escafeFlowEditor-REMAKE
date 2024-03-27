@@ -29,9 +29,9 @@ export function ActorList(): JSXElement {
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    const err = removeSelectedActor(nodeList);
-    if (err != null) {
-      setOpenMessageDialog(err);
+    const errorMessage = removeSelectedActor(nodeList);
+    if (errorMessage != null) {
+      setOpenMessageDialog(errorMessage);
     }
   }
 

@@ -1,5 +1,5 @@
 import { createStore, produce } from "solid-js/store";
-import { deepCopy } from "../data-source/data-factory";
+import { deepUnwrap } from "../data-source/data-factory";
 import {
   CommentEdge,
   EndEdge,
@@ -18,7 +18,7 @@ export function makeEdgeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   }
 
   function save(): (TransitionEdge | CommentEdge | StartEdge | EndEdge)[] {
-    return deepCopy(edgeList);
+    return deepUnwrap(edgeList);
   }
 
   function changeSelectEdges(

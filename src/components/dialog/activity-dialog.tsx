@@ -2,7 +2,7 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepCopy } from "../../data-source/data-factory";
+import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
 import { ActivityNode } from "../../data-source/data-type";
 import {
   AutoActivityIcon,
@@ -32,7 +32,7 @@ export function ActivityDialog(): JSXElement {
   createEffect(() => {
     const dialog = openDialog();
     if (dialog?.type === "activity") {
-      const activity = deepCopy(dialog.activity);
+      const activity = deepUnwrap(dialog.activity);
       activity.applications = selectedProcess().detail.applications.map((app) => ({
         id: app.id,
         ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
@@ -52,7 +52,7 @@ export function ActivityDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    const activity: ActivityNode = deepCopy(formData);
+    const activity: ActivityNode = deepUnwrap(formData);
     activity.applications =
       activity.activityType === "autoActivity"
         ? formData.applications.filter((it) => it.ognl !== "")

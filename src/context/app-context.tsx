@@ -25,6 +25,13 @@ import {
   TransitionEdge,
 } from "../data-source/data-type";
 
+function makeI18nContext() {
+  const dictionaries = { ja: jaDict, en: enDict };
+  const [locale, setLocale] = createSignal<keyof typeof dictionaries>("ja");
+  const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
+  return { dict, setLocale };
+}
+
 function makeModelContext() {
   const actorModel = makeActorModel();
   const nodeModel = makeNodeModel();
@@ -47,31 +54,6 @@ function makeModelContext() {
     transitionEdgeModel,
     extendNodeModel,
     extendEdgeModel,
-  };
-}
-
-export type DialogType =
-  | { type: "load" }
-  | { type: "save"; project: ProjectEntity }
-  | { type: "about" }
-  | { type: "project"; project: ProjectEntity }
-  | { type: "process"; process: ProcessEntity }
-  | { type: "actor"; actor: ActorEntity }
-  | { type: "activity"; activity: ActivityNode }
-  | { type: "transition"; transition: TransitionEdge }
-  | { type: "comment"; comment: CommentNode }
-  | { type: "initAll" }
-  | { type: "deleteProcess"; process: ProcessEntity };
-
-function makeDialogContext() {
-  const [openDialog, setOpenDialog] = createSignal<DialogType | null>(null);
-  const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
-
-  return {
-    openDialog,
-    setOpenDialog,
-    openMessageDialog,
-    setOpenMessageDialog,
   };
 }
 
@@ -119,21 +101,40 @@ function makeDiagramContext() {
   };
 }
 
-function makeI18nContext() {
-  const dictionaries = { ja: jaDict, en: enDict };
-  const [locale, setLocale] = createSignal<keyof typeof dictionaries>("ja");
-  const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
-  return { dict, setLocale };
+export type DialogType =
+  | { type: "load" }
+  | { type: "save"; project: ProjectEntity }
+  | { type: "about" }
+  | { type: "project"; project: ProjectEntity }
+  | { type: "process"; process: ProcessEntity }
+  | { type: "actor"; actor: ActorEntity }
+  | { type: "activity"; activity: ActivityNode }
+  | { type: "transition"; transition: TransitionEdge }
+  | { type: "comment"; comment: CommentNode }
+  | { type: "initAll" }
+  | { type: "deleteProcess"; process: ProcessEntity };
+
+function makeDialogContext() {
+  const [openDialog, setOpenDialog] = createSignal<DialogType | null>(null);
+  const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
+
+  return {
+    openDialog,
+    setOpenDialog,
+    openMessageDialog,
+    setOpenMessageDialog,
+  };
 }
 
 const appContextValue = {
-  ...makeModelContext(),
-  dialog: makeDialogContext(),
-  diagram: makeDiagramContext(),
   i18n: makeI18nContext(),
+  ...makeModelContext(),
+  diagram: makeDiagramContext(),
+  dialog: makeDialogContext(),
 };
 
 const AppContext = createContext<{
+  i18n: ReturnType<typeof makeI18nContext>;
   actorModel: ReturnType<typeof makeActorModel>;
   nodeModel: ReturnType<typeof makeNodeModel>;
   edgeModel: ReturnType<typeof makeEdgeModel>;
@@ -143,9 +144,8 @@ const AppContext = createContext<{
   transitionEdgeModel: ReturnType<typeof makeTransactionEdgeModel>;
   extendNodeModel: ReturnType<typeof makeExtendNodeModel>;
   extendEdgeModel: ReturnType<typeof makeExtendEdgeModel>;
-  dialog: ReturnType<typeof makeDialogContext>;
   diagram: ReturnType<typeof makeDiagramContext>;
-  i18n: ReturnType<typeof makeI18nContext>;
+  dialog: ReturnType<typeof makeDialogContext>;
 }>(appContextValue);
 
 export function AppProvider(props: { children: JSX.Element }) {

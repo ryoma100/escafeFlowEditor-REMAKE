@@ -1,5 +1,5 @@
 import { createStore, produce } from "solid-js/store";
-import { deepCopy } from "../data-source/data-factory";
+import { deepUnwrap } from "../data-source/data-factory";
 import { INode, ProcessEntity } from "../data-source/data-type";
 
 export function makeNodeModel() {
@@ -10,7 +10,7 @@ export function makeNodeModel() {
   }
 
   function save(): INode[] {
-    return deepCopy(nodeList);
+    return deepUnwrap(nodeList);
   }
 
   function changeSelectNodes(

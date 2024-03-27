@@ -2,7 +2,7 @@ import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepCopy } from "../../data-source/data-factory";
+import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
 import { TransitionEdge } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -33,12 +33,11 @@ export function TransitionDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    const errorMessage = updateTransitionEdge(deepCopy(formData));
+    const errorMessage = updateTransitionEdge(deepUnwrap(formData));
     if (errorMessage) {
       setOpenMessageDialog(errorMessage);
       return;
     }
-
     setOpenDialog(null);
   }
 

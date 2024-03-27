@@ -245,6 +245,7 @@ export const dataFactory = {
   createEndEdge,
 };
 
-export function deepCopy<T extends object>(data: T): T {
+export function deepUnwrap<T extends object>(data: T): T {
+  // solid-js/store unwrap is not nested.
   return JSON.parse(JSON.stringify(data));
 }

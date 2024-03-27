@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepCopy } from "../../data-source/data-factory";
+import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
 import { CommentNode } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -18,7 +18,7 @@ export function CommentDialog(): JSXElement {
   createEffect(() => {
     const dialog = openDialog();
     if (dialog?.type === "comment") {
-      setFormData(deepCopy(dialog.comment));
+      setFormData(deepUnwrap(dialog.comment));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -28,7 +28,7 @@ export function CommentDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    updateComment(deepCopy(formData));
+    updateComment(deepUnwrap(formData));
     setOpenDialog(null);
   }
 

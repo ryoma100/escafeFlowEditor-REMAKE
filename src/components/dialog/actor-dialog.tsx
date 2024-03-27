@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepCopy } from "../../data-source/data-factory";
+import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
 import { ActorEntity } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -18,7 +18,7 @@ export function ActorDialog(): JSXElement {
   createEffect(() => {
     const dialog = openDialog();
     if (dialog?.type === "actor") {
-      setFormData(deepCopy(dialog.actor));
+      setFormData(deepUnwrap(dialog.actor));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -28,7 +28,7 @@ export function ActorDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    const errorMessage = updateActor(deepCopy(formData));
+    const errorMessage = updateActor(deepUnwrap(formData));
     if (errorMessage) {
       setOpenMessageDialog(errorMessage);
       return;

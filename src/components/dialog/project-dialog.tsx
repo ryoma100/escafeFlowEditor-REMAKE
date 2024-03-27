@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepCopy } from "../../data-source/data-factory";
+import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
 import { ProjectDetailEntity } from "../../data-source/data-type";
 import { ButtonsContainer } from "../parts/buttons-container";
 
@@ -18,7 +18,7 @@ export function ProjectDialog(): JSXElement {
   createEffect(() => {
     const dialog = openDialog();
     if (dialog?.type === "project") {
-      setFormData(deepCopy(dialog.project.detail));
+      setFormData(deepUnwrap(dialog.project.detail));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();

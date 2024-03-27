@@ -1,7 +1,7 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepCopy } from "../../data-source/data-factory";
+import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
 import {
   ApplicationEntity,
   EnvironmentEntity,
@@ -28,7 +28,7 @@ export function ProcessDialog(): JSXElement {
     const dialog = openDialog();
     if (dialog?.type === "process") {
       process = dialog.process;
-      setFormData(deepCopy(dialog.process.detail));
+      setFormData(deepUnwrap(dialog.process.detail));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -77,7 +77,7 @@ export function ProcessDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    const errorMessage = updateProcessDetail({ ...process, detail: deepCopy(formData) });
+    const errorMessage = updateProcessDetail({ ...process, detail: deepUnwrap(formData) });
     if (errorMessage) {
       setOpenMessageDialog(errorMessage);
       return;
