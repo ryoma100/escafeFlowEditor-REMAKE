@@ -15,6 +15,8 @@ export function ExtendNodeContainer(props: {
   } = useAppContext();
 
   function handleMouseDown(e: MouseEvent) {
+    e.stopPropagation();
+
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {

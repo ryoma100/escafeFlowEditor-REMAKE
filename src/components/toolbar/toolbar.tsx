@@ -30,8 +30,14 @@ export function Toolbar(): JSXElement {
   } = useAppContext();
   const t = i18n.translator(dict);
 
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      setToolbar("cursor");
+    }
+  }
+
   return (
-    <div class="mx-2 flex-col">
+    <div class="mx-2 flex-col outline-none" onKeyDown={handleKeyDown}>
       <ToggleIconButton
         id="toolbar-select"
         title={t("select")}

@@ -38,12 +38,13 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   }
 
   function handleMouseDown(e: MouseEvent) {
+    e.stopPropagation();
+
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
           changeSelectNodes("toggle", [props.activity.id]);
           setDragType("none");
-          e.stopPropagation();
         } else {
           if (!props.activity.selected) {
             changeSelectNodes("select", [props.activity.id]);

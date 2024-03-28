@@ -25,6 +25,7 @@ export function ExtendEdgeContainer(props: {
 
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
+
     if (e.shiftKey) {
       changeSelectEdges("toggle", [props.edge.id]);
     } else if (!props.edge.selected) {

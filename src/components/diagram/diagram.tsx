@@ -52,6 +52,7 @@ export function DiagramContainer(): JSXElement {
       viewBox,
       setViewBox,
       toolbar,
+      setToolbar,
       zoom,
       dragType,
       setDragType,
@@ -61,8 +62,8 @@ export function DiagramContainer(): JSXElement {
   } = useAppContext();
 
   onMount(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mousemove", handleDocumentMouseMove);
+    document.addEventListener("mouseup", handleDocumentMouseUp);
   });
 
   createEffect(() => {
@@ -73,15 +74,18 @@ export function DiagramContainer(): JSXElement {
   });
 
   function handleMouseDown(e: MouseEvent) {
+    e.stopPropagation();
+
     if (dragType() === "none") {
       const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
       const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
-
       switch (toolbar()) {
         case "cursor":
           changeSelectNodes("clearAll");
           changeSelectEdges("clearAll");
           setDragType("scroll");
+          return;
+        case "transition":
           return;
         case "addManualActivity":
           {
@@ -132,7 +136,7 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
-  function handleMouseMove(e: MouseEvent) {
+  function handleDocumentMouseMove(e: MouseEvent) {
     const moveX = e.movementX / zoom();
     const moveY = e.movementY / zoom();
 
@@ -167,8 +171,14 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
-  function handleMouseUp() {
+  function handleDocumentMouseUp() {
     setDragType("none");
+  }
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      setToolbar("cursor");
+    }
   }
 
   return (
@@ -187,6 +197,7 @@ export function DiagramContainer(): JSXElement {
       nodeList={nodeList}
       edgeList={edgeList}
       onMouseDown={handleMouseDown}
+      onKeyDown={handleKeyDown}
     />
   );
 }
@@ -199,6 +210,7 @@ export function DiagramView(props: {
   edgeList: IEdge[];
   setSvgRect: (rect: Rectangle) => void;
   onMouseDown: (e: MouseEvent) => void;
+  onKeyDown: (e: KeyboardEvent) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -219,7 +231,12 @@ export function DiagramView(props: {
 
   let diagramRef: HTMLDivElement | undefined;
   return (
-    <div class="relative h-full w-full" ref={diagramRef}>
+    <div
+      class="relative h-full w-full outline-none"
+      ref={diagramRef}
+      tabindex={-1}
+      onKeyDown={(e) => props.onKeyDown(e)}
+    >
       <svg
         class="absolute inset-0 h-full w-full"
         width={props.svgRect.width}

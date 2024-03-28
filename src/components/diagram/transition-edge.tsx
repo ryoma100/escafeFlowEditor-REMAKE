@@ -28,6 +28,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
 
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
+
     if (e.shiftKey) {
       changeSelectEdges("toggle", [props.transition.id]);
       setDragType("none");
