@@ -118,8 +118,7 @@ export function CommentNodeView(props: {
     <div
       data-select={props.selected}
       class="
-        m-px flex flex-row border border-solid
-        border-gray-500 bg-background p-0.5
+        m-px flex flex-row border border-gray-500 bg-background p-0.5
         hover:cursor-move hover:bg-primary3
         data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
       onMouseDown={(e) => props.onMouseDown?.(e)}
@@ -140,7 +139,7 @@ export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: Mous
     <div
       data-select={props.selected}
       class="
-        m-px rounded border border-solid border-gray-500 bg-background p-0.5
+        m-px rounded border border-gray-500 bg-background p-0.5
         hover:cursor-move hover:bg-primary3
         data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
       onMouseDown={(e) => props.onMouseDown?.(e)}
@@ -159,7 +158,7 @@ export function EndNodeView(props: {
     <div
       data-select={props.selected}
       class="
-        m-px rounded border border-solid border-gray-500 bg-background p-0.5
+        m-px rounded border border-gray-500 bg-background p-0.5
         hover:cursor-move hover:bg-primary3
         data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
       onMouseDown={(e) => props.onMouseDown?.(e)}

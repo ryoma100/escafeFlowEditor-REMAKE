@@ -3,7 +3,7 @@ import { JSX, createContext, createMemo, createSignal, useContext } from "solid-
 import { createStore } from "solid-js/store";
 import { DragType } from "../components/diagram/diagram";
 import { ToolbarType } from "../components/toolbar/toolbar";
-import { defaultRectangle } from "../constants/app-const";
+import { defaultLine, defaultRectangle } from "../constants/app-const";
 import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-node-model";
@@ -19,6 +19,7 @@ import {
   ActivityNode,
   ActorEntity,
   CommentNode,
+  Line,
   ProcessEntity,
   ProjectEntity,
   Rectangle,
@@ -61,21 +62,16 @@ function makeDiagramContext() {
   const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
   const [zoom, setZoom] = createSignal<number>(1.0);
   const [dragType, setDragType] = createSignal<DragType>("none");
-  const [addingLine, setAddingLine] = createSignal<{
-    fromX: number;
-    fromY: number;
-    toX: number;
-    toY: number;
-  }>({ fromX: 0, fromY: 0, toX: 0, toY: 0 });
+  const [addingLine, setAddingLine] = createSignal<Line>(defaultLine);
   const [svgRect, setSvgRect] = createStore({ ...defaultRectangle });
   const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
 
   function setAddingLineFrom(x: number, y: number) {
-    setAddingLine({ fromX: x, fromY: y, toX: x, toY: y });
+    setAddingLine({ p1: { x, y }, p2: { x, y } });
   }
 
   function setAddingLineTo(x: number, y: number) {
-    setAddingLine({ fromX: addingLine().fromX, fromY: addingLine().fromY, toX: x, toY: y });
+    setAddingLine({ p1: addingLine().p1, p2: { x, y } });
   }
 
   function autoRectangle(rect: Rectangle) {

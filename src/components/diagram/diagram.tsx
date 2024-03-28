@@ -6,6 +6,10 @@ import {
   CommentNode,
   EndEdge,
   EndNode,
+  IEdge,
+  INode,
+  Line,
+  Rectangle,
   StartEdge,
   StartNode,
   TransitionEdge,
@@ -57,105 +61,74 @@ export function DiagramContainer(): JSXElement {
   } = useAppContext();
 
   onMount(() => {
-    const observer = new ResizeObserver(() => {
-      if (diagram) {
-        const rect = diagram.getBoundingClientRect();
-        setSvgRect({
-          x: rect.left,
-          y: rect.top,
-          width: rect.width,
-          height: rect.height,
-        });
-      }
-    });
-    if (diagram) {
-      observer.observe(diagram);
-    }
-
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   });
 
+  createEffect(() => {
+    setViewBox({
+      width: svgRect.width / zoom(),
+      height: svgRect.height / zoom(),
+    });
+  });
+
   function handleMouseDown(e: MouseEvent) {
-    switch (dragType()) {
-      case "none":
-        switch (toolbar()) {
-          case "cursor":
-            changeSelectNodes("clearAll");
-            changeSelectEdges("clearAll");
-            setDragType("scroll");
-            break;
-          case "addManualActivity":
-            {
-              const activity = addActivity(
-                "manualActivity",
-                selectedActor().id,
-                viewBox.x + (e.clientX - svgRect.x) / zoom(),
-                viewBox.y + (e.clientY - svgRect.y) / zoom(),
-              );
-              changeTopLayer(activity.id);
-              changeSelectNodes("select", [activity.id]);
-              setDragType("addActivity");
-            }
-            break;
-          case "addAutoActivity":
-            {
-              const activity = addActivity(
-                "autoActivity",
-                selectedActor().id,
-                viewBox.x + (e.clientX - svgRect.x) / zoom(),
-                viewBox.y + (e.clientY - svgRect.y) / zoom(),
-              );
-              changeTopLayer(activity.id);
-              changeSelectNodes("select", [activity.id]);
-              setDragType("addActivity");
-            }
-            break;
-          case "addUserActivity":
-            {
-              const activity = addActivity(
-                "userActivity",
-                selectedActor().id,
-                viewBox.x + (e.clientX - svgRect.x) / zoom(),
-                viewBox.y + (e.clientY - svgRect.y) / zoom(),
-              );
-              changeTopLayer(activity.id);
-              changeSelectNodes("select", [activity.id]);
-              setDragType("addActivity");
-            }
-            break;
-          case "addCommentNode":
-            {
-              const comment = addCommentNode(
-                viewBox.x + (e.clientX - svgRect.x) / zoom(),
-                viewBox.y + (e.clientY - svgRect.y) / zoom(),
-              );
-              changeSelectNodes("select", [comment.id]);
-              setDragType("addCommentNode");
-            }
-            break;
-          case "addStartNode":
-            {
-              const startEnd = addStartNode(
-                viewBox.x + (e.clientX - svgRect.x) / zoom(),
-                viewBox.y + (e.clientY - svgRect.y) / zoom(),
-              );
-              changeSelectNodes("select", [startEnd.id]);
-              setDragType("addStartNode");
-            }
-            break;
-          case "addEndNode":
-            {
-              const startEnd = addEndNode(
-                viewBox.x + (e.clientX - svgRect.x) / zoom(),
-                viewBox.y + (e.clientY - svgRect.y) / zoom(),
-              );
-              changeSelectNodes("select", [startEnd.id]);
-              setDragType("addEndNode");
-            }
-            break;
-        }
-        break;
+    if (dragType() === "none") {
+      const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
+      const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
+
+      switch (toolbar()) {
+        case "cursor":
+          changeSelectNodes("clearAll");
+          changeSelectEdges("clearAll");
+          setDragType("scroll");
+          return;
+        case "addManualActivity":
+          {
+            const activity = addActivity("manualActivity", selectedActor().id, x, y);
+            changeTopLayer(activity.id);
+            changeSelectNodes("select", [activity.id]);
+            setDragType("addActivity");
+          }
+          return;
+        case "addAutoActivity":
+          {
+            const activity = addActivity("autoActivity", selectedActor().id, x, y);
+            changeTopLayer(activity.id);
+            changeSelectNodes("select", [activity.id]);
+            setDragType("addActivity");
+          }
+          return;
+        case "addUserActivity":
+          {
+            const activity = addActivity("userActivity", selectedActor().id, x, y);
+            changeTopLayer(activity.id);
+            changeSelectNodes("select", [activity.id]);
+            setDragType("addActivity");
+          }
+          return;
+        case "addCommentNode":
+          {
+            const comment = addCommentNode(x, y);
+            changeSelectNodes("select", [comment.id]);
+            setDragType("addCommentNode");
+          }
+          return;
+        case "addStartNode":
+          {
+            const startNode = addStartNode(x, y);
+            changeSelectNodes("select", [startNode.id]);
+            setDragType("addStartNode");
+          }
+          return;
+        case "addEndNode":
+          {
+            const endNode = addEndNode(x, y);
+            changeSelectNodes("select", [endNode.id]);
+            setDragType("addEndNode");
+          }
+          return;
+      }
     }
   }
 
@@ -169,20 +142,20 @@ export function DiagramContainer(): JSXElement {
           x: viewBox.x - moveX,
           y: viewBox.y - moveY,
         });
-        break;
+        return;
       case "addActivity":
       case "addCommentNode":
       case "addStartNode":
       case "addEndNode":
       case "moveNodes":
         moveSelectedNodes(moveX, moveY);
-        break;
+        return;
       case "resizeActivityLeft":
         resizeLeft(moveX);
-        break;
+        return;
       case "resizeActivityRight":
         resizeRight(moveX);
-        break;
+        return;
       case "addTransition":
       case "addCommentEdge":
       case "addStartEdge":
@@ -190,7 +163,7 @@ export function DiagramContainer(): JSXElement {
           viewBox.x + (e.clientX - svgRect.x) / zoom(),
           viewBox.y + (e.clientY - svgRect.y) / zoom(),
         );
-        break;
+        return;
     }
   }
 
@@ -198,22 +171,61 @@ export function DiagramContainer(): JSXElement {
     setDragType("none");
   }
 
-  createEffect(() => {
-    setViewBox({
-      width: svgRect.width / zoom(),
-      height: svgRect.height / zoom(),
+  return (
+    <DiagramView
+      viewBox={viewBox}
+      svgRect={svgRect}
+      setSvgRect={setSvgRect}
+      addingLine={
+        dragType() === "addTransition" ||
+        dragType() === "addStartEdge" ||
+        dragType() === "addEndEdge" ||
+        dragType() === "addCommentEdge"
+          ? addingLine()
+          : null
+      }
+      nodeList={nodeList}
+      edgeList={edgeList}
+      onMouseDown={handleMouseDown}
+    />
+  );
+}
+
+export function DiagramView(props: {
+  viewBox: Rectangle;
+  svgRect: Rectangle;
+  addingLine: Line | null;
+  nodeList: INode[];
+  edgeList: IEdge[];
+  setSvgRect: (rect: Rectangle) => void;
+  onMouseDown: (e: MouseEvent) => void;
+}) {
+  onMount(() => {
+    const observer = new ResizeObserver(() => {
+      if (diagramRef) {
+        const rect = diagramRef.getBoundingClientRect();
+        props.setSvgRect({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
     });
+    if (diagramRef) {
+      observer.observe(diagramRef);
+    }
   });
 
-  let diagram: HTMLDivElement | undefined;
+  let diagramRef: HTMLDivElement | undefined;
   return (
-    <div class="relative h-full w-full" ref={diagram}>
+    <div class="relative h-full w-full" ref={diagramRef}>
       <svg
         class="absolute inset-0 h-full w-full"
-        width={svgRect.width}
-        height={svgRect.height}
-        viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
-        onMouseDown={handleMouseDown}
+        width={props.svgRect.width}
+        height={props.svgRect.height}
+        viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}
+        onMouseDown={(e) => props.onMouseDown(e)}
       >
         <defs>
           <marker
@@ -243,41 +255,34 @@ export function DiagramContainer(): JSXElement {
           </marker>
         </defs>
         <g data-id="extend-edges">
-          <For each={edgeList.filter((it) => it.type !== "transitionEdge")}>
+          <For each={props.edgeList.filter((it) => it.type !== "transitionEdge")}>
             {(it) => <ExtendEdgeContainer edge={it as StartEdge | EndEdge | CommentEdge} />}
           </For>
         </g>
         <g data-id="activity-nodes">
-          <For each={nodeList.filter((it) => it.type === "activityNode")}>
+          <For each={props.nodeList.filter((it) => it.type === "activityNode")}>
             {(it) => <ActivityNodeContainer activity={it as ActivityNode} />}
           </For>
         </g>
         <g data-id="extend-nodes">
-          <For each={nodeList.filter((it) => it.type !== "activityNode")}>
+          <For each={props.nodeList.filter((it) => it.type !== "activityNode")}>
             {(it) => <ExtendNodeContainer node={it as StartNode | EndNode | CommentNode} />}
           </For>
         </g>
         <g data-id="transition-edges">
-          <For each={edgeList.filter((it) => it.type === "transitionEdge")}>
+          <For each={props.edgeList.filter((it) => it.type === "transitionEdge")}>
             {(it) => <TransitionEdgeContainer transition={it as TransitionEdge} />}
           </For>
         </g>
 
         <g data-id="adding-line">
-          <Show
-            when={
-              dragType() === "addTransition" ||
-              dragType() === "addCommentEdge" ||
-              dragType() === "addStartEdge" ||
-              dragType() === "addEndEdge"
-            }
-          >
+          <Show when={props.addingLine != null}>
             <line
               class="pointer-events-none fill-none stroke-black stroke-2"
-              x1={addingLine().fromX}
-              y1={addingLine().fromY}
-              x2={addingLine().toX}
-              y2={addingLine().toY}
+              x1={props.addingLine?.p1.x}
+              y1={props.addingLine?.p1.y}
+              x2={props.addingLine?.p2.x}
+              y2={props.addingLine?.p2.y}
             />
           </Show>
         </g>
