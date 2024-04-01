@@ -6,7 +6,7 @@ export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
     nodeModel: { computeMaxRectangle: maxRectangle },
-    diagram: { zoom, setZoom, autoRectangle },
+    diagramModel: { zoom, setZoom, autoRectangle },
   } = useAppContext();
 
   function handleAutoZoomButtonClick() {

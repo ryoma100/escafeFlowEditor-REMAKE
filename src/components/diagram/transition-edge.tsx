@@ -8,7 +8,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     activityNodeModel: { getActivityNode },
     nodeModel: { changeSelectNodes },
     edgeModel: { changeSelectEdges },
-    diagram: { setDragType },
+    diagramModel: { setDragType },
     dialog: { setOpenDialog },
   } = useAppContext();
 
@@ -31,7 +31,7 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
 
     if (e.shiftKey) {
       changeSelectEdges("toggle", [props.transition.id]);
-      setDragType("none");
+      setDragType({ type: "none" });
     } else if (!props.transition.selected) {
       changeSelectNodes("clearAll");
       changeSelectEdges("select", [props.transition.id]);

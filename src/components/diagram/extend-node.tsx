@@ -9,8 +9,8 @@ export function ExtendNodeContainer(props: {
   const {
     extendNodeModel: { resizeCommentNode },
     extendEdgeModel: { addEndEdge },
-    nodeModel: { changeSelectNodes },
-    diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
+    nodeModel: { changeSelectNodes, nodeList },
+    diagramModel: { toolbar, dragType, setDragType, setAddingLineFrom },
     dialog: { setOpenDialog },
   } = useAppContext();
 
@@ -21,13 +21,16 @@ export function ExtendNodeContainer(props: {
       case "cursor":
         if (e.shiftKey) {
           changeSelectNodes("toggle", [props.node.id]);
-          setDragType("none");
+          setDragType({ type: "none" });
           e.stopPropagation();
         } else {
           if (!props.node.selected) {
             changeSelectNodes("select", [props.node.id]);
           }
-          setDragType("moveNodes");
+          setDragType({
+            type: "moveNodes",
+            indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
+          });
         }
         break;
       case "transition":
@@ -38,10 +41,10 @@ export function ExtendNodeContainer(props: {
         );
         switch (props.node.type) {
           case "commentNode":
-            setDragType("addCommentEdge");
+            setDragType({ type: "addCommentEdge", fromComment: props.node });
             break;
           case "startNode":
-            setDragType("addStartEdge");
+            setDragType({ type: "addStartEdge", fromStart: props.node });
             break;
         }
         break;
@@ -49,10 +52,10 @@ export function ExtendNodeContainer(props: {
   }
 
   function handleMouseUp(_e: MouseEvent) {
-    switch (dragType()) {
+    switch (dragType().type) {
       case "addTransition":
         addEndEdge(props.node.id);
-        setDragType("none");
+        setDragType({ type: "none" });
         break;
     }
   }

@@ -19,21 +19,6 @@ import { ExtendEdgeContainer } from "./extend-edge";
 import { ExtendNodeContainer } from "./extend-node";
 import { TransitionEdgeContainer } from "./transition-edge";
 
-export type DragType =
-  | "none"
-  | "scroll"
-  | "addActivity"
-  | "moveNodes"
-  | "resizeActivityLeft"
-  | "resizeActivityRight"
-  | "addTransition"
-  | "addCommentNode"
-  | "addCommentEdge"
-  | "addStartNode"
-  | "addStartEdge"
-  | "addEndNode"
-  | "addEndEdge";
-
 export function DiagramContainer(): JSXElement {
   const {
     activityNodeModel: { addActivity, resizeLeft, resizeRight },
@@ -46,7 +31,7 @@ export function DiagramContainer(): JSXElement {
       nodeList,
     },
     edgeModel: { changeSelectEdges, edgeList },
-    diagram: {
+    diagramModel: {
       svgRect,
       setSvgRect,
       viewBox,
@@ -76,14 +61,14 @@ export function DiagramContainer(): JSXElement {
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
 
-    if (dragType() === "none") {
+    if (dragType().type === "none") {
       const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
       const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
       switch (toolbar()) {
         case "cursor":
           changeSelectNodes("clearAll");
           changeSelectEdges("clearAll");
-          setDragType("scroll");
+          setDragType({ type: "scroll" });
           return;
         case "transition":
           return;
@@ -92,7 +77,7 @@ export function DiagramContainer(): JSXElement {
             const activity = addActivity("manualActivity", selectedActor().id, x, y);
             changeTopLayer(activity.id);
             changeSelectNodes("select", [activity.id]);
-            setDragType("addActivity");
+            setDragType({ type: "addActivity" });
           }
           return;
         case "addAutoActivity":
@@ -100,7 +85,7 @@ export function DiagramContainer(): JSXElement {
             const activity = addActivity("autoActivity", selectedActor().id, x, y);
             changeTopLayer(activity.id);
             changeSelectNodes("select", [activity.id]);
-            setDragType("addActivity");
+            setDragType({ type: "addActivity" });
           }
           return;
         case "addUserActivity":
@@ -108,28 +93,28 @@ export function DiagramContainer(): JSXElement {
             const activity = addActivity("userActivity", selectedActor().id, x, y);
             changeTopLayer(activity.id);
             changeSelectNodes("select", [activity.id]);
-            setDragType("addActivity");
+            setDragType({ type: "addActivity" });
           }
           return;
         case "addCommentNode":
           {
             const comment = addCommentNode(x, y);
             changeSelectNodes("select", [comment.id]);
-            setDragType("addCommentNode");
+            setDragType({ type: "addCommentNode" });
           }
           return;
         case "addStartNode":
           {
             const startNode = addStartNode(x, y);
             changeSelectNodes("select", [startNode.id]);
-            setDragType("addStartNode");
+            setDragType({ type: "addStartNode" });
           }
           return;
         case "addEndNode":
           {
             const endNode = addEndNode(x, y);
             changeSelectNodes("select", [endNode.id]);
-            setDragType("addEndNode");
+            setDragType({ type: "addEndNode" });
           }
           return;
       }
@@ -140,7 +125,7 @@ export function DiagramContainer(): JSXElement {
     const moveX = e.movementX / zoom();
     const moveY = e.movementY / zoom();
 
-    switch (dragType()) {
+    switch (dragType().type) {
       case "scroll":
         setViewBox({
           x: viewBox.x - moveX,
@@ -172,7 +157,7 @@ export function DiagramContainer(): JSXElement {
   }
 
   function handleDocumentMouseUp() {
-    setDragType("none");
+    setDragType({ type: "none" });
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -187,10 +172,10 @@ export function DiagramContainer(): JSXElement {
       svgRect={svgRect}
       setSvgRect={setSvgRect}
       addingLine={
-        dragType() === "addTransition" ||
-        dragType() === "addStartEdge" ||
-        dragType() === "addEndEdge" ||
-        dragType() === "addCommentEdge"
+        dragType().type === "addTransition" ||
+        dragType().type === "addStartEdge" ||
+        dragType().type === "addEndEdge" ||
+        dragType().type === "addCommentEdge"
           ? addingLine()
           : null
       }

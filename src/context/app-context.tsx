@@ -1,13 +1,10 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSX, createContext, createMemo, createSignal, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
-import { DragType } from "../components/diagram/diagram";
-import { ToolbarType } from "../components/toolbar/toolbar";
-import { defaultLine, defaultRectangle } from "../constants/app-const";
 import { enDict } from "../constants/i18n-en";
 import { jaDict } from "../constants/i18n-ja";
 import { makeActivityModel } from "../data-model/activity-node-model";
 import { makeActorModel } from "../data-model/actor-model";
+import { makeDiagramModel } from "../data-model/diagram-model";
 import { makeEdgeModel } from "../data-model/edge-model";
 import { makeExtendEdgeModel } from "../data-model/extend-edge-model";
 import { makeExtendNodeModel } from "../data-model/extend-node-model";
@@ -19,10 +16,8 @@ import {
   ActivityNode,
   ActorEntity,
   CommentNode,
-  Line,
   ProcessEntity,
   ProjectEntity,
-  Rectangle,
   TransitionEdge,
 } from "../data-source/data-type";
 
@@ -39,6 +34,7 @@ function makeModelContext() {
   const edgeModel = makeEdgeModel(nodeModel);
   const processModel = makeProcessModel(actorModel, nodeModel, edgeModel);
   const projectModel = makeProjectModel(processModel);
+  const diagramModel = makeDiagramModel(nodeModel, edgeModel);
 
   const activityNodeModel = makeActivityModel(nodeModel);
   const transitionEdgeModel = makeTransactionEdgeModel(edgeModel, nodeModel);
@@ -51,49 +47,11 @@ function makeModelContext() {
     edgeModel,
     processModel,
     projectModel,
+    diagramModel,
     activityNodeModel,
     transitionEdgeModel,
     extendNodeModel,
     extendEdgeModel,
-  };
-}
-
-function makeDiagramContext() {
-  const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
-  const [zoom, setZoom] = createSignal<number>(1.0);
-  const [dragType, setDragType] = createSignal<DragType>("none");
-  const [addingLine, setAddingLine] = createSignal<Line>(defaultLine);
-  const [svgRect, setSvgRect] = createStore({ ...defaultRectangle });
-  const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
-
-  function setAddingLineFrom(x: number, y: number) {
-    setAddingLine({ p1: { x, y }, p2: { x, y } });
-  }
-
-  function setAddingLineTo(x: number, y: number) {
-    setAddingLine({ p1: addingLine().p1, p2: { x, y } });
-  }
-
-  function autoRectangle(rect: Rectangle) {
-    setZoom(Math.min(svgRect.width / rect.width, svgRect.height / rect.height));
-    setViewBox({ x: rect.x, y: rect.y, width: viewBox.width, height: viewBox.height });
-  }
-
-  return {
-    toolbar,
-    setToolbar,
-    zoom,
-    setZoom,
-    dragType,
-    setDragType,
-    addingLine,
-    setAddingLineFrom,
-    setAddingLineTo,
-    svgRect,
-    setSvgRect,
-    autoRectangle,
-    viewBox,
-    setViewBox,
   };
 }
 
@@ -125,7 +83,6 @@ function makeDialogContext() {
 const appContextValue = {
   i18n: makeI18nContext(),
   ...makeModelContext(),
-  diagram: makeDiagramContext(),
   dialog: makeDialogContext(),
 };
 
@@ -140,7 +97,7 @@ const AppContext = createContext<{
   transitionEdgeModel: ReturnType<typeof makeTransactionEdgeModel>;
   extendNodeModel: ReturnType<typeof makeExtendNodeModel>;
   extendEdgeModel: ReturnType<typeof makeExtendEdgeModel>;
-  diagram: ReturnType<typeof makeDiagramContext>;
+  diagramModel: ReturnType<typeof makeDiagramModel>;
   dialog: ReturnType<typeof makeDialogContext>;
 }>(appContextValue);
 

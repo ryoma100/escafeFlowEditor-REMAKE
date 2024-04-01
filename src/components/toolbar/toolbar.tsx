@@ -25,7 +25,7 @@ export type ToolbarType =
 
 export function Toolbar(): JSXElement {
   const {
-    diagram: { toolbar, setToolbar },
+    diagramModel: { toolbar, setToolbar },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

@@ -19,22 +19,28 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   const {
     activityNodeModel: { resizeActivityHeight, updateJoinType, updateSplitType },
     actorModel: { actorList },
-    nodeModel: { changeSelectNodes, changeTopLayer },
+    nodeModel: { changeSelectNodes, changeTopLayer, nodeList },
     edgeModel: { changeSelectEdges },
     extendEdgeModel: { addCommentEdge, addStartEdge },
     transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
     dialog: { setOpenDialog },
-    diagram: { toolbar, dragType, setDragType, setAddingLineFrom },
+    diagramModel: { toolbar, dragType, setDragType, setAddingLineFrom },
   } = useAppContext();
 
   function handleLeftMouseDown(_e: MouseEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType("resizeActivityLeft");
+    setDragType({
+      type: "resizeActivityLeft",
+      index: nodeList.findIndex((it) => it.id === props.activity.id),
+    });
   }
 
   function handleRightMouseDown(_e: MouseEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType("resizeActivityRight");
+    setDragType({
+      type: "resizeActivityRight",
+      index: nodeList.findIndex((it) => it.id === props.activity.id),
+    });
   }
 
   function handleMouseDown(e: MouseEvent) {
@@ -44,14 +50,17 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
       case "cursor":
         if (e.shiftKey) {
           changeSelectNodes("toggle", [props.activity.id]);
-          setDragType("none");
+          setDragType({ type: "none" });
         } else {
           if (!props.activity.selected) {
             changeSelectNodes("select", [props.activity.id]);
             changeSelectEdges("clearAll");
           }
           changeTopLayer(props.activity.id);
-          setDragType("moveNodes");
+          setDragType({
+            type: "moveNodes",
+            indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
+          });
         }
         break;
       case "transition":
@@ -60,13 +69,13 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
           props.activity.x + props.activity.width,
           props.activity.y + props.activity.height / 2,
         );
-        setDragType("addTransition");
+        setDragType({ type: "addTransition", fromActivity: props.activity });
         break;
     }
   }
 
   function handleMouseUp(_e: MouseEvent) {
-    switch (dragType()) {
+    switch (dragType().type) {
       case "addTransition":
         {
           const transition = addTransitionEdge(props.activity.id);
@@ -80,16 +89,16 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
               getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
             );
           }
-          setDragType("none");
+          setDragType({ type: "none" });
         }
         break;
       case "addCommentEdge":
         addCommentEdge(props.activity.id);
-        setDragType("none");
+        setDragType({ type: "none" });
         break;
       case "addStartEdge":
         addStartEdge(props.activity.id);
-        setDragType("none");
+        setDragType({ type: "none" });
         break;
     }
   }
