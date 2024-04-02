@@ -1,6 +1,6 @@
 import { For, JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
 import { produce } from "solid-js/store";
-import { defaultRectangle } from "../../constants/app-const";
+import { defaultCircle, defaultRectangle } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import {
   ActivityNode,
@@ -17,7 +17,8 @@ import {
   StartNode,
   TransitionEdge,
 } from "../../data-source/data-type";
-import { intersectRect } from "../../utils/rectangle-utils";
+import { pointLength } from "../../utils/point-utils";
+import { intersectRect, minLengthOfPointToRect } from "../../utils/rectangle-utils";
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
 import { ExtendNodeContainer } from "./extend-node";
@@ -52,6 +53,7 @@ export function DiagramContainer(): JSXElement {
   } = useAppContext();
 
   const [selectBox, setSelectBox] = createSignal<Rectangle>(defaultRectangle);
+  const [selectCircle, setSelectCircle] = createSignal<Circle>(defaultCircle);
 
   onMount(() => {
     document.addEventListener("mousemove", handleDocumentMouseMove);
@@ -77,7 +79,7 @@ export function DiagramContainer(): JSXElement {
         {
           if (mouseDownTime + 500 > new Date().getTime()) {
             // onDoubleMouseDown
-            if (e.ctrlKey) {
+            if (e.ctrlKey || e.metaKey) {
               //
             } else if (e.shiftKey) {
               //
@@ -88,7 +90,8 @@ export function DiagramContainer(): JSXElement {
             // onSingleMouseDown
             mouseDownTime = new Date().getTime();
             setSelectBox(defaultRectangle);
-            if (e.ctrlKey) {
+            setSelectCircle(defaultCircle);
+            if (e.ctrlKey || e.metaKey) {
               setDragType({ type: "circleSelect", centerPoint: { x, y } });
             } else if (e.shiftKey) {
               setDragType({ type: "boxSelect", centerPoint: { x, y } });
@@ -171,6 +174,33 @@ export function DiagramContainer(): JSXElement {
           );
         }
         return;
+      case "boxSelect":
+        {
+          const diffX = Math.abs(x - drag.centerPoint.x);
+          const diffY = Math.abs(y - drag.centerPoint.y);
+          const rect: Rectangle = {
+            x: drag.centerPoint.x - diffX,
+            y: drag.centerPoint.y - diffY,
+            width: diffX * 2,
+            height: diffY * 2,
+          };
+          setSelectBox(rect);
+          setNodeList(
+            (_it) => true,
+            produce((it) => (it.selected = intersectRect(rect, it))),
+          );
+        }
+        return;
+      case "circleSelect":
+        {
+          const r = pointLength(drag.centerPoint, { x, y });
+          setSelectCircle({ cx: drag.centerPoint.x, cy: drag.centerPoint.y, r });
+          setNodeList(
+            (_it) => true,
+            produce((it) => (it.selected = minLengthOfPointToRect(drag.centerPoint, it) < r)),
+          );
+        }
+        return;
       case "scroll":
         setViewBox({
           x: viewBox.x - moveX,
@@ -229,7 +259,7 @@ export function DiagramContainer(): JSXElement {
       selectBox={
         dragType().type === "select" || dragType().type === "boxSelect" ? selectBox() : null
       }
-      selectCircle={null}
+      selectCircle={dragType().type === "circleSelect" ? selectCircle() : null}
       onMouseDown={handleMouseDown}
       onKeyDown={handleKeyDown}
     />
@@ -348,6 +378,17 @@ export function DiagramView(props: {
               y={props.selectBox?.y}
               width={props.selectBox?.width}
               height={props.selectBox?.height}
+            />
+          </Show>
+        </g>
+
+        <g data-id="select-circle">
+          <Show when={props.selectCircle != null}>
+            <circle
+              class="pointer-events-none fill-primary3 stroke-primary2 opacity-50"
+              cx={props.selectCircle?.cx}
+              cy={props.selectCircle?.cy}
+              r={props.selectCircle?.r}
             />
           </Show>
         </g>

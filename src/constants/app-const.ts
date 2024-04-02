@@ -1,4 +1,4 @@
-import { Line, Point, Rectangle } from "../data-source/data-type";
+import { Circle, Line, Point, Rectangle } from "../data-source/data-type";
 
 export const ACTIVITY_MIN_WIDTH = 100;
 export const ACTIVITY_MIN_HEIGHT = 80;
@@ -13,3 +13,4 @@ export const defaultRectangle: Rectangle = {
   width: 0,
   height: 0,
 };
+export const defaultCircle: Circle = { cx: 0, cy: 0, r: 0 };
