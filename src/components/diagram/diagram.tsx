@@ -1,7 +1,10 @@
-import { For, JSXElement, Show, createEffect, onMount } from "solid-js";
+import { For, JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
+import { produce } from "solid-js/store";
+import { defaultRectangle } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import {
   ActivityNode,
+  Circle,
   CommentEdge,
   CommentNode,
   EndEdge,
@@ -14,6 +17,7 @@ import {
   StartNode,
   TransitionEdge,
 } from "../../data-source/data-type";
+import { intersectRect } from "../../utils/rectangle-utils";
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
 import { ExtendNodeContainer } from "./extend-node";
@@ -29,8 +33,9 @@ export function DiagramContainer(): JSXElement {
       moveSelectedNodesPosition: moveSelectedNodes,
       changeTopLayer,
       nodeList,
+      setNodeList,
     },
-    edgeModel: { changeSelectEdges, edgeList },
+    edgeModel: { edgeList },
     diagramModel: {
       svgRect,
       setSvgRect,
@@ -46,6 +51,8 @@ export function DiagramContainer(): JSXElement {
     },
   } = useAppContext();
 
+  const [selectBox, setSelectBox] = createSignal<Rectangle>(defaultRectangle);
+
   onMount(() => {
     document.addEventListener("mousemove", handleDocumentMouseMove);
     document.addEventListener("mouseup", handleDocumentMouseUp);
@@ -58,74 +65,112 @@ export function DiagramContainer(): JSXElement {
     });
   });
 
+  let mouseDownTime = new Date().getTime();
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
+    if (dragType().type !== "none") return;
 
-    if (dragType().type === "none") {
-      const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
-      const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
-      switch (toolbar()) {
-        case "cursor":
-          changeSelectNodes("clearAll");
-          changeSelectEdges("clearAll");
-          setDragType({ type: "scroll" });
-          return;
-        case "transition":
-          return;
-        case "addManualActivity":
-          {
-            const activity = addActivity("manualActivity", selectedActor().id, x, y);
-            changeTopLayer(activity.id);
-            changeSelectNodes("select", [activity.id]);
-            setDragType({ type: "addActivity" });
+    const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
+    const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
+    switch (toolbar()) {
+      case "cursor":
+        {
+          if (mouseDownTime + 500 > new Date().getTime()) {
+            // onDoubleMouseDown
+            if (e.ctrlKey) {
+              //
+            } else if (e.shiftKey) {
+              //
+            } else {
+              setDragType({ type: "scroll" });
+            }
+          } else {
+            // onSingleMouseDown
+            mouseDownTime = new Date().getTime();
+            setSelectBox(defaultRectangle);
+            if (e.ctrlKey) {
+              setDragType({ type: "circleSelect", centerPoint: { x, y } });
+            } else if (e.shiftKey) {
+              setDragType({ type: "boxSelect", centerPoint: { x, y } });
+            } else {
+              setDragType({ type: "select", startPoint: { x, y } });
+            }
           }
-          return;
-        case "addAutoActivity":
-          {
-            const activity = addActivity("autoActivity", selectedActor().id, x, y);
-            changeTopLayer(activity.id);
-            changeSelectNodes("select", [activity.id]);
-            setDragType({ type: "addActivity" });
-          }
-          return;
-        case "addUserActivity":
-          {
-            const activity = addActivity("userActivity", selectedActor().id, x, y);
-            changeTopLayer(activity.id);
-            changeSelectNodes("select", [activity.id]);
-            setDragType({ type: "addActivity" });
-          }
-          return;
-        case "addCommentNode":
-          {
-            const comment = addCommentNode(x, y);
-            changeSelectNodes("select", [comment.id]);
-            setDragType({ type: "addCommentNode" });
-          }
-          return;
-        case "addStartNode":
-          {
-            const startNode = addStartNode(x, y);
-            changeSelectNodes("select", [startNode.id]);
-            setDragType({ type: "addStartNode" });
-          }
-          return;
-        case "addEndNode":
-          {
-            const endNode = addEndNode(x, y);
-            changeSelectNodes("select", [endNode.id]);
-            setDragType({ type: "addEndNode" });
-          }
-          return;
-      }
+        }
+        return;
+      case "transition":
+        return;
+      case "addManualActivity":
+        {
+          const activity = addActivity("manualActivity", selectedActor().id, x, y);
+          changeTopLayer(activity.id);
+          changeSelectNodes("select", [activity.id]);
+          setDragType({ type: "addActivity" });
+        }
+        return;
+      case "addAutoActivity":
+        {
+          const activity = addActivity("autoActivity", selectedActor().id, x, y);
+          changeTopLayer(activity.id);
+          changeSelectNodes("select", [activity.id]);
+          setDragType({ type: "addActivity" });
+        }
+        return;
+      case "addUserActivity":
+        {
+          const activity = addActivity("userActivity", selectedActor().id, x, y);
+          changeTopLayer(activity.id);
+          changeSelectNodes("select", [activity.id]);
+          setDragType({ type: "addActivity" });
+        }
+        return;
+      case "addCommentNode":
+        {
+          const comment = addCommentNode(x, y);
+          changeSelectNodes("select", [comment.id]);
+          setDragType({ type: "addCommentNode" });
+        }
+        return;
+      case "addStartNode":
+        {
+          const startNode = addStartNode(x, y);
+          changeSelectNodes("select", [startNode.id]);
+          setDragType({ type: "addStartNode" });
+        }
+        return;
+      case "addEndNode":
+        {
+          const endNode = addEndNode(x, y);
+          changeSelectNodes("select", [endNode.id]);
+          setDragType({ type: "addEndNode" });
+        }
+        return;
     }
   }
 
   function handleDocumentMouseMove(e: MouseEvent) {
+    const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
+    const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
     const moveX = e.movementX / zoom();
     const moveY = e.movementY / zoom();
 
-    switch (dragType().type) {
+    const drag = dragType();
+    switch (drag.type) {
+      case "select":
+        {
+          const rect: Rectangle = {
+            x: Math.min(drag.startPoint.x, x),
+            y: Math.min(drag.startPoint.y, y),
+            width: Math.abs(x - drag.startPoint.x),
+            height: Math.abs(y - drag.startPoint.y),
+          };
+          setSelectBox(rect);
+          setNodeList(
+            (_it) => true,
+            produce((it) => (it.selected = intersectRect(rect, it))),
+          );
+        }
+        return;
       case "scroll":
         setViewBox({
           x: viewBox.x - moveX,
@@ -171,6 +216,8 @@ export function DiagramContainer(): JSXElement {
       viewBox={viewBox}
       svgRect={svgRect}
       setSvgRect={setSvgRect}
+      nodeList={nodeList}
+      edgeList={edgeList}
       addingLine={
         dragType().type === "addTransition" ||
         dragType().type === "addStartEdge" ||
@@ -179,8 +226,10 @@ export function DiagramContainer(): JSXElement {
           ? addingLine()
           : null
       }
-      nodeList={nodeList}
-      edgeList={edgeList}
+      selectBox={
+        dragType().type === "select" || dragType().type === "boxSelect" ? selectBox() : null
+      }
+      selectCircle={null}
       onMouseDown={handleMouseDown}
       onKeyDown={handleKeyDown}
     />
@@ -190,9 +239,11 @@ export function DiagramContainer(): JSXElement {
 export function DiagramView(props: {
   viewBox: Rectangle;
   svgRect: Rectangle;
-  addingLine: Line | null;
   nodeList: INode[];
   edgeList: IEdge[];
+  addingLine: Line | null;
+  selectBox: Rectangle | null;
+  selectCircle: Circle | null;
   setSvgRect: (rect: Rectangle) => void;
   onMouseDown: (e: MouseEvent) => void;
   onKeyDown: (e: KeyboardEvent) => void;
@@ -285,6 +336,18 @@ export function DiagramView(props: {
               y1={props.addingLine?.p1.y}
               x2={props.addingLine?.p2.x}
               y2={props.addingLine?.p2.y}
+            />
+          </Show>
+        </g>
+
+        <g data-id="select-box">
+          <Show when={props.selectBox != null}>
+            <rect
+              class="pointer-events-none fill-primary3 stroke-primary2 opacity-50"
+              x={props.selectBox?.x}
+              y={props.selectBox?.y}
+              width={props.selectBox?.width}
+              height={props.selectBox?.height}
             />
           </Show>
         </g>

@@ -2,12 +2,22 @@ import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { ToolbarType } from "../components/toolbar/toolbar";
 import { defaultLine, defaultRectangle } from "../constants/app-const";
-import { ActivityNode, CommentNode, Line, Rectangle, StartNode } from "../data-source/data-type";
+import {
+  ActivityNode,
+  CommentNode,
+  Line,
+  Point,
+  Rectangle,
+  StartNode,
+} from "../data-source/data-type";
 import { makeEdgeModel } from "./edge-model";
 import { makeNodeModel } from "./node-model";
 
 export type DragType =
   | { type: "none" }
+  | { type: "select"; startPoint: Point }
+  | { type: "boxSelect"; centerPoint: Point }
+  | { type: "circleSelect"; centerPoint: Point }
   | { type: "scroll" }
   | { type: "moveNodes"; indexes: number[] }
   | { type: "resizeActivityLeft"; index: number }

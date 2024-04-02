@@ -73,6 +73,8 @@ export type Rectangle = {
   height: number;
 };
 
+export type Circle = { cx: number; cy: number; r: number };
+
 //
 // Node
 //
