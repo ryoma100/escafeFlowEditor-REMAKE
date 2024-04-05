@@ -4,7 +4,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function AboutDialog(): JSXElement {
   const {
-    dialog: { openDialog, setOpenDialog },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
   } = useAppContext();
 
   createEffect(() => {

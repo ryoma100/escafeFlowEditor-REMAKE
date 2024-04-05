@@ -7,7 +7,7 @@ export function ConfirmDialog(): JSXElement {
   const {
     projectModel: { initProject },
     processModel: { removeProcess },
-    dialog: { openDialog, setOpenDialog },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

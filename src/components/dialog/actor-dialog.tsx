@@ -10,7 +10,11 @@ const dummy = dataFactory.createActorEntity([]);
 export function ActorDialog(): JSXElement {
   const {
     actorModel: { updateActor },
-    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
+    dialog: {
+      modalDialog: openDialog,
+      setModalDialog: setOpenDialog,
+      setMessageAlert: setOpenMessageDialog,
+    },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ActorEntity>(dummy);

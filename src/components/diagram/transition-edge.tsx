@@ -8,8 +8,8 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     activityNodeModel: { getActivityNode },
     nodeModel: { changeSelectNodes },
     edgeModel: { changeSelectEdges },
-    diagramModel: { setDragType },
-    dialog: { setOpenDialog },
+    diagramModel: { setDragMode: setDragType },
+    dialog: { setModalDialog: setOpenDialog },
   } = useAppContext();
 
   const fromActivity = () => getActivityNode(props.transition.fromNodeId);

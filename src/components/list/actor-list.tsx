@@ -8,7 +8,7 @@ export function ActorList(): JSXElement {
   const {
     nodeModel: { nodeList },
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
-    dialog: { setOpenDialog, setOpenMessageDialog },
+    dialog: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

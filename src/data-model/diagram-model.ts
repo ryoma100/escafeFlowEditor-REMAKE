@@ -13,7 +13,7 @@ import {
 import { makeEdgeModel } from "./edge-model";
 import { makeNodeModel } from "./node-model";
 
-export type DragType =
+export type DragModeType =
   | { type: "none" }
   | { type: "select"; startPoint: Point }
   | { type: "boxSelect"; centerPoint: Point }
@@ -39,7 +39,7 @@ export function makeDiagramModel(
 ) {
   const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
   const [zoom, setZoom] = createSignal<number>(1.0);
-  const [dragType, setDragType] = createSignal<DragType>({ type: "none" });
+  const [dragMode, setDragMode] = createSignal<DragModeType>({ type: "none" });
   const [addingLine, setAddingLine] = createSignal<Line>(defaultLine);
   const [svgRect, setSvgRect] = createStore({ ...defaultRectangle });
   const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
@@ -65,8 +65,8 @@ export function makeDiagramModel(
     setToolbar,
     zoom,
     setZoom,
-    dragType,
-    setDragType,
+    dragMode,
+    setDragMode,
     addingLine,
     setAddingLineFrom,
     setAddingLineTo,

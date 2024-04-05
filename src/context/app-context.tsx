@@ -55,28 +55,28 @@ function makeModelContext() {
   };
 }
 
-export type DialogType =
+export type ModalDialogType =
+  | { type: "initAll" }
   | { type: "load" }
   | { type: "save"; project: ProjectEntity }
-  | { type: "about" }
   | { type: "project"; project: ProjectEntity }
   | { type: "process"; process: ProcessEntity }
+  | { type: "deleteProcess"; process: ProcessEntity }
   | { type: "actor"; actor: ActorEntity }
   | { type: "activity"; activity: ActivityNode }
   | { type: "transition"; transition: TransitionEdge }
   | { type: "comment"; comment: CommentNode }
-  | { type: "initAll" }
-  | { type: "deleteProcess"; process: ProcessEntity };
+  | { type: "about" };
 
 function makeDialogContext() {
-  const [openDialog, setOpenDialog] = createSignal<DialogType | null>(null);
-  const [openMessageDialog, setOpenMessageDialog] = createSignal<keyof typeof enDict | null>(null);
+  const [modalDialog, setModalDialog] = createSignal<ModalDialogType | null>(null);
+  const [messageAlert, setMessageAlert] = createSignal<keyof typeof enDict | null>(null);
 
   return {
-    openDialog,
-    setOpenDialog,
-    openMessageDialog,
-    setOpenMessageDialog,
+    modalDialog,
+    setModalDialog,
+    messageAlert,
+    setMessageAlert,
   };
 }
 

@@ -5,7 +5,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function MessageDialog(): JSXElement {
   const {
-    dialog: { openMessageDialog, setOpenMessageDialog },
+    dialog: { messageAlert: openMessageDialog, setMessageAlert: setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

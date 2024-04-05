@@ -10,7 +10,7 @@ const dummy = dataFactory.createCommentNode([], 0, 0);
 export function CommentDialog(): JSXElement {
   const {
     extendNodeModel: { updateComment },
-    dialog: { openDialog, setOpenDialog },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<CommentNode>(dummy);

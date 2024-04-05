@@ -23,8 +23,8 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
     edgeModel: { changeSelectEdges },
     extendEdgeModel: { addCommentEdge, addStartEdge },
     transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
-    dialog: { setOpenDialog },
-    diagramModel: { toolbar, dragType, setDragType, setAddingLineFrom },
+    dialog: { setModalDialog },
+    diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
   } = useAppContext();
 
   function handleLeftMouseDown(_e: MouseEvent) {
@@ -104,7 +104,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   }
 
   function handleDblClick() {
-    setOpenDialog({ type: "activity", activity: props.activity });
+    setModalDialog({ type: "activity", activity: props.activity });
   }
 
   return (

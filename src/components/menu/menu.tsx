@@ -10,7 +10,7 @@ export function AppMenu(): JSXElement {
     nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
     activityNodeModel: { updateAllJoinSplitType },
     edgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
-    dialog: { setOpenDialog, setOpenMessageDialog },
+    dialog: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

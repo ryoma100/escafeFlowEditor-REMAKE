@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function LoadDialog(): JSXElement {
   const {
-    dialog: { openDialog, setOpenDialog },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     processModel: { load },
     i18n: { dict },
   } = useAppContext();

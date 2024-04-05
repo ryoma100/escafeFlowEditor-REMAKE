@@ -21,7 +21,11 @@ export function ActivityDialog(): JSXElement {
     processModel: { selectedProcess },
     actorModel: { actorList },
     activityNodeModel: { updateActivity },
-    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
+    dialog: {
+      modalDialog: openDialog,
+      setModalDialog: setOpenDialog,
+      setMessageAlert: setOpenMessageDialog,
+    },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

@@ -7,7 +7,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 export function ProcessList(): JSXElement {
   const {
     processModel: { processList, selectedProcess, addProcess, changeProcess },
-    dialog: { setOpenDialog },
+    dialog: { setModalDialog: setOpenDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

@@ -10,7 +10,11 @@ const dummy = dataFactory.createTransitionEdge([], 0, 0);
 
 export function TransitionDialog(): JSXElement {
   const {
-    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
+    dialog: {
+      modalDialog: openDialog,
+      setModalDialog: setOpenDialog,
+      setMessageAlert: setOpenMessageDialog,
+    },
     transitionEdgeModel: { updateTransitionEdge },
     i18n: { dict },
   } = useAppContext();

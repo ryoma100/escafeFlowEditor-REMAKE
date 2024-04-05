@@ -16,7 +16,11 @@ export function ProcessDialog(): JSXElement {
   const {
     processModel: { updateProcessDetail },
     activityNodeModel: { getActivityNodes },
-    dialog: { openDialog, setOpenDialog, setOpenMessageDialog },
+    dialog: {
+      modalDialog: openDialog,
+      setModalDialog: setOpenDialog,
+      setMessageAlert: setOpenMessageDialog,
+    },
   } = useAppContext();
 
   let process: ProcessEntity = dummy;

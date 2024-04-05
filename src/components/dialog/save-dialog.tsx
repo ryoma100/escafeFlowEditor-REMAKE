@@ -6,7 +6,7 @@ import { ButtonsContainer } from "../parts/buttons-container";
 
 export function SaveDialog(): JSXElement {
   const {
-    dialog: { openDialog, setOpenDialog },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     i18n: { dict },
   } = useAppContext();
   const t = i18n.translator(dict);

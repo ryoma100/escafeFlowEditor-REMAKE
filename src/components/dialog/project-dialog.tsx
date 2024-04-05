@@ -10,7 +10,7 @@ const dummy = dataFactory.createProject();
 export function ProjectDialog(): JSXElement {
   const {
     projectModel: { setProjectDetail },
-    dialog: { openDialog, setOpenDialog },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
   } = useAppContext();
 
   const [formData, setFormData] = createStore<ProjectDetailEntity>(dummy.detail);

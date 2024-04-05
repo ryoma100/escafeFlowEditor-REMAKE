@@ -10,8 +10,8 @@ export function ExtendNodeContainer(props: {
     extendNodeModel: { resizeCommentNode },
     extendEdgeModel: { addEndEdge },
     nodeModel: { changeSelectNodes, nodeList },
-    diagramModel: { toolbar, dragType, setDragType, setAddingLineFrom },
-    dialog: { setOpenDialog },
+    diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
+    dialog: { setModalDialog: setOpenDialog },
   } = useAppContext();
 
   function handleMouseDown(e: MouseEvent) {
