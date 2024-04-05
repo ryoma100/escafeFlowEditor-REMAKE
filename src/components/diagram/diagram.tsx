@@ -35,6 +35,7 @@ export function DiagramContainer(): JSXElement {
       changeTopLayer,
       nodeList,
       setNodeList,
+      scaleSelectedNodesPosition,
     },
     edgeModel: { edgeList },
     diagramModel: {
@@ -80,9 +81,16 @@ export function DiagramContainer(): JSXElement {
           if (mouseDownTime + 500 > new Date().getTime()) {
             // onDoubleMouseDown
             if (e.ctrlKey || e.metaKey) {
-              //
+              setDragType({
+                type: "rotateNodes",
+                indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
+              });
             } else if (e.shiftKey) {
-              //
+              setDragType({
+                type: "scaleNodes",
+                basePoint: { x, y },
+                indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
+              });
             } else {
               setDragType({ type: "scroll" });
             }
@@ -213,6 +221,12 @@ export function DiagramContainer(): JSXElement {
       case "addEndNode":
       case "moveNodes":
         moveSelectedNodes(moveX, moveY);
+        return;
+      case "scaleNodes":
+        scaleSelectedNodesPosition(drag.basePoint, moveX, moveY);
+        return;
+      case "rotateNodes":
+        //
         return;
       case "resizeActivityLeft":
         resizeLeft(moveX);

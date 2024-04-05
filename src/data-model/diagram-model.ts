@@ -20,6 +20,8 @@ export type DragType =
   | { type: "circleSelect"; centerPoint: Point }
   | { type: "scroll" }
   | { type: "moveNodes"; indexes: number[] }
+  | { type: "scaleNodes"; basePoint: Point; indexes: number[] }
+  | { type: "rotateNodes"; indexes: number[] }
   | { type: "resizeActivityLeft"; index: number }
   | { type: "resizeActivityRight"; index: number }
   | { type: "addActivity" }

@@ -1,6 +1,6 @@
 import { createStore, produce } from "solid-js/store";
 import { deepUnwrap } from "../data-source/data-factory";
-import { INode, ProcessEntity } from "../data-source/data-type";
+import { INode, Point, ProcessEntity } from "../data-source/data-type";
 
 export function makeNodeModel() {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
@@ -44,6 +44,17 @@ export function makeNodeModel() {
       produce((it) => {
         it.x += moveX;
         it.y += moveY;
+      }),
+    );
+  }
+
+  function scaleSelectedNodesPosition(basePoint: Point, moveX: number, moveY: number) {
+    setNodeList(
+      (it) => it.selected,
+      produce((it) => {
+        const centerPoint: Point = { x: it.x + it.width / 2, y: it.y + it.height / 2 };
+        it.x += centerPoint.x > basePoint.x ? moveX : -moveX;
+        it.y += centerPoint.y > basePoint.y ? moveY : -moveY;
       }),
     );
   }
@@ -116,5 +127,6 @@ export function makeNodeModel() {
     moveSelectedNodesPosition,
     changeTopLayer,
     computeMaxRectangle,
+    scaleSelectedNodesPosition,
   };
 }
