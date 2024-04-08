@@ -1,6 +1,7 @@
 import { createStore, produce } from "solid-js/store";
 import { deepUnwrap } from "../data-source/data-factory";
 import { INode, Point, ProcessEntity } from "../data-source/data-type";
+import { rotatePoint } from "../utils/point-utils";
 
 export function makeNodeModel() {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
@@ -55,6 +56,32 @@ export function makeNodeModel() {
         const centerPoint: Point = { x: it.x + it.width / 2, y: it.y + it.height / 2 };
         it.x += centerPoint.x > basePoint.x ? moveX : -moveX;
         it.y += centerPoint.y > basePoint.y ? moveY : -moveY;
+      }),
+    );
+  }
+
+  function rotateSelectedNodesPosition(basePoint: Point, moveX: number, moveY: number) {
+    const delta: number = (100 + moveY) / 100;
+    const angle: number = -moveX;
+
+    setNodeList(
+      (it) => it.selected,
+      produce((it) => {
+        const centerPoint: Point = { x: it.x + it.width / 2, y: it.y + it.height / 2 };
+        const point: Point = { x: it.x, y: it.y };
+        if (centerPoint.y > basePoint.y) {
+          point.y = basePoint.y + (point.y - basePoint.y) * delta;
+        } else {
+          point.y = basePoint.y - (basePoint.y - point.y) * delta;
+        }
+        if (centerPoint.x > basePoint.x) {
+          point.x = basePoint.x + (point.x - basePoint.x) * delta;
+        } else {
+          point.x = basePoint.x - (basePoint.x - point.x) * delta;
+        }
+        const newPoint: Point = rotatePoint(basePoint, angle, point);
+        it.x = newPoint.x;
+        it.y = newPoint.y;
       }),
     );
   }
@@ -128,5 +155,6 @@ export function makeNodeModel() {
     changeTopLayer,
     computeMaxRectangle,
     scaleSelectedNodesPosition,
+    rotateSelectedNodesPosition,
   };
 }

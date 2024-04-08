@@ -21,7 +21,7 @@ export type DragModeType =
   | { type: "scroll" }
   | { type: "moveNodes"; indexes: number[] }
   | { type: "scaleNodes"; basePoint: Point; indexes: number[] }
-  | { type: "rotateNodes"; indexes: number[] }
+  | { type: "rotateNodes"; basePoint: Point; indexes: number[] }
   | { type: "resizeActivityLeft"; index: number }
   | { type: "resizeActivityRight"; index: number }
   | { type: "addActivity" }
