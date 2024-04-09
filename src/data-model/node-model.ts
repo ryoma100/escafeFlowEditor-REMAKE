@@ -7,7 +7,7 @@ export function makeNodeModel() {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
 
   function load(newProcess: ProcessEntity) {
-    setNodeList(newProcess.nodes);
+    setNodeList(newProcess.nodeList);
   }
 
   function save(): INode[] {

@@ -85,13 +85,11 @@ export function DiagramContainer(): JSXElement {
               setDragType({
                 type: "rotateNodes",
                 basePoint: { x, y },
-                indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
               });
             } else if (e.shiftKey) {
               setDragType({
                 type: "scaleNodes",
                 basePoint: { x, y },
-                indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
               });
             } else {
               setDragType({ type: "scroll" });

@@ -90,58 +90,62 @@ const oneProcessData = (function () {
   const actor1 = process.actors[0];
   const actor2 = process.actors[1];
 
-  process.nodes.push(
-    dataFactory.createActivityNode(process.nodes, actor1.id, "manualActivity", 11, 12),
+  process.nodeList.push(
+    dataFactory.createActivityNode(process.nodeList, actor1.id, "manualActivity", 11, 12),
   );
-  const manualActivity = process.nodes[0] as ActivityNode;
-  process.nodes.push(
-    dataFactory.createActivityNode(process.nodes, actor2.id, "autoActivity", 21, 22),
+  const manualActivity = process.nodeList[0] as ActivityNode;
+  process.nodeList.push(
+    dataFactory.createActivityNode(process.nodeList, actor2.id, "autoActivity", 21, 22),
   );
-  const autoActivity = process.nodes[1] as ActivityNode;
+  const autoActivity = process.nodeList[1] as ActivityNode;
   autoActivity.applications = [
     { id: application1.id, ognl: "ognl1" },
     { id: application2.id, ognl: "ognl2" },
   ];
-  process.nodes.push(
-    dataFactory.createActivityNode(process.nodes, actor1.id, "manualTimerActivity", 31, 32),
+  process.nodeList.push(
+    dataFactory.createActivityNode(process.nodeList, actor1.id, "manualTimerActivity", 31, 32),
   );
-  const manualTimerActivity = process.nodes[2] as ActivityNode;
-  process.nodes.push(
-    dataFactory.createActivityNode(process.nodes, actor2.id, "autoTimerActivity", 41, 42),
+  const manualTimerActivity = process.nodeList[2] as ActivityNode;
+  process.nodeList.push(
+    dataFactory.createActivityNode(process.nodeList, actor2.id, "autoTimerActivity", 41, 42),
   );
-  const autoTimerActivity = process.nodes[3] as ActivityNode;
-  process.nodes.push(
-    dataFactory.createActivityNode(process.nodes, actor1.id, "userActivity", 51, 52),
+  const autoTimerActivity = process.nodeList[3] as ActivityNode;
+  process.nodeList.push(
+    dataFactory.createActivityNode(process.nodeList, actor1.id, "userActivity", 51, 52),
   );
-  const userActivity = process.nodes[4] as ActivityNode;
+  const userActivity = process.nodeList[4] as ActivityNode;
 
-  process.nodes.push(dataFactory.createStartNode(process.nodes, 10, 11));
-  const startNode = process.nodes[5];
-  process.nodes.push(dataFactory.createEndNode(process.nodes, 61, 62));
-  const endNode = process.nodes[6];
-  process.nodes.push(dataFactory.createCommentNode(process.nodes, 71, 72));
-  const commentNode = process.nodes[7] as CommentNode;
+  process.nodeList.push(dataFactory.createStartNode(process.nodeList, 10, 11));
+  const startNode = process.nodeList[5];
+  process.nodeList.push(dataFactory.createEndNode(process.nodeList, 61, 62));
+  const endNode = process.nodeList[6];
+  process.nodeList.push(dataFactory.createCommentNode(process.nodeList, 71, 72));
+  const commentNode = process.nodeList[7] as CommentNode;
 
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, manualTimerActivity.id, manualActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(process.edgeList, manualTimerActivity.id, manualActivity.id),
   );
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, manualActivity.id, autoActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(process.edgeList, manualActivity.id, autoActivity.id),
   );
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, userActivity.id, autoActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(process.edgeList, userActivity.id, autoActivity.id),
   );
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, autoActivity.id, manualTimerActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(process.edgeList, autoActivity.id, manualTimerActivity.id),
   );
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, autoActivity.id, autoTimerActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(process.edgeList, autoActivity.id, autoTimerActivity.id),
   );
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, manualTimerActivity.id, autoTimerActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(
+      process.edgeList,
+      manualTimerActivity.id,
+      autoTimerActivity.id,
+    ),
   );
-  process.edges.push(
-    dataFactory.createTransitionEdge(process.edges, autoTimerActivity.id, userActivity.id),
+  process.edgeList.push(
+    dataFactory.createTransitionEdge(process.edgeList, autoTimerActivity.id, userActivity.id),
   );
   manualActivity.joinType = "oneJoin";
   manualActivity.splitType = "oneSplit";
@@ -154,9 +158,13 @@ const oneProcessData = (function () {
   userActivity.joinType = "oneJoin";
   userActivity.splitType = "oneSplit";
 
-  process.edges.push(dataFactory.createStartEdge(process.edges, startNode.id, manualActivity.id));
-  process.edges.push(dataFactory.createEndEdge(process.edges, userActivity.id, endNode.id));
-  process.edges.push(dataFactory.createCommentEdge(process.edges, commentNode.id, userActivity.id));
+  process.edgeList.push(
+    dataFactory.createStartEdge(process.edgeList, startNode.id, manualActivity.id),
+  );
+  process.edgeList.push(dataFactory.createEndEdge(process.edgeList, userActivity.id, endNode.id));
+  process.edgeList.push(
+    dataFactory.createCommentEdge(process.edgeList, commentNode.id, userActivity.id),
+  );
 
   return project;
 })();

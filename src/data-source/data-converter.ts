@@ -86,7 +86,7 @@ export function exportXml(project: ProjectEntity): string {
                 },
               },
             })),
-            Activities: process.nodes
+            Activities: process.nodeList
               .filter((it) => it.type === "activityNode")
               .map((it) => {
                 const activity = it as ActivityNode;
@@ -110,7 +110,7 @@ export function exportXml(project: ProjectEntity): string {
                     ? {
                         Join: {
                           "@_Type": activity.joinType === "xorJoin" ? "XOR" : "AND",
-                          TransitionRefs: process.edges
+                          TransitionRefs: process.edgeList
                             .filter(
                               (it) => it.type === "transitionEdge" && it.toNodeId === activity.id,
                             )
@@ -127,7 +127,7 @@ export function exportXml(project: ProjectEntity): string {
                     ? {
                         Split: {
                           "@_Type": activity.splitType === "xorSplit" ? "XOR" : "AND",
-                          TransitionRefs: process.edges
+                          TransitionRefs: process.edgeList
                             .filter(
                               (it) => it.type === "transitionEdge" && it.fromNodeId === activity.id,
                             )
@@ -194,7 +194,7 @@ export function exportXml(project: ProjectEntity): string {
                   },
                 };
               }),
-            Transitions: process.edges
+            Transitions: process.edgeList
               .filter((it) => it.type === "transitionEdge")
               .map((it) => {
                 const transition = it as TransitionEdge;
@@ -210,13 +210,13 @@ export function exportXml(project: ProjectEntity): string {
                 return {
                   Transition: {
                     "@_From": (
-                      process.nodes.find(
+                      process.nodeList.find(
                         (it) => it.type === "activityNode" && it.id === transition.fromNodeId,
                       ) as ActivityNode
                     ).xpdlId,
                     "@_Id": transition.xpdlId,
                     "@_To": (
-                      process.nodes.find(
+                      process.nodeList.find(
                         (it) => it.type === "activityNode" && it.id === transition.toNodeId,
                       ) as ActivityNode
                     ).xpdlId,
@@ -231,7 +231,7 @@ export function exportXml(project: ProjectEntity): string {
                 };
               }),
             ExtendedAttributes: [
-              ...stringifyExtendNodes(process.nodes, process.edges),
+              ...stringifyExtendNodes(process.nodeList, process.edgeList),
               {
                 ExtendedAttribute: {
                   "@_Name": "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",

@@ -53,8 +53,8 @@ function createProcess(
       applications: [],
     },
     actors: [createActorEntity([])],
-    nodes: [],
-    edges: [],
+    nodeList: [],
+    edgeList: [],
   };
   return process;
 }

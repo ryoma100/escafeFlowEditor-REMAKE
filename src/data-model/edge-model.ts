@@ -14,7 +14,7 @@ export function makeEdgeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   const [edgeList, setEdgeList] = createStore<IEdge[]>([]);
 
   function load(process: ProcessEntity) {
-    setEdgeList(process.edges);
+    setEdgeList(process.edgeList);
   }
 
   function save(): (TransitionEdge | CommentEdge | StartEdge | EndEdge)[] {

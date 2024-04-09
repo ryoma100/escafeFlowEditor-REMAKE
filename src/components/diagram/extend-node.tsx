@@ -9,7 +9,7 @@ export function ExtendNodeContainer(props: {
   const {
     extendNodeModel: { resizeCommentNode },
     extendEdgeModel: { addEndEdge },
-    nodeModel: { changeSelectNodes, nodeList },
+    nodeModel: { changeSelectNodes },
     diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
     dialog: { setModalDialog: setOpenDialog },
   } = useAppContext();
@@ -27,10 +27,7 @@ export function ExtendNodeContainer(props: {
           if (!props.node.selected) {
             changeSelectNodes("select", [props.node.id]);
           }
-          setDragType({
-            type: "moveNodes",
-            indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
-          });
+          setDragType({ type: "moveNodes" });
         }
         break;
       case "transition":

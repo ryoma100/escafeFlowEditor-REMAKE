@@ -31,8 +31,8 @@ export function makeProcessModel(
     const process: ProcessEntity = {
       ...selectedProcess(),
       actors: actorModel.save(),
-      nodes: nodeModel.save(),
-      edges: edgeModel.save(),
+      nodeList: nodeModel.save(),
+      edgeList: edgeModel.save(),
     };
     setProcessList(processList().map((it) => (it.id === process.id ? process : it)));
     setSelectedProcess(processList().find((it) => it.id === process.id)!);

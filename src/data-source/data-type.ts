@@ -52,8 +52,8 @@ export type ActorEntity = {
 //
 
 type Graph = {
-  nodes: INode[];
-  edges: IEdge[];
+  nodeList: INode[];
+  edgeList: IEdge[];
 };
 
 export type Point = {

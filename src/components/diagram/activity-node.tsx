@@ -19,7 +19,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
   const {
     activityNodeModel: { resizeActivityHeight, updateJoinType, updateSplitType },
     actorModel: { actorList },
-    nodeModel: { changeSelectNodes, changeTopLayer, nodeList },
+    nodeModel: { changeSelectNodes, changeTopLayer },
     edgeModel: { changeSelectEdges },
     extendEdgeModel: { addCommentEdge, addStartEdge },
     transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
@@ -29,18 +29,12 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
 
   function handleLeftMouseDown(_e: MouseEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType({
-      type: "resizeActivityLeft",
-      index: nodeList.findIndex((it) => it.id === props.activity.id),
-    });
+    setDragType({ type: "resizeActivityLeft" });
   }
 
   function handleRightMouseDown(_e: MouseEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType({
-      type: "resizeActivityRight",
-      index: nodeList.findIndex((it) => it.id === props.activity.id),
-    });
+    setDragType({ type: "resizeActivityRight" });
   }
 
   function handleMouseDown(e: MouseEvent) {
@@ -57,10 +51,7 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
             changeSelectEdges("clearAll");
           }
           changeTopLayer(props.activity.id);
-          setDragType({
-            type: "moveNodes",
-            indexes: nodeList.filter((it) => it.selected).map((_it, idx) => idx),
-          });
+          setDragType({ type: "moveNodes" });
         }
         break;
       case "transition":

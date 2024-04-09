@@ -19,11 +19,11 @@ export type DragModeType =
   | { type: "boxSelect"; centerPoint: Point }
   | { type: "circleSelect"; centerPoint: Point }
   | { type: "scroll" }
-  | { type: "moveNodes"; indexes: number[] }
-  | { type: "scaleNodes"; basePoint: Point; indexes: number[] }
-  | { type: "rotateNodes"; basePoint: Point; indexes: number[] }
-  | { type: "resizeActivityLeft"; index: number }
-  | { type: "resizeActivityRight"; index: number }
+  | { type: "moveNodes" }
+  | { type: "scaleNodes"; basePoint: Point }
+  | { type: "rotateNodes"; basePoint: Point }
+  | { type: "resizeActivityLeft" }
+  | { type: "resizeActivityRight" }
   | { type: "addActivity" }
   | { type: "addTransition"; fromActivity: ActivityNode }
   | { type: "addCommentNode" }
