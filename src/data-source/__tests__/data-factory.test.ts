@@ -30,8 +30,8 @@ describe("createProject", () => {
               xpdlId: "actor-1",
             },
           ],
-          nodes: [],
-          edges: [],
+          nodeList: [],
+          edgeList: [],
         },
       ],
     });
@@ -59,8 +59,8 @@ describe("createProcess", () => {
           xpdlId: "actor-1",
         },
       ],
-      nodes: [],
-      edges: [],
+      nodeList: [],
+      edgeList: [],
     });
   });
 
@@ -85,8 +85,8 @@ describe("createProcess", () => {
           xpdlId: "actor-1",
         },
       ],
-      nodes: [],
-      edges: [],
+      nodeList: [],
+      edgeList: [],
     });
   });
 
@@ -112,8 +112,8 @@ describe("createProcess", () => {
           xpdlId: "actor-1",
         },
       ],
-      nodes: [],
-      edges: [],
+      nodeList: [],
+      edgeList: [],
     });
   });
 });

@@ -365,7 +365,7 @@ export function importXml(xmlString: string): ProjectEntity {
           };
         },
       );
-      const { nodes, edges, envs } = parseExtendNode(process, activityList, transitionList);
+      const { nodeList, edgeList, envs } = parseExtendNode(process, activityList, transitionList);
       const detail: ProcessDetailEntity = {
         xpdlId: process["@_Id"],
         name: process["@_Name"],
@@ -380,8 +380,8 @@ export function importXml(xmlString: string): ProjectEntity {
         created: process.ProcessHeader.Created,
         detail,
         actors,
-        nodes,
-        edges,
+        nodeList,
+        edgeList,
       };
     }),
   };
@@ -392,8 +392,8 @@ export function importXml(xmlString: string): ProjectEntity {
 function parseExtendNode(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   process: any,
-  nodes: INode[],
-  edges: IEdge[],
+  nodeList: INode[],
+  edgeList: IEdge[],
 ) {
   (process.ExtendedAttributes.ExtendedAttribute as [])
     .filter((it) => it["@_Name"] === "JaWE_GRAPH_START_OF_WORKFLOW")
@@ -402,12 +402,12 @@ function parseExtendNode(
         /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
       );
       if (val) {
-        const startNode = dataFactory.createStartNode(nodes, Number(val[2]), Number(val[3]));
-        nodes.push(startNode);
-        const activity = nodes.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
+        const startNode = dataFactory.createStartNode(nodeList, Number(val[2]), Number(val[3]));
+        nodeList.push(startNode);
+        const activity = nodeList.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
         if (activity) {
-          const edge = dataFactory.createStartEdge(edges, startNode.id, activity.id);
-          edges.push(edge);
+          const edge = dataFactory.createStartEdge(edgeList, startNode.id, activity.id);
+          edgeList.push(edge);
         }
       }
     });
@@ -419,12 +419,12 @@ function parseExtendNode(
         /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
       );
       if (val) {
-        const endNode = dataFactory.createEndNode(nodes, Number(val[2]), Number(val[3]));
-        nodes.push(endNode);
-        const activity = nodes.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
+        const endNode = dataFactory.createEndNode(nodeList, Number(val[2]), Number(val[3]));
+        nodeList.push(endNode);
+        const activity = nodeList.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
         if (activity) {
-          const edge = dataFactory.createEndEdge(edges, activity.id, endNode.id);
-          edges.push(edge);
+          const edge = dataFactory.createEndEdge(edgeList, activity.id, endNode.id);
+          edgeList.push(edge);
         }
       }
     });
@@ -436,13 +436,13 @@ function parseExtendNode(
         /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+),COMMENT=(.*)/,
       );
       if (val) {
-        const commentNode = dataFactory.createCommentNode(nodes, Number(val[2]), Number(val[3]));
+        const commentNode = dataFactory.createCommentNode(nodeList, Number(val[2]), Number(val[3]));
         commentNode.comment = val[4];
-        nodes.push(commentNode);
-        const activity = nodes.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
+        nodeList.push(commentNode);
+        const activity = nodeList.find((it) => it.type === "activityNode" && it.xpdlId === val[1]);
         if (activity) {
-          const edge = dataFactory.createCommentEdge(edges, commentNode.id, activity.id);
-          edges.push(edge);
+          const edge = dataFactory.createCommentEdge(edgeList, commentNode.id, activity.id);
+          edgeList.push(edge);
         }
       }
     });
@@ -461,7 +461,7 @@ function parseExtendNode(
       value: it["@_Value"],
     }));
 
-  return { nodes, edges, envs };
+  return { nodeList, edgeList, envs };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -38,17 +38,22 @@ pre-commit:
   parallel: true
   commands:
     prettier:
-      glob: '*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md,yml,yaml}'
+      glob: "*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md,yml,yaml}"
       run: |
         pnpm prettier --write --ignore-unknown {staged_files}
         git add {staged_files}
     eslint:
-      glob: '*.{tsx,ts,mts,mcs}'
+      glob: "*.{tsx,ts,mts,mcs}"
       run: |
         pnpm eslint {staged_files}
         git add {staged_files}
+    tsc:
+      glob: "*.{tsx,ts}"
+      run: pnpm lint:tsc
     cspell:
-      glob: '*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md,yml,yaml}'
+      glob: "*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md,yml,yaml}"
       run: pnpm cspell lint --gitignore --cache {staged_files}
-    packages-audit:
+    audit:
       run: pnpm audit
+    test:
+      run: pnpm test run
