@@ -1,7 +1,10 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { ToolbarType } from "../components/toolbar/toolbar";
-import { defaultLine, defaultRectangle } from "../constants/app-const";
+
+import { ToolbarType } from "@/components/toolbar/toolbar";
+import { defaultLine, defaultRectangle } from "@/constants/app-const";
+import { makeEdgeModel } from "@/data-model/edge-model";
+import { makeNodeModel } from "@/data-model/node-model";
 import {
   ActivityNode,
   CommentNode,
@@ -9,9 +12,7 @@ import {
   Point,
   Rectangle,
   StartNode,
-} from "../data-source/data-type";
-import { makeEdgeModel } from "./edge-model";
-import { makeNodeModel } from "./node-model";
+} from "@/data-source/data-type";
 
 export type DragModeType =
   | { type: "none" }

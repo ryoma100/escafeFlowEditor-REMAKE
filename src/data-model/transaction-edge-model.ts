@@ -1,8 +1,8 @@
-import { enDict } from "../constants/i18n-en";
-import { dataFactory } from "../data-source/data-factory";
-import { TransitionEdge } from "../data-source/data-type";
-import { makeEdgeModel } from "./edge-model";
-import { makeNodeModel } from "./node-model";
+import { enDict } from "@/constants/i18n-en";
+import { makeEdgeModel } from "@/data-model/edge-model";
+import { makeNodeModel } from "@/data-model/node-model";
+import { dataFactory } from "@/data-source/data-factory";
+import { TransitionEdge } from "@/data-source/data-type";
 
 export function makeTransactionEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,

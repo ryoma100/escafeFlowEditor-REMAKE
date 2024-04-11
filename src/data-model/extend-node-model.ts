@@ -1,7 +1,8 @@
 import { produce } from "solid-js/store";
-import { dataFactory } from "../data-source/data-factory";
-import { CommentNode, EndNode, StartNode } from "../data-source/data-type";
-import { makeNodeModel } from "./node-model";
+
+import { makeNodeModel } from "@/data-model/node-model";
+import { dataFactory } from "@/data-source/data-factory";
+import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 
 export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   function addCommentNode(x: number, y: number): CommentNode {

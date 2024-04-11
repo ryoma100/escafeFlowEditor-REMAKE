@@ -1,4 +1,4 @@
-import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "../constants/app-const";
+import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
 import {
   ActivityNode,
   ActivityNodeType,
@@ -16,7 +16,7 @@ import {
   StartEdge,
   StartNode,
   TransitionEdge,
-} from "./data-type";
+} from "@/data-source/data-type";
 
 function createProject(created: string = new Date().toISOString()): ProjectEntity {
   const project: ProjectEntity = {

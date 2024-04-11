@@ -1,20 +1,21 @@
 import { JSXElement } from "solid-js";
-import { AboutDialog } from "./components/dialog/about-dialog";
-import { ActivityDialog } from "./components/dialog/activity-dialog";
-import { ActorDialog } from "./components/dialog/actor-dialog";
-import { CommentDialog } from "./components/dialog/comment-dialog";
-import { ConfirmDialog } from "./components/dialog/confirm-dialog";
-import { LoadDialog } from "./components/dialog/load-dialog";
-import { MessageDialog } from "./components/dialog/message-dialog";
-import { ProcessDialog } from "./components/dialog/process-dialog";
-import { ProjectDialog } from "./components/dialog/project-dialog";
-import { SaveDialog } from "./components/dialog/save-dialog";
-import { TransitionDialog } from "./components/dialog/transition-dialog";
-import { ActorList } from "./components/list/actor-list";
-import { ProcessList } from "./components/list/process-list";
-import { Main } from "./components/main/main";
-import { AppMenu } from "./components/menu/menu";
-import { Toolbar } from "./components/toolbar/toolbar";
+
+import { AboutDialog } from "@/components/dialog/about-dialog";
+import { ActivityDialog } from "@/components/dialog/activity-dialog";
+import { ActorDialog } from "@/components/dialog/actor-dialog";
+import { CommentDialog } from "@/components/dialog/comment-dialog";
+import { ConfirmDialog } from "@/components/dialog/confirm-dialog";
+import { LoadDialog } from "@/components/dialog/load-dialog";
+import { MessageDialog } from "@/components/dialog/message-dialog";
+import { ProcessDialog } from "@/components/dialog/process-dialog";
+import { ProjectDialog } from "@/components/dialog/project-dialog";
+import { SaveDialog } from "@/components/dialog/save-dialog";
+import { TransitionDialog } from "@/components/dialog/transition-dialog";
+import { ActorList } from "@/components/list/actor-list";
+import { ProcessList } from "@/components/list/process-list";
+import { Main } from "@/components/main/main";
+import { AppMenu } from "@/components/menu/menu";
+import { Toolbar } from "@/components/toolbar/toolbar";
 
 function App(): JSXElement {
   return (

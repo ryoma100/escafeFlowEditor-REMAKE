@@ -1,14 +1,15 @@
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
+
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { useAppContext } from "@/context/app-context";
+import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import {
   ApplicationEntity,
   EnvironmentEntity,
   ProcessDetailEntity,
   ProcessEntity,
-} from "../../data-source/data-type";
-import { ButtonsContainer } from "../parts/buttons-container";
+} from "@/data-source/data-type";
 
 const dummy = dataFactory.createProcess([]);
 

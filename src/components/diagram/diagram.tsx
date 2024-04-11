@@ -1,7 +1,8 @@
 import { For, JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
 import { produce } from "solid-js/store";
-import { defaultCircle, defaultRectangle } from "../../constants/app-const";
-import { useAppContext } from "../../context/app-context";
+
+import { defaultCircle, defaultRectangle } from "@/constants/app-const";
+import { useAppContext } from "@/context/app-context";
 import {
   ActivityNode,
   Circle,
@@ -16,9 +17,9 @@ import {
   StartEdge,
   StartNode,
   TransitionEdge,
-} from "../../data-source/data-type";
-import { pointLength } from "../../utils/point-utils";
-import { intersectRect, minLengthOfPointToRect } from "../../utils/rectangle-utils";
+} from "@/data-source/data-type";
+import { pointLength } from "@/utils/point-utils";
+import { intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
 import { ExtendNodeContainer } from "./extend-node";
@@ -47,8 +48,8 @@ export function DiagramContainer(): JSXElement {
       toolbar,
       setToolbar,
       zoom,
-      dragMode: dragType,
-      setDragMode: setDragType,
+      dragMode,
+      setDragMode,
       addingLine,
       setAddingLineTo,
     },
@@ -72,7 +73,7 @@ export function DiagramContainer(): JSXElement {
   let mouseDownTime = new Date().getTime();
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
-    if (dragType().type !== "none") return;
+    if (dragMode().type !== "none") return;
 
     const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
     const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
@@ -82,17 +83,17 @@ export function DiagramContainer(): JSXElement {
           if (mouseDownTime + 250 > new Date().getTime()) {
             // onDoubleMouseDown
             if (e.ctrlKey || e.metaKey) {
-              setDragType({
+              setDragMode({
                 type: "rotateNodes",
                 basePoint: { x, y },
               });
             } else if (e.shiftKey) {
-              setDragType({
+              setDragMode({
                 type: "scaleNodes",
                 basePoint: { x, y },
               });
             } else {
-              setDragType({ type: "moveNodes" });
+              setDragMode({ type: "moveNodes" });
             }
           } else {
             // onSingleMouseDown
@@ -100,15 +101,15 @@ export function DiagramContainer(): JSXElement {
             setSelectBox(defaultRectangle);
             setSelectCircle(defaultCircle);
             if (e.ctrlKey || e.metaKey) {
-              setDragType({ type: "circleSelect", centerPoint: { x, y } });
+              setDragMode({ type: "circleSelect", centerPoint: { x, y } });
             } else if (e.shiftKey) {
-              setDragType({ type: "boxSelect", centerPoint: { x, y } });
+              setDragMode({ type: "boxSelect", centerPoint: { x, y } });
             } else {
-              setDragType({ type: "select", startPoint: { x, y } });
+              setDragMode({ type: "select", startPoint: { x, y } });
             }
 
             setTimeout(() => {
-              if (dragType().type === "none") {
+              if (dragMode().type === "none") {
                 setNodeList(() => true, "selected", false);
                 setEdgeList(() => true, "selected", false);
               }
@@ -123,7 +124,7 @@ export function DiagramContainer(): JSXElement {
           const activity = addActivity("manualActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
-          setDragType({ type: "addActivity" });
+          setDragMode({ type: "addActivity" });
         }
         return;
       case "addAutoActivity":
@@ -131,7 +132,7 @@ export function DiagramContainer(): JSXElement {
           const activity = addActivity("autoActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
-          setDragType({ type: "addActivity" });
+          setDragMode({ type: "addActivity" });
         }
         return;
       case "addUserActivity":
@@ -139,28 +140,28 @@ export function DiagramContainer(): JSXElement {
           const activity = addActivity("userActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
-          setDragType({ type: "addActivity" });
+          setDragMode({ type: "addActivity" });
         }
         return;
       case "addCommentNode":
         {
           const comment = addCommentNode(x, y);
           changeSelectNodes("select", [comment.id]);
-          setDragType({ type: "addCommentNode" });
+          setDragMode({ type: "addCommentNode" });
         }
         return;
       case "addStartNode":
         {
           const startNode = addStartNode(x, y);
           changeSelectNodes("select", [startNode.id]);
-          setDragType({ type: "addStartNode" });
+          setDragMode({ type: "addStartNode" });
         }
         return;
       case "addEndNode":
         {
           const endNode = addEndNode(x, y);
           changeSelectNodes("select", [endNode.id]);
-          setDragType({ type: "addEndNode" });
+          setDragMode({ type: "addEndNode" });
         }
         return;
     }
@@ -172,7 +173,7 @@ export function DiagramContainer(): JSXElement {
     const moveX = e.movementX / zoom();
     const moveY = e.movementY / zoom();
 
-    const drag = dragType();
+    const drag = dragMode();
     switch (drag.type) {
       case "select":
         {
@@ -256,7 +257,7 @@ export function DiagramContainer(): JSXElement {
   }
 
   function handleDocumentMouseUp() {
-    setDragType({ type: "none" });
+    setDragMode({ type: "none" });
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -273,17 +274,17 @@ export function DiagramContainer(): JSXElement {
       nodeList={nodeList}
       edgeList={edgeList}
       addingLine={
-        dragType().type === "addTransition" ||
-        dragType().type === "addStartEdge" ||
-        dragType().type === "addEndEdge" ||
-        dragType().type === "addCommentEdge"
+        dragMode().type === "addTransition" ||
+        dragMode().type === "addStartEdge" ||
+        dragMode().type === "addEndEdge" ||
+        dragMode().type === "addCommentEdge"
           ? addingLine()
           : null
       }
       selectBox={
-        dragType().type === "select" || dragType().type === "boxSelect" ? selectBox() : null
+        dragMode().type === "select" || dragMode().type === "boxSelect" ? selectBox() : null
       }
-      selectCircle={dragType().type === "circleSelect" ? selectCircle() : null}
+      selectCircle={dragMode().type === "circleSelect" ? selectCircle() : null}
       onMouseDown={handleMouseDown}
       onKeyDown={handleKeyDown}
     />

@@ -1,6 +1,6 @@
-import { dataFactory } from "../data-source/data-factory";
-import { ProjectDetailEntity, ProjectEntity } from "../data-source/data-type";
-import { makeProcessModel } from "./process-model";
+import { makeProcessModel } from "@/data-model/process-model";
+import { dataFactory } from "@/data-source/data-factory";
+import { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 
 export function makeProjectModel(processModel: ReturnType<typeof makeProcessModel>) {
   let project: ProjectEntity = dataFactory.createProject();

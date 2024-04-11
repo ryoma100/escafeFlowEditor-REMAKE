@@ -1,15 +1,16 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
-import AutoActivitySvg from "../../assets/material-icons/auto-activity.svg";
-import CommentSvg from "../../assets/material-icons/comment.svg";
-import CursorSvg from "../../assets/material-icons/cursor.svg";
-import EndSvg from "../../assets/material-icons/end.svg";
-import ManualActivitySvg from "../../assets/material-icons/manual-activity.svg";
-import StartSvg from "../../assets/material-icons/start.svg";
-import TransitionSvg from "../../assets/material-icons/transition.svg";
-import UserActivitySvg from "../../assets/material-icons/user-activity.svg";
-import { useAppContext } from "../../context/app-context";
-import { ToggleIconButton } from "../parts/toggle-icon-button";
+
+import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
+import CommentSvg from "@/assets/material-icons/comment.svg";
+import CursorSvg from "@/assets/material-icons/cursor.svg";
+import EndSvg from "@/assets/material-icons/end.svg";
+import ManualActivitySvg from "@/assets/material-icons/manual-activity.svg";
+import StartSvg from "@/assets/material-icons/start.svg";
+import TransitionSvg from "@/assets/material-icons/transition.svg";
+import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
+import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
+import { useAppContext } from "@/context/app-context";
 
 export type ToolbarType =
   | "cursor"

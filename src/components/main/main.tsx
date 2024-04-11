@@ -1,6 +1,7 @@
 import { JSXElement } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import { DiagramContainer } from "../diagram/diagram";
+
+import { DiagramContainer } from "@/components/diagram/diagram";
+import { useAppContext } from "@/context/app-context";
 
 export function Main(): JSXElement {
   const {

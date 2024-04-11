@@ -1,16 +1,17 @@
 import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import AutoActivitySvg from "../../assets/material-icons/auto-activity.svg";
-import AutoTimerActivitySvg from "../../assets/material-icons/auto-timer-activity.svg";
-import ManualActivitySvg from "../../assets/material-icons/manual-activity.svg";
-import ManualTimerActivitySvg from "../../assets/material-icons/manual-timer-activity.svg";
-import UserActivitySvg from "../../assets/material-icons/user-activity.svg";
-import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
-import { ActivityNode } from "../../data-source/data-type";
-import { ButtonsContainer } from "../parts/buttons-container";
-import { ToggleIconButton } from "../parts/toggle-icon-button";
+
+import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
+import AutoTimerActivitySvg from "@/assets/material-icons/auto-timer-activity.svg";
+import ManualActivitySvg from "@/assets/material-icons/manual-activity.svg";
+import ManualTimerActivitySvg from "@/assets/material-icons/manual-timer-activity.svg";
+import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
+import { useAppContext } from "@/context/app-context";
+import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
+import { ActivityNode } from "@/data-source/data-type";
 
 const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
 

@@ -1,7 +1,7 @@
-import { dataFactory } from "../data-source/data-factory";
-import { CommentEdge, EndEdge, StartEdge } from "../data-source/data-type";
-import { makeEdgeModel } from "./edge-model";
-import { makeNodeModel } from "./node-model";
+import { makeEdgeModel } from "@/data-model/edge-model";
+import { makeNodeModel } from "@/data-model/node-model";
+import { dataFactory } from "@/data-source/data-factory";
+import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
 
 export function makeExtendEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,

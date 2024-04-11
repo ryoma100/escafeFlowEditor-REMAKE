@@ -1,7 +1,8 @@
 import { createStore, produce } from "solid-js/store";
-import { deepUnwrap } from "../data-source/data-factory";
-import { INode, Point, ProcessEntity } from "../data-source/data-type";
-import { rotatePoint } from "../utils/point-utils";
+
+import { deepUnwrap } from "@/data-source/data-factory";
+import { INode, Point, ProcessEntity } from "@/data-source/data-type";
+import { rotatePoint } from "@/utils/point-utils";
 
 export function makeNodeModel() {
   const [nodeList, setNodeList] = createStore<INode[]>([]);

@@ -21,6 +21,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
+    /* Path */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     "types": ["vite-plugin-solid-svg/types-component-solid", "vite/client", "vitest/globals"]
   },
   "include": ["src"],

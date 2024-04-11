@@ -1,9 +1,10 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
-import CommentSvg from "../../assets/material-icons/comment-node.svg";
-import EndSvg from "../../assets/material-icons/end-node.svg";
-import StartSvg from "../../assets/material-icons/start-node.svg";
-import { useAppContext } from "../../context/app-context";
-import { CommentNode, EndNode, StartNode } from "../../data-source/data-type";
+
+import CommentSvg from "@/assets/material-icons/comment-node.svg";
+import EndSvg from "@/assets/material-icons/end-node.svg";
+import StartSvg from "@/assets/material-icons/start-node.svg";
+import { useAppContext } from "@/context/app-context";
+import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 
 export function ExtendNodeContainer(props: {
   node: CommentNode | StartNode | EndNode;

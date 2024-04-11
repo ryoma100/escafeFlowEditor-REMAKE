@@ -1,5 +1,7 @@
 import { createStore, produce } from "solid-js/store";
-import { deepUnwrap } from "../data-source/data-factory";
+
+import { makeNodeModel } from "@/data-model/node-model";
+import { deepUnwrap } from "@/data-source/data-factory";
 import {
   CommentEdge,
   EndEdge,
@@ -7,8 +9,7 @@ import {
   ProcessEntity,
   StartEdge,
   TransitionEdge,
-} from "../data-source/data-type";
-import { makeNodeModel } from "./node-model";
+} from "@/data-source/data-type";
 
 export function makeEdgeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   const [edgeList, setEdgeList] = createStore<IEdge[]>([]);

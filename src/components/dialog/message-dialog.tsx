@@ -1,7 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
+
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { useAppContext } from "@/context/app-context";
 import { JSXElement, createEffect } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import { ButtonsContainer } from "../parts/buttons-container";
 
 export function MessageDialog(): JSXElement {
   const {

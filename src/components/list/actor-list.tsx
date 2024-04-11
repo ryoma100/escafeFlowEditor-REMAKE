@@ -1,8 +1,9 @@
 import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import { ActorEntity } from "../../data-source/data-type";
-import { ButtonsContainer } from "../parts/buttons-container";
+
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { useAppContext } from "@/context/app-context";
+import { ActorEntity } from "@/data-source/data-type";
 
 export function ActorList(): JSXElement {
   const {

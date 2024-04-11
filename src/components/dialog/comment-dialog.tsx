@@ -1,9 +1,10 @@
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
-import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
-import { CommentNode } from "../../data-source/data-type";
-import { ButtonsContainer } from "../parts/buttons-container";
+
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { useAppContext } from "@/context/app-context";
+import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
+import { CommentNode } from "@/data-source/data-type";
 
 const dummy = dataFactory.createCommentNode([], 0, 0);
 

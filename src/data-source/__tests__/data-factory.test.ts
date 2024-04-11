@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "../../constants/app-const";
-import { dataFactory } from "../data-factory";
+
+import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
+import { dataFactory } from "@/data-source/data-factory";
 
 describe("createProject", () => {
   it("one project", () => {

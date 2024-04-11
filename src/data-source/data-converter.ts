@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
-import { dataFactory } from "./data-factory";
+
+import { dataFactory } from "@/data-source/data-factory";
 import {
   ActivityJoinType,
   ActivityNode,
@@ -21,7 +22,7 @@ import {
   StartEdge,
   StartNode,
   TransitionEdge,
-} from "./data-type";
+} from "@/data-source/data-type";
 
 const alwaysArray = [
   "Package.WorkflowProcesses.WorkflowProcess",

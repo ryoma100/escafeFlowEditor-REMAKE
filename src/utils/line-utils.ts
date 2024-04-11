@@ -1,4 +1,4 @@
-import { Line, Point, Rectangle } from "../data-source/data-type";
+import { Line, Point, Rectangle } from "@/data-source/data-type";
 
 const ACCURACY: number = 0.000000000001;
 

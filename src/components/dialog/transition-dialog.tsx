@@ -1,10 +1,11 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { useAppContext } from "../../context/app-context";
-import { dataFactory, deepUnwrap } from "../../data-source/data-factory";
-import { TransitionEdge } from "../../data-source/data-type";
-import { ButtonsContainer } from "../parts/buttons-container";
+
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { useAppContext } from "@/context/app-context";
+import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
+import { TransitionEdge } from "@/data-source/data-type";
 
 const dummy = dataFactory.createTransitionEdge([], 0, 0);
 

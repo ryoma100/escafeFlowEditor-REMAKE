@@ -1,16 +1,17 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
-import AutoActivitySvg from "../../assets/material-icons/auto-activity.svg";
-import AutoTimerActivitySvg from "../../assets/material-icons/auto-timer-activity.svg";
-import ManualActivitySvg from "../../assets/material-icons/manual-activity.svg";
-import UserActivitySvg from "../../assets/material-icons/user-activity.svg";
-import { ACTIVITY_MIN_HEIGHT } from "../../constants/app-const";
-import { useAppContext } from "../../context/app-context";
+
+import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
+import AutoTimerActivitySvg from "@/assets/material-icons/auto-timer-activity.svg";
+import ManualActivitySvg from "@/assets/material-icons/manual-activity.svg";
+import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
+import { ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
+import { useAppContext } from "@/context/app-context";
 import {
   ActivityJoinType,
   ActivityNode,
   ActivityNodeType,
   ActivitySplitType,
-} from "../../data-source/data-type";
+} from "@/data-source/data-type";
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
