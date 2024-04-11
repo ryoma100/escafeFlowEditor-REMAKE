@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { exportXml, importXml } from "../data-converter";
-import { dataFactory } from "../data-factory";
-import { ActivityNode, CommentNode } from "../data-type";
+
+import { exportXml, importXml } from "@/data-source/data-converter";
+import { dataFactory } from "@/data-source/data-factory";
+import { ActivityNode, CommentNode } from "@/data-source/data-type";
 
 describe("exportXml", () => {
   it("init project", () => {

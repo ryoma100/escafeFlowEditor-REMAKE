@@ -1,6 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import { ButtonsContainer } from "../parts/buttons-container";
+
+import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { useAppContext } from "@/context/app-context";
 
 export function AboutDialog(): JSXElement {
   const {

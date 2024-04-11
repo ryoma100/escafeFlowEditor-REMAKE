@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
-import { CommentNodeView } from "../components/diagram/extend-node";
+
+import { CommentNodeView } from "@/components/diagram/extend-node";
 
 const meta = {
   title: "Node/Comment",

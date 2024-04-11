@@ -1,6 +1,7 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
-import { useAppContext } from "../../context/app-context";
+
+import { useAppContext } from "@/context/app-context";
 
 export function AppMenu(): JSXElement {
   const {

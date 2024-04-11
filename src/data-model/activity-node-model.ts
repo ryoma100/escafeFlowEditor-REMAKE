@@ -1,9 +1,10 @@
 import { produce } from "solid-js/store";
-import { ACTIVITY_MIN_WIDTH } from "../constants/app-const";
-import { enDict } from "../constants/i18n-en";
-import { dataFactory } from "../data-source/data-factory";
-import { ActivityNode, ActivityNodeType, IEdge } from "../data-source/data-type";
-import { makeNodeModel } from "./node-model";
+
+import { ACTIVITY_MIN_WIDTH } from "@/constants/app-const";
+import { enDict } from "@/constants/i18n-en";
+import { makeNodeModel } from "@/data-model//node-model";
+import { dataFactory } from "@/data-source/data-factory";
+import { ActivityNode, ActivityNodeType, IEdge } from "@/data-source/data-type";
 
 export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   function getActivityNodes(): ActivityNode[] {

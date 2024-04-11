@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
-import { ActivityNodeView } from "../components/diagram/activity-node";
+
+import { ActivityNodeView } from "@/components/diagram/activity-node";
 
 const meta = {
   title: "Node/Activity",

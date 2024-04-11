@@ -1,7 +1,8 @@
 import { JSXElement, createSignal, onMount } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import { Line, TransitionEdge } from "../../data-source/data-type";
-import { computeLine } from "../../utils/line-utils";
+
+import { useAppContext } from "@/context/app-context";
+import { Line, TransitionEdge } from "@/data-source/data-type";
+import { computeLine } from "@/utils/line-utils";
 
 export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
   const {

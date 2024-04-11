@@ -1,10 +1,11 @@
 import { batch, createSignal } from "solid-js";
-import { enDict } from "../constants/i18n-en";
-import { dataFactory, deepUnwrap } from "../data-source/data-factory";
-import { ProcessEntity, ProjectEntity } from "../data-source/data-type";
-import { makeActorModel } from "./actor-model";
-import { makeEdgeModel } from "./edge-model";
-import { makeNodeModel } from "./node-model";
+
+import { enDict } from "@/constants/i18n-en";
+import { makeActorModel } from "@/data-model/actor-model";
+import { makeEdgeModel } from "@/data-model/edge-model";
+import { makeNodeModel } from "@/data-model/node-model";
+import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
+import { ProcessEntity, ProjectEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createProcess([]);
 

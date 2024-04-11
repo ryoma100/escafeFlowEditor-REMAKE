@@ -1,5 +1,5 @@
-import { Point, Rectangle } from "../data-source/data-type";
-import { pointLength } from "./point-utils";
+import { Point, Rectangle } from "@/data-source/data-type";
+import { pointLength } from "@/utils/point-utils";
 
 export function intersectRect(r1: Rectangle, r2: Rectangle): boolean {
   return !(

@@ -1,6 +1,7 @@
 import { JSXElement } from "solid-js";
-import { useAppContext } from "../../context/app-context";
-import { CommentEdge, EndEdge, StartEdge } from "../../data-source/data-type";
+
+import { useAppContext } from "@/context/app-context";
+import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
 
 export function ExtendEdgeContainer(props: {
   edge: CommentEdge | StartEdge | EndEdge;

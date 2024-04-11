@@ -1,17 +1,18 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSX, createContext, createMemo, createSignal, useContext } from "solid-js";
-import { enDict } from "../constants/i18n-en";
-import { jaDict } from "../constants/i18n-ja";
-import { makeActivityModel } from "../data-model/activity-node-model";
-import { makeActorModel } from "../data-model/actor-model";
-import { makeDiagramModel } from "../data-model/diagram-model";
-import { makeEdgeModel } from "../data-model/edge-model";
-import { makeExtendEdgeModel } from "../data-model/extend-edge-model";
-import { makeExtendNodeModel } from "../data-model/extend-node-model";
-import { makeNodeModel } from "../data-model/node-model";
-import { makeProcessModel } from "../data-model/process-model";
-import { makeProjectModel } from "../data-model/project-model";
-import { makeTransactionEdgeModel } from "../data-model/transaction-edge-model";
+
+import { enDict } from "@/constants/i18n-en";
+import { jaDict } from "@/constants/i18n-ja";
+import { makeActivityModel } from "@/data-model/activity-node-model";
+import { makeActorModel } from "@/data-model/actor-model";
+import { makeDiagramModel } from "@/data-model/diagram-model";
+import { makeEdgeModel } from "@/data-model/edge-model";
+import { makeExtendEdgeModel } from "@/data-model/extend-edge-model";
+import { makeExtendNodeModel } from "@/data-model/extend-node-model";
+import { makeNodeModel } from "@/data-model/node-model";
+import { makeProcessModel } from "@/data-model/process-model";
+import { makeProjectModel } from "@/data-model/project-model";
+import { makeTransactionEdgeModel } from "@/data-model/transaction-edge-model";
 import {
   ActivityNode,
   ActorEntity,
@@ -19,7 +20,7 @@ import {
   ProcessEntity,
   ProjectEntity,
   TransitionEdge,
-} from "../data-source/data-type";
+} from "@/data-source/data-type";
 
 function makeI18nContext() {
   const dictionaries = { ja: jaDict, en: enDict };
