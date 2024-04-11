@@ -64,11 +64,13 @@ export function OtherEdgeView(props: {
         y2={props.toY}
       />
       <line
-        data-select={props.selected}
         class="
-          fill-none stroke-transparent stroke-[5px]
-          hover:cursor-pointer hover:stroke-primary2
-          data-[select=true]:fill-none data-[select=true]:stroke-primary1 data-[select=true]:stroke-[5px]"
+          fill-none stroke-[5]
+          hover:cursor-pointer hover:stroke-primary2"
+        classList={{
+          "stroke-transparent": !props.selected,
+          "stroke-primary1": props.selected,
+        }}
         onMouseDown={(e) => props.onMouseDown(e)}
         x1={props.fromX}
         y1={props.fromY}

@@ -38,7 +38,7 @@ export function DiagramContainer(): JSXElement {
       scaleSelectedNodes,
       rotateSelectedNodes,
     },
-    edgeModel: { edgeList },
+    edgeModel: { edgeList, setEdgeList },
     diagramModel: {
       svgRect,
       setSvgRect,
@@ -79,7 +79,7 @@ export function DiagramContainer(): JSXElement {
     switch (toolbar()) {
       case "cursor":
         {
-          if (mouseDownTime + 500 > new Date().getTime()) {
+          if (mouseDownTime + 250 > new Date().getTime()) {
             // onDoubleMouseDown
             if (e.ctrlKey || e.metaKey) {
               setDragType({
@@ -92,7 +92,7 @@ export function DiagramContainer(): JSXElement {
                 basePoint: { x, y },
               });
             } else {
-              setDragType({ type: "scroll" });
+              setDragType({ type: "moveNodes" });
             }
           } else {
             // onSingleMouseDown
@@ -106,6 +106,13 @@ export function DiagramContainer(): JSXElement {
             } else {
               setDragType({ type: "select", startPoint: { x, y } });
             }
+
+            setTimeout(() => {
+              if (dragType().type === "none") {
+                setNodeList(() => true, "selected", false);
+                setEdgeList(() => true, "selected", false);
+              }
+            }, 250);
           }
         }
         return;
@@ -177,9 +184,10 @@ export function DiagramContainer(): JSXElement {
           };
           setSelectBox(rect);
           setNodeList(
-            (_it) => true,
+            () => true,
             produce((it) => (it.selected = intersectRect(rect, it))),
           );
+          setEdgeList(() => true, "selected", false);
         }
         return;
       case "boxSelect":
@@ -197,6 +205,7 @@ export function DiagramContainer(): JSXElement {
             (_it) => true,
             produce((it) => (it.selected = intersectRect(rect, it))),
           );
+          setEdgeList(() => true, "selected", false);
         }
         return;
       case "circleSelect":
@@ -207,6 +216,7 @@ export function DiagramContainer(): JSXElement {
             (_it) => true,
             produce((it) => (it.selected = minLengthOfPointToRect(drag.centerPoint, it) < r)),
           );
+          setEdgeList(() => true, "selected", false);
         }
         return;
       case "scroll":

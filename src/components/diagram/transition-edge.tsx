@@ -85,9 +85,12 @@ export function TransitionEdgeView(props: {
       />
       <line
         class="
-          fill-none stroke-transparent stroke-[5]
+          fill-none stroke-[5]
           hover:cursor-pointer hover:stroke-primary2"
-        classList={{ "fill-none stroke-primary1 stroke-[5]": props.selected }}
+        classList={{
+          "stroke-transparent": !props.selected,
+          "stroke-primary1": props.selected,
+        }}
         onDblClick={(e) => props.handleDblClick(e)}
         onMouseDown={(e) => props.handleMouseDown(e)}
         x1={props.line.p1.x}

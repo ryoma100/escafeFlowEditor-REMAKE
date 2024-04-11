@@ -145,11 +145,14 @@ export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: Mous
   return (
     <div
       class="
-        flex h-10 w-10
-        items-center justify-center rounded
-        border border-gray-500 bg-background p-px
+        flex h-10 w-10 items-center
+        justify-center 
+        rounded bg-background
         hover:cursor-move hover:bg-primary3"
-      classList={{ "m-0 border-2 border-primary1": props.selected }}
+      classList={{
+        "border border-gray-500": !props.selected,
+        "border-2 border-primary1": props.selected,
+      }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
     >
       <StartSvg />
@@ -165,11 +168,14 @@ export function EndNodeView(props: {
   return (
     <div
       class="
-        flex h-10 w-10
-        items-center justify-center rounded
-        border border-gray-500 bg-background p-px
+        flex h-10 w-10 items-center
+        justify-center 
+        rounded bg-background
         hover:cursor-move hover:bg-primary3"
-      classList={{ "m-0 border-2 border-primary1": props.selected }}
+      classList={{
+        "border border-gray-500": !props.selected,
+        "border-2 border-primary1": props.selected,
+      }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onMouseUp={(e) => props.onMouseUp?.(e)}
     >
