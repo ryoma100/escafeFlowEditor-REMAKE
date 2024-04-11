@@ -1,7 +1,9 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
+import CommentSvg from "../../assets/material-icons/comment-node.svg";
+import EndSvg from "../../assets/material-icons/end-node.svg";
+import StartSvg from "../../assets/material-icons/start-node.svg";
 import { useAppContext } from "../../context/app-context";
 import { CommentNode, EndNode, StartNode } from "../../data-source/data-type";
-import { CommentIcon, EndIcon, StartIcon } from "../icons/material-icons";
 
 export function ExtendNodeContainer(props: {
   node: CommentNode | StartNode | EndNode;
@@ -105,8 +107,8 @@ export function CommentNodeView(props: {
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (titleDiv) {
-        const width = titleDiv.clientWidth + 48;
-        const height = titleDiv.clientHeight + 8;
+        const width = titleDiv.clientWidth + 36;
+        const height = titleDiv.clientHeight + 4;
         props.onChangeSize?.(width, height);
       }
     });
@@ -118,18 +120,21 @@ export function CommentNodeView(props: {
   let titleDiv: HTMLDivElement | undefined;
   return (
     <div
-      data-select={props.selected}
       class="
-        m-px flex flex-row border border-gray-500 bg-background p-0.5
-        hover:cursor-move hover:bg-primary3
-        data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
+        flex flex-row
+        rounded bg-background
+        hover:cursor-move hover:bg-primary3"
+      classList={{
+        "p-px border border-gray-500": !props.selected,
+        "p-0 border-2 border-primary1": props.selected,
+      }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onDblClick={(e) => props.onDblClick?.(e)}
     >
-      <div class="flex items-center">
-        <CommentIcon />
+      <div class="m-1 flex items-center">
+        <CommentSvg />
       </div>
-      <div ref={titleDiv} class="whitespace-pre text-[11px] leading-[1.1]">
+      <div ref={titleDiv} class="whitespace-pre p-1 text-[11px] leading-[1.1]">
         {props.comment}
       </div>
     </div>
@@ -139,14 +144,15 @@ export function CommentNodeView(props: {
 export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: MouseEvent) => void }) {
   return (
     <div
-      data-select={props.selected}
       class="
-        m-px rounded border border-gray-500 bg-background p-0.5
-        hover:cursor-move hover:bg-primary3
-        data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
+        flex h-10 w-10
+        items-center justify-center rounded
+        border border-gray-500 bg-background p-px
+        hover:cursor-move hover:bg-primary3"
+      classList={{ "m-0 border-2 border-primary1": props.selected }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
     >
-      <StartIcon />
+      <StartSvg />
     </div>
   );
 }
@@ -158,15 +164,16 @@ export function EndNodeView(props: {
 }) {
   return (
     <div
-      data-select={props.selected}
       class="
-        m-px rounded border border-gray-500 bg-background p-0.5
-        hover:cursor-move hover:bg-primary3
-        data-[select=true]:m-0 data-[select=true]:border-2 data-[select=true]:border-solid data-[select=true]:border-primary1"
+        flex h-10 w-10
+        items-center justify-center rounded
+        border border-gray-500 bg-background p-px
+        hover:cursor-move hover:bg-primary3"
+      classList={{ "m-0 border-2 border-primary1": props.selected }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onMouseUp={(e) => props.onMouseUp?.(e)}
     >
-      <EndIcon />
+      <EndSvg />
     </div>
   );
 }

@@ -1,4 +1,8 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
+import AutoActivitySvg from "../../assets/material-icons/auto-activity.svg";
+import AutoTimerActivitySvg from "../../assets/material-icons/auto-timer-activity.svg";
+import ManualActivitySvg from "../../assets/material-icons/manual-activity.svg";
+import UserActivitySvg from "../../assets/material-icons/user-activity.svg";
 import { ACTIVITY_MIN_HEIGHT } from "../../constants/app-const";
 import { useAppContext } from "../../context/app-context";
 import {
@@ -7,13 +11,6 @@ import {
   ActivityNodeType,
   ActivitySplitType,
 } from "../../data-source/data-type";
-import {
-  AutoActivityIcon,
-  AutoTimerActivityIcon,
-  ManualActivityIcon,
-  ManualTimerActivityIcon,
-  UserActivityIcon,
-} from "../icons/material-icons";
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
@@ -199,26 +196,26 @@ export function ActivityNodeView(props: {
         <div class="mx-0.5 w-full overflow-ellipsis whitespace-nowrap text-xs">
           {props.actorName}
         </div>
-        <div class="flex h-full w-full justify-center">
+        <div class="flex h-full justify-center">
           <Switch>
             <Match when={props.activityType === "manualActivity"}>
-              <ManualActivityIcon />
+              <ManualActivitySvg />
             </Match>
             <Match when={props.activityType === "autoActivity"}>
-              <AutoActivityIcon />
+              <AutoActivitySvg />
             </Match>
             <Match when={props.activityType === "manualTimerActivity"}>
-              <ManualTimerActivityIcon />
+              <AutoTimerActivitySvg />
             </Match>
             <Match when={props.activityType === "autoTimerActivity"}>
-              <AutoTimerActivityIcon />
+              <AutoTimerActivitySvg />
             </Match>
             <Match when={props.activityType === "userActivity"}>
-              <UserActivityIcon />
+              <UserActivitySvg />
             </Match>
           </Switch>
         </div>
-        <div ref={titleDiv} class="m-0.5 text-xs">
+        <div ref={titleDiv} class="mx-0.5 text-xs">
           {props.name}
         </div>
       </div>

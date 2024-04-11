@@ -39,7 +39,7 @@ export function makeNodeModel() {
     );
   }
 
-  function moveSelectedNodesPosition(moveX: number, moveY: number) {
+  function moveSelectedNodes(moveX: number, moveY: number) {
     setNodeList(
       (it) => it.selected,
       produce((it) => {
@@ -49,7 +49,7 @@ export function makeNodeModel() {
     );
   }
 
-  function scaleSelectedNodesPosition(basePoint: Point, moveX: number, moveY: number) {
+  function scaleSelectedNodes(basePoint: Point, moveX: number, moveY: number) {
     setNodeList(
       (it) => it.selected,
       produce((it) => {
@@ -60,7 +60,7 @@ export function makeNodeModel() {
     );
   }
 
-  function rotateSelectedNodesPosition(basePoint: Point, moveX: number, moveY: number) {
+  function rotateSelectedNodes(basePoint: Point, moveX: number, moveY: number) {
     const delta: number = (100 + moveY) / 100;
     const angle: number = -moveX;
 
@@ -151,10 +151,10 @@ export function makeNodeModel() {
     getSelectedNodes,
     changeSelectNodes,
     deleteSelectedNodes,
-    moveSelectedNodesPosition,
+    moveSelectedNodes,
     changeTopLayer,
     computeMaxRectangle,
-    scaleSelectedNodesPosition,
-    rotateSelectedNodesPosition,
+    scaleSelectedNodes,
+    rotateSelectedNodes,
   };
 }

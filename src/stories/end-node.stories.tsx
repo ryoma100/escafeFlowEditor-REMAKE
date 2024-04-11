@@ -10,7 +10,7 @@ export default meta;
 
 type Story = StoryObj<typeof EndNodeView>;
 
-export const Start: Story = {
+export const End: Story = {
   args: {
     selected: false,
   },

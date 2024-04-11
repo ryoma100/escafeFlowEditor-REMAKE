@@ -31,12 +31,12 @@ export function DiagramContainer(): JSXElement {
     extendNodeModel: { addCommentNode, addStartNode, addEndNode },
     nodeModel: {
       changeSelectNodes,
-      moveSelectedNodesPosition,
+      moveSelectedNodes,
       changeTopLayer,
       nodeList,
       setNodeList,
-      scaleSelectedNodesPosition,
-      rotateSelectedNodesPosition,
+      scaleSelectedNodes,
+      rotateSelectedNodes,
     },
     edgeModel: { edgeList },
     diagramModel: {
@@ -220,13 +220,13 @@ export function DiagramContainer(): JSXElement {
       case "addStartNode":
       case "addEndNode":
       case "moveNodes":
-        moveSelectedNodesPosition(moveX, moveY);
+        moveSelectedNodes(moveX, moveY);
         return;
       case "scaleNodes":
-        scaleSelectedNodesPosition(drag.basePoint, moveX, moveY);
+        scaleSelectedNodes(drag.basePoint, moveX, moveY);
         return;
       case "rotateNodes":
-        rotateSelectedNodesPosition(drag.basePoint, moveX, moveY);
+        rotateSelectedNodes(drag.basePoint, moveX, moveY);
         return;
       case "resizeActivityLeft":
         resizeLeft(moveX);

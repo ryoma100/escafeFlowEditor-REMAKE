@@ -216,8 +216,8 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
           </TransitionRestrictions>
           <ExtendedAttributes>
             <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="actor-1"></ExtendedAttribute>
-            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-39,12"></ExtendedAttribute>
-            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-39,12,100,0"></ExtendedAttribute>
+            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-33,12"></ExtendedAttribute>
+            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-33,12,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
         <Activity Id="activity-2" Name="仕事2">
@@ -255,8 +255,8 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
           </TransitionRestrictions>
           <ExtendedAttributes>
             <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="actor-2"></ExtendedAttribute>
-            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-29,22"></ExtendedAttribute>
-            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-29,22,100,0"></ExtendedAttribute>
+            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-23,22"></ExtendedAttribute>
+            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-23,22,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
         <Activity Id="activity-3" Name="仕事3">
@@ -280,8 +280,8 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
           </TransitionRestrictions>
           <ExtendedAttributes>
             <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="actor-1"></ExtendedAttribute>
-            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-19,32"></ExtendedAttribute>
-            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-19,32,100,0"></ExtendedAttribute>
+            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-13,32"></ExtendedAttribute>
+            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-13,32,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
         <Activity Id="activity-4" Name="仕事4">
@@ -305,8 +305,8 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
           </TransitionRestrictions>
           <ExtendedAttributes>
             <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="actor-2"></ExtendedAttribute>
-            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-9,42"></ExtendedAttribute>
-            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-9,42,100,0"></ExtendedAttribute>
+            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="-3,42"></ExtendedAttribute>
+            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-3,42,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
         <Activity Id="activity-5" Name="仕事5">
@@ -319,8 +319,8 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
           </TransitionRestrictions>
           <ExtendedAttributes>
             <ExtendedAttribute Name="JaWE_GRAPH_PARTICIPANT_ID" Value="actor-1"></ExtendedAttribute>
-            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="1,52"></ExtendedAttribute>
-            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="1,52,100,0"></ExtendedAttribute>
+            <ExtendedAttribute Name="JaWE_GRAPH_OFFSET" Value="7,52"></ExtendedAttribute>
+            <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="7,52,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
       </Activities>

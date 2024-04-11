@@ -1,9 +1,9 @@
 import { Circle, Line, Point, Rectangle } from "../data-source/data-type";
 
-export const ACTIVITY_MIN_WIDTH = 100;
-export const ACTIVITY_MIN_HEIGHT = 80;
+export const ACTIVITY_MIN_WIDTH = 88;
+export const ACTIVITY_MIN_HEIGHT = 72;
 
-export const NORMAL_ICON_SIZE = 48;
+export const NORMAL_ICON_SIZE = 40;
 
 export const defaultPoint: Point = { x: 0, y: 0 };
 export const defaultLine: Line = { p1: defaultPoint, p2: defaultPoint };

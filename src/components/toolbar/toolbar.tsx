@@ -1,16 +1,14 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
+import AutoActivitySvg from "../../assets/material-icons/auto-activity.svg";
+import CommentSvg from "../../assets/material-icons/comment.svg";
+import CursorSvg from "../../assets/material-icons/cursor.svg";
+import EndSvg from "../../assets/material-icons/end.svg";
+import ManualActivitySvg from "../../assets/material-icons/manual-activity.svg";
+import StartSvg from "../../assets/material-icons/start.svg";
+import TransitionSvg from "../../assets/material-icons/transition.svg";
+import UserActivitySvg from "../../assets/material-icons/user-activity.svg";
 import { useAppContext } from "../../context/app-context";
-import {
-  AutoActivityIcon,
-  CommentIcon,
-  EndIcon,
-  LineIcon,
-  ManualActivityIcon,
-  PointIcon,
-  StartIcon,
-  UserActivityIcon,
-} from "../icons/material-icons";
 import { ToggleIconButton } from "../parts/toggle-icon-button";
 
 export type ToolbarType =
@@ -39,13 +37,13 @@ export function Toolbar(): JSXElement {
   return (
     <div class="mx-2 flex-col outline-none" onKeyDown={handleKeyDown}>
       <ToggleIconButton
-        id="toolbar-select"
+        id="toolbar-cursor"
         title={t("select")}
         checked={toolbar() === "cursor"}
         onChange={() => setToolbar("cursor")}
         margin="0 0 4px 0"
       >
-        <PointIcon />
+        <CursorSvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -55,7 +53,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("transition")}
         margin="0 0 8px 0"
       >
-        <LineIcon />
+        <TransitionSvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -65,7 +63,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addManualActivity")}
         margin="0 0 4px 0"
       >
-        <ManualActivityIcon />
+        <ManualActivitySvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -75,7 +73,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addAutoActivity")}
         margin="0 0 4px 0"
       >
-        <AutoActivityIcon />
+        <AutoActivitySvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -85,7 +83,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addUserActivity")}
         margin="0 0 8px 0"
       >
-        <UserActivityIcon />
+        <UserActivitySvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -95,7 +93,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addStartNode")}
         margin="0 0 4px 0"
       >
-        <StartIcon />
+        <StartSvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -105,7 +103,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addEndNode")}
         margin="0 0 4px 0"
       >
-        <EndIcon />
+        <EndSvg />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -114,7 +112,7 @@ export function Toolbar(): JSXElement {
         checked={toolbar() === "addCommentNode"}
         onChange={() => setToolbar("addCommentNode")}
       >
-        <CommentIcon />
+        <CommentSvg />
       </ToggleIconButton>
     </div>
   );
