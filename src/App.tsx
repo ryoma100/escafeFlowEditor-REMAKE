@@ -30,7 +30,7 @@ function App(): JSXElement {
         <div class="col-start-1 row-start-3 ml-2 h-[calc(65vh_-_20px)]">
           <ActorList />
         </div>
-        <div class="col-start-2 row-start-2 row-end-4 mt-6">
+        <div class="col-start-2 row-start-2 row-end-4 mt-4">
           <Toolbar />
         </div>
         <div class="col-start-3 row-start-2 row-end-4 h-[calc(100vh_-_28px)] w-[calc(100vw_-_254px)]">
