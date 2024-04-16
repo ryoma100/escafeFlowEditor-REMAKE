@@ -1,6 +1,4 @@
-import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
-import { createStore } from "solid-js/store";
 
 import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
 import AutoTimerActivitySvg from "@/assets/material-icons/auto-timer-activity.svg";
@@ -9,9 +7,11 @@ import ManualTimerActivitySvg from "@/assets/material-icons/manual-timer-activit
 import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
-import { useAppContext } from "@/context/app-context";
+import { enDict } from "@/constants/i18n-en";
+import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { ActivityNode } from "@/data-source/data-type";
+import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
+import { createStore } from "solid-js/store";
 
 const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
 
@@ -27,22 +27,52 @@ export function ActivityDialog(): JSXElement {
     },
     i18n: { dict },
   } = useAppContext();
-  const t = i18n.translator(dict);
 
+  function handleFormSubmit(formData: ActivityNode) {
+    const errorMessage = updateActivity(formData);
+    if (errorMessage) {
+      setOpenMessageDialog(errorMessage);
+      return;
+    }
+    setOpenDialog(null);
+  }
+
+  function handleDialogClose() {
+    setOpenDialog(null);
+  }
+
+  return (
+    <ActivityDialogView
+      openDialog={openDialog()}
+      applications={selectedProcess().detail.applications}
+      actorList={actorList}
+      dict={dict()}
+      onFormSubmit={handleFormSubmit}
+      onDialogClose={handleDialogClose}
+    />
+  );
+}
+
+export function ActivityDialogView(props: {
+  openDialog: ModalDialogType | null;
+  applications: ApplicationEntity[];
+  actorList: ActorEntity[];
+  dict: typeof enDict;
+  onFormSubmit?: (formData: ActivityNode) => void;
+  onDialogClose?: () => void;
+}) {
   const [formData, setFormData] = createStore<ActivityNode>(dummy);
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
 
   createEffect(() => {
-    const dialog = openDialog();
-    if (dialog?.type === "activity") {
-      const activity = deepUnwrap(dialog.activity);
-      activity.applications = selectedProcess().detail.applications.map((app) => ({
+    if (props.openDialog?.type === "activity") {
+      const activity = deepUnwrap(props.openDialog.activity);
+      activity.applications = props.applications.map((app) => ({
         id: app.id,
         ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
       }));
       setFormData(activity);
-      setSelectedAppIndex(activity.applications.length > 0 ? 0 : -1);
-
+      setSelectedAppIndex(props.applications.length > 0 ? 0 : -1);
       dialogRef?.showModal();
       if (radioTabCenterRef) {
         radioTabCenterRef.checked = true;
@@ -65,29 +95,25 @@ export function ActivityDialog(): JSXElement {
       formData.activityType === "autoTimerActivity"
         ? formData.ognl
         : "";
-    const errorMessage = updateActivity(activity);
-    if (errorMessage) {
-      setOpenMessageDialog(errorMessage);
-      return;
-    }
-    setOpenDialog(null);
-  }
 
-  function handleClose() {
-    setOpenDialog(null);
+    props.onFormSubmit?.(activity);
   }
 
   let dialogRef: HTMLDialogElement | undefined;
   let radioTabCenterRef: HTMLInputElement | undefined;
   return (
-    <dialog class="w-[388px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5 class="mb-2">{t("editActivity")}</h5>
+    <dialog
+      class="w-[388px] bg-primary2 p-2"
+      ref={dialogRef}
+      onClose={() => props.onDialogClose?.()}
+    >
+      <h5 class="mb-2">{props.dict.editActivity}</h5>
 
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-2 flex flex-row">
           <ToggleIconButton
             id="manual-activity"
-            title={t("manualActivity")}
+            title={props.dict.manualActivity}
             checked={formData.activityType === "manualActivity"}
             onChange={() => setFormData("activityType", "manualActivity")}
             margin="0 4px 0 0"
@@ -96,7 +122,7 @@ export function ActivityDialog(): JSXElement {
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-activity"
-            title={t("autoActivity")}
+            title={props.dict.autoActivity}
             checked={formData.activityType === "autoActivity"}
             onChange={() => setFormData("activityType", "autoActivity")}
             margin="0 4px 0 0"
@@ -105,7 +131,7 @@ export function ActivityDialog(): JSXElement {
           </ToggleIconButton>
           <ToggleIconButton
             id="manual-timer-activity"
-            title={t("manualTimerActivity")}
+            title={props.dict.manualTimerActivity}
             checked={formData.activityType === "manualTimerActivity"}
             onChange={() => setFormData("activityType", "manualTimerActivity")}
             margin="0 4px 0 0"
@@ -114,7 +140,7 @@ export function ActivityDialog(): JSXElement {
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-timer-activity"
-            title={t("autoTimerActivity")}
+            title={props.dict.autoTimerActivity}
             checked={formData.activityType === "autoTimerActivity"}
             onChange={() => setFormData("activityType", "autoTimerActivity")}
             margin="0 4px 0 0"
@@ -123,7 +149,7 @@ export function ActivityDialog(): JSXElement {
           </ToggleIconButton>
           <ToggleIconButton
             id="user-activity"
-            title={t("handWork")}
+            title={props.dict.handWork}
             checked={formData.activityType === "userActivity"}
             onChange={() => setFormData("activityType", "userActivity")}
           >
@@ -220,16 +246,16 @@ export function ActivityDialog(): JSXElement {
                 onChange={(e) => setFormData("xpdlId", e.target.value)}
               />
 
-              <div>{t("jobTitle")}</div>
+              <div>{props.dict.jobTitle}</div>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData("name", e.target.value)}
               />
 
-              <div>{t("actor")}</div>
+              <div>{props.dict.actor}</div>
               <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
-                <For each={actorList}>
+                <For each={props.actorList}>
                   {(actor) => (
                     <option value={actor.id} selected={actor.id === formData.actorId}>
                       {actor.name}
@@ -249,7 +275,7 @@ export function ActivityDialog(): JSXElement {
                         setSelectedAppIndex(Number(e.target.value));
                       }}
                     >
-                      <For each={selectedProcess().detail.applications}>
+                      <For each={props.applications}>
                         {(app, index) => (
                           <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>
                         )}
@@ -259,7 +285,8 @@ export function ActivityDialog(): JSXElement {
                       class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
                       value={
-                        formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")
+                        formData.applications[selectedAppIndex()]?.ognl ??
+                        props.dict.registerProcessApp
                       }
                       onChange={(e) =>
                         setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)
@@ -345,7 +372,7 @@ export function ActivityDialog(): JSXElement {
 
         <ButtonsContainer>
           <button type="submit">OK</button>
-          <button type="button" onClick={handleClose}>
+          <button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
           </button>
         </ButtonsContainer>
