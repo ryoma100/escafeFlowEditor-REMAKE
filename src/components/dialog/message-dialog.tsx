@@ -11,20 +11,7 @@ export function MessageDialog(): JSXElement {
   } = useAppContext();
   const t = i18n.translator(dict);
 
-  createEffect(() => {
-    if (openMessageDialog() != null) {
-      dialogRef?.showModal();
-    } else {
-      dialogRef?.close();
-    }
-  });
-
-  function handleSubmit(e: Event) {
-    e.preventDefault();
-    setOpenMessageDialog(null);
-  }
-
-  function handleClose() {
+  function handleDialogClose() {
     setOpenMessageDialog(null);
   }
 
@@ -33,11 +20,28 @@ export function MessageDialog(): JSXElement {
     return key != null ? t(key) : "";
   };
 
+  return <MessageDialogView message={message()} onDialogClose={handleDialogClose} />;
+}
+
+export function MessageDialogView(props: { message: string; onDialogClose?: () => void }) {
+  createEffect(() => {
+    if (props.message !== "") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const handleFormSubmit = (e: Event) => {
+    e.preventDefault();
+    props.onDialogClose?.();
+  };
+
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
-        <div class="mb-4">{message()}</div>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+      <form class="bg-white p-2" onSubmit={handleFormSubmit}>
+        <div class="mb-4">{props.message}</div>
 
         <ButtonsContainer>
           <button type="submit">OK</button>

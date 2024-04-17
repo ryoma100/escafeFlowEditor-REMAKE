@@ -2,9 +2,11 @@ import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { enDict } from "@/constants/i18n-en";
+import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import {
+  ActivityNode,
   ApplicationEntity,
   EnvironmentEntity,
   ProcessDetailEntity,
@@ -17,23 +19,47 @@ export function ProcessDialog(): JSXElement {
   const {
     processModel: { updateProcessDetail },
     activityNodeModel: { getActivityNodes },
-    dialog: {
-      modalDialog: openDialog,
-      setModalDialog: setOpenDialog,
-      setMessageAlert: setOpenMessageDialog,
-    },
+    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog, setMessageAlert },
   } = useAppContext();
 
-  let process: ProcessEntity = dummy;
+  function handleFormSubmit(process: ProcessEntity) {
+    const errorMessage = updateProcessDetail(process);
+    if (errorMessage) {
+      setMessageAlert(errorMessage);
+      return;
+    }
+    setOpenDialog(null);
+  }
+
+  function handleDialogClose() {
+    setOpenDialog(null);
+  }
+
+  return (
+    <ProcessDialogView
+      openDialog={openDialog()}
+      activityList={getActivityNodes()}
+      onFormSubmit={handleFormSubmit}
+      onDialogClose={handleDialogClose}
+      onOpenMessageDialog={setMessageAlert}
+    />
+  );
+}
+
+export function ProcessDialogView(props: {
+  openDialog: ModalDialogType | null;
+  activityList: ActivityNode[];
+  onFormSubmit?: (formData: ProcessEntity) => void;
+  onDialogClose?: () => void;
+  onOpenMessageDialog?: (key: keyof typeof enDict) => void;
+}) {
   const [formData, setFormData] = createStore<ProcessDetailEntity>(dummy.detail);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
   const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
 
   createEffect(() => {
-    const dialog = openDialog();
-    if (dialog?.type === "process") {
-      process = dialog.process;
-      setFormData(deepUnwrap(dialog.process.detail));
+    if (props.openDialog?.type === "process") {
+      setFormData(deepUnwrap(props.openDialog.process.detail));
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -68,8 +94,8 @@ export function ProcessDialog(): JSXElement {
   function handleRemoveAppButtonClick() {
     const app = selectedApp();
     if (app) {
-      if (getActivityNodes().some((it) => it.applications.some((app) => app.id === app.id))) {
-        setOpenMessageDialog("applicationCannotDelete");
+      if (props.activityList.some((it) => it.applications.some((app) => app.id === app.id))) {
+        props.onOpenMessageDialog?.("applicationCannotDelete");
         return;
       }
       setFormData(
@@ -82,21 +108,19 @@ export function ProcessDialog(): JSXElement {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    const errorMessage = updateProcessDetail({ ...process, detail: deepUnwrap(formData) });
-    if (errorMessage) {
-      setOpenMessageDialog(errorMessage);
-      return;
+    if (props.openDialog?.type === "process") {
+      const newProcess = { ...props.openDialog.process, detail: deepUnwrap(formData) };
+      props.onFormSubmit?.(newProcess);
     }
-    setOpenDialog(null);
-  }
-
-  function handleClose() {
-    setOpenDialog(null);
   }
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[520px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+    <dialog
+      class="w-[520px] bg-primary2 p-2"
+      ref={dialogRef}
+      onClose={() => props.onDialogClose?.()}
+    >
       <h5 class="mb-2">ワークフロープロセスの編集</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
@@ -255,7 +279,7 @@ export function ProcessDialog(): JSXElement {
 
         <ButtonsContainer>
           <button type="submit">OK</button>
-          <button type="button" onClick={handleClose}>
+          <button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
           </button>
         </ButtonsContainer>
