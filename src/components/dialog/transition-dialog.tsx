@@ -1,9 +1,9 @@
-import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { enDict } from "@/constants/i18n-en";
+import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
 
@@ -19,16 +19,43 @@ export function TransitionDialog(): JSXElement {
     transitionEdgeModel: { updateTransitionEdge },
     i18n: { dict },
   } = useAppContext();
-  const t = i18n.translator(dict);
 
+  function handleFormSubmit(formData: TransitionEdge) {
+    const errorMessage = updateTransitionEdge(formData);
+    if (errorMessage) {
+      setOpenMessageDialog(errorMessage);
+      return;
+    }
+    setOpenDialog(null);
+  }
+
+  function handleDialogClose() {
+    setOpenDialog(null);
+  }
+
+  return (
+    <TransitionDialogView
+      openDialog={openDialog()}
+      dict={dict()}
+      onFormSubmit={handleFormSubmit}
+      onDialogClose={handleDialogClose}
+    />
+  );
+}
+
+export function TransitionDialogView(props: {
+  openDialog: ModalDialogType | null;
+  dict: typeof enDict;
+  onFormSubmit?: (formData: TransitionEdge) => void;
+  onDialogClose?: () => void;
+}) {
   const [formData, setFormData] = createStore<TransitionEdge>(dummy);
   const [showOgnl, setShowOgnl] = createSignal<boolean>(false);
 
   createEffect(() => {
-    const dialog = openDialog();
-    if (dialog?.type === "transition") {
-      setFormData({ ...dialog.transition });
-      setShowOgnl(dialog.transition.ognl !== "");
+    if (props.openDialog?.type === "transition") {
+      setFormData({ ...props.openDialog.transition });
+      setShowOgnl(props.openDialog.transition.ognl !== "");
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -37,23 +64,13 @@ export function TransitionDialog(): JSXElement {
 
   function handleSubmit(e: Event) {
     e.preventDefault();
-
-    const errorMessage = updateTransitionEdge(deepUnwrap(formData));
-    if (errorMessage) {
-      setOpenMessageDialog(errorMessage);
-      return;
-    }
-    setOpenDialog(null);
-  }
-
-  function handleClose() {
-    setOpenDialog(null);
+    props.onFormSubmit?.(deepUnwrap(formData));
   }
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5 class="mb-2">{t("editTransition")}</h5>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+      <h5 class="mb-2">{props.dict.editTransition}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center space-y-2">
           <div>ID：</div>
@@ -98,7 +115,7 @@ export function TransitionDialog(): JSXElement {
 
         <ButtonsContainer>
           <button type="submit">OK</button>
-          <button type="button" onClick={handleClose}>
+          <button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
           </button>
         </ButtonsContainer>

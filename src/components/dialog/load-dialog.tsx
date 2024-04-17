@@ -1,8 +1,8 @@
-import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { enDict } from "@/constants/i18n-en";
+import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { importXml } from "@/data-source/data-converter";
 import { ProjectEntity } from "@/data-source/data-type";
 
@@ -12,12 +12,38 @@ export function LoadDialog(): JSXElement {
     processModel: { load },
     i18n: { dict },
   } = useAppContext();
-  const t = i18n.translator(dict);
 
+  function handleFormSubmit(formData: string) {
+    // TODO: parse error
+    const project: ProjectEntity = importXml(formData);
+    load(project);
+    setOpenDialog(null);
+  }
+
+  function handleDialogClose() {
+    setOpenDialog(null);
+  }
+
+  return (
+    <LoadDialogView
+      openDialog={openDialog()}
+      dict={dict()}
+      onFormSubmit={handleFormSubmit}
+      onDialogClose={handleDialogClose}
+    />
+  );
+}
+
+export function LoadDialogView(props: {
+  openDialog: ModalDialogType | null;
+  dict: typeof enDict;
+  onFormSubmit?: (formData: string) => void;
+  onDialogClose?: () => void;
+}) {
   const [data, setData] = createSignal<string>("");
 
   createEffect(() => {
-    if (openDialog()?.type === "load") {
+    if (props.openDialog?.type === "load") {
       dialogRef?.showModal();
       okButtonRef?.focus();
       setData("");
@@ -26,25 +52,21 @@ export function LoadDialog(): JSXElement {
     }
   });
 
-  function handleSubmit(e: Event) {
+  function handleFormSubmit(e: Event) {
     e.preventDefault();
-
-    // TODO: parse error
-    const project: ProjectEntity = importXml(data());
-    load(project);
-    setOpenDialog(null);
-  }
-
-  function handleClose() {
-    setOpenDialog(null);
+    props.onFormSubmit?.(data());
   }
 
   let dialogRef: HTMLDialogElement | undefined;
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="w-[512px] bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
-      <h5 class="mb-2">{t("xpdlLoad")}</h5>
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
+    <dialog
+      class="w-[512px] bg-primary2 p-2"
+      ref={dialogRef}
+      onClose={() => props.onDialogClose?.()}
+    >
+      <h5 class="mb-2">{props.dict.xpdlLoad}</h5>
+      <form class="bg-white p-2" onSubmit={handleFormSubmit}>
         <textarea
           class="mb-2 h-[512px] w-full resize-none"
           value={data()}
@@ -55,7 +77,7 @@ export function LoadDialog(): JSXElement {
           <button type="submit" ref={okButtonRef}>
             Load
           </button>
-          <button type="button" onClick={handleClose}>
+          <button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
           </button>
         </ButtonsContainer>

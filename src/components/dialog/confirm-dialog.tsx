@@ -1,8 +1,8 @@
-import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { enDict } from "@/constants/i18n-en";
+import { ModalDialogType, useAppContext } from "@/context/app-context";
 
 export function ConfirmDialog(): JSXElement {
   const {
@@ -11,20 +11,8 @@ export function ConfirmDialog(): JSXElement {
     dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     i18n: { dict },
   } = useAppContext();
-  const t = i18n.translator(dict);
 
-  createEffect(() => {
-    const dialog = openDialog();
-    if (dialog?.type === "initAll" || dialog?.type === "deleteProcess") {
-      dialogRef?.showModal();
-    } else {
-      dialogRef?.close();
-    }
-  });
-
-  function handleSubmit(e: Event) {
-    e.preventDefault();
-
+  function handleSubmit() {
     const dialog = openDialog();
     switch (dialog?.type) {
       case "initAll":
@@ -41,26 +29,55 @@ export function ConfirmDialog(): JSXElement {
     setOpenDialog(null);
   }
 
-  const dialogMessage = () => {
-    switch (openDialog()?.type) {
+  return (
+    <ConfirmDialogView
+      openDialog={openDialog()}
+      dict={dict()}
+      onFormSubmit={handleSubmit}
+      onDialogClose={handleClose}
+    />
+  );
+}
+
+export function ConfirmDialogView(props: {
+  openDialog: ModalDialogType | null;
+  dict: typeof enDict;
+  onFormSubmit?: () => void;
+  onDialogClose?: () => void;
+}) {
+  createEffect(() => {
+    if (props.openDialog?.type === "initAll" || props.openDialog?.type === "deleteProcess") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const message = () => {
+    switch (props.openDialog?.type) {
       case "initAll":
-        return t("initAllConfirm");
+        return props.dict.initAllConfirm;
       case "deleteProcess":
-        return t("deleteProcessConfirm");
+        return props.dict.deleteProcessConfirm;
       default:
         return "";
     }
   };
 
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+    props.onFormSubmit?.();
+  };
+
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={handleClose}>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
-        <p class="mb-4">{dialogMessage()}</p>
+        <p class="mb-4">{message()}</p>
 
         <ButtonsContainer>
           <button type="submit">OK</button>
-          <button type="button" onClick={handleClose}>
+          <button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
           </button>
         </ButtonsContainer>
