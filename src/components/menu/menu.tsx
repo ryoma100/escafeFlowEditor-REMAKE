@@ -27,7 +27,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleFileSaveClick() {
-    setOpenDialog({ type: "save", project });
+    setOpenDialog({ type: "save", project: project() });
     return false;
   }
 
@@ -67,7 +67,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProjectPropertyClick() {
-    setOpenDialog({ type: "project", project });
+    setOpenDialog({ type: "project", project: project() });
     return false;
   }
 
