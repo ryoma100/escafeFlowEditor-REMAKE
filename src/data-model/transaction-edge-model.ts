@@ -3,6 +3,7 @@ import { makeEdgeModel } from "@/data-model/edge-model";
 import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
+import { produce } from "solid-js/store";
 
 export function makeTransactionEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,
@@ -47,7 +48,15 @@ export function makeTransactionEdgeModel(
       return "idExists";
     }
 
-    edgeModel.setEdgeList([...edgeModel.edgeList, transition]);
+    edgeModel.setEdgeList(
+      (it) => it.id === transition.id,
+      produce((it) => {
+        if (it.type === "transitionEdge") {
+          it.xpdlId = transition.xpdlId;
+          it.ognl = transition.ognl;
+        }
+      }),
+    );
   }
 
   return { addTransitionEdge, getTransitionEdges, updateTransitionEdge };

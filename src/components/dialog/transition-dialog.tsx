@@ -54,8 +54,9 @@ export function TransitionDialogView(props: {
 
   createEffect(() => {
     if (props.openDialog?.type === "transition") {
-      setFormData({ ...props.openDialog.transition });
-      setShowOgnl(props.openDialog.transition.ognl !== "");
+      const transition = deepUnwrap(props.openDialog.transition);
+      setFormData(transition);
+      setShowOgnl(transition.ognl !== "");
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -64,7 +65,12 @@ export function TransitionDialogView(props: {
 
   function handleSubmit(e: Event) {
     e.preventDefault();
-    props.onFormSubmit?.(deepUnwrap(formData));
+
+    const transition = deepUnwrap(formData);
+    if (!showOgnl()) {
+      transition.ognl = "";
+    }
+    props.onFormSubmit?.(transition);
   }
 
   let dialogRef: HTMLDialogElement | undefined;
