@@ -5,7 +5,7 @@ import { useAppContext } from "@/context/app-context";
 
 export function AppMenu(): JSXElement {
   const {
-    projectModel: { project },
+    projectModel: { project, save },
     processModel: { addProcess, selectedProcess, processList },
     actorModel: { addActor, removeSelectedActor, selectedActor },
     nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
@@ -27,6 +27,7 @@ export function AppMenu(): JSXElement {
   }
 
   function handleFileSaveClick() {
+    save();
     setOpenDialog({ type: "save", project: project() });
     return false;
   }
