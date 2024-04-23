@@ -1,6 +1,6 @@
 # escafeFlowEditor-REMAKE
 
-This is a simple workflow editor. This is made to practice for developing a diagram editor.
+This is a remake of [escafeFlowEditor](https://github.com/ryoma100/escafeFlowEditor) created with adobe flash and remade with Solid.js.
 
 ### Tauri + Solid + Typescript
 
