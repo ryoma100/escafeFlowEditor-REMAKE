@@ -1,3 +1,5 @@
+[Playground](https://www.google.com/search?client=safari&rls=en&q=playgroujnd&ie=UTF-8&oe=UTF-8)
+
 # escafeFlowEditor-REMAKE
 
 This is a remake of [escafeFlowEditor](https://github.com/ryoma100/escafeFlowEditor) created with adobe flash and remade with Solid.js.
