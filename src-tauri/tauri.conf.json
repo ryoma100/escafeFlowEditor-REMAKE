@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "tiny-es-flow-editor",
+    "productName": "escafe-flow-editor-remake",
     "version": "0.0.0"
   },
   "tauri": {
@@ -36,7 +36,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "tiny-es-flow-editor",
+        "title": "escafeFlowEditor-REMAKE",
         "width": 800,
         "height": 600
       }

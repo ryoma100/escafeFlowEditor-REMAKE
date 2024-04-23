@@ -1,4 +1,4 @@
-name: tiny-es-flow-editor Workflow
+name: escafeFlowEditor-REMAKE Workflow
 on:
   push:
     branches: ["main"]

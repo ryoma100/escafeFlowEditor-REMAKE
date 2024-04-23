@@ -1,4 +1,4 @@
-# tiny-es-flow-editor
+# escafeFlowEditor-REMAKE
 
 This is a simple workflow editor. This is made to practice for developing a diagram editor.
 
