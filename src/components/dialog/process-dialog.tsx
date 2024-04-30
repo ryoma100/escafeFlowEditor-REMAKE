@@ -146,7 +146,7 @@ export function ProcessDialogView(props: {
               <td class="w-[240px] pl-1">値</td>
             </tr>
           </thead>
-          <tbody class="block h-[88px] overflow-x-hidden overflow-y-scroll">
+          <tbody class="block h-[64px] overflow-x-hidden overflow-y-scroll">
             <For each={formData.environments}>
               {(it, index) => (
                 <tr
@@ -197,7 +197,7 @@ export function ProcessDialogView(props: {
               <td class="w-[120px] pl-1">拡張値</td>
             </tr>
           </thead>
-          <tbody class="block h-[88px] overflow-x-hidden overflow-y-scroll">
+          <tbody class="block h-[64px] overflow-x-hidden overflow-y-scroll">
             <For each={formData.applications}>
               {(it, index) => (
                 <tr
@@ -258,8 +258,8 @@ export function ProcessDialogView(props: {
           </button>
         </ButtonsContainer>
 
-        <p class="mb-2">有効期限</p>
-        <div class="mb-4 grid grid-cols-[80px_220px_180px] items-center gap-y-2">
+        <p>有効期限</p>
+        <div class="mb-2 grid grid-cols-[80px_220px_180px] items-center gap-y-2">
           <p>From：</p>
           <input
             type="text"

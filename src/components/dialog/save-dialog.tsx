@@ -1,3 +1,5 @@
+import { dialog } from "@tauri-apps/api";
+import { writeTextFile } from "@tauri-apps/api/fs";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
@@ -11,8 +13,33 @@ export function SaveDialog(): JSXElement {
     i18n: { dict },
   } = useAppContext();
 
-  function handleFormSubmit(_formData: string) {
+  function handleFormSubmit(formData: string) {
+    if ("__TAURI_IPC__" in window) {
+      tauriSave(formData);
+    } else {
+      webSave(formData);
+    }
     setOpenDialog(null);
+  }
+
+  function webSave(data: string) {
+    const blob = new Blob([data], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.download = "foo.xml";
+    a.href = url;
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function tauriSave(data: string) {
+    const filename = "foo.xml";
+    const path = await dialog.save({ defaultPath: filename });
+    if (path) {
+      await writeTextFile(path, data);
+    }
   }
 
   function handleDialogClose() {
@@ -56,13 +83,13 @@ export function SaveDialogView(props: {
   let okButtonRef: HTMLButtonElement | undefined;
   return (
     <dialog
-      class="w-[512px] bg-primary2 p-2"
+      class="h-[536px] w-[768px] bg-primary2 p-2"
       ref={dialogRef}
       onClose={() => props.onDialogClose?.()}
     >
       <h5 class="mb-2">{props.dict.xpdlSave}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <textarea class="mb-2 h-[512px] w-full resize-none" readOnly>
+        <textarea class="mb-2 h-[436px] w-full resize-none" readOnly>
           {data()}
         </textarea>
 

@@ -42,7 +42,7 @@ export function Toolbar(): JSXElement {
         title={t("select")}
         checked={toolbar() === "cursor"}
         onChange={() => setToolbar("cursor")}
-        margin="0 0 4px 0"
+        margin="4px 0 8px 0"
       >
         <CursorSvg />
       </ToggleIconButton>
@@ -52,7 +52,7 @@ export function Toolbar(): JSXElement {
         title={t("transition")}
         checked={toolbar() === "transition"}
         onChange={() => setToolbar("transition")}
-        margin="0 0 8px 0"
+        margin="0 0 16px 0"
       >
         <TransitionSvg />
       </ToggleIconButton>
@@ -62,7 +62,7 @@ export function Toolbar(): JSXElement {
         title={t("manualActivity")}
         checked={toolbar() === "addManualActivity"}
         onChange={() => setToolbar("addManualActivity")}
-        margin="0 0 4px 0"
+        margin="0 0 8px 0"
       >
         <ManualActivitySvg />
       </ToggleIconButton>
@@ -72,7 +72,7 @@ export function Toolbar(): JSXElement {
         title={t("autoActivity")}
         checked={toolbar() === "addAutoActivity"}
         onChange={() => setToolbar("addAutoActivity")}
-        margin="0 0 4px 0"
+        margin="0 0 8px 0"
       >
         <AutoActivitySvg />
       </ToggleIconButton>
@@ -82,7 +82,7 @@ export function Toolbar(): JSXElement {
         title={t("handWork")}
         checked={toolbar() === "addUserActivity"}
         onChange={() => setToolbar("addUserActivity")}
-        margin="0 0 8px 0"
+        margin="0 0 16px 0"
       >
         <UserActivitySvg />
       </ToggleIconButton>
@@ -92,7 +92,7 @@ export function Toolbar(): JSXElement {
         title={t("start")}
         checked={toolbar() === "addStartNode"}
         onChange={() => setToolbar("addStartNode")}
-        margin="0 0 4px 0"
+        margin="0 0 8px 0"
       >
         <StartSvg />
       </ToggleIconButton>
@@ -102,7 +102,7 @@ export function Toolbar(): JSXElement {
         title={t("end")}
         checked={toolbar() === "addEndNode"}
         onChange={() => setToolbar("addEndNode")}
-        margin="0 0 4px 0"
+        margin="0 0 8px 0"
       >
         <EndSvg />
       </ToggleIconButton>

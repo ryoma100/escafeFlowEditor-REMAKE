@@ -12,9 +12,15 @@
   "tauri": {
     "allowlist": {
       "all": false,
-      "shell": {
+      "fs": {
         "all": false,
-        "open": true
+        "readFile": true,
+        "writeFile": true
+      },
+      "dialog": {
+        "all": false,
+        "open": true,
+        "save": true
       }
     },
     "bundle": {
@@ -36,7 +42,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "escafeFlowEditor-REMAKE",
+        "title": "escafeFlowEditor REMAKE",
         "width": 800,
         "height": 600
       }
