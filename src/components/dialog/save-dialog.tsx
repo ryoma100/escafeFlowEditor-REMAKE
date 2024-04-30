@@ -1,11 +1,11 @@
+import { dialog } from "@tauri-apps/api";
+import { writeTextFile } from "@tauri-apps/api/fs";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { enDict } from "@/constants/i18n-en";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { exportXml } from "@/data-source/data-converter";
-import { save } from "@tauri-apps/api/dialog";
-import { writeTextFile } from "@tauri-apps/api/fs";
 
 export function SaveDialog(): JSXElement {
   const {
@@ -15,28 +15,28 @@ export function SaveDialog(): JSXElement {
 
   function handleFormSubmit(formData: string) {
     if ("__TAURI_IPC__" in window) {
-      tauriDownload(formData);
+      tauriSave(formData);
     } else {
-      webDownload(formData);
+      webSave(formData);
     }
     setOpenDialog(null);
   }
 
-  function webDownload(data: string) {
+  function webSave(data: string) {
     const blob = new Blob([data], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     document.body.appendChild(a);
-    a.download = "foo.txt";
+    a.download = "foo.xml";
     a.href = url;
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
   }
 
-  async function tauriDownload(data: string) {
-    const filename = "foo.txt";
-    const path = await save({ defaultPath: filename });
+  async function tauriSave(data: string) {
+    const filename = "foo.xml";
+    const path = await dialog.save({ defaultPath: filename });
     if (path) {
       await writeTextFile(path, data);
     }

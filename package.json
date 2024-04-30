@@ -1,7 +1,7 @@
 {
   "name": "escafe-flow-editor-remake",
   "version": "0.0.0",
-  "description": "escafeFlowEditor-REMAKE",
+  "description": "escafeFlowEditor REMAKE",
   "type": "module",
   "scripts": {
     "start": "vite",
