@@ -93,7 +93,7 @@ export function DiagramContainer(): JSXElement {
                 basePoint: { x, y },
               });
             } else {
-              setDragMode({ type: "moveNodes" });
+              setDragMode({ type: "scroll" });
             }
           } else {
             // onSingleMouseDown

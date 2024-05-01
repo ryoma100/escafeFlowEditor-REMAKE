@@ -36,6 +36,7 @@ export function LoadDialog(): JSXElement {
   function webLoad() {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
+    input.setAttribute("accept", ".xml");
     input.style.display = "none";
     input.addEventListener("change", (e) => {
       const target = e.target as HTMLInputElement;
@@ -47,10 +48,10 @@ export function LoadDialog(): JSXElement {
         load(project);
       };
       reader.readAsText(file);
+      input.remove();
     });
     document.body.appendChild(input);
     input.click();
-    input.remove();
   }
 
   function handleDialogClose() {
