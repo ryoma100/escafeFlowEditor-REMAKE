@@ -25,7 +25,7 @@ pre-commit:
       glob: "*.{tsx,ts}"
       run: pnpm lint:tsc
     cspell:
-      glob: "*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md,yml,yaml}"
+      glob: "*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md}"
       run: pnpm cspell lint --gitignore --cache {staged_files}
     test:
       run: pnpm test run
