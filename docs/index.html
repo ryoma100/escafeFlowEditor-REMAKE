@@ -2,12 +2,94 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
     <title>escafeFlowEditor REMAKE</title>
+    <link rel="stylesheet" href="index.css" type="text/css" />
   </head>
 
   <body>
-    <h1>escafeFlowEditor REMAKE</h1>
+    <h2>escafeFlowEditor REMAKE</h2>
+    <ul>
+      <li><a href="https://ryoma100.github.io/escafeFlowEditor-REMAKE/editor/">Web版</a></li>
+      <li><a href="https://github.com/ryoma100/escafeFlowEditor-REMAKE/releases">App版</a></li>
+    </ul>
+
+    <hr />
+    <p>
+      以下は、Flash版escafeFlowEditorの当時のドキュメントです。特殊な操作方法も同じです。REMAKE版では、機能追加のバージョンアップはありません。
+    </p>
+    <h2>escafeFlowEditor</h2>
+    <p>escafeFlowEditorとは、escafeFlow専用のxpdlエディタです。</p>
+    <p>
+      escafeFlow用のxpdlファイルは、JaWEやJPEdといったxpdlエディタで編集できます。しかし、それらのエディタはxpdlの全ての編集ができるように多機能になっています。escafeFlowはxpdlの一部のみを使うので、慣れないうちは操作に迷うかもしれません。
+    </p>
+    <p>
+      xpdlのうちescafeFlowで使う部分だけを簡単に編集できる専用のエディタとして、escafeFlowEditorを開発しています。残念ながら、現在のバージョンではescafeFlowの全てをサポートできていません。今後のバージョンアップで少しずつ対応していきますので、ご期待ください。
+    </p>
+
+    <hr />
+    <p>特殊な操作方法について、説明しておきます。</p>
+
+    <h5>■ アクティビティの横幅を変える</h5>
+    <p>
+      アクティビティを選択すると上下左右に太線が引かれて選択されていることが分かります。その左右の線ぴったりにマウスカーソルを合わせて左右にドラッグすると、アクティビティの横幅が変わります。アクティビティの仕事名が長い場合に、改行の位置が横幅に合わせて自動的に変わります。
+    </p>
+
+    <h5>■ シングルクリック操作</h5>
+    <p>
+      マウスクリック（というかマウスダウンしたまま）マウスを移動する操作です。何も無い空白の部分で操作します。
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <td>キーを押さないで</td>
+          <td>マウス移動すると</td>
+          <td>複数選択します</td>
+        </tr>
+        <tr>
+          <td>Shiftキーを押しながら</td>
+          <td>マウス移動すると</td>
+          <td>クリック位置を中心点として矩形選択します</td>
+        </tr>
+        <tr>
+          <td>Ctrl/Commandキーを押しながら</td>
+          <td>マウス移動すると</td>
+          <td>クリック位置を中心点として円選択します</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h5>■ ダブルクリック操作</h5>
+    <p>
+      ダブルクリック（マウスダウン→マウスアップ→マウスダウンしたまま）マウスを移動する操作です。何も無い空白の部分で操作します。
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <td>キーを押さないで</td>
+          <td>マウス移動すると</td>
+          <td>スクロールします</td>
+        </tr>
+        <tr>
+          <td>Shiftキーを押しながら</td>
+          <td>マウス横移動すると</td>
+          <td>ダブルクリック位置を中心点として左右に空間を作ります</td>
+        </tr>
+        <tr>
+          <td>Shiftキーを押しながら</td>
+          <td>マウス縦移動すると</td>
+          <td>ダブルクリック位置を中心点として上下に空間を作ります</td>
+        </tr>
+        <tr>
+          <td>Ctrl/Commandキーを押しながら</td>
+          <td>マウス横移動すると</td>
+          <td>ダブルクリック位置を中心点として左右に回転します</td>
+        </tr>
+        <tr>
+          <td>Ctrl/Commandキーを押しながら</td>
+          <td>マウス縦移動すると</td>
+          <td>ダブルクリック位置を中心点として上下左右に分散縮小します</td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>
