@@ -21,6 +21,9 @@
         "all": false,
         "open": true,
         "save": true
+      },
+      "shell": {
+        "open": true
       }
     },
     "bundle": {
