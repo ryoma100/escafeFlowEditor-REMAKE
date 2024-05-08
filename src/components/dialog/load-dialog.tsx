@@ -15,7 +15,13 @@ export function LoadDialog(): JSXElement {
     i18n: { dict },
   } = useAppContext();
 
-  function handleFormSubmit() {
+  function handleInput(data: string) {
+    const project: ProjectEntity = importXml(data);
+    load(project);
+    setOpenDialog(null);
+  }
+
+  function handleFileLoad() {
     if ("__TAURI_IPC__" in window) {
       tauriLoad();
     } else {
@@ -62,7 +68,8 @@ export function LoadDialog(): JSXElement {
     <LoadDialogView
       openDialog={openDialog()}
       dict={dict()}
-      onFormSubmit={handleFormSubmit}
+      onLoadClick={handleFileLoad}
+      onInputClick={handleInput}
       onDialogClose={handleDialogClose}
     />
   );
@@ -71,7 +78,8 @@ export function LoadDialog(): JSXElement {
 export function LoadDialogView(props: {
   openDialog: ModalDialogType | null;
   dict: typeof enDict;
-  onFormSubmit?: () => void;
+  onLoadClick?: () => void;
+  onInputClick?: (data: string) => void;
   onDialogClose?: () => void;
 }) {
   const [data, setData] = createSignal<string>("");
@@ -79,7 +87,7 @@ export function LoadDialogView(props: {
   createEffect(() => {
     if (props.openDialog?.type === "load") {
       dialogRef?.showModal();
-      okButtonRef?.focus();
+      loadButtonRef?.focus();
       setData("");
     } else {
       dialogRef?.close();
@@ -88,30 +96,34 @@ export function LoadDialogView(props: {
 
   function handleFormSubmit(e: Event) {
     e.preventDefault();
-    props.onFormSubmit?.();
+    props.onLoadClick?.();
   }
 
   let dialogRef: HTMLDialogElement | undefined;
-  let okButtonRef: HTMLInputElement | undefined;
+  let loadButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog
-      class="h-[536px] w-[768px] bg-primary2 p-2"
-      ref={dialogRef}
-      onClose={() => props.onDialogClose?.()}
-    >
+    <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
       <h5 class="mb-2">{props.dict.xpdlLoad}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
+        <p class="mb-2">XPDLファイルの内容をコピーペーストで入力してください。</p>
         <textarea
-          class="mb-2 h-[436px] w-full resize-none"
+          class="mb-2 h-[410px] w-full resize-none"
           value={data()}
           onChange={(e) => setData(e.target.value)}
         />
-        <ButtonsContainer>
-          <button type="submit">Load</button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
-            Cancel
+        <div class="flex justify-between">
+          <button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
+            ファイルから読み込む
           </button>
-        </ButtonsContainer>
+          <ButtonsContainer>
+            <button type="button" onClick={() => props.onInputClick?.(data())}>
+              入力したXPDLを読み込む
+            </button>
+            <button type="button" onClick={() => props.onDialogClose?.()}>
+              閉じる
+            </button>
+          </ButtonsContainer>
+        </div>
       </form>
     </dialog>
   );
