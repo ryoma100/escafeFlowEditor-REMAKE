@@ -27,7 +27,7 @@ export function SaveDialog(): JSXElement {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     document.body.appendChild(a);
-    a.download = "foo.xml";
+    a.download = "flow.xml";
     a.href = url;
     a.click();
     a.remove();
@@ -35,7 +35,7 @@ export function SaveDialog(): JSXElement {
   }
 
   async function tauriSave(data: string) {
-    const filename = "foo.xml";
+    const filename = "flow.xml";
     const path = await dialog.save({ defaultPath: filename });
     if (path) {
       await writeTextFile(path, data);
@@ -67,7 +67,7 @@ export function SaveDialogView(props: {
   createEffect(() => {
     if (props.openDialog?.type === "save") {
       dialogRef?.showModal();
-      okButtonRef?.focus();
+      saveButtonRef?.focus();
       setData(exportXml(props.openDialog.project));
     } else {
       dialogRef?.close();
@@ -80,25 +80,22 @@ export function SaveDialogView(props: {
   }
 
   let dialogRef: HTMLDialogElement | undefined;
-  let okButtonRef: HTMLButtonElement | undefined;
+  let saveButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog
-      class="h-[536px] w-[768px] bg-primary2 p-2"
-      ref={dialogRef}
-      onClose={() => props.onDialogClose?.()}
-    >
+    <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
       <h5 class="mb-2">{props.dict.xpdlSave}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <textarea class="mb-2 h-[436px] w-full resize-none" readOnly>
+        <p class="mb-2">下記のXPDLの内容をコピーペーストで保存してください。</p>
+        <textarea class="mb-2 h-[410px] w-full resize-none" readOnly>
           {data()}
         </textarea>
 
         <ButtonsContainer>
-          <button type="submit" ref={okButtonRef}>
-            Save
+          <button type="button" ref={saveButtonRef} onClick={handleFormSubmit}>
+            ファイルに保存
           </button>
           <button type="button" onClick={() => props.onDialogClose?.()}>
-            Cancel
+            閉じる
           </button>
         </ButtonsContainer>
       </form>
