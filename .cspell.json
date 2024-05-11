@@ -43,6 +43,7 @@
     "**/*.icns",
     "**/*.svg",
     "**/*.avif",
-    "lefthook.yml"
+    "lefthook.yml",
+    "**/*.mp4"
   ]
 }

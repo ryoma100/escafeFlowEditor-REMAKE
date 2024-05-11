@@ -7,7 +7,7 @@ import ManualTimerActivitySvg from "@/assets/material-icons/manual-timer-activit
 import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
-import { enDict } from "@/constants/i18n-en";
+import { I18nDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
@@ -57,7 +57,7 @@ export function ActivityDialogView(props: {
   openDialog: ModalDialogType | null;
   applications: ApplicationEntity[];
   actorList: ActorEntity[];
-  dict: typeof enDict;
+  dict: I18nDict;
   onFormSubmit?: (formData: ActivityNode) => void;
   onDialogClose?: () => void;
 }) {
@@ -174,7 +174,7 @@ export function ActivityDialogView(props: {
               peer-checked/tab-switch1:bg-primary1"
             for="tab-join"
           >
-            はじまり
+            {props.dict.beginning}
           </label>
           <div
             class="
@@ -185,7 +185,7 @@ export function ActivityDialogView(props: {
             }}
           >
             <div>
-              <div>前の仕事が・・・</div>
+              <div>{props.dict.previousWork}</div>
               <div>
                 <input
                   type="radio"
@@ -196,7 +196,7 @@ export function ActivityDialogView(props: {
                   checked={formData.joinType === "xorJoin"}
                   onChange={() => setFormData("joinType", "xorJoin")}
                 />
-                <label for="joinOne">ひとつでも終わったら</label>
+                <label for="joinOne">{props.dict.whenOneDone}</label>
               </div>
               <div>
                 <input
@@ -208,9 +208,9 @@ export function ActivityDialogView(props: {
                   checked={formData.joinType === "andJoin"}
                   onChange={() => setFormData("joinType", "andJoin")}
                 />
-                <label for="joinMany">すべて終わったら</label>
+                <label for="joinMany">{props.dict.whenAllOver}</label>
               </div>
-              <div>この仕事を行う。</div>
+              <div>{props.dict.executeJob}</div>
             </div>
           </div>
 
@@ -231,7 +231,7 @@ export function ActivityDialogView(props: {
               peer-checked/tab-switch2:bg-primary1"
             for="tab-work"
           >
-            仕事
+            {props.dict.work}
           </label>
           <div
             class="
@@ -266,7 +266,7 @@ export function ActivityDialogView(props: {
 
               <Switch>
                 <Match when={formData.activityType === "autoActivity"}>
-                  <div>処理内容 (OGNL)</div>
+                  <div>{props.dict.processingDetails}</div>
                   <div class="flex h-[160px] flex-col border-solid border-gray-300">
                     <select
                       disabled={selectedAppIndex() < 0}
@@ -300,7 +300,7 @@ export function ActivityDialogView(props: {
                     formData.activityType === "autoTimerActivity"
                   }
                 >
-                  <div>自動で実行するのはいつ？ (OGNL)</div>
+                  <div>{props.dict.whenRunAutomatically}</div>
                   <div class="h-[160px] w-[266px]">
                     <textarea
                       class="b-0 h-full w-full resize-none"
@@ -329,7 +329,7 @@ export function ActivityDialogView(props: {
               peer-checked/tab-switch3:bg-primary1"
             for="tab-split"
           >
-            終わったら
+            {props.dict.termination}
           </label>
           <div
             class="
@@ -340,7 +340,7 @@ export function ActivityDialogView(props: {
             }}
           >
             <div>
-              <div>後続の仕事への接続条件を満たす・・・</div>
+              <div>{props.dict.nextJobCondition}</div>
               <div>
                 <input
                   type="radio"
@@ -351,7 +351,7 @@ export function ActivityDialogView(props: {
                   checked={formData.splitType === "xorSplit"}
                   onChange={() => setFormData("splitType", "xorSplit")}
                 />
-                <label for="splitOne">どれかひとつ</label>
+                <label for="splitOne">{props.dict.oneOfThese}</label>
               </div>
               <div>
                 <input
@@ -363,9 +363,9 @@ export function ActivityDialogView(props: {
                   checked={formData.splitType === "andSplit"}
                   onChange={() => setFormData("splitType", "andSplit")}
                 />
-                <label for="splitMany">すべて</label>
+                <label for="splitMany">{props.dict.all}</label>
               </div>
-              <div>に続く</div>
+              <div>{props.dict.processContinues}</div>
             </div>
           </div>
         </div>

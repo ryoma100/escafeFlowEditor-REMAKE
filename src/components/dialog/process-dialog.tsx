@@ -2,7 +2,7 @@ import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { enDict } from "@/constants/i18n-en";
+import { I18nDict, i18nEnDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import {
@@ -17,6 +17,7 @@ const dummy = dataFactory.createProcess([]);
 
 export function ProcessDialog(): JSXElement {
   const {
+    i18n: { dict },
     processModel: { updateProcessDetail },
     activityNodeModel: { getActivityNodes },
     dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog, setMessageAlert },
@@ -39,6 +40,7 @@ export function ProcessDialog(): JSXElement {
     <ProcessDialogView
       openDialog={openDialog()}
       activityList={getActivityNodes()}
+      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
       onOpenMessageDialog={setMessageAlert}
@@ -49,9 +51,10 @@ export function ProcessDialog(): JSXElement {
 export function ProcessDialogView(props: {
   openDialog: ModalDialogType | null;
   activityList: ActivityNode[];
+  dict: I18nDict;
   onFormSubmit?: (formData: ProcessEntity) => void;
   onDialogClose?: () => void;
-  onOpenMessageDialog?: (key: keyof typeof enDict) => void;
+  onOpenMessageDialog?: (key: keyof typeof i18nEnDict) => void;
 }) {
   const [formData, setFormData] = createStore<ProcessDetailEntity>(dummy.detail);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
@@ -121,16 +124,16 @@ export function ProcessDialogView(props: {
       ref={dialogRef}
       onClose={() => props.onDialogClose?.()}
     >
-      <h5 class="mb-2">ワークフロープロセスの編集</h5>
+      <h5 class="mb-2">{props.dict.editProcess}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
-          <p>ID：</p>
+          <p>ID:</p>
           <input
             type="text"
             value={formData.xpdlId}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <p>名前：</p>
+          <p>{props.dict.name}:</p>
           <input
             type="text"
             value={formData.name}
@@ -138,12 +141,12 @@ export function ProcessDialogView(props: {
           />
         </div>
 
-        <p class="mb-1 mt-2">拡張設定：</p>
+        <p class="mb-1 mt-2">{props.dict.extendedSetting}:</p>
         <table class="mb-2 w-full border-collapse border border-solid border-primary3 bg-white">
           <thead class="block bg-primary3 pr-4">
             <tr>
-              <td class="w-[240px] pl-1">名前</td>
-              <td class="w-[240px] pl-1">値</td>
+              <td class="w-[240px] pl-1">{props.dict.name}</td>
+              <td class="w-[240px] pl-1">{props.dict.value}</td>
             </tr>
           </thead>
           <tbody class="block h-[64px] overflow-x-hidden overflow-y-scroll">
@@ -180,21 +183,21 @@ export function ProcessDialogView(props: {
         </table>
         <ButtonsContainer justify="end">
           <button type="button" onClick={handleAddEnvButtonClick}>
-            追加
+            {props.dict.add}
           </button>
           <button type="button" onClick={handleRemoveEnvButtonClick}>
-            削除
+            {props.dict.delete}
           </button>
         </ButtonsContainer>
 
-        <p>アプリケーション：</p>
+        <p>{props.dict.application}:</p>
         <table class="mb-2 mt-1 border-collapse border border-solid border-primary3 bg-white">
           <thead class="block bg-primary3 pr-4">
             <tr>
               <td class="w-[120px] pl-1">ID</td>
-              <td class="w-[120px] pl-1">名前</td>
-              <td class="w-[120px] pl-1">拡張名</td>
-              <td class="w-[120px] pl-1">拡張値</td>
+              <td class="w-[120px] pl-1">{props.dict.name}</td>
+              <td class="w-[120px] pl-1">{props.dict.extendedName}</td>
+              <td class="w-[120px] pl-1">{props.dict.extendedValue}</td>
             </tr>
           </thead>
           <tbody class="block h-[64px] overflow-x-hidden overflow-y-scroll">
@@ -251,30 +254,30 @@ export function ProcessDialogView(props: {
         </table>
         <ButtonsContainer justify="end">
           <button type="button" onClick={handleAddAppButtonClick}>
-            追加
+            {props.dict.add}
           </button>
           <button type="button" onClick={handleRemoveAppButtonClick}>
-            削除
+            {props.dict.delete}
           </button>
         </ButtonsContainer>
 
-        <p>有効期限</p>
+        <p>{props.dict.expireLimit}</p>
         <div class="mb-2 grid grid-cols-[80px_220px_180px] items-center gap-y-2">
-          <p>From：</p>
+          <p>From:</p>
           <input
             type="text"
             value={formData.validFrom}
             onChange={(e) => setFormData("validFrom", e.target.value)}
           />
-          <p class="ml-2">入力例：2009/1/2</p>
+          <p class="ml-2">{props.dict.inputExample}: 2009/1/2</p>
 
-          <p>To：</p>
+          <p>To:</p>
           <input
             type="text"
             value={formData.validTo}
             onChange={(e) => setFormData("validTo", e.target.value)}
           />
-          <p class="ml-2">入力例：2009/1/2</p>
+          <p class="ml-2">{props.dict.inputExample}: 2009/1/2</p>
         </div>
 
         <ButtonsContainer>

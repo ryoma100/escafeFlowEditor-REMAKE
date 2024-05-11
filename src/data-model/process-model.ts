@@ -1,6 +1,6 @@
 import { batch, createSignal } from "solid-js";
 
-import { enDict } from "@/constants/i18n-en";
+import { i18nEnDict } from "@/constants/i18n";
 import { makeActorModel } from "@/data-model/actor-model";
 import { makeEdgeModel } from "@/data-model/edge-model";
 import { makeNodeModel } from "@/data-model/node-model";
@@ -57,7 +57,7 @@ export function makeProcessModel(
     changeProcess(newProcess);
   }
 
-  function updateProcessDetail(process: ProcessEntity): keyof typeof enDict | undefined {
+  function updateProcessDetail(process: ProcessEntity): keyof typeof i18nEnDict | undefined {
     if (
       processList().some((it) => it.id !== process.id && it.detail.xpdlId === process.detail.xpdlId)
     ) {

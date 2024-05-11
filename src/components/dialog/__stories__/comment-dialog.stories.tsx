@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { CommentDialogView } from "@/components/dialog/comment-dialog";
+import { i18nEnDict } from "@/constants/i18n";
 import { dataFactory } from "@/data-source/data-factory";
 
 const meta = {
@@ -17,5 +18,6 @@ const comment = dataFactory.createCommentNode([], 0, 0);
 export const Comment: Story = {
   args: {
     openDialog: { type: "comment", comment },
+    dict: i18nEnDict,
   },
 };

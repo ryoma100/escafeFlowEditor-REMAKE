@@ -16,8 +16,14 @@ import { ProcessList } from "@/components/list/process-list";
 import { Main } from "@/components/main/main";
 import { AppMenu } from "@/components/menu/menu";
 import { Toolbar } from "@/components/toolbar/toolbar";
+import { useAppContext } from "@/context/app-context";
 
 function App(): JSXElement {
+  const {
+    projectModel: { initProject },
+  } = useAppContext();
+  initProject();
+
   return (
     <>
       <div class="grid h-full w-full select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr]">

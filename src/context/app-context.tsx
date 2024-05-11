@@ -1,8 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSX, createContext, createMemo, createSignal, useContext } from "solid-js";
+import { JSX, createContext, createEffect, createMemo, createSignal, useContext } from "solid-js";
 
-import { enDict } from "@/constants/i18n-en";
-import { jaDict } from "@/constants/i18n-ja";
+import { i18nEnDict } from "@/constants/i18n";
+import { i18nJaDict } from "@/constants/i18n-ja";
 import { makeActivityModel } from "@/data-model/activity-node-model";
 import { makeActorModel } from "@/data-model/actor-model";
 import { makeDiagramModel } from "@/data-model/diagram-model";
@@ -13,6 +13,7 @@ import { makeNodeModel } from "@/data-model/node-model";
 import { makeProcessModel } from "@/data-model/process-model";
 import { makeProjectModel } from "@/data-model/project-model";
 import { makeTransactionEdgeModel } from "@/data-model/transaction-edge-model";
+import { setDataFactoryDict } from "@/data-source/data-factory";
 import {
   ActivityNode,
   ActorEntity,
@@ -23,10 +24,23 @@ import {
 } from "@/data-source/data-type";
 
 function makeI18nContext() {
-  const dictionaries = { ja: jaDict, en: enDict };
-  const [locale, setLocale] = createSignal<keyof typeof dictionaries>("ja");
+  const LOCALE_KEY = "locale";
+  const defaultLocale = (localStorage.getItem(LOCALE_KEY) || navigator.language)
+    .toLowerCase()
+    .startsWith("ja")
+    ? "ja"
+    : "en";
+
+  const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
+  const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
-  return { dict, setLocale };
+
+  createEffect(() => {
+    localStorage.setItem(LOCALE_KEY, locale());
+    setDataFactoryDict(dict());
+  });
+
+  return { dict, locale, setLocale };
 }
 
 function makeModelContext() {
@@ -71,7 +85,7 @@ export type ModalDialogType =
 
 function makeDialogContext() {
   const [modalDialog, setModalDialog] = createSignal<ModalDialogType | null>(null);
-  const [messageAlert, setMessageAlert] = createSignal<keyof typeof enDict | null>(null);
+  const [messageAlert, setMessageAlert] = createSignal<keyof typeof i18nEnDict | null>(null);
 
   return {
     modalDialog,

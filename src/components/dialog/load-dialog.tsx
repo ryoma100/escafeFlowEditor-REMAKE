@@ -2,7 +2,7 @@ import { dialog } from "@tauri-apps/api";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { enDict } from "@/constants/i18n-en";
+import { I18nDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { importXml } from "@/data-source/data-converter";
 import { ProjectEntity } from "@/data-source/data-type";
@@ -77,7 +77,7 @@ export function LoadDialog(): JSXElement {
 
 export function LoadDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: typeof enDict;
+  dict: I18nDict;
   onLoadClick?: () => void;
   onInputClick?: (data: string) => void;
   onDialogClose?: () => void;
@@ -103,9 +103,9 @@ export function LoadDialogView(props: {
   let loadButtonRef: HTMLButtonElement | undefined;
   return (
     <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
-      <h5 class="mb-2">{props.dict.xpdlLoad}</h5>
+      <h5 class="mb-2">{props.dict.openXpdl}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <p class="mb-2">XPDLファイルの内容をコピーペーストで入力してください。</p>
+        <p class="mb-2">{props.dict.inputXpdl}</p>
         <textarea
           class="mb-2 h-[410px] w-full resize-none"
           value={data()}
@@ -113,14 +113,14 @@ export function LoadDialogView(props: {
         />
         <div class="flex justify-between">
           <button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
-            ファイルから読み込む
+            {props.dict.loadFile}
           </button>
           <ButtonsContainer>
             <button type="button" onClick={() => props.onInputClick?.(data())}>
-              入力したXPDLを読み込む
+              {props.dict.readXpdl}
             </button>
             <button type="button" onClick={() => props.onDialogClose?.()}>
-              閉じる
+              {props.dict.close}
             </button>
           </ButtonsContainer>
         </div>
