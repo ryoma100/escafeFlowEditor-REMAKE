@@ -74,6 +74,7 @@ export type ModalDialogType =
   | { type: "initAll" }
   | { type: "load" }
   | { type: "save"; project: ProjectEntity }
+  | { type: "setting" }
   | { type: "project"; project: ProjectEntity }
   | { type: "process"; process: ProcessEntity }
   | { type: "deleteProcess"; process: ProcessEntity }

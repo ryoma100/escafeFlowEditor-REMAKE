@@ -6,6 +6,7 @@ export const i18nEnDict = {
   new: "New",
   open: "Open",
   save: "Save",
+  setting: "Setting",
   edit: "Edit",
   selectAll: "Select All",
   delete: "Delete",
@@ -84,6 +85,11 @@ export const i18nEnDict = {
   saveXpdl: "Save XPDL",
   copyXpdl: "Copy-paste and save the contents of the XPDL below.",
   saveFile: "Save to file",
+
+  // setting
+  language: "Language",
+  en: "English",
+  ja: "Japanese",
 
   // message
   idExists: "This ID already exists.",

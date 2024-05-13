@@ -6,6 +6,7 @@ export const i18nJaDict: I18nDict = {
   new: "新規作成",
   open: "開く",
   save: "保存",
+  setting: "設定",
   edit: "編集",
   selectAll: "すべて選択",
   delete: "削除",
@@ -84,6 +85,11 @@ export const i18nJaDict: I18nDict = {
   saveXpdl: "XPDLを保存",
   copyXpdl: "下記のXPDLの内容をコピーペーストで保存してください。",
   saveFile: "ファイルに保存",
+
+  // setting
+  language: "言語",
+  en: "英語",
+  ja: "日本語",
 
   // message
   idExists: "このIDは既に存在します。",

@@ -10,6 +10,7 @@ import { MessageDialog } from "@/components/dialog/message-dialog";
 import { ProcessDialog } from "@/components/dialog/process-dialog";
 import { ProjectDialog } from "@/components/dialog/project-dialog";
 import { SaveDialog } from "@/components/dialog/save-dialog";
+import { SettingDialog } from "@/components/dialog/setting-dialog";
 import { TransitionDialog } from "@/components/dialog/transition-dialog";
 import { ActorList } from "@/components/list/actor-list";
 import { ProcessList } from "@/components/list/process-list";
@@ -52,6 +53,7 @@ function App(): JSXElement {
       <CommentDialog />
       <LoadDialog />
       <SaveDialog />
+      <SettingDialog />
       <MessageDialog />
       <AboutDialog />
       <ConfirmDialog />
