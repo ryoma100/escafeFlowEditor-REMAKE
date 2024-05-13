@@ -27,9 +27,9 @@ export function SettingDialog(): JSXElement {
 export function SettingDialogView(props: {
   open: boolean;
   dict: I18nDict;
-  locale: Accessor<"en" | "ja">;
-  setLocale: Setter<"en" | "ja">;
-  onClose: () => void;
+  locale?: Accessor<"en" | "ja">;
+  setLocale?: Setter<"en" | "ja">;
+  onClose?: () => void;
 }) {
   createEffect(() => {
     if (props.open) {
@@ -43,10 +43,10 @@ export function SettingDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onClose()}>
+    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
       <h5 class="mb-2">{props.dict.setting}</h5>
       <form class="my-1 bg-white p-2">
-        <div class="mb-4 grid grid-cols-[96px_272px] items-center gap-y-2">
+        <div class="mb-4 grid grid-cols-[96px_272px] items-center">
           <div>{props.dict.language}</div>
           <div class="flex items-center gap-1">
             <input
@@ -54,8 +54,8 @@ export function SettingDialogView(props: {
               id="i18n-en"
               name="condition"
               class="cursor-pointer"
-              checked={props.locale() === "en"}
-              onChange={() => props.setLocale("en")}
+              checked={props.locale?.() === "en"}
+              onChange={() => props.setLocale?.("en")}
             />
             <label for="i18n-en" class="mr-2 cursor-pointer pl-1">
               {props.dict.en}
@@ -65,8 +65,8 @@ export function SettingDialogView(props: {
               id="i18n-ja"
               name="condition"
               class="cursor-pointer"
-              checked={props.locale() === "ja"}
-              onChange={() => props.setLocale("ja")}
+              checked={props.locale?.() === "ja"}
+              onChange={() => props.setLocale?.("ja")}
             />
             <label for="i18n-ja" class="cursor-pointer pl-1">
               {props.dict.ja}
@@ -74,7 +74,7 @@ export function SettingDialogView(props: {
           </div>
         </div>
         <ButtonsContainer>
-          <button type="button" onClick={() => props.onClose()}>
+          <button type="button" onClick={() => props.onClose?.()}>
             {props.dict.close}
           </button>
         </ButtonsContainer>
