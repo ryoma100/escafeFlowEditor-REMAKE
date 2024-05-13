@@ -35,7 +35,8 @@ export function makeActorModel() {
 
   function removeSelectedActor(nodeList: INode[]): keyof typeof i18nEnDict | null {
     if (actorList.length <= 1) return null;
-    if (nodeList.some((it) => it.id === selectedActor().id)) return "actorCannotDelete";
+    if (nodeList.some((it) => it.type === "activityNode" && it.actorId === selectedActor().id))
+      return "actorCannotDelete";
 
     const nextSelectedIndex = Math.min(
       actorList.findIndex((it) => it.id === selectedActor().id),
