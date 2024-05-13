@@ -2,6 +2,7 @@ import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { I18nDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ProjectDetailEntity } from "@/data-source/data-type";
@@ -10,6 +11,7 @@ const dummy = dataFactory.createProject();
 
 export function ProjectDialog(): JSXElement {
   const {
+    i18n: { dict },
     projectModel: { setProjectDetail },
     dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
   } = useAppContext();
@@ -26,6 +28,7 @@ export function ProjectDialog(): JSXElement {
   return (
     <ProjectDialogView
       openDialog={openDialog()}
+      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
     />
@@ -34,6 +37,7 @@ export function ProjectDialog(): JSXElement {
 
 export function ProjectDialogView(props: {
   openDialog: ModalDialogType | null;
+  dict: I18nDict;
   onFormSubmit?: (formData: ProjectDetailEntity) => void;
   onDialogClose?: () => void;
 }) {
@@ -56,16 +60,16 @@ export function ProjectDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
-      <h5 class="mb-2">パッケージの編集</h5>
+      <h5 class="mb-2">{props.dict.editPackage}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
-          <div>ID：</div>
+          <div>ID:</div>
           <input
             type="text"
             value={formData.xpdlId}
             onInput={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <div>名前：</div>
+          <div>{props.dict.name}:</div>
           <input
             type="text"
             value={formData.name}

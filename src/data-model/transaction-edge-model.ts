@@ -1,4 +1,4 @@
-import { enDict } from "@/constants/i18n-en";
+import { i18nEnDict } from "@/constants/i18n";
 import { makeEdgeModel } from "@/data-model/edge-model";
 import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
@@ -36,7 +36,7 @@ export function makeTransactionEdgeModel(
     return transition;
   }
 
-  function updateTransitionEdge(transition: TransitionEdge): keyof typeof enDict | undefined {
+  function updateTransitionEdge(transition: TransitionEdge): keyof typeof i18nEnDict | undefined {
     if (
       edgeModel.edgeList.some(
         (it) =>

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { MessageDialogView } from "@/components/dialog/message-dialog";
-import { jaDict } from "@/constants/i18n-ja";
+import { i18nEnDict } from "@/constants/i18n";
 
 const meta = {
   title: "Dialog/Message",
@@ -14,6 +14,6 @@ type Story = StoryObj<typeof MessageDialogView>;
 
 export const Message: Story = {
   args: {
-    message: jaDict.duplicateApplicationId,
+    message: i18nEnDict.duplicateApplicationId,
   },
 };

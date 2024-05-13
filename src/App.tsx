@@ -10,14 +10,21 @@ import { MessageDialog } from "@/components/dialog/message-dialog";
 import { ProcessDialog } from "@/components/dialog/process-dialog";
 import { ProjectDialog } from "@/components/dialog/project-dialog";
 import { SaveDialog } from "@/components/dialog/save-dialog";
+import { SettingDialog } from "@/components/dialog/setting-dialog";
 import { TransitionDialog } from "@/components/dialog/transition-dialog";
 import { ActorList } from "@/components/list/actor-list";
 import { ProcessList } from "@/components/list/process-list";
 import { Main } from "@/components/main/main";
 import { AppMenu } from "@/components/menu/menu";
 import { Toolbar } from "@/components/toolbar/toolbar";
+import { useAppContext } from "@/context/app-context";
 
 function App(): JSXElement {
+  const {
+    projectModel: { initProject },
+  } = useAppContext();
+  initProject();
+
   return (
     <>
       <div class="grid h-full w-full select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr]">
@@ -46,6 +53,7 @@ function App(): JSXElement {
       <CommentDialog />
       <LoadDialog />
       <SaveDialog />
+      <SettingDialog />
       <MessageDialog />
       <AboutDialog />
       <ConfirmDialog />

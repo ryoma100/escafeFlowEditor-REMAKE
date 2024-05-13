@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { enDict } from "@/constants/i18n-en";
+import { i18nEnDict } from "@/constants/i18n";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActorEntity, INode, ProcessEntity } from "@/data-source/data-type";
 
@@ -26,14 +26,14 @@ export function makeActorModel() {
     setSelectedActor(actor);
   }
 
-  function updateActor(actor: ActorEntity): keyof typeof enDict | undefined {
+  function updateActor(actor: ActorEntity): keyof typeof i18nEnDict | undefined {
     if (actorList.some((it) => it.id !== actor.id && it.xpdlId === actor.xpdlId)) {
       return "idExists";
     }
     setActorList([actorList.findIndex((it) => it.id === actor.id)], actor);
   }
 
-  function removeSelectedActor(nodeList: INode[]): keyof typeof enDict | null {
+  function removeSelectedActor(nodeList: INode[]): keyof typeof i18nEnDict | null {
     if (actorList.length <= 1) return null;
     if (nodeList.some((it) => it.id === selectedActor().id)) return "actorCannotDelete";
 

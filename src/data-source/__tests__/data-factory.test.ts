@@ -9,8 +9,8 @@ describe("createProject", () => {
     expect(dataFactory.createProject(created)).toStrictEqual({
       created,
       detail: {
-        name: "プロジェクト",
-        xpdlId: "project",
+        name: "Package",
+        xpdlId: "package",
       },
       processes: [
         {
@@ -18,7 +18,7 @@ describe("createProject", () => {
           created,
           detail: {
             xpdlId: "process-1",
-            name: "プロセス1",
+            name: "Process1",
             validFrom: "",
             validTo: "",
             environments: [],
@@ -27,7 +27,7 @@ describe("createProject", () => {
           actors: [
             {
               id: 1,
-              name: "アクター1",
+              name: "Actor1",
               xpdlId: "actor-1",
             },
           ],
@@ -47,7 +47,7 @@ describe("createProcess", () => {
       created,
       detail: {
         xpdlId: "process-1",
-        name: "プロセス1",
+        name: "Process1",
         validFrom: "",
         validTo: "",
         environments: [],
@@ -56,7 +56,7 @@ describe("createProcess", () => {
       actors: [
         {
           id: 1,
-          name: "アクター1",
+          name: "Actor1",
           xpdlId: "actor-1",
         },
       ],
@@ -73,7 +73,7 @@ describe("createProcess", () => {
       created,
       detail: {
         xpdlId: "process-2",
-        name: "プロセス2",
+        name: "Process2",
         validFrom: "",
         validTo: "",
         environments: [],
@@ -82,7 +82,7 @@ describe("createProcess", () => {
       actors: [
         {
           id: 1,
-          name: "アクター1",
+          name: "Actor1",
           xpdlId: "actor-1",
         },
       ],
@@ -100,7 +100,7 @@ describe("createProcess", () => {
       created,
       detail: {
         xpdlId: "process-3",
-        name: "プロセス3",
+        name: "Process3",
         validFrom: "",
         validTo: "",
         environments: [],
@@ -109,7 +109,7 @@ describe("createProcess", () => {
       actors: [
         {
           id: 1,
-          name: "アクター1",
+          name: "Actor1",
           xpdlId: "actor-1",
         },
       ],
@@ -178,7 +178,7 @@ describe("createActorEntity", () => {
     expect(dataFactory.createActorEntity([])).toStrictEqual({
       id: 1,
       xpdlId: "actor-1",
-      name: "アクター1",
+      name: "Actor1",
     });
   });
 
@@ -187,7 +187,7 @@ describe("createActorEntity", () => {
     expect(dataFactory.createActorEntity([application])).toStrictEqual({
       id: 2,
       xpdlId: "actor-2",
-      name: "アクター2",
+      name: "Actor2",
     });
   });
 
@@ -197,7 +197,7 @@ describe("createActorEntity", () => {
     expect(dataFactory.createActorEntity([application])).toStrictEqual({
       id: 3,
       xpdlId: "actor-3",
-      name: "アクター3",
+      name: "Actor3",
     });
   });
 });
@@ -209,7 +209,7 @@ describe("createActivityNode", () => {
       xpdlId: "activity-1",
       type: "activityNode",
       activityType: "autoActivity",
-      name: "仕事1",
+      name: "Work1",
       actorId: 1,
       applications: [],
       ognl: "",
@@ -230,7 +230,7 @@ describe("createActivityNode", () => {
       xpdlId: "activity-2",
       type: "activityNode",
       activityType: "manualActivity",
-      name: "仕事2",
+      name: "Work2",
       actorId: 11,
       applications: [],
       ognl: "",
@@ -252,7 +252,7 @@ describe("createActivityNode", () => {
       xpdlId: "activity-3",
       type: "activityNode",
       activityType: "userActivity",
-      name: "仕事3",
+      name: "Work3",
       actorId: 21,
       applications: [],
       ognl: "",
@@ -313,7 +313,7 @@ describe("createCommentNode", () => {
     expect(dataFactory.createCommentNode([], 1, 2)).toStrictEqual({
       id: 1,
       type: "commentNode",
-      comment: "コメント",
+      comment: "Comment",
       x: 1,
       y: 2,
       width: 0,
@@ -327,7 +327,7 @@ describe("createCommentNode", () => {
     expect(dataFactory.createCommentNode([node], 11, 12)).toStrictEqual({
       id: 2,
       type: "commentNode",
-      comment: "コメント",
+      comment: "Comment",
       x: 11,
       y: 12,
       width: 0,

@@ -2,7 +2,7 @@ import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { enDict } from "@/constants/i18n-en";
+import { I18nDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
@@ -45,7 +45,7 @@ export function TransitionDialog(): JSXElement {
 
 export function TransitionDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: typeof enDict;
+  dict: I18nDict;
   onFormSubmit?: (formData: TransitionEdge) => void;
   onDialogClose?: () => void;
 }) {
@@ -79,13 +79,13 @@ export function TransitionDialogView(props: {
       <h5 class="mb-2">{props.dict.editTransition}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center space-y-2">
-          <div>ID：</div>
+          <div>ID:</div>
           <input
             type="text"
             value={formData.xpdlId}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <div>接続条件</div>
+          <div>{props.dict.connectCondition}</div>
           <div class="flex items-center">
             <input
               type="radio"
@@ -96,7 +96,7 @@ export function TransitionDialogView(props: {
               onChange={() => setShowOgnl(true)}
             />
             <label for="condition-on" class="mr-2 cursor-pointer pl-1">
-              あり
+              {props.dict.conditionOn}
             </label>
             <input
               type="radio"
@@ -107,10 +107,10 @@ export function TransitionDialogView(props: {
               onChange={() => setShowOgnl(false)}
             />
             <label for="condition-off" class="cursor-pointer pl-1">
-              なし
+              {props.dict.conditionOff}
             </label>
           </div>
-          <div classList={{ invisible: !showOgnl() }}>条件式 (OGNL)</div>
+          <div classList={{ invisible: !showOgnl() }}>{props.dict.conditionExpression} (OGNL)</div>
           <input
             classList={{ invisible: !showOgnl() }}
             type="text"

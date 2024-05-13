@@ -1,4 +1,5 @@
 import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
+import { I18nDict, i18nEnDict } from "@/constants/i18n";
 import {
   ActivityNode,
   ActivityNodeType,
@@ -18,12 +19,18 @@ import {
   TransitionEdge,
 } from "@/data-source/data-type";
 
+let dict: I18nDict = i18nEnDict;
+
+export function setDataFactoryDict(newDict: I18nDict) {
+  dict = newDict;
+}
+
 function createProject(created: string = new Date().toISOString()): ProjectEntity {
   const project: ProjectEntity = {
     created,
     detail: {
-      xpdlId: "project",
-      name: "プロジェクト",
+      xpdlId: "package",
+      name: dict.package,
     },
     processes: [createProcess([], created)],
   };
@@ -46,7 +53,7 @@ function createProcess(
     created,
     detail: {
       xpdlId,
-      name: `プロセス${id}`,
+      name: `${dict.process}${id}`,
       validFrom: "",
       validTo: "",
       environments: [],
@@ -96,7 +103,7 @@ function createActorEntity(actorList: ActorEntity[]): ActorEntity {
   return {
     id,
     xpdlId,
-    name: `アクター${id}`,
+    name: `${dict.actor}${id}`,
   };
 }
 
@@ -120,7 +127,7 @@ function createActivityNode(
     xpdlId,
     type: "activityNode",
     activityType,
-    name: `仕事${activityId}`,
+    name: `${dict.work}${activityId}`,
     actorId,
     applications: [],
     ognl: "",
@@ -162,7 +169,7 @@ function createCommentNode(nodeList: INode[], x: number, y: number): CommentNode
   return {
     id: maxId(nodeList) + 1,
     type: "commentNode",
-    comment: "コメント",
+    comment: dict.comment,
     x,
     y,
     width: 0,

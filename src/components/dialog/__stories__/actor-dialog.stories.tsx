@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ActorDialogView } from "@/components/dialog/actor-dialog";
+import { i18nEnDict } from "@/constants/i18n";
 import { dataFactory } from "@/data-source/data-factory";
 
 const meta = {
@@ -17,5 +18,6 @@ const actor = dataFactory.createActorEntity([]);
 export const Actor: Story = {
   args: {
     openDialog: { type: "actor", actor },
+    dict: i18nEnDict,
   },
 };

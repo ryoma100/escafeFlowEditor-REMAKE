@@ -1,7 +1,7 @@
 import { produce } from "solid-js/store";
 
 import { ACTIVITY_MIN_WIDTH } from "@/constants/app-const";
-import { enDict } from "@/constants/i18n-en";
+import { i18nEnDict } from "@/constants/i18n";
 import { makeNodeModel } from "@/data-model//node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { ActivityNode, ActivityNodeType, IEdge } from "@/data-source/data-type";
@@ -22,7 +22,7 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
     return activity;
   }
 
-  function updateActivity(activity: ActivityNode): keyof typeof enDict | undefined {
+  function updateActivity(activity: ActivityNode): keyof typeof i18nEnDict | undefined {
     if (activityList().some((it) => it.id !== activity.id && it.xpdlId === activity.xpdlId)) {
       return "idExists";
     }

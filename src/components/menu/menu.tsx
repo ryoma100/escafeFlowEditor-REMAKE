@@ -26,6 +26,11 @@ export function AppMenu(): JSXElement {
     return false;
   }
 
+  function handleFileSettingClick() {
+    setOpenDialog({ type: "setting" });
+    return false;
+  }
+
   function handleFileSaveClick() {
     save();
     setOpenDialog({ type: "save", project: project() });
@@ -116,6 +121,7 @@ export function AppMenu(): JSXElement {
         <MenuItem title={t("new")} onClick={handleFileNewClick} />
         <MenuItem title={t("open")} onClick={handleFileOpenClick} />
         <MenuItem title={t("save")} onClick={handleFileSaveClick} />
+        <MenuItem title={t("setting")} onClick={handleFileSettingClick} />
       </Menu>
       <Menu title={t("edit")}>
         <MenuItem title={t("selectAll")} onClick={handleEditSelectAllClick} />

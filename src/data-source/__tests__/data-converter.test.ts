@@ -30,21 +30,21 @@ describe("importXml", () => {
 
 const initProjectData = dataFactory.createProject("0001-01-01T00:00:00.000Z");
 const initProjectXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="project" Name="プロジェクト" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
+<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="package" Name="Package" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
   <PackageHeader>
     <XPDLVersion>1.0</XPDLVersion>
     <Vendor>escafe.org</Vendor>
     <Created>0001-01-01T00:00:00.000Z</Created>
   </PackageHeader>
   <WorkflowProcesses>
-    <WorkflowProcess Id="process-1" Name="プロセス1">
+    <WorkflowProcess Id="process-1" Name="Process1">
       <ProcessHeader>
         <Created>0001-01-01T00:00:00.000Z</Created>
         <ValidFrom></ValidFrom>
         <ValidTo></ValidTo>
       </ProcessHeader>
       <Participants>
-        <Participant Id="actor-1" Name="アクター1">
+        <Participant Id="actor-1" Name="Actor1">
           <ParticipantType Type="ROLE"></ParticipantType>
         </Participant>
       </Participants>
@@ -170,24 +170,24 @@ const oneProcessData = (function () {
   return project;
 })();
 const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="project" Name="プロジェクト" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
+<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="package" Name="Package" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
   <PackageHeader>
     <XPDLVersion>1.0</XPDLVersion>
     <Vendor>escafe.org</Vendor>
     <Created>0001-01-01T00:00:00.000Z</Created>
   </PackageHeader>
   <WorkflowProcesses>
-    <WorkflowProcess Id="process-1" Name="プロセス1">
+    <WorkflowProcess Id="process-1" Name="Process1">
       <ProcessHeader>
         <Created>0001-01-01T00:00:00.000Z</Created>
         <ValidFrom></ValidFrom>
         <ValidTo></ValidTo>
       </ProcessHeader>
       <Participants>
-        <Participant Id="actor-1" Name="アクター1">
+        <Participant Id="actor-1" Name="Actor1">
           <ParticipantType Type="ROLE"></ParticipantType>
         </Participant>
-        <Participant Id="actor-2" Name="アクター2">
+        <Participant Id="actor-2" Name="Actor2">
           <ParticipantType Type="ROLE"></ParticipantType>
         </Participant>
       </Participants>
@@ -204,7 +204,7 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         </Application>
       </Applications>
       <Activities>
-        <Activity Id="activity-1" Name="仕事1">
+        <Activity Id="activity-1" Name="Work1">
           <Implementation>
             <No/>
           </Implementation>
@@ -221,7 +221,7 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
             <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-33,12,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
-        <Activity Id="activity-2" Name="仕事2">
+        <Activity Id="activity-2" Name="Work2">
           <Implementation>
             <Tool Id="app1" Type="APPLICATION">
               <ExtendedAttributes>
@@ -260,7 +260,7 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
             <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-23,22,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
-        <Activity Id="activity-3" Name="仕事3">
+        <Activity Id="activity-3" Name="Work3">
           <Implementation>
             <No/>
           </Implementation>
@@ -285,7 +285,7 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
             <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-13,32,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
-        <Activity Id="activity-4" Name="仕事4">
+        <Activity Id="activity-4" Name="Work4">
           <Implementation>
             <No/>
           </Implementation>
@@ -310,7 +310,7 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
             <ExtendedAttribute Name="BURI_GRAPH_RECTANGLE" Value="-3,42,88,0"></ExtendedAttribute>
           </ExtendedAttributes>
         </Activity>
-        <Activity Id="activity-5" Name="仕事5">
+        <Activity Id="activity-5" Name="Work5">
           <Implementation>
             <No/>
           </Implementation>
@@ -365,7 +365,7 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
       <ExtendedAttributes>
         <ExtendedAttribute Name="JaWE_GRAPH_START_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-1,X_OFFSET=10,Y_OFFSET=11"></ExtendedAttribute>
         <ExtendedAttribute Name="JaWE_GRAPH_END_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=61,Y_OFFSET=62"></ExtendedAttribute>
-        <ExtendedAttribute Name="BURI_GRAPH_COMMENT" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=71,Y_OFFSET=72,COMMENT=コメント"></ExtendedAttribute>
+        <ExtendedAttribute Name="BURI_GRAPH_COMMENT" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=71,Y_OFFSET=72,COMMENT=Comment"></ExtendedAttribute>
         <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="actor-1;actor-2"></ExtendedAttribute>
         <ExtendedAttribute Name="name1" Value="value1"></ExtendedAttribute>
         <ExtendedAttribute Name="name2" Value="value2"></ExtendedAttribute>
@@ -384,21 +384,21 @@ twoProcessData.processes.push(
   dataFactory.createProcess(twoProcessData.processes, "9999-01-01T00:00:00.000Z"),
 );
 const twoProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="project" Name="プロジェクト" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
+<Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="package" Name="Package" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
   <PackageHeader>
     <XPDLVersion>1.0</XPDLVersion>
     <Vendor>escafe.org</Vendor>
     <Created>0001-01-01T00:00:00.000Z</Created>
   </PackageHeader>
   <WorkflowProcesses>
-    <WorkflowProcess Id="process-1" Name="プロセス1">
+    <WorkflowProcess Id="process-1" Name="Process1">
       <ProcessHeader>
         <Created>0001-01-01T00:00:00.000Z</Created>
         <ValidFrom></ValidFrom>
         <ValidTo></ValidTo>
       </ProcessHeader>
       <Participants>
-        <Participant Id="actor-1" Name="アクター1">
+        <Participant Id="actor-1" Name="Actor1">
           <ParticipantType Type="ROLE"></ParticipantType>
         </Participant>
       </Participants>
@@ -409,14 +409,14 @@ const twoProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="actor-1"></ExtendedAttribute>
       </ExtendedAttributes>
     </WorkflowProcess>
-    <WorkflowProcess Id="process-2" Name="プロセス2">
+    <WorkflowProcess Id="process-2" Name="Process2">
       <ProcessHeader>
         <Created>9999-01-01T00:00:00.000Z</Created>
         <ValidFrom></ValidFrom>
         <ValidTo></ValidTo>
       </ProcessHeader>
       <Participants>
-        <Participant Id="actor-1" Name="アクター1">
+        <Participant Id="actor-1" Name="Actor1">
           <ParticipantType Type="ROLE"></ParticipantType>
         </Participant>
       </Participants>

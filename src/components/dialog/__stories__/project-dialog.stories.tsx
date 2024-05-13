@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ProjectDialogView } from "@/components/dialog/project-dialog";
+import { i18nEnDict } from "@/constants/i18n";
 import { dataFactory } from "@/data-source/data-factory";
 
 const meta = {
@@ -17,5 +18,6 @@ const project = dataFactory.createProject();
 export const Project: Story = {
   args: {
     openDialog: { type: "project", project },
+    dict: i18nEnDict,
   },
 };

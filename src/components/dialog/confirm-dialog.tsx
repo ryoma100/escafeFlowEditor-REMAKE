@@ -1,7 +1,7 @@
 import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { enDict } from "@/constants/i18n-en";
+import { i18nEnDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 
 export function ConfirmDialog(): JSXElement {
@@ -41,7 +41,7 @@ export function ConfirmDialog(): JSXElement {
 
 export function ConfirmDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: typeof enDict;
+  dict: typeof i18nEnDict;
   onFormSubmit?: () => void;
   onDialogClose?: () => void;
 }) {

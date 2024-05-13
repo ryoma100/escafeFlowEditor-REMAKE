@@ -3,7 +3,7 @@ import { writeTextFile } from "@tauri-apps/api/fs";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { enDict } from "@/constants/i18n-en";
+import { i18nEnDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { exportXml } from "@/data-source/data-converter";
 
@@ -58,7 +58,7 @@ export function SaveDialog(): JSXElement {
 
 export function SaveDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: typeof enDict;
+  dict: typeof i18nEnDict;
   onFormSubmit?: (formData: string) => void;
   onDialogClose?: () => void;
 }) {
@@ -83,19 +83,19 @@ export function SaveDialogView(props: {
   let saveButtonRef: HTMLButtonElement | undefined;
   return (
     <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
-      <h5 class="mb-2">{props.dict.xpdlSave}</h5>
+      <h5 class="mb-2">{props.dict.saveXpdl}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <p class="mb-2">下記のXPDLの内容をコピーペーストで保存してください。</p>
+        <p class="mb-2">{props.dict.copyXpdl}</p>
         <textarea class="mb-2 h-[410px] w-full resize-none" readOnly>
           {data()}
         </textarea>
 
         <ButtonsContainer>
           <button type="button" ref={saveButtonRef} onClick={handleFormSubmit}>
-            ファイルに保存
+            {props.dict.saveFile}
           </button>
           <button type="button" onClick={() => props.onDialogClose?.()}>
-            閉じる
+            {props.dict.close}
           </button>
         </ButtonsContainer>
       </form>
