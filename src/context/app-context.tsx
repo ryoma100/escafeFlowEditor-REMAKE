@@ -23,6 +23,10 @@ import {
   TransitionEdge,
 } from "@/data-source/data-type";
 
+export type Theme = "material" | "crab";
+export type Color = "green" | "red";
+const themeColorMap: Record<Theme, Color> = { material: "green", crab: "red" };
+
 function makeI18nContext() {
   const LOCALE_KEY = "locale";
   const defaultLocale = (localStorage.getItem(LOCALE_KEY) || navigator.language)
@@ -31,16 +35,29 @@ function makeI18nContext() {
     ? "ja"
     : "en";
 
+  const THEME_KEY = "theme";
+  const COLOR_KEY = "color";
+
   const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
-
   createEffect(() => {
     localStorage.setItem(LOCALE_KEY, locale());
     setDataFactoryDict(dict());
   });
 
-  return { dict, locale, setLocale };
+  const [color, setColor] = createSignal<Color>("green");
+  createEffect(() => {
+    localStorage.setItem(COLOR_KEY, color());
+  });
+
+  const [theme, setTheme] = createSignal<Theme>("material");
+  createEffect(() => {
+    localStorage.setItem(THEME_KEY, theme());
+    setColor(themeColorMap[theme()]);
+  });
+
+  return { dict, locale, setLocale, theme, setTheme, color, setColor };
 }
 
 function makeModelContext() {

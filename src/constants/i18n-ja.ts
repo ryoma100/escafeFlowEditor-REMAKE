@@ -90,6 +90,12 @@ export const i18nJaDict: I18nDict = {
   language: "言語",
   en: "英語",
   ja: "日本語",
+  theme: "テーマ",
+  themeMaterial: "Material Icons",
+  themeCrab: "蟹",
+  color: "色",
+  colorGreen: "緑",
+  colorRed: "Red",
 
   // message
   idExists: "このIDは既に存在します。",

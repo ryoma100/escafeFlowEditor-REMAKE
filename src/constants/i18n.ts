@@ -90,6 +90,12 @@ export const i18nEnDict = {
   language: "Language",
   en: "English",
   ja: "Japanese",
+  theme: "Theme",
+  themeMaterial: "Material Icons",
+  themeCrab: "Crab",
+  color: "Color",
+  colorGreen: "Green",
+  colorRed: "Red",
 
   // message
   idExists: "This ID already exists.",
