@@ -1,16 +1,16 @@
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 
-import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
-import AutoTimerActivitySvg from "@/assets/material-icons/auto-timer-activity.svg";
-import ManualActivitySvg from "@/assets/material-icons/manual-activity.svg";
-import ManualTimerActivitySvg from "@/assets/material-icons/manual-timer-activity.svg";
-import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
 import { I18nDict } from "@/constants/i18n";
 import { ModalDialogType, useAppContext } from "@/context/app-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
+import { AutoActivityIcon } from "@/icons/auto-activity-icon";
+import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
+import { ManualActivityIcon } from "@/icons/manual-activity-icon";
+import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
+import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { createStore } from "solid-js/store";
 
 const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
@@ -118,7 +118,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "manualActivity")}
             margin="0 4px 0 0"
           >
-            <ManualActivitySvg />
+            <ManualActivityIcon />
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-activity"
@@ -127,7 +127,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "autoActivity")}
             margin="0 4px 0 0"
           >
-            <AutoActivitySvg />
+            <AutoActivityIcon />
           </ToggleIconButton>
           <ToggleIconButton
             id="manual-timer-activity"
@@ -136,7 +136,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "manualTimerActivity")}
             margin="0 4px 0 0"
           >
-            <ManualTimerActivitySvg />
+            <ManualTimerActivityIcon />
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-timer-activity"
@@ -145,7 +145,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "autoTimerActivity")}
             margin="0 4px 0 0"
           >
-            <AutoTimerActivitySvg />
+            <AutoTimerActivityIcon />
           </ToggleIconButton>
           <ToggleIconButton
             id="user-activity"
@@ -153,7 +153,7 @@ export function ActivityDialogView(props: {
             checked={formData.activityType === "userActivity"}
             onChange={() => setFormData("activityType", "userActivity")}
           >
-            <UserActivitySvg />
+            <UserActivityIcon />
           </ToggleIconButton>
         </div>
 

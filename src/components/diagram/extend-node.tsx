@@ -1,10 +1,10 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 
-import CommentSvg from "@/assets/material-icons/comment-node.svg";
-import EndSvg from "@/assets/material-icons/end-node.svg";
-import StartSvg from "@/assets/material-icons/start-node.svg";
 import { useAppContext } from "@/context/app-context";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
+import { CommentIcon } from "@/icons/comment";
+import { EndIcon } from "@/icons/end-icon";
+import { StartIcon } from "@/icons/start-icon";
 
 export function ExtendNodeContainer(props: {
   node: CommentNode | StartNode | EndNode;
@@ -133,7 +133,7 @@ export function CommentNodeView(props: {
       onDblClick={(e) => props.onDblClick?.(e)}
     >
       <div class="m-1 flex items-center">
-        <CommentSvg />
+        <CommentIcon />
       </div>
       <div ref={titleDiv} class="whitespace-pre p-1 text-[11px] leading-[1.1]">
         {props.comment}
@@ -156,7 +156,7 @@ export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: Mous
       }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
     >
-      <StartSvg />
+      <StartIcon />
     </div>
   );
 }
@@ -180,7 +180,7 @@ export function EndNodeView(props: {
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onMouseUp={(e) => props.onMouseUp?.(e)}
     >
-      <EndSvg />
+      <EndIcon />
     </div>
   );
 }

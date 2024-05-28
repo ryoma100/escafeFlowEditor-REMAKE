@@ -1,6 +1,7 @@
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
-import { useAppContext } from "@/context/app-context";
+import { Color, useAppContext } from "@/context/app-context";
+import { Theme } from "@tauri-apps/api/window";
 import { Accessor, JSXElement, Setter, createEffect } from "solid-js";
 
 export function SettingDialog(): JSXElement {
@@ -29,6 +30,10 @@ export function SettingDialogView(props: {
   dict: I18nDict;
   locale?: Accessor<"en" | "ja">;
   setLocale?: Setter<"en" | "ja">;
+  color?: Accessor<Color>;
+  setColor?: Setter<Color>;
+  theme?: Accessor<Theme>;
+  setTheme?: Setter<Theme>;
   onClose?: () => void;
 }) {
   createEffect(() => {
@@ -48,6 +53,32 @@ export function SettingDialogView(props: {
       <form class="my-1 bg-white p-2">
         <div class="mb-4 grid grid-cols-[96px_272px] items-center">
           <div>{props.dict.language}</div>
+          <div class="flex items-center gap-1">
+            <input
+              type="radio"
+              id="i18n-en"
+              name="condition"
+              class="cursor-pointer"
+              checked={props.locale?.() === "en"}
+              onChange={() => props.setLocale?.("en")}
+            />
+            <label for="i18n-en" class="mr-2 cursor-pointer pl-1">
+              {props.dict.en}
+            </label>
+            <input
+              type="radio"
+              id="i18n-ja"
+              name="condition"
+              class="cursor-pointer"
+              checked={props.locale?.() === "ja"}
+              onChange={() => props.setLocale?.("ja")}
+            />
+            <label for="i18n-ja" class="cursor-pointer pl-1">
+              {props.dict.ja}
+            </label>
+          </div>
+
+          <div>{props.dict.theme}</div>
           <div class="flex items-center gap-1">
             <input
               type="radio"

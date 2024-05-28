@@ -1,9 +1,5 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 
-import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
-import AutoTimerActivitySvg from "@/assets/material-icons/auto-timer-activity.svg";
-import ManualActivitySvg from "@/assets/material-icons/manual-activity.svg";
-import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
 import { ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
 import { useAppContext } from "@/context/app-context";
 import {
@@ -12,6 +8,10 @@ import {
   ActivityNodeType,
   ActivitySplitType,
 } from "@/data-source/data-type";
+import { AutoActivityIcon } from "@/icons/auto-activity-icon";
+import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
+import { ManualActivityIcon } from "@/icons/manual-activity-icon";
+import { UserActivityIcon } from "@/icons/user-activity-icon";
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
   const {
@@ -200,19 +200,19 @@ export function ActivityNodeView(props: {
         <div class="flex h-full justify-center">
           <Switch>
             <Match when={props.activityType === "manualActivity"}>
-              <ManualActivitySvg />
+              <ManualActivityIcon />
             </Match>
             <Match when={props.activityType === "autoActivity"}>
-              <AutoActivitySvg />
+              <AutoActivityIcon />
             </Match>
             <Match when={props.activityType === "manualTimerActivity"}>
-              <AutoTimerActivitySvg />
+              <AutoTimerActivityIcon />
             </Match>
             <Match when={props.activityType === "autoTimerActivity"}>
-              <AutoTimerActivitySvg />
+              <AutoTimerActivityIcon />
             </Match>
             <Match when={props.activityType === "userActivity"}>
-              <UserActivitySvg />
+              <UserActivityIcon />
             </Match>
           </Switch>
         </div>
