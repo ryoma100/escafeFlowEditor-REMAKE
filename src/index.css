@@ -54,3 +54,9 @@ input:focus,
 textarea:focus {
   outline: 2px solid var(--primary2-color);
 }
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+}

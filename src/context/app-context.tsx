@@ -36,7 +36,9 @@ function makeI18nContext() {
     : "en";
 
   const THEME_KEY = "theme";
+  const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme) || "material";
   const COLOR_KEY = "color";
+  const defaultColor = (localStorage.getItem(COLOR_KEY) as Color) || "green";
 
   const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
@@ -46,12 +48,12 @@ function makeI18nContext() {
     setDataFactoryDict(dict());
   });
 
-  const [color, setColor] = createSignal<Color>("green");
+  const [color, setColor] = createSignal<Color>(defaultColor);
   createEffect(() => {
     localStorage.setItem(COLOR_KEY, color());
   });
 
-  const [theme, setTheme] = createSignal<Theme>("material");
+  const [theme, setTheme] = createSignal<Theme>(defaultTheme);
   createEffect(() => {
     localStorage.setItem(THEME_KEY, theme());
     setColor(themeColorMap[theme()]);
