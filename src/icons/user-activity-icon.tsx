@@ -13,7 +13,7 @@ export function UserActivityIcon() {
         <UserActivitySvg />
       </Match>
       <Match when={theme() === "crab"}>
-        <img src="crab/auto-activity.jpg" class="h-12 w-16" />
+        <img src="crab/user-activity.jpg" class="h-12 w-16" />
       </Match>
     </Switch>
   );
