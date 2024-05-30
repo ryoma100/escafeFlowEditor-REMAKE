@@ -11,6 +11,7 @@ import {
 import { AutoActivityIcon } from "@/icons/auto-activity-icon";
 import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
 import { ManualActivityIcon } from "@/icons/manual-activity-icon";
+import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 
 export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
@@ -206,7 +207,7 @@ export function ActivityNodeView(props: {
               <AutoActivityIcon />
             </Match>
             <Match when={props.activityType === "manualTimerActivity"}>
-              <AutoTimerActivityIcon />
+              <ManualTimerActivityIcon />
             </Match>
             <Match when={props.activityType === "autoTimerActivity"}>
               <AutoTimerActivityIcon />

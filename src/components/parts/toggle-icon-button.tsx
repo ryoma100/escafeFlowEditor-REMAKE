@@ -28,6 +28,7 @@ export function ToggleIconButton(props: {
           rounded-md border-2
           border-primary2
           hover:bg-primary2
+          peer-checked/toolbar-toggle:border-primary1
           peer-checked/toolbar-toggle:bg-primary1"
       >
         <label class="flex" for={props.id} title={props.title}>
