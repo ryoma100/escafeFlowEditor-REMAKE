@@ -1,9 +1,10 @@
-name: "deploy"
+name: "release"
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches-ignore:
+      - "**"
+    tags:
+      - "v*"
 
 permissions:
   contents: write
@@ -16,6 +17,7 @@ concurrency:
 
 env:
   VITE_BASE_PATH: ${{ vars.BASE_PATH }}
+  VITE_APP_VERSION: ${{ github.ref_name }}
 
 jobs:
   deploy:
@@ -67,8 +69,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: "App v__VERSION__"
+          tagName: ${{ github.ref_name }} # the action automatically replaces \_\_VERSION\_\_ with the app version.
+          releaseName: ${{ github.ref_name }}
           releaseBody: "See the assets to download this version and install.\nIf \"escafeFlowEditor-REMAKE\" is broken on the apple silicon mac, run \"xattr -rc escafeFlowEditor-REMAKE.app\" in a terminal."
           releaseDraft: true
           prerelease: false

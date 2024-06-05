@@ -12,10 +12,16 @@ export function AboutDialog(): JSXElement {
     setOpenDialog(null);
   }
 
-  return <AboutDialogView open={openDialog()?.type === "about"} onClose={handleClose} />;
+  return (
+    <AboutDialogView
+      open={openDialog()?.type === "about"}
+      version={import.meta.env.VITE_APP_VERSION ?? "v0.0.0"}
+      onClose={handleClose}
+    />
+  );
 }
 
-export function AboutDialogView(props: { open: boolean; onClose: () => void }) {
+export function AboutDialogView(props: { open: boolean; version: string; onClose: () => void }) {
   createEffect(() => {
     if (props.open) {
       dialogRef?.showModal();
@@ -31,7 +37,7 @@ export function AboutDialogView(props: { open: boolean; onClose: () => void }) {
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onClose()}>
       <h5 class="mb-2">escafeFlowEditor-REMAKE</h5>
       <form class="my-1 bg-white p-2" onClick={() => props.onClose()}>
-        <div>version: 0.1.1</div>
+        <div>version: {props.version.substring(1)}</div>
         <div>author: Ryouichi Matsuda</div>
         <div class="mb-4">
           web:&nbsp;
