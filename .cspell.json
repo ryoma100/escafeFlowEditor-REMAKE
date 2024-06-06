@@ -38,6 +38,7 @@
   "ignorePaths": [
     "node_modules/**",
     "dist/**",
+    "coverage/**",
     "pnpm-lock.yaml",
     "src-tauri/target/**",
     "**/*.icns",
