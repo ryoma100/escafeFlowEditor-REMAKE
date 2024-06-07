@@ -1,6 +1,8 @@
 name: "Continuous Integration"
 on:
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -21,7 +23,10 @@ jobs:
       - name: install dependencies
         run: pnpm install
 
-      - name: test
+      - name: lint
         run: |
+          pnpm audit
           pnpm lint
-          pnpm coverage
+
+      - name: test
+        run: pnpm coverage
