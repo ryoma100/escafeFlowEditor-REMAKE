@@ -81,8 +81,8 @@ jobs:
         run: |
           mv dist editor
           mv editor docs
-          # pnpm build-storybook
-          # mv storybook-static docs
+          pnpm build-storybook
+          mv storybook-static docs
 
       - name: upload artifact (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
