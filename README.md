@@ -4,13 +4,11 @@ This is a remake of [escafeFlowEditor](https://github.com/ryoma100/escafeFlowEdi
 
 <img width="809" alt="flow" src="docs/flow.png">
 
-### Playground
-
-https://ryoma100.github.io/escafeFlowEditor-REMAKE/
-
-### Download
-
-https://github.com/ryoma100/escafeFlowEditor-REMAKE/releases
+- [Web Application](https://ryoma100.github.io/escafeFlowEditor-REMAKE/editor/)
+- [PC Installer](https://github.com/ryoma100/escafeFlowEditor-REMAKE/releases)
+- [Storybook](https://ryoma100.github.io/escafeFlowEditor-REMAKE/storybook-static/)
+- [source code](https://github.com/ryoma100/escafeFlowEditor-REMAKE)
+- [sonar cloud](https://sonarcloud.io/project/overview?id=ryoma100_escafeFlowEditor-REMAKE)
 
 ## Development
 
