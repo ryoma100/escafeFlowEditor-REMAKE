@@ -20,10 +20,16 @@ export default defineConfig(async () => ({
     solid(),
     solidSvg(),
   ],
-
   resolve: {
     alias: {
       "@": "/src",
+    },
+  },
+  test: {
+    global: true,
+    coverage: {
+      reporter: ["text", "lcov"],
+      reportsDirectory: "coverage",
     },
   },
 
@@ -39,9 +45,5 @@ export default defineConfig(async () => ({
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
-  },
-
-  test: {
-    global: true,
   },
 }));
