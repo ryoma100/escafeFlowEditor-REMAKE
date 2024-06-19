@@ -1,11 +1,9 @@
 import ManualTimerActivitySvg from "@/assets/material-icons/manual-timer-activity.svg";
-import { useAppContext } from "@/context/app-context";
+import { useThemeContext } from "@/context/theme-context";
 import { Match, Switch } from "solid-js";
 
 export function ManualTimerActivityIcon() {
-  const {
-    i18n: { theme },
-  } = useAppContext();
+  const { theme } = useThemeContext();
 
   return (
     <Switch>

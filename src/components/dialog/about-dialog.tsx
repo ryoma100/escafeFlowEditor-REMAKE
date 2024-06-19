@@ -1,12 +1,12 @@
 import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 
 export function AboutDialog(): JSXElement {
   const {
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useAppContext();
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   function handleClose() {
     setOpenDialog(null);

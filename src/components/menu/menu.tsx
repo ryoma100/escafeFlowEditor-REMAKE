@@ -1,9 +1,11 @@
 import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
 
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
 
 export function AppMenu(): JSXElement {
+  const { dict } = useThemeContext();
   const {
     projectModel: { project, save },
     processModel: { addProcess, selectedProcess, processList },
@@ -11,9 +13,8 @@ export function AppMenu(): JSXElement {
     nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
     activityNodeModel: { updateAllJoinSplitType },
     edgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
-    dialog: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
-    i18n: { dict },
-  } = useAppContext();
+    dialogModel: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
+  } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {

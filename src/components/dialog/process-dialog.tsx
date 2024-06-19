@@ -3,7 +3,9 @@ import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict, i18nEnDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import {
   ActivityNode,
@@ -16,12 +18,12 @@ import {
 const dummy = dataFactory.createProcess([]);
 
 export function ProcessDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    i18n: { dict },
     processModel: { updateProcessDetail },
     activityNodeModel: { getActivityNodes },
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog, setMessageAlert },
-  } = useAppContext();
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog, setMessageAlert },
+  } = useModelContext();
 
   function handleFormSubmit(process: ProcessEntity) {
     const errorMessage = updateProcessDetail(process);

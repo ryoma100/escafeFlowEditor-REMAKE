@@ -3,7 +3,9 @@ import { For, JSXElement, Match, Switch, createEffect, createSignal } from "soli
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
 import { I18nDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
 import { AutoActivityIcon } from "@/icons/auto-activity-icon";
@@ -16,17 +18,17 @@ import { createStore } from "solid-js/store";
 const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
 
 export function ActivityDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
     processModel: { selectedProcess },
     actorModel: { actorList },
     activityNodeModel: { updateActivity },
-    dialog: {
+    dialogModel: {
       modalDialog: openDialog,
       setModalDialog: setOpenDialog,
       setMessageAlert: setOpenMessageDialog,
     },
-    i18n: { dict },
-  } = useAppContext();
+  } = useModelContext();
 
   function handleFormSubmit(formData: ActivityNode) {
     const errorMessage = updateActivity(formData);

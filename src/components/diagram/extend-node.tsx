@@ -1,6 +1,6 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 import { CommentIcon } from "@/icons/comment";
 import { EndIcon } from "@/icons/end-icon";
@@ -14,8 +14,8 @@ export function ExtendNodeContainer(props: {
     extendEdgeModel: { addEndEdge },
     nodeModel: { changeSelectNodes },
     diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
-    dialog: { setModalDialog: setOpenDialog },
-  } = useAppContext();
+    dialogModel: { setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();

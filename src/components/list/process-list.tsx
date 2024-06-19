@@ -2,15 +2,16 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
 import { ProcessEntity } from "@/data-source/data-type";
 
 export function ProcessList(): JSXElement {
+  const { dict } = useThemeContext();
   const {
     processModel: { processList, selectedProcess, addProcess, changeProcess },
-    dialog: { setModalDialog: setOpenDialog },
-    i18n: { dict },
-  } = useAppContext();
+    dialogModel: { setModalDialog: setOpenDialog },
+  } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleItemMouseDown(process: ProcessEntity, _: MouseEvent) {

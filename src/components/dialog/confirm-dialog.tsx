@@ -2,15 +2,17 @@ import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { i18nEnDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 
 export function ConfirmDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
     projectModel: { initProject },
     processModel: { removeProcess },
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-    i18n: { dict },
-  } = useAppContext();
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   function handleSubmit() {
     const dialog = openDialog();

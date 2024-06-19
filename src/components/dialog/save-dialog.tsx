@@ -4,14 +4,16 @@ import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { i18nEnDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { exportXml } from "@/data-source/data-converter";
 
 export function SaveDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-    i18n: { dict },
-  } = useAppContext();
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   function handleFormSubmit(formData: string) {
     if ("__TAURI_IPC__" in window) {

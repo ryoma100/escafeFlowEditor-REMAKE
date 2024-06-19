@@ -2,7 +2,8 @@ import * as i18n from "@solid-primitives/i18n";
 import { JSXElement } from "solid-js";
 
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
 import { AutoActivityIcon } from "@/icons/auto-activity-icon";
 import { CommentIcon } from "@/icons/comment";
 import { CursorIcon } from "@/icons/cursor-icon";
@@ -23,10 +24,10 @@ export type ToolbarType =
   | "addCommentNode";
 
 export function Toolbar(): JSXElement {
+  const { dict } = useThemeContext();
   const {
     diagramModel: { toolbar, setToolbar },
-    i18n: { dict },
-  } = useAppContext();
+  } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleKeyDown(e: KeyboardEvent) {

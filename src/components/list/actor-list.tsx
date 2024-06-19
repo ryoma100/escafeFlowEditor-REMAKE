@@ -2,16 +2,17 @@ import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
 import { ActorEntity } from "@/data-source/data-type";
 
 export function ActorList(): JSXElement {
+  const { dict } = useThemeContext();
   const {
     nodeModel: { nodeList },
     actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
-    dialog: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
-    i18n: { dict },
-  } = useAppContext();
+    dialogModel: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
+  } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {

@@ -3,22 +3,24 @@ import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
 
 const dummy = dataFactory.createTransitionEdge([], 0, 0);
 
 export function TransitionDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    dialog: {
+    dialogModel: {
       modalDialog: openDialog,
       setModalDialog: setOpenDialog,
       setMessageAlert: setOpenMessageDialog,
     },
     transitionEdgeModel: { updateTransitionEdge },
-    i18n: { dict },
-  } = useAppContext();
+  } = useModelContext();
 
   function handleFormSubmit(formData: TransitionEdge) {
     const errorMessage = updateTransitionEdge(formData);
