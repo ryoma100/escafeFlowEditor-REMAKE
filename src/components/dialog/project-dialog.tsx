@@ -1,8 +1,8 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
@@ -12,7 +12,6 @@ import { ProjectDetailEntity } from "@/data-source/data-type";
 const dummy = dataFactory.createProject();
 
 export function ProjectDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     projectModel: { setProjectDetail },
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
@@ -30,7 +29,6 @@ export function ProjectDialog(): JSXElement {
   return (
     <ProjectDialogView
       openDialog={openDialog()}
-      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
     />
@@ -39,10 +37,12 @@ export function ProjectDialog(): JSXElement {
 
 export function ProjectDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: I18nDict;
   onFormSubmit?: (formData: ProjectDetailEntity) => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [formData, setFormData] = createStore<ProjectDetailEntity>(dummy.detail);
 
   createEffect(() => {
@@ -62,7 +62,7 @@ export function ProjectDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
-      <h5 class="mb-2">{props.dict.editPackage}</h5>
+      <h5 class="mb-2">{t("editPackage")}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID:</div>
@@ -71,7 +71,7 @@ export function ProjectDialogView(props: {
             value={formData.xpdlId}
             onInput={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <div>{props.dict.name}:</div>
+          <div>{t("name")}:</div>
           <input
             type="text"
             value={formData.name}

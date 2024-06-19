@@ -1,16 +1,15 @@
+import * as i18n from "@solid-primitives/i18n";
 import { dialog } from "@tauri-apps/api";
 import { writeTextFile } from "@tauri-apps/api/fs";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { i18nEnDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
 import { exportXml } from "@/data-source/data-converter";
 
 export function SaveDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
   } = useModelContext();
@@ -51,7 +50,6 @@ export function SaveDialog(): JSXElement {
   return (
     <SaveDialogView
       openDialog={openDialog()}
-      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
     />
@@ -60,10 +58,12 @@ export function SaveDialog(): JSXElement {
 
 export function SaveDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: typeof i18nEnDict;
   onFormSubmit?: (formData: string) => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [data, setData] = createSignal<string>("");
 
   createEffect(() => {
@@ -85,19 +85,19 @@ export function SaveDialogView(props: {
   let saveButtonRef: HTMLButtonElement | undefined;
   return (
     <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
-      <h5 class="mb-2">{props.dict.saveXpdl}</h5>
+      <h5 class="mb-2">{t("saveXpdl")}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <p class="mb-2">{props.dict.copyXpdl}</p>
+        <p class="mb-2">{t("copyXpdl")}</p>
         <textarea class="mb-2 h-[410px] w-full resize-none" readOnly>
           {data()}
         </textarea>
 
         <ButtonsContainer>
           <button type="button" ref={saveButtonRef} onClick={handleFormSubmit}>
-            {props.dict.saveFile}
+            {t("saveFile")}
           </button>
           <button type="button" onClick={() => props.onDialogClose?.()}>
-            {props.dict.close}
+            {t("close")}
           </button>
         </ButtonsContainer>
       </form>

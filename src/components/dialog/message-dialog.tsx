@@ -1,32 +1,32 @@
 import * as i18n from "@solid-primitives/i18n";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
+import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { JSXElement, createEffect } from "solid-js";
 
 export function MessageDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     dialogModel: { messageAlert: openMessageDialog, setMessageAlert: setOpenMessageDialog },
   } = useModelContext();
-  const t = i18n.translator(dict);
 
   function handleDialogClose() {
     setOpenMessageDialog(null);
   }
 
-  const message = () => {
-    const key = openMessageDialog();
-    return key != null ? t(key) : "";
-  };
-
-  return <MessageDialogView message={message()} onDialogClose={handleDialogClose} />;
+  return <MessageDialogView message={openMessageDialog()} onDialogClose={handleDialogClose} />;
 }
 
-export function MessageDialogView(props: { message: string; onDialogClose?: () => void }) {
+export function MessageDialogView(props: {
+  message: keyof I18nDict | null;
+  onDialogClose?: () => void;
+}) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   createEffect(() => {
-    if (props.message !== "") {
+    if (props.message) {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -42,7 +42,7 @@ export function MessageDialogView(props: { message: string; onDialogClose?: () =
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <div class="mb-4">{props.message}</div>
+        <div class="mb-4">{props.message ? t(props.message) : ""}</div>
 
         <ButtonsContainer>
           <button type="submit">OK</button>

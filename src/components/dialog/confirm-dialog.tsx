@@ -1,13 +1,12 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { i18nEnDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
 
 export function ConfirmDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     projectModel: { initProject },
     processModel: { removeProcess },
@@ -34,7 +33,6 @@ export function ConfirmDialog(): JSXElement {
   return (
     <ConfirmDialogView
       openDialog={openDialog()}
-      dict={dict()}
       onFormSubmit={handleSubmit}
       onDialogClose={handleClose}
     />
@@ -43,10 +41,12 @@ export function ConfirmDialog(): JSXElement {
 
 export function ConfirmDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: typeof i18nEnDict;
   onFormSubmit?: () => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   createEffect(() => {
     if (props.openDialog?.type === "initAll" || props.openDialog?.type === "deleteProcess") {
       dialogRef?.showModal();
@@ -58,9 +58,9 @@ export function ConfirmDialogView(props: {
   const message = () => {
     switch (props.openDialog?.type) {
       case "initAll":
-        return props.dict.initAllConfirm;
+        return t("initAllConfirm");
       case "deleteProcess":
-        return props.dict.deleteProcessConfirm;
+        return t("deleteProcessConfirm");
       default:
         return "";
     }

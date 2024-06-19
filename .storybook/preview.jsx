@@ -1,8 +1,7 @@
-import { Preview } from "storybook-solidjs";
-
+import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import "../src/index.css";
 
-const preview: Preview = {
+const preview = {
   parameters: {
     controls: {
       matchers: {
@@ -25,6 +24,17 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story, { globals }) => {
+      const value = makeThemeContext();
+      value.setLocale(globals.locale);
+      return (
+        <ThemeContext.Provider value={value}>
+          <Story />
+        </ThemeContext.Provider>
+      );
+    },
+  ],
 };
 
 export default preview;

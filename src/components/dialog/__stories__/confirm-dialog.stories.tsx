@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ConfirmDialogView } from "@/components/dialog/confirm-dialog";
-import { i18nEnDict } from "@/constants/i18n";
 import { dataFactory } from "@/data-source/data-factory";
 
 const meta = {
@@ -18,13 +17,11 @@ const process = dataFactory.createProcess([]);
 export const InitAll: Story = {
   args: {
     openDialog: { type: "initAll" },
-    dict: i18nEnDict,
   },
 };
 
 export const DeleteProcess: Story = {
   args: {
     openDialog: { type: "deleteProcess", process },
-    dict: i18nEnDict,
   },
 };
