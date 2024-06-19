@@ -1,14 +1,14 @@
 import { JSXElement } from "solid-js";
 
 import { DiagramContainer } from "@/components/diagram/diagram";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 
 export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
     nodeModel: { computeMaxRectangle: maxRectangle },
     diagramModel: { zoom, setZoom, autoRectangle },
-  } = useAppContext();
+  } = useModelContext();
 
   function handleAutoZoomButtonClick() {
     const rect = maxRectangle();

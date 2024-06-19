@@ -2,7 +2,7 @@ import { For, JSXElement, Show, createEffect, createSignal, onMount } from "soli
 import { produce } from "solid-js/store";
 
 import { defaultCircle, defaultRectangle } from "@/constants/app-const";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 import {
   ActivityNode,
   Circle,
@@ -53,7 +53,7 @@ export function DiagramContainer(): JSXElement {
       addingLine,
       setAddingLineTo,
     },
-  } = useAppContext();
+  } = useModelContext();
 
   const [selectBox, setSelectBox] = createSignal<Rectangle>(defaultRectangle);
   const [selectCircle, setSelectCircle] = createSignal<Circle>(defaultCircle);

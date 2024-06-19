@@ -2,7 +2,9 @@ import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { CommentNode } from "@/data-source/data-type";
 import { createStore } from "solid-js/store";
@@ -10,11 +12,11 @@ import { createStore } from "solid-js/store";
 const dummy = dataFactory.createCommentNode([], 0, 0);
 
 export function CommentDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    i18n: { dict },
     extendNodeModel: { updateComment },
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useAppContext();
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   function handleFormSubmit(formData: CommentNode) {
     updateComment(deepUnwrap(formData));

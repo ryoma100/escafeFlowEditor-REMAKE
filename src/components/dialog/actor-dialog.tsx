@@ -3,22 +3,24 @@ import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActorEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createActorEntity([]);
 
 export function ActorDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    i18n: { dict },
     actorModel: { updateActor },
-    dialog: {
+    dialogModel: {
       modalDialog: openDialog,
       setModalDialog: setOpenDialog,
       setMessageAlert: setOpenMessageDialog,
     },
-  } = useAppContext();
+  } = useModelContext();
 
   function handleFormSubmit(formData: ActorEntity) {
     const errorMessage = updateActor(deepUnwrap(formData));

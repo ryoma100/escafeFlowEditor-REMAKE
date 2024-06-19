@@ -1,14 +1,15 @@
 import * as i18n from "@solid-primitives/i18n";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
 import { JSXElement, createEffect } from "solid-js";
 
 export function MessageDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    dialog: { messageAlert: openMessageDialog, setMessageAlert: setOpenMessageDialog },
-    i18n: { dict },
-  } = useAppContext();
+    dialogModel: { messageAlert: openMessageDialog, setMessageAlert: setOpenMessageDialog },
+  } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleDialogClose() {

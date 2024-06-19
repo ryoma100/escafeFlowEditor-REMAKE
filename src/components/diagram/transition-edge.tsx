@@ -1,6 +1,6 @@
 import { JSXElement, createSignal, onMount } from "solid-js";
 
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 import { Line, TransitionEdge } from "@/data-source/data-type";
 import { computeLine } from "@/utils/line-utils";
 
@@ -10,8 +10,8 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
     nodeModel: { changeSelectNodes },
     edgeModel: { changeSelectEdges },
     diagramModel: { setDragMode: setDragType },
-    dialog: { setModalDialog: setOpenDialog },
-  } = useAppContext();
+    dialogModel: { setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   const fromActivity = () => getActivityNode(props.transition.fromNodeId);
   const toActivity = () => getActivityNode(props.transition.toNodeId);

@@ -3,18 +3,20 @@ import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ProjectDetailEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createProject();
 
 export function ProjectDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    i18n: { dict },
     projectModel: { setProjectDetail },
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useAppContext();
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
+  } = useModelContext();
 
   function handleFormSubmit(formData: ProjectDetailEntity) {
     setProjectDetail(formData);

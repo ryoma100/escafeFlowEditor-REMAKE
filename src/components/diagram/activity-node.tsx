@@ -1,7 +1,7 @@
 import { JSXElement, Match, Switch, onMount } from "solid-js";
 
 import { ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 import {
   ActivityJoinType,
   ActivityNode,
@@ -22,9 +22,9 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
     edgeModel: { changeSelectEdges },
     extendEdgeModel: { addCommentEdge, addStartEdge },
     transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
-    dialog: { setModalDialog },
+    dialogModel: { setModalDialog },
     diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
-  } = useAppContext();
+  } = useModelContext();
 
   function handleLeftMouseDown(_e: MouseEvent) {
     changeSelectNodes("select", [props.activity.id]);

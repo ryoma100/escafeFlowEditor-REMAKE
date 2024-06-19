@@ -1,6 +1,6 @@
 import { JSXElement } from "solid-js";
 
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
 
 export function ExtendEdgeContainer(props: {
@@ -11,7 +11,7 @@ export function ExtendEdgeContainer(props: {
     activityNodeModel: { getActivityNode },
     nodeModel: { changeSelectNodes },
     edgeModel: { changeSelectEdges },
-  } = useAppContext();
+  } = useModelContext();
 
   const fromToNode = () => {
     switch (props.edge.type) {

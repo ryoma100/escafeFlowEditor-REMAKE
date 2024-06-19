@@ -3,14 +3,17 @@ import "solid-devtools";
 import { render } from "solid-js/web";
 
 import App from "@/App";
-import { AppProvider } from "@/context/app-context";
+import { ModelProvider } from "@/context/model-context";
+import { ThemeProvider } from "@/context/theme-context";
 import "@/index.css";
 
 render(
   () => (
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <ThemeProvider>
+      <ModelProvider>
+        <App />
+      </ModelProvider>
+    </ThemeProvider>
   ),
   document.getElementById("root") as HTMLElement,
 );

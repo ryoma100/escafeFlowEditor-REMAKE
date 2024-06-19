@@ -17,12 +17,12 @@ import { ProcessList } from "@/components/list/process-list";
 import { Main } from "@/components/main/main";
 import { AppMenu } from "@/components/menu/menu";
 import { Toolbar } from "@/components/toolbar/toolbar";
-import { useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
 
 function App(): JSXElement {
   const {
     projectModel: { initProject },
-  } = useAppContext();
+  } = useModelContext();
   initProject();
 
   return (

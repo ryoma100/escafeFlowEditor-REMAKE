@@ -3,17 +3,19 @@ import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
-import { ModalDialogType, useAppContext } from "@/context/app-context";
+import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
+import { ModalDialogType } from "@/data-model/dialog-model";
 import { importXml } from "@/data-source/data-converter";
 import { ProjectEntity } from "@/data-source/data-type";
 import { readTextFile } from "@tauri-apps/api/fs";
 
 export function LoadDialog(): JSXElement {
+  const { dict } = useThemeContext();
   const {
-    dialog: { modalDialog: openDialog, setModalDialog: setOpenDialog },
+    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     processModel: { load },
-    i18n: { dict },
-  } = useAppContext();
+  } = useModelContext();
 
   function handleInput(data: string) {
     const project: ProjectEntity = importXml(data);
