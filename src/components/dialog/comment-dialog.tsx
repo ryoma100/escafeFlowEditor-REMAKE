@@ -1,7 +1,7 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
@@ -12,7 +12,6 @@ import { createStore } from "solid-js/store";
 const dummy = dataFactory.createCommentNode([], 0, 0);
 
 export function CommentDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     extendNodeModel: { updateComment },
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
@@ -30,7 +29,6 @@ export function CommentDialog(): JSXElement {
   return (
     <CommentDialogView
       openDialog={openDialog()}
-      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
     />
@@ -39,10 +37,12 @@ export function CommentDialog(): JSXElement {
 
 export function CommentDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: I18nDict;
   onFormSubmit?: (formData: CommentNode) => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [formData, setFormData] = createStore<CommentNode>(dummy);
 
   createEffect(() => {
@@ -62,7 +62,7 @@ export function CommentDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
-      <h5 class="mb-2">{props.dict.editComment}</h5>
+      <h5 class="mb-2">{t("editComment")}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <textarea
           class="mb-2 h-48 w-full resize-none"

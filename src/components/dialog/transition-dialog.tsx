@@ -1,8 +1,8 @@
+import * as i18n from "@solid-primitives/i18n";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
@@ -12,7 +12,6 @@ import { TransitionEdge } from "@/data-source/data-type";
 const dummy = dataFactory.createTransitionEdge([], 0, 0);
 
 export function TransitionDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     dialogModel: {
       modalDialog: openDialog,
@@ -38,7 +37,6 @@ export function TransitionDialog(): JSXElement {
   return (
     <TransitionDialogView
       openDialog={openDialog()}
-      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
     />
@@ -47,10 +45,12 @@ export function TransitionDialog(): JSXElement {
 
 export function TransitionDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: I18nDict;
   onFormSubmit?: (formData: TransitionEdge) => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [formData, setFormData] = createStore<TransitionEdge>(dummy);
   const [showOgnl, setShowOgnl] = createSignal<boolean>(false);
 
@@ -78,7 +78,7 @@ export function TransitionDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
-      <h5 class="mb-2">{props.dict.editTransition}</h5>
+      <h5 class="mb-2">{t("editTransition")}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center space-y-2">
           <div>ID:</div>
@@ -87,7 +87,7 @@ export function TransitionDialogView(props: {
             value={formData.xpdlId}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <div>{props.dict.connectCondition}</div>
+          <div>{t("connectCondition")}</div>
           <div class="flex items-center">
             <input
               type="radio"
@@ -98,7 +98,7 @@ export function TransitionDialogView(props: {
               onChange={() => setShowOgnl(true)}
             />
             <label for="condition-on" class="mr-2 cursor-pointer pl-1">
-              {props.dict.conditionOn}
+              {t("conditionOn")}
             </label>
             <input
               type="radio"
@@ -109,10 +109,10 @@ export function TransitionDialogView(props: {
               onChange={() => setShowOgnl(false)}
             />
             <label for="condition-off" class="cursor-pointer pl-1">
-              {props.dict.conditionOff}
+              {t("conditionOff")}
             </label>
           </div>
-          <div classList={{ invisible: !showOgnl() }}>{props.dict.conditionExpression} (OGNL)</div>
+          <div classList={{ invisible: !showOgnl() }}>{t("conditionExpression")} (OGNL)</div>
           <input
             classList={{ invisible: !showOgnl() }}
             type="text"

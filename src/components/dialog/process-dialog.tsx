@@ -1,8 +1,9 @@
+import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, createEffect, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { I18nDict, i18nEnDict } from "@/constants/i18n";
+import { i18nEnDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
@@ -18,7 +19,6 @@ import {
 const dummy = dataFactory.createProcess([]);
 
 export function ProcessDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     processModel: { updateProcessDetail },
     activityNodeModel: { getActivityNodes },
@@ -42,7 +42,6 @@ export function ProcessDialog(): JSXElement {
     <ProcessDialogView
       openDialog={openDialog()}
       activityList={getActivityNodes()}
-      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
       onOpenMessageDialog={setMessageAlert}
@@ -53,11 +52,13 @@ export function ProcessDialog(): JSXElement {
 export function ProcessDialogView(props: {
   openDialog: ModalDialogType | null;
   activityList: ActivityNode[];
-  dict: I18nDict;
   onFormSubmit?: (formData: ProcessEntity) => void;
   onDialogClose?: () => void;
   onOpenMessageDialog?: (key: keyof typeof i18nEnDict) => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [formData, setFormData] = createStore<ProcessDetailEntity>(dummy.detail);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
   const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
@@ -126,7 +127,7 @@ export function ProcessDialogView(props: {
       ref={dialogRef}
       onClose={() => props.onDialogClose?.()}
     >
-      <h5 class="mb-2">{props.dict.editProcess}</h5>
+      <h5 class="mb-2">{t("editProcess")}</h5>
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
           <p>ID:</p>
@@ -135,7 +136,7 @@ export function ProcessDialogView(props: {
             value={formData.xpdlId}
             onChange={(e) => setFormData("xpdlId", e.target.value)}
           />
-          <p>{props.dict.name}:</p>
+          <p>{t("name")}:</p>
           <input
             type="text"
             value={formData.name}
@@ -143,12 +144,12 @@ export function ProcessDialogView(props: {
           />
         </div>
 
-        <p class="mb-1 mt-2">{props.dict.extendedSetting}:</p>
+        <p class="mb-1 mt-2">{t("extendedSetting")}:</p>
         <table class="mb-2 w-full border-collapse border border-solid border-primary3 bg-white">
           <thead class="block bg-primary3 pr-4">
             <tr>
-              <td class="w-[240px] pl-1">{props.dict.name}</td>
-              <td class="w-[240px] pl-1">{props.dict.value}</td>
+              <td class="w-[240px] pl-1">{t("name")}</td>
+              <td class="w-[240px] pl-1">{t("value")}</td>
             </tr>
           </thead>
           <tbody class="block h-[64px] overflow-x-hidden overflow-y-scroll">
@@ -185,21 +186,21 @@ export function ProcessDialogView(props: {
         </table>
         <ButtonsContainer justify="end">
           <button type="button" onClick={handleAddEnvButtonClick}>
-            {props.dict.add}
+            {t("add")}
           </button>
           <button type="button" onClick={handleRemoveEnvButtonClick}>
-            {props.dict.delete}
+            {t("delete")}
           </button>
         </ButtonsContainer>
 
-        <p>{props.dict.application}:</p>
+        <p>{t("application")}:</p>
         <table class="mb-2 mt-1 border-collapse border border-solid border-primary3 bg-white">
           <thead class="block bg-primary3 pr-4">
             <tr>
               <td class="w-[120px] pl-1">ID</td>
-              <td class="w-[120px] pl-1">{props.dict.name}</td>
-              <td class="w-[120px] pl-1">{props.dict.extendedName}</td>
-              <td class="w-[120px] pl-1">{props.dict.extendedValue}</td>
+              <td class="w-[120px] pl-1">{t("name")}</td>
+              <td class="w-[120px] pl-1">{t("extendedName")}</td>
+              <td class="w-[120px] pl-1">{t("extendedValue")}</td>
             </tr>
           </thead>
           <tbody class="block h-[64px] overflow-x-hidden overflow-y-scroll">
@@ -256,14 +257,14 @@ export function ProcessDialogView(props: {
         </table>
         <ButtonsContainer justify="end">
           <button type="button" onClick={handleAddAppButtonClick}>
-            {props.dict.add}
+            {t("add")}
           </button>
           <button type="button" onClick={handleRemoveAppButtonClick}>
-            {props.dict.delete}
+            {t("delete")}
           </button>
         </ButtonsContainer>
 
-        <p>{props.dict.expireLimit}</p>
+        <p>{t("expireLimit")}</p>
         <div class="mb-2 grid grid-cols-[80px_220px_180px] items-center gap-y-2">
           <p>From:</p>
           <input
@@ -271,7 +272,7 @@ export function ProcessDialogView(props: {
             value={formData.validFrom}
             onChange={(e) => setFormData("validFrom", e.target.value)}
           />
-          <p class="ml-2">{props.dict.inputExample}: 2009/1/2</p>
+          <p class="ml-2">{t("inputExample")}: 2009/1/2</p>
 
           <p>To:</p>
           <input
@@ -279,7 +280,7 @@ export function ProcessDialogView(props: {
             value={formData.validTo}
             onChange={(e) => setFormData("validTo", e.target.value)}
           />
-          <p class="ml-2">{props.dict.inputExample}: 2009/1/2</p>
+          <p class="ml-2">{t("inputExample")}: 2009/1/2</p>
         </div>
 
         <ButtonsContainer>

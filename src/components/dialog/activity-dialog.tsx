@@ -1,8 +1,8 @@
+import * as i18n from "@solid-primitives/i18n";
 import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
-import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
@@ -18,7 +18,6 @@ import { createStore } from "solid-js/store";
 const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
 
 export function ActivityDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     processModel: { selectedProcess },
     actorModel: { actorList },
@@ -48,7 +47,6 @@ export function ActivityDialog(): JSXElement {
       openDialog={openDialog()}
       applications={selectedProcess().detail.applications}
       actorList={actorList}
-      dict={dict()}
       onFormSubmit={handleFormSubmit}
       onDialogClose={handleDialogClose}
     />
@@ -59,10 +57,12 @@ export function ActivityDialogView(props: {
   openDialog: ModalDialogType | null;
   applications: ApplicationEntity[];
   actorList: ActorEntity[];
-  dict: I18nDict;
   onFormSubmit?: (formData: ActivityNode) => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [formData, setFormData] = createStore<ActivityNode>(dummy);
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
 
@@ -109,13 +109,13 @@ export function ActivityDialogView(props: {
       ref={dialogRef}
       onClose={() => props.onDialogClose?.()}
     >
-      <h5 class="mb-2">{props.dict.editActivity}</h5>
+      <h5 class="mb-2">{t("editActivity")}</h5>
 
       <form class="bg-white p-2" onSubmit={handleSubmit}>
         <div class="mb-2 flex flex-row">
           <ToggleIconButton
             id="manual-activity"
-            title={props.dict.manualActivity}
+            title={t("manualActivity")}
             checked={formData.activityType === "manualActivity"}
             onChange={() => setFormData("activityType", "manualActivity")}
             margin="0 4px 0 0"
@@ -124,7 +124,7 @@ export function ActivityDialogView(props: {
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-activity"
-            title={props.dict.autoActivity}
+            title={t("autoActivity")}
             checked={formData.activityType === "autoActivity"}
             onChange={() => setFormData("activityType", "autoActivity")}
             margin="0 4px 0 0"
@@ -133,7 +133,7 @@ export function ActivityDialogView(props: {
           </ToggleIconButton>
           <ToggleIconButton
             id="manual-timer-activity"
-            title={props.dict.manualTimerActivity}
+            title={t("manualTimerActivity")}
             checked={formData.activityType === "manualTimerActivity"}
             onChange={() => setFormData("activityType", "manualTimerActivity")}
             margin="0 4px 0 0"
@@ -142,7 +142,7 @@ export function ActivityDialogView(props: {
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-timer-activity"
-            title={props.dict.autoTimerActivity}
+            title={t("autoTimerActivity")}
             checked={formData.activityType === "autoTimerActivity"}
             onChange={() => setFormData("activityType", "autoTimerActivity")}
             margin="0 4px 0 0"
@@ -151,7 +151,7 @@ export function ActivityDialogView(props: {
           </ToggleIconButton>
           <ToggleIconButton
             id="user-activity"
-            title={props.dict.handWork}
+            title={t("handWork")}
             checked={formData.activityType === "userActivity"}
             onChange={() => setFormData("activityType", "userActivity")}
           >
@@ -176,7 +176,7 @@ export function ActivityDialogView(props: {
               peer-checked/tab-switch1:bg-primary1"
             for="tab-join"
           >
-            {props.dict.beginning}
+            {t("beginning")}
           </label>
           <div
             class="
@@ -187,7 +187,7 @@ export function ActivityDialogView(props: {
             }}
           >
             <div>
-              <div>{props.dict.previousWork}</div>
+              <div>{t("previousWork")}</div>
               <div>
                 <input
                   type="radio"
@@ -198,7 +198,7 @@ export function ActivityDialogView(props: {
                   checked={formData.joinType === "xorJoin"}
                   onChange={() => setFormData("joinType", "xorJoin")}
                 />
-                <label for="joinOne">{props.dict.whenOneDone}</label>
+                <label for="joinOne">{t("whenOneDone")}</label>
               </div>
               <div>
                 <input
@@ -210,9 +210,9 @@ export function ActivityDialogView(props: {
                   checked={formData.joinType === "andJoin"}
                   onChange={() => setFormData("joinType", "andJoin")}
                 />
-                <label for="joinMany">{props.dict.whenAllOver}</label>
+                <label for="joinMany">{t("whenAllOver")}</label>
               </div>
-              <div>{props.dict.executeJob}</div>
+              <div>{t("executeJob")}</div>
             </div>
           </div>
 
@@ -233,7 +233,7 @@ export function ActivityDialogView(props: {
               peer-checked/tab-switch2:bg-primary1"
             for="tab-work"
           >
-            {props.dict.work}
+            {t("work")}
           </label>
           <div
             class="
@@ -248,14 +248,14 @@ export function ActivityDialogView(props: {
                 onChange={(e) => setFormData("xpdlId", e.target.value)}
               />
 
-              <div>{props.dict.jobTitle}</div>
+              <div>{t("jobTitle")}</div>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData("name", e.target.value)}
               />
 
-              <div>{props.dict.actor}</div>
+              <div>{t("actor")}</div>
               <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
                 <For each={props.actorList}>
                   {(actor) => (
@@ -268,7 +268,7 @@ export function ActivityDialogView(props: {
 
               <Switch>
                 <Match when={formData.activityType === "autoActivity"}>
-                  <div>{props.dict.processingDetails}</div>
+                  <div>{t("processingDetails")}</div>
                   <div class="flex h-[160px] flex-col border-solid border-gray-300">
                     <select
                       disabled={selectedAppIndex() < 0}
@@ -287,8 +287,7 @@ export function ActivityDialogView(props: {
                       class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
                       value={
-                        formData.applications[selectedAppIndex()]?.ognl ??
-                        props.dict.registerProcessApp
+                        formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")
                       }
                       onChange={(e) =>
                         setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)
@@ -302,7 +301,7 @@ export function ActivityDialogView(props: {
                     formData.activityType === "autoTimerActivity"
                   }
                 >
-                  <div>{props.dict.whenRunAutomatically}</div>
+                  <div>{t("whenRunAutomatically")}</div>
                   <div class="h-[160px] w-[266px]">
                     <textarea
                       class="b-0 h-full w-full resize-none"
@@ -331,7 +330,7 @@ export function ActivityDialogView(props: {
               peer-checked/tab-switch3:bg-primary1"
             for="tab-split"
           >
-            {props.dict.termination}
+            {t("termination")}
           </label>
           <div
             class="
@@ -342,7 +341,7 @@ export function ActivityDialogView(props: {
             }}
           >
             <div>
-              <div>{props.dict.nextJobCondition}</div>
+              <div>{t("nextJobCondition")}</div>
               <div>
                 <input
                   type="radio"
@@ -353,7 +352,7 @@ export function ActivityDialogView(props: {
                   checked={formData.splitType === "xorSplit"}
                   onChange={() => setFormData("splitType", "xorSplit")}
                 />
-                <label for="splitOne">{props.dict.oneOfThese}</label>
+                <label for="splitOne">{t("oneOfThese")}</label>
               </div>
               <div>
                 <input
@@ -365,9 +364,9 @@ export function ActivityDialogView(props: {
                   checked={formData.splitType === "andSplit"}
                   onChange={() => setFormData("splitType", "andSplit")}
                 />
-                <label for="splitMany">{props.dict.all}</label>
+                <label for="splitMany">{t("all")}</label>
               </div>
-              <div>{props.dict.processContinues}</div>
+              <div>{t("processContinues")}</div>
             </div>
           </div>
         </div>

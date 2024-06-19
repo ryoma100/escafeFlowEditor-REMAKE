@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ActivityDialogView } from "@/components/dialog/activity-dialog";
-import { i18nEnDict } from "@/constants/i18n";
 import { dataFactory } from "@/data-source/data-factory";
 
 const meta = {
@@ -27,6 +26,5 @@ export const Activity: Story = {
     openDialog: { type: "activity", activity },
     actorList: process.actors,
     applications: process.detail.applications,
-    dict: i18nEnDict,
   },
 };

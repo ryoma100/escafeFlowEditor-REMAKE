@@ -1,8 +1,8 @@
+import * as i18n from "@solid-primitives/i18n";
 import { dialog } from "@tauri-apps/api";
 import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
@@ -11,7 +11,6 @@ import { ProjectEntity } from "@/data-source/data-type";
 import { readTextFile } from "@tauri-apps/api/fs";
 
 export function LoadDialog(): JSXElement {
-  const { dict } = useThemeContext();
   const {
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     processModel: { load },
@@ -69,7 +68,6 @@ export function LoadDialog(): JSXElement {
   return (
     <LoadDialogView
       openDialog={openDialog()}
-      dict={dict()}
       onLoadClick={handleFileLoad}
       onInputClick={handleInput}
       onDialogClose={handleDialogClose}
@@ -79,11 +77,13 @@ export function LoadDialog(): JSXElement {
 
 export function LoadDialogView(props: {
   openDialog: ModalDialogType | null;
-  dict: I18nDict;
   onLoadClick?: () => void;
   onInputClick?: (data: string) => void;
   onDialogClose?: () => void;
 }) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const [data, setData] = createSignal<string>("");
 
   createEffect(() => {
@@ -105,9 +105,9 @@ export function LoadDialogView(props: {
   let loadButtonRef: HTMLButtonElement | undefined;
   return (
     <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
-      <h5 class="mb-2">{props.dict.openXpdl}</h5>
+      <h5 class="mb-2">{t("openXpdl")}</h5>
       <form class="bg-white p-2" onSubmit={handleFormSubmit}>
-        <p class="mb-2">{props.dict.inputXpdl}</p>
+        <p class="mb-2">{t("inputXpdl")}</p>
         <textarea
           class="mb-2 h-[410px] w-full resize-none"
           value={data()}
@@ -115,14 +115,14 @@ export function LoadDialogView(props: {
         />
         <div class="flex justify-between">
           <button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
-            {props.dict.loadFile}
+            {t("loadFile")}
           </button>
           <ButtonsContainer>
             <button type="button" onClick={() => props.onInputClick?.(data())}>
-              {props.dict.readXpdl}
+              {t("readXpdl")}
             </button>
             <button type="button" onClick={() => props.onDialogClose?.()}>
-              {props.dict.close}
+              {t("close")}
             </button>
           </ButtonsContainer>
         </div>
