@@ -1,7 +1,11 @@
+/** @jsxImportSource solid-js */
+
+import { Preview } from "storybook-solidjs";
+
 import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import "../src/index.css";
 
-const preview = {
+const preview: Preview = {
   parameters: {
     controls: {
       matchers: {
@@ -18,8 +22,24 @@ const preview = {
       toolbar: {
         icon: "globe",
         items: [
-          { value: "en", right: "en", title: "English" },
-          { value: "ja", right: "ja", title: "Japanese" },
+          { value: "en", right: "🇺🇸", title: "English" },
+          { value: "ja", right: "🇯🇵", title: "Japanese" },
+        ],
+      },
+    },
+    theme: {
+      name: "Theme",
+      description: "Change theme",
+      defaultValue: "material",
+      toolbar: {
+        icon: "facehappy",
+        items: [
+          { value: "material", right: "", title: "Default (Used By Material Icons)" },
+          {
+            value: "crab",
+            right: "🦀",
+            title: "Crab (Made By Image Creator from Microsoft Designer)",
+          },
         ],
       },
     },
@@ -28,6 +48,7 @@ const preview = {
     (Story, { globals }) => {
       const value = makeThemeContext();
       value.setLocale(globals.locale);
+      value.setTheme(globals.theme);
       return (
         <ThemeContext.Provider value={value}>
           <Story />
