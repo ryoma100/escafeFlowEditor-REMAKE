@@ -1,7 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
+import { JSXElement, createEffect, createSignal } from "solid-js";
+
 import { dialog } from "@tauri-apps/api";
 import { writeTextFile } from "@tauri-apps/api/fs";
-import { JSXElement, createEffect, createSignal } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";

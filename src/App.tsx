@@ -1,4 +1,9 @@
-import { JSXElement } from "solid-js";
+import { JSXElement, Show } from "solid-js";
+
+import { dialog } from "@tauri-apps/api";
+import { TauriEvent } from "@tauri-apps/api/event";
+import { exit } from "@tauri-apps/api/process";
+import { appWindow } from "@tauri-apps/api/window";
 
 import { AboutDialog } from "@/components/dialog/about-dialog";
 import { ActivityDialog } from "@/components/dialog/activity-dialog";
@@ -18,6 +23,7 @@ import { Main } from "@/components/main/main";
 import { AppMenu } from "@/components/menu/menu";
 import { Toolbar } from "@/components/toolbar/toolbar";
 import { useModelContext } from "@/context/model-context";
+import { useThemeContext } from "@/context/theme-context";
 
 function App(): JSXElement {
   const {
@@ -57,8 +63,31 @@ function App(): JSXElement {
       <MessageDialog />
       <AboutDialog />
       <ConfirmDialog />
+
+      <Show when={import.meta.env.PROD}>
+        <WindowUnloadDialog />
+      </Show>
     </>
   );
+}
+
+function WindowUnloadDialog() {
+  const { dict } = useThemeContext();
+
+  window.addEventListener("beforeunload", function (e) {
+    e.preventDefault();
+  });
+
+  if ("__TAURI_IPC__" in window) {
+    appWindow.listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
+      const confirmed = await dialog.confirm(dict().exit);
+      if (confirmed) {
+        exit(0);
+      }
+    });
+  }
+
+  return <></>;
 }
 
 export default App;
