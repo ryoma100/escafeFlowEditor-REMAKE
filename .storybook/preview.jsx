@@ -1,11 +1,7 @@
-/** @jsxImportSource solid-js */
-
-import { Preview } from "storybook-solidjs";
-
 import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import "../src/index.css";
 
-const preview: Preview = {
+const preview = {
   parameters: {
     controls: {
       matchers: {
@@ -34,11 +30,11 @@ const preview: Preview = {
       toolbar: {
         icon: "facehappy",
         items: [
-          { value: "material", right: "", title: "Default (Used By Material Icons)" },
+          { value: "material", right: "", title: "Default" },
           {
             value: "crab",
             right: "🦀",
-            title: "Crab (Made By Image Creator from Microsoft Designer)",
+            title: "Crab",
           },
         ],
       },
