@@ -30,11 +30,11 @@ const preview = {
       toolbar: {
         icon: "facehappy",
         items: [
-          { value: "material", right: "", title: "Default" },
+          { value: "material", right: "", title: "Default (Used By Material Icons)" },
           {
             value: "crab",
             right: "🦀",
-            title: "Crab",
+            title: "Crab (Made By Image Creator from Microsoft Designer)",
           },
         ],
       },

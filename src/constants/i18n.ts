@@ -105,4 +105,5 @@ export const i18nEnDict = {
   duplicateApplicationId: "Please do not duplicate Application IDs.",
   applicationCannotDelete: "This Application is already in use and cannot be removed.",
   registerProcessApp: "Register process application.",
+  exit: "Do you want to exit this application?",
 };

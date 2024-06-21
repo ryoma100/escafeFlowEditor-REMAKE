@@ -105,4 +105,5 @@ export const i18nJaDict: I18nDict = {
   duplicateApplicationId: "ApplicationのIDは重複しないようにして下さい。",
   applicationCannotDelete: "このアプリケーションは既に使われているので、削除できません。",
   registerProcessApp: "プロセスのアプリケーションを登録して下さい。",
+  exit: "このアプリケーションを終了しますか？",
 };
