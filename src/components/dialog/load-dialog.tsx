@@ -77,10 +77,10 @@ export function LoadDialog(): JSXElement {
 }
 
 export function LoadDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onLoadClick?: () => void;
-  onInputClick?: (data: string) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onLoadClick?: () => void;
+  readonly onInputClick?: (data: string) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

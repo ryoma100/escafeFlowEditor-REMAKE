@@ -50,7 +50,7 @@ const themeContextValue = {
 
 export const ThemeContext = createContext(themeContextValue);
 
-export function ThemeProvider(props: { children: JSX.Element }) {
+export function ThemeProvider(props: { readonly children: JSX.Element }) {
   return <ThemeContext.Provider value={themeContextValue}>{props.children}</ThemeContext.Provider>;
 }
 

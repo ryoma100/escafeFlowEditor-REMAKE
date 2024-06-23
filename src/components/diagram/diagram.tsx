@@ -1,7 +1,9 @@
 import { For, JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
 import { produce } from "solid-js/store";
 
+import { ContextMenu } from "@/components/parts/context-menu";
 import { defaultCircle, defaultRectangle } from "@/constants/app-const";
+import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
   ActivityNode,
@@ -13,6 +15,7 @@ import {
   IEdge,
   INode,
   Line,
+  Point,
   Rectangle,
   StartEdge,
   StartNode,
@@ -57,6 +60,7 @@ export function DiagramContainer(): JSXElement {
 
   const [selectBox, setSelectBox] = createSignal<Rectangle>(defaultRectangle);
   const [selectCircle, setSelectCircle] = createSignal<Circle>(defaultCircle);
+  const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
 
   onMount(() => {
     document.addEventListener("mousemove", handleDocumentMouseMove);
@@ -73,6 +77,8 @@ export function DiagramContainer(): JSXElement {
   let mouseDownTime = new Date().getTime();
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
+    if (e.buttons != 1) return;
+    if (contextMenuPoint() != null) return;
     if (dragMode().type !== "none") return;
 
     const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
@@ -266,48 +272,101 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
+  function handleContextMenu(e: MouseEvent) {
+    e.preventDefault();
+    setContextMenuPoint({ x: e.pageX, y: e.pageY });
+  }
+
+  function onContextMenuSelect(menuItem: keyof I18nDict | null) {
+    setContextMenuPoint(null);
+    switch (menuItem) {
+      case "select":
+        setToolbar("cursor");
+        break;
+      case "transition":
+        setToolbar("transition");
+        break;
+      case "manualActivity":
+        setToolbar("addManualActivity");
+        break;
+      case "autoActivity":
+        setToolbar("addAutoActivity");
+        break;
+      case "handWork":
+        setToolbar("addUserActivity");
+        break;
+      case "start":
+        setToolbar("addStartNode");
+        break;
+      case "end":
+        setToolbar("addEndNode");
+        break;
+      case "comment":
+        setToolbar("addCommentNode");
+        break;
+    }
+  }
+
   return (
-    <DiagramView
-      viewBox={viewBox}
-      svgRect={svgRect}
-      setSvgRect={setSvgRect}
-      nodeList={nodeList}
-      edgeList={edgeList}
-      addingLine={
-        dragMode().type === "addTransition" ||
-        dragMode().type === "addStartEdge" ||
-        dragMode().type === "addEndEdge" ||
-        dragMode().type === "addCommentEdge"
-          ? addingLine()
-          : null
-      }
-      selectBox={
-        dragMode().type === "select" || dragMode().type === "boxSelect" ? selectBox() : null
-      }
-      selectCircle={dragMode().type === "circleSelect" ? selectCircle() : null}
-      onMouseDown={handleMouseDown}
-      onKeyDown={handleKeyDown}
-    />
+    <>
+      <DiagramView
+        viewBox={viewBox}
+        svgRect={svgRect}
+        setSvgRect={setSvgRect}
+        nodeList={nodeList}
+        edgeList={edgeList}
+        addingLine={
+          dragMode().type === "addTransition" ||
+          dragMode().type === "addStartEdge" ||
+          dragMode().type === "addEndEdge" ||
+          dragMode().type === "addCommentEdge"
+            ? addingLine()
+            : null
+        }
+        selectBox={
+          dragMode().type === "select" || dragMode().type === "boxSelect" ? selectBox() : null
+        }
+        selectCircle={dragMode().type === "circleSelect" ? selectCircle() : null}
+        onMouseDown={handleMouseDown}
+        onKeyDown={handleKeyDown}
+        onContextMenu={handleContextMenu}
+      />
+      <ContextMenu
+        openPoint={contextMenuPoint()}
+        menuItems={[
+          "select",
+          "transition",
+          "manualActivity",
+          "autoActivity",
+          "handWork",
+          "start",
+          "end",
+          "comment",
+        ]}
+        onClickMenu={onContextMenuSelect}
+      />
+    </>
   );
 }
 
 export function DiagramView(props: {
-  viewBox: Rectangle;
-  svgRect: Rectangle;
-  nodeList: INode[];
-  edgeList: IEdge[];
-  addingLine: Line | null;
-  selectBox: Rectangle | null;
-  selectCircle: Circle | null;
-  setSvgRect: (rect: Rectangle) => void;
-  onMouseDown: (e: MouseEvent) => void;
-  onKeyDown: (e: KeyboardEvent) => void;
+  readonly viewBox: Rectangle;
+  readonly svgRect: Rectangle;
+  readonly nodeList: INode[];
+  readonly edgeList: IEdge[];
+  readonly addingLine: Line | null;
+  readonly selectBox: Rectangle | null;
+  readonly selectCircle: Circle | null;
+  readonly setSvgRect?: (rect: Rectangle) => void;
+  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onKeyDown?: (e: KeyboardEvent) => void;
+  readonly onContextMenu?: (e: MouseEvent) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (diagramRef) {
         const rect = diagramRef.getBoundingClientRect();
-        props.setSvgRect({
+        props.setSvgRect?.({
           x: rect.left,
           y: rect.top,
           width: rect.width,
@@ -326,14 +385,15 @@ export function DiagramView(props: {
       class="relative h-full w-full outline-none"
       ref={diagramRef}
       tabindex={-1}
-      onKeyDown={(e) => props.onKeyDown(e)}
+      onKeyDown={(e) => props.onKeyDown?.(e)}
+      onContextMenu={(e) => props.onContextMenu?.(e)}
     >
       <svg
         class="absolute inset-0 h-full w-full"
         width={props.svgRect.width}
         height={props.svgRect.height}
         viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}
-        onMouseDown={(e) => props.onMouseDown(e)}
+        onMouseDown={(e) => props.onMouseDown?.(e)}
       >
         <defs>
           <marker

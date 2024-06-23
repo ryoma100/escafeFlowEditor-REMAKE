@@ -19,8 +19,8 @@ export function MessageDialog(): JSXElement {
 }
 
 export function MessageDialogView(props: {
-  message: keyof I18nDict | null;
-  onDialogClose?: () => void;
+  readonly message: keyof I18nDict | null;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

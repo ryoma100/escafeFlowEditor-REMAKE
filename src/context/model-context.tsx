@@ -52,7 +52,10 @@ const ModelContext = createContext<{
   dialogModel: ReturnType<typeof makeDialogModel>;
 }>(modelContextValue);
 
-export function ModelProvider(props: { children: JSX.Element }) {
+export function ModelProvider(props: {
+  readonly onChange?: (e: Event) => void;
+  readonly children: JSX.Element;
+}) {
   return <ModelContext.Provider value={modelContextValue}>{props.children}</ModelContext.Provider>;
 }
 

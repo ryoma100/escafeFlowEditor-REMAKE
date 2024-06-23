@@ -54,11 +54,11 @@ export function ActivityDialog(): JSXElement {
 }
 
 export function ActivityDialogView(props: {
-  openDialog: ModalDialogType | null;
-  applications: ApplicationEntity[];
-  actorList: ActorEntity[];
-  onFormSubmit?: (formData: ActivityNode) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly applications: ApplicationEntity[];
+  readonly actorList: ActorEntity[];
+  readonly onFormSubmit?: (formData: ActivityNode) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

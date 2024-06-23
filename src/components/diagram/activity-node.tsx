@@ -14,7 +14,7 @@ import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 
-export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXElement {
+export function ActivityNodeContainer(props: { readonly activity: ActivityNode }): JSXElement {
   const {
     activityNodeModel: { resizeActivityHeight, updateJoinType, updateSplitType },
     actorModel: { actorList },
@@ -125,18 +125,18 @@ export function ActivityNodeContainer(props: { activity: ActivityNode }): JSXEle
 }
 
 export function ActivityNodeView(props: {
-  activityType: ActivityNodeType;
-  name: string;
-  actorName: string;
-  joinType: ActivityJoinType;
-  splitType: ActivitySplitType;
-  selected: boolean;
-  width: number;
-  onLeftMouseDown?: (e: MouseEvent) => void;
-  onMouseDown?: (e: MouseEvent) => void;
-  onRightMouseDown?: (e: MouseEvent) => void;
-  onDblClick?: (e: MouseEvent) => void;
-  onChangeHeight?: (height: number) => void;
+  readonly activityType: ActivityNodeType;
+  readonly name: string;
+  readonly actorName: string;
+  readonly joinType: ActivityJoinType;
+  readonly splitType: ActivitySplitType;
+  readonly selected: boolean;
+  readonly width: number;
+  readonly onLeftMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onRightMouseDown?: (e: MouseEvent) => void;
+  readonly onDblClick?: (e: MouseEvent) => void;
+  readonly onChangeHeight?: (height: number) => void;
 }): JSXElement {
   onMount(() => {
     const observer = new ResizeObserver(() => {

@@ -149,7 +149,7 @@ export function AppMenu(): JSXElement {
   );
 }
 
-function MenuBar(props: { children: JSXElement }): JSXElement {
+function MenuBar(props: { readonly children: JSXElement }): JSXElement {
   return (
     <nav class="h-full bg-primary2">
       <ul class="flex">{props.children}</ul>
@@ -157,7 +157,7 @@ function MenuBar(props: { children: JSXElement }): JSXElement {
   );
 }
 
-function Menu(props: { title: string; children: JSXElement }): JSXElement {
+function Menu(props: { readonly title: string; readonly children: JSXElement }): JSXElement {
   return (
     <li
       class="
@@ -178,7 +178,7 @@ function Menu(props: { title: string; children: JSXElement }): JSXElement {
   );
 }
 
-function MenuItem(props: { title: string; onClick: () => void }): JSXElement {
+function MenuItem(props: { readonly title: string; readonly onClick: () => void }): JSXElement {
   return (
     <li class="px-4 py-1 hover:bg-primary1">
       <a class="flex items-center p-0" href="#" onClick={() => props.onClick()}>

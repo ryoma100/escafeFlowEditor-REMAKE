@@ -4,7 +4,9 @@ import { useModelContext } from "@/context/model-context";
 import { Line, TransitionEdge } from "@/data-source/data-type";
 import { computeLine } from "@/utils/line-utils";
 
-export function TransitionEdgeContainer(props: { transition: TransitionEdge }): JSXElement {
+export function TransitionEdgeContainer(props: {
+  readonly transition: TransitionEdge;
+}): JSXElement {
   const {
     activityNodeModel: { getActivityNode },
     nodeModel: { changeSelectNodes },
@@ -55,11 +57,11 @@ export function TransitionEdgeContainer(props: { transition: TransitionEdge }): 
 }
 
 export function TransitionEdgeView(props: {
-  line: Line;
-  ognl: string;
-  selected: boolean;
-  handleMouseDown: (e: MouseEvent) => void;
-  handleDblClick: (e: MouseEvent) => void;
+  readonly line: Line;
+  readonly ognl: string;
+  readonly selected: boolean;
+  readonly handleMouseDown?: (e: MouseEvent) => void;
+  readonly handleDblClick?: (e: MouseEvent) => void;
 }): JSXElement {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -92,8 +94,8 @@ export function TransitionEdgeView(props: {
           "stroke-transparent": !props.selected,
           "stroke-primary1": props.selected,
         }}
-        onDblClick={(e) => props.handleDblClick(e)}
-        onMouseDown={(e) => props.handleMouseDown(e)}
+        onDblClick={(e) => props.handleDblClick?.(e)}
+        onMouseDown={(e) => props.handleMouseDown?.(e)}
         x1={props.line.p1.x}
         y1={props.line.p1.y}
         x2={props.line.p2.x}
