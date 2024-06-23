@@ -1,9 +1,9 @@
 import { JSXElement } from "solid-js";
 
 export function ButtonsContainer(props: {
-  justify?: "end" | "start";
-  margin?: string;
-  children: JSXElement;
+  readonly justify?: "end" | "start";
+  readonly margin?: string;
+  readonly children: JSXElement;
 }): JSXElement {
   return (
     <div

@@ -36,9 +36,9 @@ export function CommentDialog(): JSXElement {
 }
 
 export function CommentDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onFormSubmit?: (formData: CommentNode) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onFormSubmit?: (formData: CommentNode) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

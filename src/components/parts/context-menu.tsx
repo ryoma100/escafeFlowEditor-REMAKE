@@ -6,9 +6,9 @@ import { useThemeContext } from "@/context/theme-context";
 import { Point } from "@/data-source/data-type";
 
 export function ContextMenu(props: {
-  openPoint: Point | null;
-  menuItems: (keyof I18nDict)[];
-  onClickMenu?: (menu: keyof I18nDict | null) => void;
+  readonly openPoint: Point | null;
+  readonly menuItems: (keyof I18nDict)[];
+  readonly onClickMenu?: (menu: keyof I18nDict | null) => void;
 }): JSXElement {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

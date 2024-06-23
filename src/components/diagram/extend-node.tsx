@@ -7,7 +7,7 @@ import { EndIcon } from "@/icons/end-icon";
 import { StartIcon } from "@/icons/start-icon";
 
 export function ExtendNodeContainer(props: {
-  node: CommentNode | StartNode | EndNode;
+  readonly node: CommentNode | StartNode | EndNode;
 }): JSXElement {
   const {
     extendNodeModel: { resizeCommentNode },
@@ -99,11 +99,11 @@ export function ExtendNodeContainer(props: {
 }
 
 export function CommentNodeView(props: {
-  comment: string;
-  selected: boolean;
-  onMouseDown?: (e: MouseEvent) => void;
-  onDblClick?: (e: MouseEvent) => void;
-  onChangeSize?: (width: number, height: number) => void;
+  readonly comment: string;
+  readonly selected: boolean;
+  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onDblClick?: (e: MouseEvent) => void;
+  readonly onChangeSize?: (width: number, height: number) => void;
 }): JSXElement {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -142,7 +142,10 @@ export function CommentNodeView(props: {
   );
 }
 
-export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: MouseEvent) => void }) {
+export function StartNodeView(props: {
+  readonly selected: boolean;
+  readonly onMouseDown?: (e: MouseEvent) => void;
+}) {
   return (
     <div
       class="
@@ -162,9 +165,9 @@ export function StartNodeView(props: { selected: boolean; onMouseDown?: (e: Mous
 }
 
 export function EndNodeView(props: {
-  selected: boolean;
-  onMouseDown?: (e: MouseEvent) => void;
-  onMouseUp?: (e: MouseEvent) => void;
+  readonly selected: boolean;
+  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseUp?: (e: MouseEvent) => void;
 }) {
   return (
     <div

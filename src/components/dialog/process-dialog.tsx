@@ -50,11 +50,11 @@ export function ProcessDialog(): JSXElement {
 }
 
 export function ProcessDialogView(props: {
-  openDialog: ModalDialogType | null;
-  activityList: ActivityNode[];
-  onFormSubmit?: (formData: ProcessEntity) => void;
-  onDialogClose?: () => void;
-  onOpenMessageDialog?: (key: keyof typeof i18nEnDict) => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly activityList: ActivityNode[];
+  readonly onFormSubmit?: (formData: ProcessEntity) => void;
+  readonly onDialogClose?: () => void;
+  readonly onOpenMessageDialog?: (key: keyof typeof i18nEnDict) => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

@@ -44,9 +44,9 @@ export function ActorDialog(): JSXElement {
 }
 
 export function ActorDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onFormSubmit?: (formData: ActorEntity) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onFormSubmit?: (formData: ActorEntity) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

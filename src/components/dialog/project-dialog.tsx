@@ -36,9 +36,9 @@ export function ProjectDialog(): JSXElement {
 }
 
 export function ProjectDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onFormSubmit?: (formData: ProjectDetailEntity) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onFormSubmit?: (formData: ProjectDetailEntity) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

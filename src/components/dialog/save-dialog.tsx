@@ -58,9 +58,9 @@ export function SaveDialog(): JSXElement {
 }
 
 export function SaveDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onFormSubmit?: (formData: string) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onFormSubmit?: (formData: string) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

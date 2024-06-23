@@ -44,9 +44,9 @@ export function TransitionDialog(): JSXElement {
 }
 
 export function TransitionDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onFormSubmit?: (formData: TransitionEdge) => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onFormSubmit?: (formData: TransitionEdge) => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);

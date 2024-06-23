@@ -350,23 +350,23 @@ export function DiagramContainer(): JSXElement {
 }
 
 export function DiagramView(props: {
-  viewBox: Rectangle;
-  svgRect: Rectangle;
-  nodeList: INode[];
-  edgeList: IEdge[];
-  addingLine: Line | null;
-  selectBox: Rectangle | null;
-  selectCircle: Circle | null;
-  setSvgRect: (rect: Rectangle) => void;
-  onMouseDown: (e: MouseEvent) => void;
-  onKeyDown: (e: KeyboardEvent) => void;
-  onContextMenu: (e: MouseEvent) => void;
+  readonly viewBox: Rectangle;
+  readonly svgRect: Rectangle;
+  readonly nodeList: INode[];
+  readonly edgeList: IEdge[];
+  readonly addingLine: Line | null;
+  readonly selectBox: Rectangle | null;
+  readonly selectCircle: Circle | null;
+  readonly setSvgRect?: (rect: Rectangle) => void;
+  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onKeyDown?: (e: KeyboardEvent) => void;
+  readonly onContextMenu?: (e: MouseEvent) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (diagramRef) {
         const rect = diagramRef.getBoundingClientRect();
-        props.setSvgRect({
+        props.setSvgRect?.({
           x: rect.left,
           y: rect.top,
           width: rect.width,
@@ -385,15 +385,15 @@ export function DiagramView(props: {
       class="relative h-full w-full outline-none"
       ref={diagramRef}
       tabindex={-1}
-      onKeyDown={(e) => props.onKeyDown(e)}
-      onContextMenu={(e) => props.onContextMenu(e)}
+      onKeyDown={(e) => props.onKeyDown?.(e)}
+      onContextMenu={(e) => props.onContextMenu?.(e)}
     >
       <svg
         class="absolute inset-0 h-full w-full"
         width={props.svgRect.width}
         height={props.svgRect.height}
         viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}
-        onMouseDown={(e) => props.onMouseDown(e)}
+        onMouseDown={(e) => props.onMouseDown?.(e)}
       >
         <defs>
           <marker

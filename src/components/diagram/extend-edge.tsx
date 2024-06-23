@@ -4,7 +4,7 @@ import { useModelContext } from "@/context/model-context";
 import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
 
 export function ExtendEdgeContainer(props: {
-  edge: CommentEdge | StartEdge | EndEdge;
+  readonly edge: CommentEdge | StartEdge | EndEdge;
 }): JSXElement {
   const {
     extendNodeModel: { getCommentNode, getStartNode, getEndNode },
@@ -48,12 +48,12 @@ export function ExtendEdgeContainer(props: {
 }
 
 export function OtherEdgeView(props: {
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-  selected: boolean;
-  onMouseDown: (e: MouseEvent) => void;
+  readonly fromX: number;
+  readonly fromY: number;
+  readonly toX: number;
+  readonly toY: number;
+  readonly selected: boolean;
+  readonly onMouseDown?: (e: MouseEvent) => void;
 }): JSXElement {
   return (
     <>
@@ -72,7 +72,7 @@ export function OtherEdgeView(props: {
           "stroke-transparent": !props.selected,
           "stroke-primary1": props.selected,
         }}
-        onMouseDown={(e) => props.onMouseDown(e)}
+        onMouseDown={(e) => props.onMouseDown?.(e)}
         x1={props.fromX}
         y1={props.fromY}
         x2={props.toX}

@@ -1,13 +1,13 @@
 import { JSXElement } from "solid-js";
 
 export function ToggleIconButton(props: {
-  id: string;
-  title: string;
-  checked: boolean;
-  name?: string;
-  margin?: string;
-  onChange: (e: Event) => void;
-  children: JSXElement;
+  readonly id: string;
+  readonly title: string;
+  readonly checked: boolean;
+  readonly name?: string;
+  readonly margin?: string;
+  readonly children: JSXElement;
+  readonly onChange?: (e: Event) => void;
 }): JSXElement {
   return (
     <div class="flex" style={{ margin: props.margin }}>
@@ -19,7 +19,7 @@ export function ToggleIconButton(props: {
         name={props.name ?? "toggleIconButtons"}
         id={props.id}
         checked={props.checked}
-        onChange={(e) => props.onChange(e)}
+        onChange={(e) => props.onChange?.(e)}
       />
       <div
         class="

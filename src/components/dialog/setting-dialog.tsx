@@ -16,7 +16,10 @@ export function SettingDialog(): JSXElement {
   return <SettingDialogView open={openDialog()?.type === "setting"} onClose={handleClose} />;
 }
 
-export function SettingDialogView(props: { open: boolean; onClose?: () => void }) {
+export function SettingDialogView(props: {
+  readonly open: boolean;
+  readonly onClose?: () => void;
+}) {
   const { dict, locale, setLocale, theme, setTheme } = useThemeContext();
   const t = i18n.translator(dict);
 

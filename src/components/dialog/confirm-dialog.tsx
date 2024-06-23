@@ -40,9 +40,9 @@ export function ConfirmDialog(): JSXElement {
 }
 
 export function ConfirmDialogView(props: {
-  openDialog: ModalDialogType | null;
-  onFormSubmit?: () => void;
-  onDialogClose?: () => void;
+  readonly openDialog: ModalDialogType | null;
+  readonly onFormSubmit?: () => void;
+  readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
