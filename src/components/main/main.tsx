@@ -24,7 +24,7 @@ export function Main(): JSXElement {
   return (
     <div class="flex h-full flex-col">
       <h5>{selectedProcess().detail.name}</h5>
-      <div class="flex-grow bg-background">
+      <div class="grow bg-background">
         <DiagramContainer />
       </div>
       <div class="mt-1 flex w-full flex-row justify-center gap-x-2">

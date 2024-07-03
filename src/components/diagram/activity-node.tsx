@@ -155,9 +155,7 @@ export function ActivityNodeView(props: {
     <div
       style={{ width: `${props.width}px` }}
       data-select={props.selected}
-      class="
-        flex h-full w-full flex-row justify-between border-2 border-solid border-transparent
-        data-[select=true]:border-primary1"
+      class="flex size-full flex-row justify-between border-2 border-solid border-transparent data-[select=true]:border-primary1"
     >
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-primary3"
@@ -189,15 +187,11 @@ export function ActivityNodeView(props: {
       </div>
 
       <div
-        class="
-          flex h-full w-full cursor-move select-none flex-col border border-solid border-black bg-background
-          hover:bg-primary3"
+        class="flex size-full cursor-move select-none flex-col border border-solid border-black bg-background hover:bg-primary3"
         onMouseDown={(e) => props.onMouseDown?.(e)}
         onDblClick={(e) => props.onDblClick?.(e)}
       >
-        <div class="mx-0.5 w-full overflow-ellipsis whitespace-nowrap text-xs">
-          {props.actorName}
-        </div>
+        <div class="mx-0.5 w-full text-ellipsis whitespace-nowrap text-xs">{props.actorName}</div>
         <div class="flex h-full justify-center">
           <Switch>
             <Match when={props.activityType === "manualActivity"}>

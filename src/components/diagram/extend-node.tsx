@@ -121,10 +121,7 @@ export function CommentNodeView(props: {
   let titleDiv: HTMLDivElement | undefined;
   return (
     <div
-      class="
-        flex flex-row
-        rounded bg-background
-        hover:cursor-move hover:bg-primary3"
+      class="flex flex-row rounded bg-background hover:cursor-move hover:bg-primary3"
       classList={{
         "p-px border border-gray-500": !props.selected,
         "p-0 border-2 border-primary1": props.selected,
@@ -148,11 +145,7 @@ export function StartNodeView(props: {
 }) {
   return (
     <div
-      class="
-        flex h-10 w-10 items-center
-        justify-center 
-        rounded bg-background
-        hover:cursor-move hover:bg-primary3"
+      class="flex size-10 items-center justify-center rounded bg-background hover:cursor-move hover:bg-primary3"
       classList={{
         "border border-gray-500": !props.selected,
         "border-2 border-primary1": props.selected,
@@ -171,11 +164,7 @@ export function EndNodeView(props: {
 }) {
   return (
     <div
-      class="
-        flex h-10 w-10 items-center
-        justify-center 
-        rounded bg-background
-        hover:cursor-move hover:bg-primary3"
+      class="flex size-10 items-center justify-center rounded bg-background hover:cursor-move hover:bg-primary3"
       classList={{
         "border border-gray-500": !props.selected,
         "border-2 border-primary1": props.selected,
