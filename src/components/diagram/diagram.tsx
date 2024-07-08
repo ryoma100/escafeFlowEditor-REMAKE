@@ -382,14 +382,14 @@ export function DiagramView(props: {
   let diagramRef: HTMLDivElement | undefined;
   return (
     <div
-      class="relative h-full w-full outline-none"
+      class="relative size-full outline-none"
       ref={diagramRef}
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
     >
       <svg
-        class="absolute inset-0 h-full w-full"
+        class="absolute inset-0 size-full"
         width={props.svgRect.width}
         height={props.svgRect.height}
         viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}

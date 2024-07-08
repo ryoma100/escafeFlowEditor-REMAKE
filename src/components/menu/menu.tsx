@@ -159,19 +159,11 @@ function MenuBar(props: { readonly children: JSXElement }): JSXElement {
 
 function Menu(props: { readonly title: string; readonly children: JSXElement }): JSXElement {
   return (
-    <li
-      class="
-        group relative z-10
-        hover:bg-primary1"
-    >
+    <li class="group relative z-10 hover:bg-primary1">
       <a class="px-2 no-underline" href="#">
         {props.title}
       </a>
-      <ul
-        class="
-          invisible absolute w-max
-          list-none bg-primary2 p-0 group-hover:visible"
-      >
+      <ul class="invisible absolute w-max list-none bg-primary2 p-0 group-hover:visible">
         {props.children}
       </ul>
     </li>

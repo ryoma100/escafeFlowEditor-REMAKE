@@ -66,6 +66,11 @@ export type Line = {
   p2: Point;
 };
 
+export type Size = {
+  width: number;
+  height: number;
+};
+
 export type Rectangle = {
   x: number;
   y: number;

@@ -164,24 +164,16 @@ export function ActivityDialogView(props: {
             id="tab-join"
             type="radio"
             name="tab-switch"
-            class="
-              peer/tab-switch1
-              b-0 absolute m-[-1px] h-[1px]
-              w-[1px] overflow-hidden whitespace-nowrap p-0
-              [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+            class="peer/tab-switch1 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
           <label
-            class="
-              -order-1 mr-1 bg-gray-300 px-2 py-1
-              peer-checked/tab-switch1:bg-primary1"
+            class="-order-1 mr-1 bg-gray-300 px-2 py-1 peer-checked/tab-switch1:bg-primary1"
             for="tab-join"
           >
             {t("beginning")}
           </label>
           <div
-            class="
-              hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2
-              peer-checked/tab-switch1:block"
+            class="hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2 peer-checked/tab-switch1:block"
             classList={{
               "bg-gray-100": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
             }}
@@ -220,26 +212,16 @@ export function ActivityDialogView(props: {
             id="tab-work"
             type="radio"
             name="tab-switch"
-            class="
-              peer/tab-switch2
-              b-0 absolute m-[-1px] h-[1px]
-              w-[1px] overflow-hidden whitespace-nowrap p-0
-              [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+            class="peer/tab-switch2 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
             ref={radioTabCenterRef}
           />
           <label
-            class="
-              -order-1 mr-1 bg-gray-300 px-2 py-1
-              peer-checked/tab-switch2:bg-primary1"
+            class="-order-1 mr-1 bg-gray-300 px-2 py-1 peer-checked/tab-switch2:bg-primary1"
             for="tab-work"
           >
             {t("work")}
           </label>
-          <div
-            class="
-              hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2
-              peer-checked/tab-switch2:block"
-          >
+          <div class="hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2 peer-checked/tab-switch2:block">
             <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
               <input
@@ -304,7 +286,7 @@ export function ActivityDialogView(props: {
                   <div>{t("whenRunAutomatically")}</div>
                   <div class="h-[160px] w-[266px]">
                     <textarea
-                      class="b-0 h-full w-full resize-none"
+                      class="size-full resize-none border-0"
                       value={formData.ognl}
                       onChange={(e) => setFormData("ognl", e.target.value)}
                     />
@@ -318,24 +300,16 @@ export function ActivityDialogView(props: {
             id="tab-split"
             type="radio"
             name="tab-switch"
-            class="
-              peer/tab-switch3
-              b-0 absolute m-[-1px] h-[1px]
-              w-[1px] overflow-hidden whitespace-nowrap p-0
-              [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+            class="peer/tab-switch3 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
           <label
-            class="
-              -order-1 mr-1 bg-gray-300 px-2 py-1
-              peer-checked/tab-switch3:bg-primary1"
+            class="-order-1 mr-1 bg-gray-300 px-2 py-1 peer-checked/tab-switch3:bg-primary1"
             for="tab-split"
           >
             {t("termination")}
           </label>
           <div
-            class="
-              hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2
-              peer-checked/tab-switch3:block"
+            class="hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2 peer-checked/tab-switch3:block"
             classList={{
               "bg-gray-100": formData.splitType === "notSplit" || formData.splitType === "oneSplit",
             }}
