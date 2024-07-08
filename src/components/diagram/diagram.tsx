@@ -333,6 +333,7 @@ export function DiagramContainer(): JSXElement {
       />
       <ContextMenu
         openPoint={contextMenuPoint()}
+        contextRect={svgRect}
         menuItems={[
           "select",
           "transition",
