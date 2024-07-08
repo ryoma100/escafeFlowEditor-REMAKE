@@ -4,19 +4,15 @@ import { For, JSXElement, createEffect, createSignal, onMount } from "solid-js";
 import { defaultPoint } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useThemeContext } from "@/context/theme-context";
-import { Point, Rectangle, Size } from "@/data-source/data-type";
+import { Point, Size } from "@/data-source/data-type";
 
 export function ContextMenu(props: {
   readonly openPoint: Point | null;
-  readonly contextRect: Rectangle;
   readonly menuItems: (keyof I18nDict)[];
   readonly onClickMenu?: (menu: keyof I18nDict | null) => void;
 }): JSXElement {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
-
-  const [menuSize, setMenuSize] = createSignal<Size | null>(null);
-  const [point, setPoint] = createSignal<Point>(defaultPoint);
 
   createEffect(() => {
     if (props.openPoint != null) {
@@ -26,14 +22,12 @@ export function ContextMenu(props: {
     }
   });
 
+  const [menuSize, setMenuSize] = createSignal<Size | null>(null);
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (contextMenuRef) {
         const rect = contextMenuRef.getBoundingClientRect();
-        setMenuSize({
-          width: rect.width,
-          height: rect.height,
-        });
+        setMenuSize({ width: rect.width, height: rect.height });
       }
     });
     if (contextMenuRef) {
@@ -41,18 +35,13 @@ export function ContextMenu(props: {
     }
   });
 
+  const [adjustPoint, setAdjustPoint] = createSignal<Point>(defaultPoint);
   createEffect(() => {
     const contextMenuSize = menuSize();
     if (props.openPoint != null && contextMenuSize != null) {
-      const x = Math.min(
-        props.openPoint.x,
-        props.contextRect.x + props.contextRect.width - contextMenuSize.width,
-      );
-      const y = Math.min(
-        props.openPoint.y,
-        props.contextRect.y + props.contextRect.height - contextMenuSize.height,
-      );
-      setPoint({ x, y });
+      const x = Math.min(props.openPoint.x, document.body.clientWidth - contextMenuSize.width);
+      const y = Math.min(props.openPoint.y, document.body.clientHeight - contextMenuSize.height);
+      setAdjustPoint({ x, y });
     }
   });
 
@@ -70,7 +59,7 @@ export function ContextMenu(props: {
       ref={contextMenuRef}
       class="fixed hidden border-2 border-background bg-primary3"
       classList={{ hidden: props.openPoint == null, block: props.openPoint != null }}
-      style={{ left: `${point().x}px`, top: `${point().y}px` }}
+      style={{ left: `${adjustPoint().x}px`, top: `${adjustPoint().y}px` }}
     >
       <ul class="m-1">
         <For each={props.menuItems}>
