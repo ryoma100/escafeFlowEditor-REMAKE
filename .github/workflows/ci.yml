@@ -33,10 +33,8 @@ jobs:
           pnpm lint
 
       - name: test
-        run: pnpm coverage
-
-      - name: buiild
         run: |
+          pnpm coverage
           pnpm build
           pnpm build-storybook
 
