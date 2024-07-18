@@ -1,4 +1,4 @@
-import { JSX, createContext, useContext } from "solid-js";
+import { createContext, JSX, useContext } from "solid-js";
 
 import { makeActivityModel } from "@/data-model/activity-node-model";
 import { makeActorModel } from "@/data-model/actor-model";

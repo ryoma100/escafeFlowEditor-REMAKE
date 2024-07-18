@@ -1,4 +1,4 @@
-import { JSXElement, Match, Switch, onMount } from "solid-js";
+import { JSXElement, Match, onMount, Switch } from "solid-js";
 
 import { ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
 import { useModelContext } from "@/context/model-context";

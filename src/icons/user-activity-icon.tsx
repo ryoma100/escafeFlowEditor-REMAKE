@@ -1,6 +1,7 @@
+import { Match, Switch } from "solid-js";
+
 import UserActivitySvg from "@/assets/material-icons/user-activity.svg";
 import { useThemeContext } from "@/context/theme-context";
-import { Match, Switch } from "solid-js";
 
 export function UserActivityIcon() {
   const { theme } = useThemeContext();

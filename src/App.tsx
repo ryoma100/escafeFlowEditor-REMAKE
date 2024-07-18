@@ -1,9 +1,8 @@
-import { JSXElement, Show } from "solid-js";
-
 import { dialog } from "@tauri-apps/api";
 import { TauriEvent } from "@tauri-apps/api/event";
 import { exit } from "@tauri-apps/api/process";
 import { appWindow } from "@tauri-apps/api/window";
+import { JSXElement, Show } from "solid-js";
 
 import { AboutDialog } from "@/components/dialog/about-dialog";
 import { ActivityDialog } from "@/components/dialog/activity-dialog";

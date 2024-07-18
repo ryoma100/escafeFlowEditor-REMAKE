@@ -1,10 +1,10 @@
 import * as i18n from "@solid-primitives/i18n";
+import { createEffect, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { JSXElement, createEffect } from "solid-js";
 
 export function MessageDialog(): JSXElement {
   const {

@@ -1,4 +1,4 @@
-import { JSXElement, Match, Switch, onMount } from "solid-js";
+import { JSXElement, Match, onMount, Switch } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";

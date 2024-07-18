@@ -1,4 +1,4 @@
-import { JSXElement, createSignal, onMount } from "solid-js";
+import { createSignal, JSXElement, onMount } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
 import { Line, TransitionEdge } from "@/data-source/data-type";

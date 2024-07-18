@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSXElement, createEffect } from "solid-js";
+import { createEffect, JSXElement } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";

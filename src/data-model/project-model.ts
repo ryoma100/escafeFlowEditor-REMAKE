@@ -1,7 +1,8 @@
+import { createSignal } from "solid-js";
+
 import { makeProcessModel } from "@/data-model/process-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
-import { createSignal } from "solid-js";
 
 const initialProject = dataFactory.createProject();
 

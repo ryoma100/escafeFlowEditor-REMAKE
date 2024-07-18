@@ -1,5 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
-import { For, JSXElement, Match, Switch, createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal, For, JSXElement, Match, Switch } from "solid-js";
+import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
@@ -13,7 +14,6 @@ import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
 import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
-import { createStore } from "solid-js/store";
 
 const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
 
