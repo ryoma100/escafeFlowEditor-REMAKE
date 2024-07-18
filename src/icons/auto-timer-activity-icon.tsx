@@ -1,6 +1,7 @@
+import { Match, Switch } from "solid-js";
+
 import AutoTimerActivitySvg from "@/assets/material-icons/auto-timer-activity.svg";
 import { useThemeContext } from "@/context/theme-context";
-import { Match, Switch } from "solid-js";
 
 export function AutoTimerActivityIcon() {
   const { theme } = useThemeContext();

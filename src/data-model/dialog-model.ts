@@ -1,3 +1,5 @@
+import { createSignal } from "solid-js";
+
 import { i18nEnDict } from "@/constants/i18n";
 import {
   ActivityNode,
@@ -7,7 +9,6 @@ import {
   ProjectEntity,
   TransitionEdge,
 } from "@/data-source/data-type";
-import { createSignal } from "solid-js";
 
 export type ModalDialogType =
   | { type: "initAll" }

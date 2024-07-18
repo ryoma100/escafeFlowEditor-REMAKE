@@ -1,6 +1,7 @@
+import { Match, Switch } from "solid-js";
+
 import ManualTimerActivitySvg from "@/assets/material-icons/manual-timer-activity.svg";
 import { useThemeContext } from "@/context/theme-context";
-import { Match, Switch } from "solid-js";
 
 export function ManualTimerActivityIcon() {
   const { theme } = useThemeContext();

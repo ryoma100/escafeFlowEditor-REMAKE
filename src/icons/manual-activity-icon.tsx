@@ -1,6 +1,7 @@
+import { Match, Switch } from "solid-js";
+
 import ManualActivitySvg from "@/assets/material-icons/manual-activity.svg";
 import { useThemeContext } from "@/context/theme-context";
-import { Match, Switch } from "solid-js";
 
 export function ManualActivityIcon() {
   const { theme } = useThemeContext();

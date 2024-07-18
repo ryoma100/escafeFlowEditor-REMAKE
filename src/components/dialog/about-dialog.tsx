@@ -1,4 +1,4 @@
-import { JSXElement, createEffect } from "solid-js";
+import { createEffect, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";

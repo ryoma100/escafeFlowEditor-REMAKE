@@ -1,5 +1,6 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSXElement, createEffect } from "solid-js";
+import { createEffect, JSXElement } from "solid-js";
+import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
@@ -7,7 +8,6 @@ import { useThemeContext } from "@/context/theme-context";
 import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { CommentNode } from "@/data-source/data-type";
-import { createStore } from "solid-js/store";
 
 const dummy = dataFactory.createCommentNode([], 0, 0);
 

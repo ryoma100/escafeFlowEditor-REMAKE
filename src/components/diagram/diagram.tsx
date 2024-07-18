@@ -1,4 +1,4 @@
-import { For, JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
@@ -23,6 +23,7 @@ import {
 } from "@/data-source/data-type";
 import { pointLength } from "@/utils/point-utils";
 import { intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
+
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
 import { ExtendNodeContainer } from "./extend-node";

@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { For, JSXElement, createEffect, createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, For, JSXElement, onMount } from "solid-js";
 
 import { defaultPoint } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";

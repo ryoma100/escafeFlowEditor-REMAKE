@@ -1,9 +1,10 @@
+import { produce } from "solid-js/store";
+
 import { i18nEnDict } from "@/constants/i18n";
 import { makeEdgeModel } from "@/data-model/edge-model";
 import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
-import { produce } from "solid-js/store";
 
 export function makeTransactionEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,

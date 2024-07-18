@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSX, createContext, createEffect, createMemo, createSignal, useContext } from "solid-js";
+import { createContext, createEffect, createMemo, createSignal, JSX, useContext } from "solid-js";
 
 import { i18nEnDict } from "@/constants/i18n";
 import { i18nJaDict } from "@/constants/i18n-ja";

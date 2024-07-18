@@ -1,6 +1,7 @@
+import { Match, Switch } from "solid-js";
+
 import AutoActivitySvg from "@/assets/material-icons/auto-activity.svg";
 import { useThemeContext } from "@/context/theme-context";
-import { Match, Switch } from "solid-js";
 
 export function AutoActivityIcon() {
   const { theme } = useThemeContext();
