@@ -78,7 +78,13 @@ export function DiagramContainer(): JSXElement {
   let mouseDownTime = new Date().getTime();
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
-    if (e.buttons != 1) return;
+
+    if (e.button === 2) {
+      setDragMode({ type: "contextMenuScroll" });
+      return;
+    }
+
+    if (e.button !== 0) return;
     if (contextMenuPoint() != null) return;
     if (dragMode().type !== "none") return;
 
@@ -233,6 +239,13 @@ export function DiagramContainer(): JSXElement {
           y: viewBox.y - moveY,
         });
         return;
+      case "contextMenuScroll":
+        setDragMode({ type: "scroll" });
+        setViewBox({
+          x: viewBox.x - moveX,
+          y: viewBox.y - moveY,
+        });
+        return;
       case "addActivity":
       case "addCommentNode":
       case "addStartNode":
@@ -263,7 +276,10 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
-  function handleDocumentMouseUp() {
+  function handleDocumentMouseUp(e: MouseEvent) {
+    if (dragMode().type === "contextMenuScroll") {
+      setContextMenuPoint({ x: e.pageX, y: e.pageY });
+    }
     setDragMode({ type: "none" });
   }
 
@@ -275,7 +291,6 @@ export function DiagramContainer(): JSXElement {
 
   function handleContextMenu(e: MouseEvent) {
     e.preventDefault();
-    setContextMenuPoint({ x: e.pageX, y: e.pageY });
   }
 
   function onContextMenuSelect(menuItem: keyof I18nDict | null) {
