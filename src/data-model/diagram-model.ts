@@ -20,6 +20,7 @@ export type DragModeType =
   | { type: "boxSelect"; centerPoint: Point }
   | { type: "circleSelect"; centerPoint: Point }
   | { type: "scroll" }
+  | { type: "contextMenuScroll" }
   | { type: "moveNodes" }
   | { type: "scaleNodes"; basePoint: Point }
   | { type: "rotateNodes"; basePoint: Point }
