@@ -60,6 +60,7 @@ export function ContextMenu(props: {
       class="fixed hidden border-2 border-background bg-primary3"
       classList={{ hidden: props.openPoint == null, block: props.openPoint != null }}
       style={{ left: `${adjustPoint().x}px`, top: `${adjustPoint().y}px` }}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <ul class="m-1">
         <For each={props.menuItems}>
