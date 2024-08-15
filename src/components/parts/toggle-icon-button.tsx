@@ -19,8 +19,8 @@ export function ToggleIconButton(props: {
         checked={props.checked}
         onChange={(e) => props.onChange?.(e)}
       />
-      <div class="h-[52px] w-[68px] cursor-pointer rounded-md border-2 border-primary2 hover:bg-primary2 peer-checked/toolbar-toggle:border-primary1 peer-checked/toolbar-toggle:bg-primary1">
-        <label class="flex" for={props.id} title={props.title}>
+      <div class="h-[52px] w-[68px] rounded-md border-2 border-primary bg-secondary hover:bg-primary peer-checked/toolbar-toggle:border-primary peer-checked/toolbar-toggle:bg-primary">
+        <label class="flex cursor-pointer" for={props.id} title={props.title}>
           {props.children}
         </label>
       </div>

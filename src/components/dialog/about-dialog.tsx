@@ -38,13 +38,12 @@ export function AboutDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
+    <dialog class="w-96 bg-primary p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
       <h5 class="mb-2">escafeFlowEditor-REMAKE</h5>
-      <form class="my-1 bg-white p-2" onClick={() => props.onClose?.()}>
+      <form class="my-1 bg-background p-2" onClick={() => props.onClose?.()}>
         <div>version: {props.version.substring(1)}</div>
         <div>author: Ryouichi Matsuda</div>
         <div class="mb-4">
-          web:&nbsp;
           <a
             href="https://github.com/ryoma100/escafeFlowEditor-REMAKE"
             class="underline"

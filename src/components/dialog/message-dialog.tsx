@@ -40,8 +40,8 @@ export function MessageDialogView(props: {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
-      <form class="bg-white p-2" onSubmit={handleFormSubmit}>
+    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+      <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <div class="mb-4">{props.message ? t(props.message) : ""}</div>
 
         <ButtonsContainer>

@@ -35,6 +35,7 @@
     "@storybook/addon-essentials": "^8.2.6",
     "@storybook/addon-interactions": "^8.2.6",
     "@storybook/addon-links": "^8.2.6",
+    "@storybook/addon-themes": "^8.2.9",
     "@storybook/blocks": "^8.2.6",
     "@storybook/docs-tools": "^8.2.6",
     "@storybook/test": "^8.2.6",

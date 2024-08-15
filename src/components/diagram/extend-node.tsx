@@ -121,18 +121,21 @@ export function CommentNodeView(props: {
   let titleDiv: HTMLDivElement | undefined;
   return (
     <div
-      class="flex flex-row rounded bg-background hover:cursor-move hover:bg-primary3"
+      class="flex flex-row rounded bg-background hover:cursor-move hover:bg-secondary"
       classList={{
-        "p-px border border-gray-500": !props.selected,
-        "p-0 border-2 border-primary1": props.selected,
+        "p-px border [border-color:var(--foreground-color)]": !props.selected,
+        "p-0 border-2 border-primary": props.selected,
       }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onDblClick={(e) => props.onDblClick?.(e)}
     >
       <div class="m-1 flex items-center">
-        <CommentIcon />
+        <CommentIcon class="[fill:var(--foreground-color)]" />
       </div>
-      <div ref={titleDiv} class="whitespace-pre p-1 text-[11px] leading-[1.1]">
+      <div
+        ref={titleDiv}
+        class="whitespace-pre p-1 text-[11px] leading-[1.1] [color:var(--foreground-color)]"
+      >
         {props.comment}
       </div>
     </div>
@@ -145,14 +148,14 @@ export function StartNodeView(props: {
 }) {
   return (
     <div
-      class="flex size-10 items-center justify-center rounded bg-background hover:cursor-move hover:bg-primary3"
+      class="flex size-10 items-center justify-center rounded bg-background hover:cursor-move hover:bg-secondary"
       classList={{
-        "border border-gray-500": !props.selected,
-        "border-2 border-primary1": props.selected,
+        "border [border-color:var(--foreground-color)]": !props.selected,
+        "border-2 border-primary": props.selected,
       }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
     >
-      <StartIcon />
+      <StartIcon class="[fill:var(--foreground-color)]" />
     </div>
   );
 }
@@ -164,15 +167,15 @@ export function EndNodeView(props: {
 }) {
   return (
     <div
-      class="flex size-10 items-center justify-center rounded bg-background hover:cursor-move hover:bg-primary3"
+      class="flex size-10 items-center justify-center rounded bg-background hover:cursor-move hover:bg-secondary"
       classList={{
-        "border border-gray-500": !props.selected,
-        "border-2 border-primary1": props.selected,
+        "border [border-color:var(--foreground-color)]": !props.selected,
+        "border-2 border-primary": props.selected,
       }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onMouseUp={(e) => props.onMouseUp?.(e)}
     >
-      <EndIcon />
+      <EndIcon class="[fill:var(--foreground-color)]" />
     </div>
   );
 }

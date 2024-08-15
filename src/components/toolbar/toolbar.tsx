@@ -45,7 +45,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("cursor")}
         margin="4px 0 8px 0"
       >
-        <CursorIcon />
+        <CursorIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -55,7 +55,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("transition")}
         margin="0 0 16px 0"
       >
-        <TransitionIcon />
+        <TransitionIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -65,7 +65,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addManualActivity")}
         margin="0 0 8px 0"
       >
-        <ManualActivityIcon />
+        <ManualActivityIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -75,7 +75,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addAutoActivity")}
         margin="0 0 8px 0"
       >
-        <AutoActivityIcon />
+        <AutoActivityIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -85,7 +85,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addUserActivity")}
         margin="0 0 16px 0"
       >
-        <UserActivityIcon />
+        <UserActivityIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
 
       <ToggleIconButton
@@ -96,7 +96,7 @@ export function Toolbar(): JSXElement {
         margin="0 0 8px 0"
       >
         <div class="flex h-12 w-16 items-center justify-center">
-          <StartIcon />
+          <StartIcon class="[fill:var(--foreground-color)]" />
         </div>
       </ToggleIconButton>
 
@@ -108,7 +108,7 @@ export function Toolbar(): JSXElement {
         margin="0 0 8px 0"
       >
         <div class="flex h-12 w-16 items-center justify-center">
-          <EndIcon />
+          <EndIcon class="[fill:var(--foreground-color)]" />
         </div>
       </ToggleIconButton>
 
@@ -119,7 +119,7 @@ export function Toolbar(): JSXElement {
         onChange={() => setToolbar("addCommentNode")}
       >
         <div class="flex h-12 w-16 items-center justify-center">
-          <CommentIcon />
+          <CommentIcon class="[fill:var(--foreground-color)]" />
         </div>
       </ToggleIconButton>
     </div>

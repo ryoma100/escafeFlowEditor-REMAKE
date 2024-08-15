@@ -79,7 +79,7 @@ export function TransitionEdgeView(props: {
   return (
     <>
       <line
-        class="fill-none stroke-gray-500 stroke-1 [vector-effect:non-scaling-stroke]"
+        class="fill-none stroke-1 [stroke:var(--foreground-color)] [vector-effect:non-scaling-stroke]"
         x1={props.line.p1.x}
         y1={props.line.p1.y}
         x2={props.line.p2.x}
@@ -87,10 +87,10 @@ export function TransitionEdgeView(props: {
         marker-end={props.ognl !== "" ? "url(#ognl-arrow-end)" : "url(#arrow-end)"}
       />
       <line
-        class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary2"
+        class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary"
         classList={{
           "stroke-transparent": !props.selected,
-          "stroke-primary1": props.selected,
+          "stroke-primary": props.selected,
         }}
         onDblClick={(e) => props.handleDblClick?.(e)}
         onMouseDown={(e) => props.handleMouseDown?.(e)}

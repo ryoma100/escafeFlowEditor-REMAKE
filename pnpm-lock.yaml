@@ -33,6 +33,9 @@ importers:
       '@storybook/addon-links':
         specifier: ^8.2.6
         version: 8.2.6(react@18.3.1)(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))
+      '@storybook/addon-themes':
+        specifier: ^8.2.9
+        version: 8.2.9(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))
       '@storybook/blocks':
         specifier: ^8.2.6
         version: 8.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))
@@ -1430,6 +1433,11 @@ packages:
     peerDependencies:
       storybook: ^8.2.6
 
+  '@storybook/addon-themes@8.2.9':
+    resolution: {integrity: sha512-f9buB5v18ul7IP0JALkPn9kpPvkkxe4RiEF5S77i1B6v7/1Owa62DLp2NLgav/tvg6MHsGap4UnnyuOxWHUTbg==}
+    peerDependencies:
+      storybook: ^8.2.9
+
   '@storybook/addon-toolbars@8.2.6':
     resolution: {integrity: sha512-0JmRirMpxHS6VZzBk0kY871xWTpkk3TN4S1sxoFf5fcnCfVTHDjEJ5Ws/QWru1RJlIZHuJKRdQIA6Vuq5X+KfQ==}
     peerDependencies:
@@ -1452,11 +1460,11 @@ packages:
       react-dom:
         optional: true
 
-  '@storybook/builder-vite@8.3.0-alpha.3':
-    resolution: {integrity: sha512-/82rf41Bd8PdDYcjXD9eI0rYT9OuXhaXMXU6DzKS3nLHCMObEz6UjxM9rTWpsjJG31+pssMOljxfX+/2YcwYIA==}
+  '@storybook/builder-vite@8.3.0-alpha.5':
+    resolution: {integrity: sha512-fAP7MEjTd+fzdhWhPQ7uNtfh2z68OKkoSvBHeWpaNpauSh7EFWTmRVATdz4bItGmK2na/FFHEayHPTnfQWkU0g==}
     peerDependencies:
       '@preact/preset-vite': '*'
-      storybook: ^8.3.0-alpha.3
+      storybook: ^8.3.0-alpha.5
       typescript: '>= 4.3.x'
       vite: ^4.0.0 || ^5.0.0
       vite-plugin-glimmerx: '*'
@@ -1479,10 +1487,10 @@ packages:
     peerDependencies:
       storybook: ^8.2.6
 
-  '@storybook/csf-plugin@8.3.0-alpha.3':
-    resolution: {integrity: sha512-jh3tLzXItyO2Eq9F47eG0NqkRV9HeyqjFxOFaJessUxzhUDR5kR8TGZULXK+CANzbF9rdjVuBjiUPxghjX3smQ==}
+  '@storybook/csf-plugin@8.3.0-alpha.5':
+    resolution: {integrity: sha512-NgArxKGtrdeCTM7H0L3ppYpXRsxqUfaw5jGk2QykMqOFbrSfyVgKeL8iZPClFH6YjopYL1GtlziHLCL2Cju1JA==}
     peerDependencies:
-      storybook: ^8.3.0-alpha.3
+      storybook: ^8.3.0-alpha.5
 
   '@storybook/csf@0.0.1':
     resolution: {integrity: sha512-USTLkZze5gkel8MYCujSRBVIrUQ3YPBrLOx7GNk/0wttvVtlzWXAq9eLbQ4p/NicGxP+3T7KPEMVV//g+yubpw==}
@@ -6092,6 +6100,11 @@ snapshots:
       storybook: 8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2))
       ts-dedent: 2.2.0
 
+  '@storybook/addon-themes@8.2.9(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))':
+    dependencies:
+      storybook: 8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2))
+      ts-dedent: 2.2.0
+
   '@storybook/addon-toolbars@8.2.6(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))':
     dependencies:
       storybook: 8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2))
@@ -6122,9 +6135,9 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@storybook/builder-vite@8.3.0-alpha.3(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))(typescript@5.5.4)(vite@5.3.5(@types/node@22.0.0))':
+  '@storybook/builder-vite@8.3.0-alpha.5(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))(typescript@5.5.4)(vite@5.3.5(@types/node@22.0.0))':
     dependencies:
-      '@storybook/csf-plugin': 8.3.0-alpha.3(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))
+      '@storybook/csf-plugin': 8.3.0-alpha.5(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))
       '@types/find-cache-dir': 3.2.1
       browser-assert: 1.2.1
       es-module-lexer: 1.5.4
@@ -6183,7 +6196,7 @@ snapshots:
       storybook: 8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2))
       unplugin: 1.12.0
 
-  '@storybook/csf-plugin@8.3.0-alpha.3(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))':
+  '@storybook/csf-plugin@8.3.0-alpha.5(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))':
     dependencies:
       storybook: 8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2))
       unplugin: 1.12.0
@@ -9035,7 +9048,7 @@ snapshots:
 
   storybook-solidjs-vite@1.0.0-beta.2(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))(typescript@5.5.4)(vite@5.3.5(@types/node@22.0.0)):
     dependencies:
-      '@storybook/builder-vite': 8.3.0-alpha.3(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))(typescript@5.5.4)(vite@5.3.5(@types/node@22.0.0))
+      '@storybook/builder-vite': 8.3.0-alpha.5(storybook@8.2.6(@babel/preset-env@7.25.2(@babel/core@7.25.2)))(typescript@5.5.4)(vite@5.3.5(@types/node@22.0.0))
     transitivePeerDependencies:
       - '@preact/preset-vite'
       - storybook

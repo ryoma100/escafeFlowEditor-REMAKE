@@ -57,7 +57,7 @@ export function ContextMenu(props: {
   return (
     <div
       ref={contextMenuRef}
-      class="fixed hidden border-2 border-background bg-primary3"
+      class="fixed hidden border-2 border-background bg-secondary"
       classList={{ hidden: props.openPoint == null, block: props.openPoint != null }}
       style={{ left: `${adjustPoint().x}px`, top: `${adjustPoint().y}px` }}
       onContextMenu={(e) => e.preventDefault()}
@@ -66,7 +66,7 @@ export function ContextMenu(props: {
         <For each={props.menuItems}>
           {(it) => (
             <li
-              class="cursor-pointer text-nowrap p-1 hover:bg-primary2"
+              class="cursor-pointer text-nowrap p-1 hover:bg-primary"
               onClick={() => onMenuClick(it)}
             >
               {t(it)}

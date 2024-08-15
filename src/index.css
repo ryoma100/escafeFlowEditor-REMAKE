@@ -3,56 +3,105 @@
 @tailwind utilities;
 
 :root {
-  --background-color: #fff;
-  --font-color: #0f0f0f;
-  --primary1-color: #689f38;
-  --primary2-color: #8bc34a;
-  --primary3-color: #c5e1a5;
+  --LIGHT-COLOR: #f5f5f5;
+  --DARK-COLOR: #212121;
+  --GREEN1-COLOR: #388e3c;
+  --GREEN2-COLOR: #8bc34a;
+
+  --background-color: var(--LIGHT-COLOR);
+  --foreground-color: var(--DARK-COLOR);
+  --primary-color: var(--GREEN1-COLOR);
+  --secondary-color: var(--GREEN2-COLOR);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: var(--DARK-COLOR);
+    --foreground-color: var(--LIGHT-COLOR);
+    --primary-color: var(--GREEN2-COLOR);
+    --secondary-color: var(--GREEN1-COLOR);
+  }
+}
+
+.light-theme {
+  --background-color: var(--LIGHT-COLOR);
+  --foreground-color: var(--DARK-COLOR);
+  --primary-color: var(--GREEN1-COLOR);
+  --secondary-color: var(--GREEN2-COLOR);
+}
+
+.dark-theme {
+  --background-color: var(--DARK-COLOR);
+  --foreground-color: var(--LIGHT-COLOR);
+  --primary-color: var(--GREEN2-COLOR);
+  --secondary-color: var(--GREEN1-COLOR);
 }
 
 #root {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  color: var(--font-color);
-  background-color: var(--primary3-color);
 }
 
-body {
+body  {
   font-size: 12px;
+  color: var(--foreground-color);
+  background-color: var(--background-color);
 }
 
-button,
-select,
-input,
-textarea {
+dialog {
+  color: var(--foreground-color);
+  background-color: var(--primary-color);
   border-radius: 4px;
-  border: solid 1px var(--primary2-color);
-  accent-color: var(--primary1-color);
 }
 
-button,
-input,
-textarea {
+button {
+  border-radius: 4px;
+  border: solid 1px var(--primary-color);
+  accent-color: var(--primary-color);
   padding: 4px 8px;
 }
 
 select {
+  border-radius: 4px;
+  border: solid 1px var(--primary-color);
+  accent-color: var(--primary-color);
+  background-color: var(--background-color);
   padding: 4px;
+}
+
+input {
+  border-radius: 4px;
+  border: solid 1px var(--primary-color);
+  accent-color: var(--primary-color);
+  padding: 4px 8px;
+  background-color: var(--background-color);
+}
+
+textarea {
+  border-radius: 4px;
+  border: solid 1px var(--primary-color);
+  accent-color: var(--primary-color);
+  background-color: var(--background-color);
+  padding: 4px 8px;
+  outline: 1px solid var(--primary-color);
+}
+
+button:hover {
+  background-color: var(--primary-color);
 }
 
 button:disabled,
 select:disabled,
 input:disabled,
-textarea:disabled {
-  background-color: lightgray;
-  color: gray;
+textarea:disabled  {
+  background-color: gray;
 }
 
 button:focus,
 select:focus,
 input:focus,
 textarea:focus {
-  outline: 2px solid var(--primary2-color);
+  outline: 2px solid var(--primary-color);
 }
 
 img {

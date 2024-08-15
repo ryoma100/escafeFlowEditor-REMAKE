@@ -122,13 +122,9 @@ export function ProcessDialogView(props: {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog
-      class="w-[520px] bg-primary2 p-2"
-      ref={dialogRef}
-      onClose={() => props.onDialogClose?.()}
-    >
+    <dialog class="w-[520px] p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
       <h5 class="mb-2">{t("editProcess")}</h5>
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
+      <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
           <p>ID:</p>
           <input
@@ -145,8 +141,8 @@ export function ProcessDialogView(props: {
         </div>
 
         <p class="mb-1 mt-2">{t("extendedSetting")}:</p>
-        <table class="mb-2 w-full border-collapse border border-solid border-primary3 bg-white">
-          <thead class="block bg-primary3 pr-4">
+        <table class="mb-2 w-full border border-solid border-secondary bg-background">
+          <thead class="block bg-secondary pr-4">
             <tr>
               <td class="w-[240px] pl-1">{t("name")}</td>
               <td class="w-[240px] pl-1">{t("value")}</td>
@@ -157,7 +153,7 @@ export function ProcessDialogView(props: {
               {(it, index) => (
                 <tr
                   onClick={[handleEnvClick, it]}
-                  classList={{ "bg-primary1": it.id === selectedEnv()?.id }}
+                  classList={{ "bg-primary": it.id === selectedEnv()?.id }}
                 >
                   <td class="w-[240px]">
                     <input
@@ -194,8 +190,8 @@ export function ProcessDialogView(props: {
         </ButtonsContainer>
 
         <p>{t("application")}:</p>
-        <table class="mb-2 mt-1 border-collapse border border-solid border-primary3 bg-white">
-          <thead class="block bg-primary3 pr-4">
+        <table class="mb-2 w-full border border-solid border-secondary bg-background">
+          <thead class="block bg-secondary pr-4">
             <tr>
               <td class="w-[120px] pl-1">ID</td>
               <td class="w-[120px] pl-1">{t("name")}</td>
@@ -208,7 +204,7 @@ export function ProcessDialogView(props: {
               {(it, index) => (
                 <tr
                   onClick={[handleAppClick, it]}
-                  classList={{ "bg-primary1": it.id === selectedApp()?.id }}
+                  classList={{ "bg-primary": it.id === selectedApp()?.id }}
                 >
                   <td class="w-[120px] pl-1">
                     <input

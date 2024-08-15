@@ -59,17 +59,17 @@ export function OtherEdgeView(props: {
     <>
       <line
         /* eslint-disable-next-line tailwindcss/no-custom-classname */
-        class="stroke fill-none stroke-gray-300 [vector-effect:non-scaling-stroke]"
+        class="stroke fill-none [stroke:var(--foreground-color)] [vector-effect:non-scaling-stroke]"
         x1={props.fromX}
         y1={props.fromY}
         x2={props.toX}
         y2={props.toY}
       />
       <line
-        class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary2"
+        class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary"
         classList={{
           "stroke-transparent": !props.selected,
-          "stroke-primary1": props.selected,
+          "stroke-primary": props.selected,
         }}
         onMouseDown={(e) => props.onMouseDown?.(e)}
         x1={props.fromX}

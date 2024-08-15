@@ -61,9 +61,9 @@ export function CommentDialogView(props: {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
       <h5 class="mb-2">{t("editComment")}</h5>
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
+      <form class="bg-background p-2" onSubmit={handleSubmit}>
         <textarea
           class="mb-2 h-48 w-full resize-none"
           value={formData.comment}

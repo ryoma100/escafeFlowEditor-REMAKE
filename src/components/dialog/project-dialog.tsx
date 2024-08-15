@@ -61,9 +61,9 @@ export function ProjectDialogView(props: {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
       <h5 class="mb-2">{t("editPackage")}</h5>
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
+      <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID:</div>
           <input

@@ -36,9 +36,9 @@ export function SettingDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="bg-primary2 p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
+    <dialog class="p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
       <h5 class="mb-2">{t("setting")}</h5>
-      <form class="bg-white p-2">
+      <form class="bg-background p-2">
         <div class="mb-4 grid grid-cols-[80px_360px] items-center gap-1">
           <div>{t("language")}</div>
           <div>
