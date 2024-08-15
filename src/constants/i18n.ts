@@ -93,9 +93,10 @@ export const i18nEnDict = {
   theme: "Theme",
   themeMaterial: "Default (Used By Material Icons)",
   themeCrab: "Crab (Made By Image Creator from Microsoft Designer)",
-  color: "Color",
-  colorGreen: "Green",
-  colorRed: "Red",
+  appearance: "Appearance",
+  auto: "Auto",
+  light: "Light",
+  dark: "Dark",
 
   // message
   idExists: "This ID already exists.",

@@ -240,11 +240,13 @@ export function DiagramContainer(): JSXElement {
         });
         return;
       case "contextMenuScroll":
-        setDragMode({ type: "scroll" });
-        setViewBox({
-          x: viewBox.x - moveX,
-          y: viewBox.y - moveY,
-        });
+        if (contextMenuPoint() == null) {
+          setDragMode({ type: "scroll" });
+          setViewBox({
+            x: viewBox.x - moveX,
+            y: viewBox.y - moveY,
+          });
+        }
         return;
       case "addActivity":
       case "addCommentNode":
