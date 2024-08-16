@@ -93,9 +93,10 @@ export const i18nJaDict: I18nDict = {
   theme: "テーマ",
   themeMaterial: "デフォルト (Used By Material Icons)",
   themeCrab: "蟹 (Made By Image Creator from Microsoft Designer)",
-  color: "色",
-  colorGreen: "緑",
-  colorRed: "Red",
+  appearance: "外観モード",
+  auto: "自動",
+  light: "ライト",
+  dark: "ダーク",
 
   // message
   idExists: "このIDは既に存在します。",

@@ -240,11 +240,13 @@ export function DiagramContainer(): JSXElement {
         });
         return;
       case "contextMenuScroll":
-        setDragMode({ type: "scroll" });
-        setViewBox({
-          x: viewBox.x - moveX,
-          y: viewBox.y - moveY,
-        });
+        if (contextMenuPoint() == null) {
+          setDragMode({ type: "scroll" });
+          setViewBox({
+            x: viewBox.x - moveX,
+            y: viewBox.y - moveY,
+          });
+        }
         return;
       case "addActivity":
       case "addCommentNode":
@@ -347,6 +349,7 @@ export function DiagramContainer(): JSXElement {
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
       />
+
       <ContextMenu
         openPoint={contextMenuPoint()}
         menuItems={[
@@ -421,7 +424,7 @@ export function DiagramView(props: {
             markerWidth="20"
             markerHeight="20"
           >
-            <polygon points="20,0 40,10 20,20" fill="gray" />
+            <polygon points="20,0 40,10 20,20" fill="var(--foreground-color)" />
           </marker>
           <marker
             id="ognl-arrow-end"
@@ -462,7 +465,7 @@ export function DiagramView(props: {
         <g data-id="adding-line">
           <Show when={props.addingLine != null}>
             <line
-              class="pointer-events-none fill-none stroke-black stroke-2"
+              class="pointer-events-none fill-none stroke-foreground stroke-2"
               x1={props.addingLine?.p1.x}
               y1={props.addingLine?.p1.y}
               x2={props.addingLine?.p2.x}
@@ -474,7 +477,7 @@ export function DiagramView(props: {
         <g data-id="select-box">
           <Show when={props.selectBox != null}>
             <rect
-              class="pointer-events-none fill-primary3 stroke-primary2 opacity-50"
+              class="pointer-events-none fill-secondary stroke-primary opacity-50"
               x={props.selectBox?.x}
               y={props.selectBox?.y}
               width={props.selectBox?.width}
@@ -486,7 +489,7 @@ export function DiagramView(props: {
         <g data-id="select-circle">
           <Show when={props.selectCircle != null}>
             <circle
-              class="pointer-events-none fill-primary3 stroke-primary2 opacity-50"
+              class="pointer-events-none fill-secondary stroke-primary opacity-50"
               cx={props.selectCircle?.cx}
               cy={props.selectCircle?.cy}
               r={props.selectCircle?.r}

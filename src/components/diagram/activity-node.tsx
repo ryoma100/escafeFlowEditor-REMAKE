@@ -155,22 +155,25 @@ export function ActivityNodeView(props: {
     <div
       style={{ width: `${props.width}px` }}
       data-select={props.selected}
-      class="flex size-full flex-row justify-between border-2 border-solid border-transparent data-[select=true]:border-primary1"
+      class="flex size-full flex-row justify-between border-2 border-solid border-transparent data-[select=true]:border-primary"
     >
       <div
-        class="w-[10px] hover:cursor-ew-resize hover:bg-primary3"
+        class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
         onMouseDown={(e) => props.onLeftMouseDown?.(e)}
       >
         <Switch>
           <Match when={props.joinType === "oneJoin"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
-              <path class="stroke-black [vector-effect:non-scaling-stroke]" d="M 0 50 L 10 50" />
+              <path
+                class="stroke-foreground [vector-effect:non-scaling-stroke]"
+                d="M 0 50 L 10 50"
+              />
             </svg>
           </Match>
           <Match when={props.joinType === "xorJoin"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
               <path
-                class="stroke-black [vector-effect:non-scaling-stroke]"
+                class="stroke-foreground [vector-effect:non-scaling-stroke]"
                 d="M 0 50 L 10 50 M 1 0 L 1 100"
               />
             </svg>
@@ -178,7 +181,7 @@ export function ActivityNodeView(props: {
           <Match when={props.joinType === "andJoin"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
               <path
-                class="fill-none stroke-black [vector-effect:non-scaling-stroke]"
+                class="fill-none stroke-foreground [vector-effect:non-scaling-stroke]"
                 d="M 0 0 L 10 50 L 0 100 M 5 25 L 5 75"
               />
             </svg>
@@ -187,7 +190,7 @@ export function ActivityNodeView(props: {
       </div>
 
       <div
-        class="flex size-full cursor-move select-none flex-col border border-solid border-black bg-background hover:bg-primary3"
+        class="flex size-full cursor-move select-none flex-col border border-solid border-foreground bg-background hover:bg-secondary"
         onMouseDown={(e) => props.onMouseDown?.(e)}
         onDblClick={(e) => props.onDblClick?.(e)}
       >
@@ -195,19 +198,19 @@ export function ActivityNodeView(props: {
         <div class="flex h-full justify-center">
           <Switch>
             <Match when={props.activityType === "manualActivity"}>
-              <ManualActivityIcon />
+              <ManualActivityIcon class="fill-foreground" />
             </Match>
             <Match when={props.activityType === "autoActivity"}>
-              <AutoActivityIcon />
+              <AutoActivityIcon class="fill-foreground" />
             </Match>
             <Match when={props.activityType === "manualTimerActivity"}>
-              <ManualTimerActivityIcon />
+              <ManualTimerActivityIcon class="fill-foreground" />
             </Match>
             <Match when={props.activityType === "autoTimerActivity"}>
-              <AutoTimerActivityIcon />
+              <AutoTimerActivityIcon class="fill-foreground" />
             </Match>
             <Match when={props.activityType === "userActivity"}>
-              <UserActivityIcon />
+              <UserActivityIcon class="fill-foreground" />
             </Match>
           </Switch>
         </div>
@@ -217,19 +220,22 @@ export function ActivityNodeView(props: {
       </div>
 
       <div
-        class="w-[10px] hover:cursor-ew-resize hover:bg-primary3"
+        class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
         onMouseDown={(e) => props.onRightMouseDown?.(e)}
       >
         <Switch>
           <Match when={props.splitType === "oneSplit"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
-              <path class="stroke-black [vector-effect:non-scaling-stroke]" d="M 0 50 L 10 50" />
+              <path
+                class="stroke-foreground [vector-effect:non-scaling-stroke]"
+                d="M 0 50 L 10 50"
+              />
             </svg>
           </Match>
           <Match when={props.splitType === "xorSplit"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
               <path
-                class="stroke-black [vector-effect:non-scaling-stroke]"
+                class="stroke-foreground [vector-effect:non-scaling-stroke]"
                 d="M 0 50 L 9 50 M 9 0 L 9 100"
               />
             </svg>
@@ -237,7 +243,7 @@ export function ActivityNodeView(props: {
           <Match when={props.splitType === "andSplit"}>
             <svg viewBox="0 0 10 100" preserveAspectRatio="none" width="100%" height="100%">
               <path
-                class="fill-none stroke-black [vector-effect:non-scaling-stroke]"
+                class="fill-none stroke-foreground [vector-effect:non-scaling-stroke]"
                 d="M 10 0 L 0 50 L 10 100 M 5 25 L 5 75"
               />
             </svg>

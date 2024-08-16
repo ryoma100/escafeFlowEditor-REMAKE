@@ -1,3 +1,4 @@
+import { withThemeByClassName } from "@storybook/addon-themes";
 import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import "../src/index.css";
 
@@ -23,9 +24,9 @@ const preview = {
         ],
       },
     },
-    theme: {
-      name: "Theme",
-      description: "Change theme",
+    icon: {
+      name: "Icon",
+      description: "Change icon",
       defaultValue: "material",
       toolbar: {
         icon: "facehappy",
@@ -41,10 +42,17 @@ const preview = {
     },
   },
   decorators: [
+    withThemeByClassName({
+      themes: {
+        light: "light-theme",
+        dark: "dark-theme",
+      },
+      defaultTheme: "light",
+    }),
     (Story, { globals }) => {
       const value = makeThemeContext();
       value.setLocale(globals.locale);
-      value.setTheme(globals.theme);
+      value.setTheme(globals.icon);
       return (
         <ThemeContext.Provider value={value}>
           <Story />

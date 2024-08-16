@@ -73,8 +73,8 @@ export function ConfirmDialogView(props: {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 bg-primary2 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
+    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+      <form class="bg-background p-2" onSubmit={handleSubmit}>
         <p class="mb-4">{message()}</p>
 
         <ButtonsContainer>

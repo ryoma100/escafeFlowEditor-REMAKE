@@ -44,8 +44,8 @@ export function ActorList(): JSXElement {
           <For each={actorList}>
             {(it) => (
               <li
-                class="p-1 hover:bg-primary2"
-                classList={{ "bg-primary1": it.id === selectedActor().id }}
+                class="cursor-pointer p-1 hover:bg-primary"
+                classList={{ "bg-primary": it.id === selectedActor().id }}
                 onMouseDown={[handleItemMouseDown, it]}
                 onDblClick={[handleItemDblClick, it]}
               >

@@ -3,8 +3,6 @@ import { createStore } from "solid-js/store";
 
 import { ToolbarType } from "@/components/toolbar/toolbar";
 import { defaultLine, defaultRectangle } from "@/constants/app-const";
-import { makeEdgeModel } from "@/data-model/edge-model";
-import { makeNodeModel } from "@/data-model/node-model";
 import {
   ActivityNode,
   CommentNode,
@@ -35,10 +33,7 @@ export type DragModeType =
   | { type: "addEndNode" }
   | { type: "addEndEdge"; fromActivity: ActivityNode };
 
-export function makeDiagramModel(
-  nodeModel: ReturnType<typeof makeNodeModel>,
-  edgeModel: ReturnType<typeof makeEdgeModel>,
-) {
+export function makeDiagramModel() {
   const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
   const [zoom, setZoom] = createSignal<number>(1.0);
   const [dragMode, setDragMode] = createSignal<DragModeType>({ type: "none" });
@@ -58,9 +53,6 @@ export function makeDiagramModel(
     setZoom(Math.min(svgRect.width / rect.width, svgRect.height / rect.height));
     setViewBox({ x: rect.x, y: rect.y, width: viewBox.width, height: viewBox.height });
   }
-
-  nodeModel;
-  edgeModel;
 
   return {
     toolbar,

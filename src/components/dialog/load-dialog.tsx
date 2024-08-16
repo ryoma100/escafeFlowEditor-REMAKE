@@ -104,9 +104,9 @@ export function LoadDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   let loadButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="h-[536px] w-[768px] bg-primary2 p-2" ref={dialogRef}>
+    <dialog class="h-[536px] w-[768px] p-2" ref={dialogRef}>
       <h5 class="mb-2">{t("openXpdl")}</h5>
-      <form class="bg-white p-2" onSubmit={handleFormSubmit}>
+      <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("inputXpdl")}</p>
         <textarea
           class="mb-2 h-[410px] w-full resize-none"

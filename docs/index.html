@@ -9,8 +9,12 @@
   <body>
     <div class="header">
       <h2>escafeFlowEditor REMAKE</h2>
-      <a href="https://github.com/ryoma100/escafeFlowEditor-REMAKE" target="_blank" rel="noopener"
-        >GitHub</a
+      <a
+        href="https://github.com/ryoma100/escafeFlowEditor-REMAKE"
+        target="_blank"
+        rel="noopener"
+        class="github"
+        ><img src="github-mark.svg" width="24px" alt="GitHub" />GitHub</a
       >
     </div>
     <div class="video">
@@ -18,24 +22,36 @@
         <source src="flow.mp4" type="video/mp4" />
       </video>
     </div>
-    <ul>
-      <li>
+
+    <div class="buttons">
+      <button class="button" type="button" onclick="document.getElementById('playground').click()">
         <a
+          id="playground"
           href="https://ryoma100.github.io/escafeFlowEditor-REMAKE/editor/"
           target="_blank"
           rel="noopener"
-          >Web Application</a
-        >
-      </li>
-      <li>
+          ><img
+            src="open_in_browser_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+            width="48px"
+            alt="playground"
+        /></a>
+        <p>Playground<br />(Web Application)</p>
+      </button>
+      <button class="button" type="button" onclick="document.getElementById('download').click()">
         <a
+          id="download"
           href="https://github.com/ryoma100/escafeFlowEditor-REMAKE/releases"
           target="_blank"
           rel="noopener"
-          >PC Installer</a
-        >
-      </li>
-    </ul>
+          ><img
+            src="download_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+            width="48px"
+            alt="download"
+        /></a>
+        <p>Download<br />(PC Installer)</p>
+      </button>
+    </div>
+
     <p>
       Adobe
       Flash/AIRで作ったescafeFlowEditorを、SolidJS/TAURIでリメイクしました。保存ファイルの互換性があるので、Flash/AIR版の保存ファイルがあれば読み込めます。

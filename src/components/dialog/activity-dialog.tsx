@@ -105,13 +105,13 @@ export function ActivityDialogView(props: {
   let radioTabCenterRef: HTMLInputElement | undefined;
   return (
     <dialog
-      class="w-[388px] bg-primary2 p-2"
+      class="w-[388px] bg-primary p-2"
       ref={dialogRef}
       onClose={() => props.onDialogClose?.()}
     >
       <h5 class="mb-2">{t("editActivity")}</h5>
 
-      <form class="bg-white p-2" onSubmit={handleSubmit}>
+      <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-2 flex flex-row">
           <ToggleIconButton
             id="manual-activity"
@@ -120,7 +120,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "manualActivity")}
             margin="0 4px 0 0"
           >
-            <ManualActivityIcon />
+            <ManualActivityIcon class="fill-foreground" />
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-activity"
@@ -129,7 +129,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "autoActivity")}
             margin="0 4px 0 0"
           >
-            <AutoActivityIcon />
+            <AutoActivityIcon class="fill-foreground" />
           </ToggleIconButton>
           <ToggleIconButton
             id="manual-timer-activity"
@@ -138,7 +138,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "manualTimerActivity")}
             margin="0 4px 0 0"
           >
-            <ManualTimerActivityIcon />
+            <ManualTimerActivityIcon class="fill-foreground" />
           </ToggleIconButton>
           <ToggleIconButton
             id="auto-timer-activity"
@@ -147,7 +147,7 @@ export function ActivityDialogView(props: {
             onChange={() => setFormData("activityType", "autoTimerActivity")}
             margin="0 4px 0 0"
           >
-            <AutoTimerActivityIcon />
+            <AutoTimerActivityIcon class="fill-foreground" />
           </ToggleIconButton>
           <ToggleIconButton
             id="user-activity"
@@ -155,7 +155,7 @@ export function ActivityDialogView(props: {
             checked={formData.activityType === "userActivity"}
             onChange={() => setFormData("activityType", "userActivity")}
           >
-            <UserActivityIcon />
+            <UserActivityIcon class="fill-foreground" />
           </ToggleIconButton>
         </div>
 
@@ -167,15 +167,15 @@ export function ActivityDialogView(props: {
             class="peer/tab-switch1 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
           <label
-            class="-order-1 mr-1 bg-gray-300 px-2 py-1 peer-checked/tab-switch1:bg-primary1"
+            class="-order-1 mr-1 cursor-pointer bg-secondary px-2 py-1 hover:bg-primary peer-checked/tab-switch1:bg-primary"
             for="tab-join"
           >
             {t("beginning")}
           </label>
           <div
-            class="hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2 peer-checked/tab-switch1:block"
+            class="hidden h-[300px] w-full border border-solid border-secondary py-4 pl-2 peer-checked/tab-switch1:block"
             classList={{
-              "bg-gray-100": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
+              "opacity-50": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
             }}
           >
             <div>
@@ -216,12 +216,12 @@ export function ActivityDialogView(props: {
             ref={radioTabCenterRef}
           />
           <label
-            class="-order-1 mr-1 bg-gray-300 px-2 py-1 peer-checked/tab-switch2:bg-primary1"
+            class="-order-1 mr-1 cursor-pointer bg-secondary px-2 py-1 hover:bg-primary peer-checked/tab-switch2:bg-primary"
             for="tab-work"
           >
             {t("work")}
           </label>
-          <div class="hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2 peer-checked/tab-switch2:block">
+          <div class="hidden h-[300px] w-full border border-solid border-secondary py-4 pl-2 peer-checked/tab-switch2:block">
             <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
               <input
@@ -303,15 +303,15 @@ export function ActivityDialogView(props: {
             class="peer/tab-switch3 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
           <label
-            class="-order-1 mr-1 bg-gray-300 px-2 py-1 peer-checked/tab-switch3:bg-primary1"
+            class="-order-1 mr-1 cursor-pointer bg-secondary px-2 py-1 hover:bg-primary peer-checked/tab-switch3:bg-primary"
             for="tab-split"
           >
             {t("termination")}
           </label>
           <div
-            class="hidden h-[300px] w-full border border-solid border-gray-300 py-4 pl-2 peer-checked/tab-switch3:block"
+            class="hidden h-[300px] w-full border border-solid border-secondary py-4 pl-2 peer-checked/tab-switch3:block"
             classList={{
-              "bg-gray-100": formData.splitType === "notSplit" || formData.splitType === "oneSplit",
+              "opacity-50": formData.splitType === "notSplit" || formData.splitType === "oneSplit",
             }}
           >
             <div>

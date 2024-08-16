@@ -3,7 +3,7 @@ import { createEffect, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
-import { Theme, useThemeContext } from "@/context/theme-context";
+import { Appearance, Theme, useThemeContext } from "@/context/theme-context";
 
 export function SettingDialog(): JSXElement {
   const {
@@ -21,7 +21,7 @@ export function SettingDialogView(props: {
   readonly open: boolean;
   readonly onClose?: () => void;
 }) {
-  const { dict, locale, setLocale, theme, setTheme } = useThemeContext();
+  const { dict, locale, setLocale, theme, setTheme, appearance, setAppearance } = useThemeContext();
   const t = i18n.translator(dict);
 
   createEffect(() => {
@@ -36,9 +36,9 @@ export function SettingDialogView(props: {
   let dialogRef: HTMLDialogElement | undefined;
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="bg-primary2 p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
+    <dialog class="p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
       <h5 class="mb-2">{t("setting")}</h5>
-      <form class="bg-white p-2">
+      <form class="bg-background p-2">
         <div class="mb-4 grid grid-cols-[80px_360px] items-center gap-1">
           <div>{t("language")}</div>
           <div>
@@ -56,6 +56,18 @@ export function SettingDialogView(props: {
             <select value={theme()} onChange={(e) => setTheme(e.currentTarget.value as Theme)}>
               <option value="material">{t("themeMaterial")}</option>
               <option value="crab">{t("themeCrab")}</option>
+            </select>
+          </div>
+
+          <div>{t("appearance")}</div>
+          <div>
+            <select
+              value={appearance()}
+              onChange={(e) => setAppearance(e.currentTarget.value as Appearance)}
+            >
+              <option value="light">{t("light")}</option>
+              <option value="dark">{t("dark")}</option>
+              <option value="auto">{t("auto")}</option>
             </select>
           </div>
         </div>
