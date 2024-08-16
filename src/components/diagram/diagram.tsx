@@ -349,6 +349,7 @@ export function DiagramContainer(): JSXElement {
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
       />
+
       <ContextMenu
         openPoint={contextMenuPoint()}
         menuItems={[

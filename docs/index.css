@@ -22,3 +22,26 @@ td {
 .header h2 {
   margin-top: 0;
 }
+
+.github {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  column-gap: 4px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  column-gap: 48px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  column-gap: 8px;
+  width: 190px;
+}

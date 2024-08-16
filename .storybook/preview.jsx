@@ -1,5 +1,5 @@
-import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import { withThemeByClassName } from "@storybook/addon-themes";
+import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import "../src/index.css";
 
 const preview = {

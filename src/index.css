@@ -42,7 +42,7 @@
   height: 100vh;
 }
 
-body  {
+body {
   font-size: 12px;
   color: var(--foreground-color);
   background-color: var(--background-color);
@@ -93,7 +93,7 @@ button:hover {
 button:disabled,
 select:disabled,
 input:disabled,
-textarea:disabled  {
+textarea:disabled {
   background-color: gray;
 }
 

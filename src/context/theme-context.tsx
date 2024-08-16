@@ -15,12 +15,6 @@ export function makeThemeContext() {
     .startsWith("ja")
     ? "ja"
     : "en";
-
-  const THEME_KEY = "theme";
-  const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme) || "material";
-  const APPEARANCE_KEY = "appearance";
-  const defaultAppearance = (localStorage.getItem(APPEARANCE_KEY) as Appearance) || "auto";
-
   const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
@@ -29,22 +23,31 @@ export function makeThemeContext() {
     setDataFactoryDict(dict());
   });
 
+  const THEME_KEY = "theme";
+  const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme) || "material";
   const [theme, setTheme] = createSignal<Theme>(defaultTheme);
   createEffect(() => {
     localStorage.setItem(THEME_KEY, theme());
   });
 
+  const APPEARANCE_KEY = "appearance";
+  const defaultAppearance = (localStorage.getItem(APPEARANCE_KEY) as Appearance) || "auto";
   const [appearance, setAppearance] = createSignal<Appearance>(defaultAppearance);
   createEffect(() => {
     localStorage.setItem(APPEARANCE_KEY, appearance());
-    document.body.classList.remove("light-theme");
-    document.body.classList.remove("dark-theme");
+
     switch (appearance()) {
       case "light":
         document.body.classList.add("light-theme");
+        document.body.classList.remove("dark-theme");
         break;
       case "dark":
+        document.body.classList.remove("light-theme");
         document.body.classList.add("dark-theme");
+        break;
+      case "auto":
+        document.body.classList.remove("dark-theme");
+        document.body.classList.remove("dark-theme");
         break;
     }
   });
