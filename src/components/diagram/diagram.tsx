@@ -69,10 +69,12 @@ export function DiagramContainer(): JSXElement {
   });
 
   createEffect(() => {
-    setViewBox({
-      width: svgRect.width / zoom(),
-      height: svgRect.height / zoom(),
-    });
+    const width = svgRect.width / zoom();
+    const height = svgRect.height / zoom();
+    const x = viewBox.x + (viewBox.width - width) / 2;
+    const y = viewBox.y + (viewBox.height - height) / 2;
+
+    setViewBox({ x, y, width, height });
   });
 
   let mouseDownTime = new Date().getTime();
