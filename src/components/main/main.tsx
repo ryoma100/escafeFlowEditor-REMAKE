@@ -40,7 +40,7 @@ export function Main(): JSXElement {
           onInput={(e) => setZoom(Number(e.target.value))}
         />
         <button type="button" onClick={handleNormalZoomButtonClick}>
-          100%
+          {Math.trunc(zoom() * 100)}%
         </button>
       </div>
     </div>

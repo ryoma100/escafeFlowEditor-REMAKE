@@ -52,6 +52,7 @@ export function DiagramContainer(): JSXElement {
       toolbar,
       setToolbar,
       zoom,
+      setZoom,
       dragMode,
       setDragMode,
       addingLine,
@@ -327,6 +328,11 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
+  function handleWheel(e: WheelEvent) {
+    const scale = zoom() * 100 + (e.deltaY < 0 ? -10 : 10);
+    setZoom(Math.min(Math.max(scale / 100, 0.1), 2));
+  }
+
   return (
     <>
       <DiagramView
@@ -350,6 +356,7 @@ export function DiagramContainer(): JSXElement {
         onMouseDown={handleMouseDown}
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
+        onWheel={handleWheel}
       />
 
       <ContextMenu
@@ -382,6 +389,7 @@ export function DiagramView(props: {
   readonly onMouseDown?: (e: MouseEvent) => void;
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
+  readonly onWheel?: (e: WheelEvent) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -408,6 +416,7 @@ export function DiagramView(props: {
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
+      onWheel={(e) => props.onWheel?.(e)}
     >
       <svg
         class="absolute inset-0 size-full"
