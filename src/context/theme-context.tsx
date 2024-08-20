@@ -55,14 +55,12 @@ export function makeThemeContext() {
   return { dict, locale, setLocale, theme, setTheme, appearance, setAppearance };
 }
 
-const themeContextValue = {
-  ...makeThemeContext(),
-};
-
-export const ThemeContext = createContext(themeContextValue);
+const dummyValue = undefined as unknown as ReturnType<typeof makeThemeContext>;
+export const ThemeContext = createContext(dummyValue);
 
 export function ThemeProvider(props: { readonly children: JSX.Element }) {
-  return <ThemeContext.Provider value={themeContextValue}>{props.children}</ThemeContext.Provider>;
+  const value = makeThemeContext();
+  return <ThemeContext.Provider value={value}>{props.children}</ThemeContext.Provider>;
 }
 
 export function useThemeContext() {

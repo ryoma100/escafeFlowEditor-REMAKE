@@ -7,7 +7,7 @@ export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
     nodeModel: { computeMaxRectangle: maxRectangle },
-    diagramModel: { zoom, setZoom, autoRectangle },
+    diagramModel: { zoom, changeZoom, autoRectangle },
   } = useModelContext();
 
   function handleAutoZoomButtonClick() {
@@ -18,7 +18,7 @@ export function Main(): JSXElement {
   }
 
   function handleNormalZoomButtonClick() {
-    setZoom(1);
+    changeZoom(1.0);
   }
 
   return (
@@ -37,10 +37,10 @@ export function Main(): JSXElement {
           max="2"
           step="0.01"
           value={zoom()}
-          onInput={(e) => setZoom(Number(e.target.value))}
+          onInput={(e) => changeZoom(Number(e.target.value))}
         />
         <button type="button" onClick={handleNormalZoomButtonClick}>
-          100%
+          {Math.trunc(zoom() * 100)}%
         </button>
       </div>
     </div>

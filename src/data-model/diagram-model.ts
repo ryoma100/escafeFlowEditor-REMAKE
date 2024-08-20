@@ -1,5 +1,4 @@
 import { createSignal } from "solid-js";
-import { createStore } from "solid-js/store";
 
 import { ToolbarType } from "@/components/toolbar/toolbar";
 import { defaultLine, defaultRectangle } from "@/constants/app-const";
@@ -38,8 +37,8 @@ export function makeDiagramModel() {
   const [zoom, setZoom] = createSignal<number>(1.0);
   const [dragMode, setDragMode] = createSignal<DragModeType>({ type: "none" });
   const [addingLine, setAddingLine] = createSignal<Line>(defaultLine);
-  const [svgRect, setSvgRect] = createStore({ ...defaultRectangle });
-  const [viewBox, setViewBox] = createStore({ ...defaultRectangle });
+  const [svgRect, setSvgRect] = createSignal(defaultRectangle);
+  const [viewBox, setViewBox] = createSignal(defaultRectangle);
 
   function setAddingLineFrom(x: number, y: number) {
     setAddingLine({ p1: { x, y }, p2: { x, y } });
@@ -50,22 +49,46 @@ export function makeDiagramModel() {
   }
 
   function autoRectangle(rect: Rectangle) {
-    setZoom(Math.min(svgRect.width / rect.width, svgRect.height / rect.height));
-    setViewBox({ x: rect.x, y: rect.y, width: viewBox.width, height: viewBox.height });
+    const newZoom = Math.min(svgRect().width / rect.width, svgRect().height / rect.height);
+    changeZoom(newZoom);
+    setViewBox({ x: rect.x, y: rect.y, width: viewBox().width, height: viewBox().height });
+  }
+
+  function changeSvgRect(rect: Rectangle) {
+    setSvgRect(rect);
+    changeZoom(zoom());
+  }
+
+  function changeZoom(newZoom: number, point: Point | null = null) {
+    const zoom = Math.min(Math.max(newZoom, 0.1), 2);
+
+    const width = svgRect().width / zoom;
+    const height = svgRect().height / zoom;
+    const x =
+      point != null
+        ? viewBox().x - (width - viewBox().width) / (svgRect().width / (point.x - svgRect().x))
+        : viewBox().x - (width - viewBox().width) / 2;
+    const y =
+      point != null
+        ? viewBox().y - (height - viewBox().height) / (svgRect().height / (point.y - svgRect().y))
+        : viewBox().y - (height - viewBox().height) / 2;
+
+    setZoom(zoom);
+    setViewBox({ x, y, width, height });
   }
 
   return {
     toolbar,
     setToolbar,
     zoom,
-    setZoom,
+    changeZoom,
     dragMode,
     setDragMode,
     addingLine,
     setAddingLineFrom,
     setAddingLineTo,
     svgRect,
-    setSvgRect,
+    changeSvgRect,
     autoRectangle,
     viewBox,
     setViewBox,

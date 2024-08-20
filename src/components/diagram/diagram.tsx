@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, JSXElement, onMount, Show } from "solid-js";
+import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
@@ -46,12 +46,13 @@ export function DiagramContainer(): JSXElement {
     edgeModel: { edgeList, setEdgeList },
     diagramModel: {
       svgRect,
-      setSvgRect,
+      changeSvgRect,
       viewBox,
       setViewBox,
       toolbar,
       setToolbar,
       zoom,
+      changeZoom,
       dragMode,
       setDragMode,
       addingLine,
@@ -68,13 +69,6 @@ export function DiagramContainer(): JSXElement {
     document.addEventListener("mouseup", handleDocumentMouseUp);
   });
 
-  createEffect(() => {
-    setViewBox({
-      width: svgRect.width / zoom(),
-      height: svgRect.height / zoom(),
-    });
-  });
-
   let mouseDownTime = new Date().getTime();
   function handleMouseDown(e: MouseEvent) {
     e.stopPropagation();
@@ -88,8 +82,8 @@ export function DiagramContainer(): JSXElement {
     if (contextMenuPoint() != null) return;
     if (dragMode().type !== "none") return;
 
-    const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
-    const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
+    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
     switch (toolbar()) {
       case "cursor":
         {
@@ -181,8 +175,8 @@ export function DiagramContainer(): JSXElement {
   }
 
   function handleDocumentMouseMove(e: MouseEvent) {
-    const x = viewBox.x + (e.clientX - svgRect.x) / zoom();
-    const y = viewBox.y + (e.clientY - svgRect.y) / zoom();
+    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
     const moveX = e.movementX / zoom();
     const moveY = e.movementY / zoom();
 
@@ -235,16 +229,20 @@ export function DiagramContainer(): JSXElement {
         return;
       case "scroll":
         setViewBox({
-          x: viewBox.x - moveX,
-          y: viewBox.y - moveY,
+          x: viewBox().x - moveX,
+          y: viewBox().y - moveY,
+          width: viewBox().width,
+          height: viewBox().height,
         });
         return;
       case "contextMenuScroll":
         if (contextMenuPoint() == null) {
           setDragMode({ type: "scroll" });
           setViewBox({
-            x: viewBox.x - moveX,
-            y: viewBox.y - moveY,
+            x: viewBox().x - moveX,
+            y: viewBox().y - moveY,
+            width: viewBox().width,
+            height: viewBox().height,
           });
         }
         return;
@@ -271,8 +269,8 @@ export function DiagramContainer(): JSXElement {
       case "addCommentEdge":
       case "addStartEdge":
         setAddingLineTo(
-          viewBox.x + (e.clientX - svgRect.x) / zoom(),
-          viewBox.y + (e.clientY - svgRect.y) / zoom(),
+          viewBox().x + (e.clientX - svgRect().x) / zoom(),
+          viewBox().y + (e.clientY - svgRect().y) / zoom(),
         );
         return;
     }
@@ -325,12 +323,17 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
+  function handleWheel(e: WheelEvent) {
+    const newZoom = (zoom() * 100 + (e.deltaY < 0 ? -10 : 10)) / 100;
+    changeZoom(newZoom, { x: e.clientX, y: e.clientY });
+  }
+
   return (
     <>
       <DiagramView
-        viewBox={viewBox}
-        svgRect={svgRect}
-        setSvgRect={setSvgRect}
+        viewBox={viewBox()}
+        svgRect={svgRect()}
+        changeSvgRect={changeSvgRect}
         nodeList={nodeList}
         edgeList={edgeList}
         addingLine={
@@ -348,6 +351,7 @@ export function DiagramContainer(): JSXElement {
         onMouseDown={handleMouseDown}
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
+        onWheel={handleWheel}
       />
 
       <ContextMenu
@@ -376,16 +380,17 @@ export function DiagramView(props: {
   readonly addingLine: Line | null;
   readonly selectBox: Rectangle | null;
   readonly selectCircle: Circle | null;
-  readonly setSvgRect?: (rect: Rectangle) => void;
+  readonly changeSvgRect?: (rect: Rectangle) => void;
   readonly onMouseDown?: (e: MouseEvent) => void;
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
+  readonly onWheel?: (e: WheelEvent) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
       if (diagramRef) {
         const rect = diagramRef.getBoundingClientRect();
-        props.setSvgRect?.({
+        props.changeSvgRect?.({
           x: rect.left,
           y: rect.top,
           width: rect.width,
@@ -406,6 +411,7 @@ export function DiagramView(props: {
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
+      onWheel={(e) => props.onWheel?.(e)}
     >
       <svg
         class="absolute inset-0 size-full"
