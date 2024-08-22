@@ -51,7 +51,14 @@ export function makeDiagramModel() {
   function autoRectangle(rect: Rectangle) {
     const newZoom = Math.min(svgRect().width / rect.width, svgRect().height / rect.height);
     changeZoom(newZoom);
-    setViewBox({ x: rect.x, y: rect.y, width: viewBox().width, height: viewBox().height });
+
+    const newViewBox = {
+      x: rect.x + (rect.width - viewBox().width) / 2,
+      y: rect.y + (rect.height - viewBox().height) / 2,
+      width: viewBox().width,
+      height: viewBox().height,
+    };
+    setViewBox(newViewBox);
   }
 
   function changeSvgRect(rect: Rectangle) {

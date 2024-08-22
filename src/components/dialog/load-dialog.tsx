@@ -14,11 +14,13 @@ export function LoadDialog(): JSXElement {
   const {
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     processModel: { load },
+    diagramModel: { autoRectangle },
+    nodeModel: { computeMaxRectangle },
   } = useModelContext();
 
   function handleInput(data: string) {
     const project: ProjectEntity = importXml(data);
-    load(project);
+    loadAndAutoZoom(project);
     setOpenDialog(null);
   }
 
@@ -36,7 +38,7 @@ export function LoadDialog(): JSXElement {
     if (path) {
       const data = await readTextFile(String(path));
       const project: ProjectEntity = importXml(data);
-      load(project);
+      loadAndAutoZoom(project);
     }
   }
 
@@ -52,13 +54,23 @@ export function LoadDialog(): JSXElement {
       reader.onload = (event) => {
         const data = event.target?.result;
         const project: ProjectEntity = importXml(String(data));
-        load(project);
+        loadAndAutoZoom(project);
       };
       reader.readAsText(file);
       input.remove();
     });
     document.body.appendChild(input);
     input.click();
+  }
+
+  function loadAndAutoZoom(project: ProjectEntity) {
+    load(project);
+    setTimeout(() => {
+      const rect = computeMaxRectangle();
+      if (rect) {
+        autoRectangle(rect);
+      }
+    }, 0);
   }
 
   function handleDialogClose() {
