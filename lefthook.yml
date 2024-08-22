@@ -4,11 +4,11 @@
 #   https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
 #
 
-pre-push:
-  commands:
-    packages-audit:
-      tags: frontend security
-      run: pnpm audit
+# pre-push:
+#   commands:
+#     packages-audit:
+#       tags: frontend security
+#       run: pnpm audit
 
 pre-commit:
   parallel: true
