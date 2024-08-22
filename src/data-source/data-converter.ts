@@ -28,9 +28,10 @@ const alwaysArray = [
   "Package.WorkflowProcesses.WorkflowProcess",
   "Package.WorkflowProcesses.WorkflowProcess.Participants.Participant",
   "Package.WorkflowProcesses.WorkflowProcess.Applications.Application",
-  "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity.",
+  "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity",
   "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity.Implementation.Tool",
   "Package.WorkflowProcesses.WorkflowProcess.Activities.Activity.ExtendedAttributes.ExtendedAttribute",
+  "Package.WorkflowProcesses.WorkflowProcess.Transitions.Transition",
   "Package.WorkflowProcesses.WorkflowProcess.ExtendedAttributes.ExtendedAttribute",
 ];
 
@@ -182,13 +183,13 @@ export function exportXml(project: ProjectEntity): string {
                       {
                         ExtendedAttribute: {
                           "@_Name": "JaWE_GRAPH_OFFSET",
-                          "@_Value": `${activity.x},${activity.y}`,
+                          "@_Value": `${Math.round(activity.x)},${Math.round(activity.y)}`,
                         },
                       },
                       {
                         ExtendedAttribute: {
                           "@_Name": "BURI_GRAPH_RECTANGLE",
-                          "@_Value": `${activity.x},${activity.y},${activity.width},${activity.height}`,
+                          "@_Value": `${Math.round(activity.x)},${Math.round(activity.y)},${Math.round(activity.width)},${Math.round(activity.height)}`,
                         },
                       },
                     ],
@@ -270,7 +271,7 @@ function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
     return {
       ExtendedAttribute: {
         "@_Name": "JaWE_GRAPH_START_OF_WORKFLOW",
-        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${it.x},Y_OFFSET=${it.y}`,
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x)},Y_OFFSET=${Math.round(it.y)}`,
       },
     };
   });
@@ -283,7 +284,7 @@ function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
     return {
       ExtendedAttribute: {
         "@_Name": "JaWE_GRAPH_END_OF_WORKFLOW",
-        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${it.x},Y_OFFSET=${it.y}`,
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x)},Y_OFFSET=${Math.round(it.y)}`,
       },
     };
   });
@@ -296,7 +297,7 @@ function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
     return {
       ExtendedAttribute: {
         "@_Name": "BURI_GRAPH_COMMENT",
-        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${it.x},Y_OFFSET=${it.y},COMMENT=${it.comment}`,
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x)},Y_OFFSET=${Math.round(it.y)},COMMENT=${it.comment}`,
       },
     };
   });
