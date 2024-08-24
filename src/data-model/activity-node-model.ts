@@ -49,6 +49,7 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
         it.height = height;
       }),
     );
+    nodeModel.resetGraphRect();
   }
 
   function resizeLeft(moveX: number) {
@@ -61,6 +62,7 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
         }
       }),
     );
+    nodeModel.resetGraphRect();
   }
 
   function resizeRight(moveX: number) {
@@ -72,6 +74,7 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
         }
       }),
     );
+    nodeModel.resetGraphRect();
   }
 
   function updateJoinType(activityId: number, joinCount: number) {

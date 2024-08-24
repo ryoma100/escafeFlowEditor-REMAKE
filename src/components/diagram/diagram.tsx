@@ -2,7 +2,7 @@ import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
-import { defaultCircle, defaultRectangle } from "@/constants/app-const";
+import { defaultCircle, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -49,6 +49,7 @@ export function DiagramContainer(): JSXElement {
       changeSvgRect,
       viewBox,
       setViewBox,
+      graphRect,
       toolbar,
       setToolbar,
       zoom,
@@ -328,12 +329,35 @@ export function DiagramContainer(): JSXElement {
     changeZoom(newZoom, { x: e.clientX, y: e.clientY });
   }
 
+  function gridLines(): Line[] {
+    const rect = graphRect();
+    if (rect.width === 0) return [];
+
+    const dx = rect.x % GRID_SPACING;
+    const dy = rect.y % GRID_SPACING;
+    const lines: Line[] = [];
+    for (let x = 0; x < rect.width + dx; x += GRID_SPACING) {
+      lines.push({
+        p1: { x: x + rect.x - dx, y: rect.y },
+        p2: { x: x + rect.x - dx, y: rect.y + rect.height },
+      });
+    }
+    for (let y = 0; y < rect.height + dy; y += GRID_SPACING) {
+      lines.push({
+        p1: { x: rect.x, y: y + rect.y - dy },
+        p2: { x: rect.x + rect.width, y: y + rect.y - dy },
+      });
+    }
+    return lines;
+  }
+
   return (
     <>
       <DiagramView
         viewBox={viewBox()}
         svgRect={svgRect()}
         changeSvgRect={changeSvgRect}
+        gridLines={gridLines()}
         nodeList={nodeList}
         edgeList={edgeList}
         addingLine={
@@ -375,6 +399,7 @@ export function DiagramContainer(): JSXElement {
 export function DiagramView(props: {
   readonly viewBox: Rectangle;
   readonly svgRect: Rectangle;
+  readonly gridLines: Line[];
   readonly nodeList: INode[];
   readonly edgeList: IEdge[];
   readonly addingLine: Line | null;
@@ -447,6 +472,19 @@ export function DiagramView(props: {
             <polygon points="20,0 40,10 20,20" fill="gray" />
           </marker>
         </defs>
+        <g data-id="gird-line">
+          <For each={props.gridLines}>
+            {(it) => (
+              <line
+                x1={it.p1.x}
+                y1={it.p1.y}
+                x2={it.p2.x}
+                y2={it.p2.y}
+                stroke="var(--gridline-color)"
+              />
+            )}
+          </For>
+        </g>
         <g data-id="extend-edges">
           <For each={props.edgeList.filter((it) => it.type !== "transitionEdge")}>
             {(it) => <ExtendEdgeContainer edge={it as StartEdge | EndEdge | CommentEdge} />}

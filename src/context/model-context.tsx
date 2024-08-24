@@ -12,12 +12,12 @@ import { makeProcessModel } from "@/data-model/process-model";
 import { makeProjectModel } from "@/data-model/project-model";
 import { makeTransactionEdgeModel } from "@/data-model/transaction-edge-model";
 
-const actorModel = makeActorModel();
-const nodeModel = makeNodeModel();
+const diagramModel = makeDiagramModel();
+const nodeModel = makeNodeModel(diagramModel);
 const edgeModel = makeEdgeModel(nodeModel);
+const actorModel = makeActorModel();
 const processModel = makeProcessModel(actorModel, nodeModel, edgeModel);
 const projectModel = makeProjectModel(processModel);
-const diagramModel = makeDiagramModel();
 const activityNodeModel = makeActivityModel(nodeModel);
 const transitionEdgeModel = makeTransactionEdgeModel(edgeModel, nodeModel);
 const extendNodeModel = makeExtendNodeModel(nodeModel);

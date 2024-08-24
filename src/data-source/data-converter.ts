@@ -401,7 +401,7 @@ function parseExtendNode(
     .filter((it) => it["@_Name"] === "JaWE_GRAPH_START_OF_WORKFLOW")
     .forEach((it) => {
       const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+)/,
       );
       if (val) {
         const startNode = dataFactory.createStartNode(nodeList, Number(val[2]), Number(val[3]));
@@ -418,7 +418,7 @@ function parseExtendNode(
     .filter((it) => it["@_Name"] === "JaWE_GRAPH_END_OF_WORKFLOW")
     .forEach((it) => {
       const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+)/,
       );
       if (val) {
         const endNode = dataFactory.createEndNode(nodeList, Number(val[2]), Number(val[3]));
@@ -435,7 +435,7 @@ function parseExtendNode(
     .filter((it) => it["@_Name"] === "BURI_GRAPH_COMMENT")
     .forEach((it) => {
       const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+),COMMENT=(.*)/,
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+),COMMENT=(.*)/,
       );
       if (val) {
         const commentNode = dataFactory.createCommentNode(nodeList, Number(val[2]), Number(val[3]));

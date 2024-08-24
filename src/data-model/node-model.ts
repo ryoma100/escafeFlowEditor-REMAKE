@@ -1,14 +1,19 @@
 import { createStore, produce } from "solid-js/store";
 
+import { defaultRectangle, GRID_SPACING } from "@/constants/app-const";
+import { makeDiagramModel } from "@/data-model/diagram-model";
 import { deepUnwrap } from "@/data-source/data-factory";
-import { INode, Point, ProcessEntity } from "@/data-source/data-type";
+import { INode, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
 import { rotatePoint } from "@/utils/point-utils";
 
-export function makeNodeModel() {
+export function makeNodeModel(diagramModel: ReturnType<typeof makeDiagramModel>) {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
 
   function load(newProcess: ProcessEntity) {
     setNodeList(newProcess.nodeList);
+
+    // wait ResizeObserver
+    setTimeout(() => resetGraphRect(), 0);
   }
 
   function save(): INode[] {
@@ -48,6 +53,7 @@ export function makeNodeModel() {
         it.y += moveY;
       }),
     );
+    resetGraphRect();
   }
 
   function scaleSelectedNodes(basePoint: Point, moveX: number, moveY: number) {
@@ -59,6 +65,7 @@ export function makeNodeModel() {
         it.y += centerPoint.y > basePoint.y ? moveY : -moveY;
       }),
     );
+    resetGraphRect();
   }
 
   function rotateSelectedNodes(basePoint: Point, moveX: number, moveY: number) {
@@ -85,6 +92,7 @@ export function makeNodeModel() {
         it.y = newPoint.y;
       }),
     );
+    resetGraphRect();
   }
 
   function getNode(nodeId: number): INode {
@@ -95,9 +103,11 @@ export function makeNodeModel() {
     return node;
   }
 
-  function addNode<T extends INode>(node: T): T {
+  function addNode<T extends INode>(node: T) {
     setNodeList([...nodeList, node]);
-    return node;
+
+    // wait ResizeObserver
+    setTimeout(() => resetGraphRect(), 0);
   }
 
   function deleteSelectedNodes() {
@@ -114,8 +124,12 @@ export function makeNodeModel() {
     setNodeList([...listWithoutTarget, target]);
   }
 
-  function computeMaxRectangle() {
-    if (nodeList.length === 0) return null;
+  function resetGraphRect() {
+    diagramModel.changeGraphRect(computeMaxRectangle());
+  }
+
+  function computeMaxRectangle(): Rectangle {
+    if (nodeList.length === 0) return defaultRectangle;
 
     const area = nodeList.reduce(
       (rect, node) => {
@@ -135,10 +149,10 @@ export function makeNodeModel() {
     );
 
     return {
-      x: area.left,
-      y: area.top,
-      width: area.right - area.left,
-      height: area.bottom - area.top,
+      x: area.left - GRID_SPACING,
+      y: area.top - 10 - GRID_SPACING,
+      width: area.right - area.left + GRID_SPACING * 2,
+      height: area.bottom - area.top + 20 + GRID_SPACING * 2,
     };
   }
 
@@ -154,8 +168,8 @@ export function makeNodeModel() {
     deleteSelectedNodes,
     moveSelectedNodes,
     changeTopLayer,
-    computeMaxRectangle,
     scaleSelectedNodes,
     rotateSelectedNodes,
+    resetGraphRect,
   };
 }

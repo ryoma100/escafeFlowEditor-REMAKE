@@ -3,6 +3,8 @@ import { Circle, Line, Point, Rectangle, Size } from "@/data-source/data-type";
 export const ACTIVITY_MIN_WIDTH = 88;
 export const ACTIVITY_MIN_HEIGHT = 72;
 
+export const GRID_SPACING = 32;
+
 export const NORMAL_ICON_SIZE = 40;
 
 export const defaultPoint: Point = { x: 0, y: 0 };

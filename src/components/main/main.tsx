@@ -6,15 +6,11 @@ import { useModelContext } from "@/context/model-context";
 export function Main(): JSXElement {
   const {
     processModel: { selectedProcess },
-    nodeModel: { computeMaxRectangle },
-    diagramModel: { zoom, changeZoom, autoRectangle },
+    diagramModel: { zoom, changeZoom, fitViewBox },
   } = useModelContext();
 
   function handleAutoZoomButtonClick() {
-    const rect = computeMaxRectangle();
-    if (rect) {
-      autoRectangle(rect);
-    }
+    fitViewBox();
   }
 
   function handleNormalZoomButtonClick() {
