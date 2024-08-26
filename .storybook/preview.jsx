@@ -10,6 +10,7 @@ const preview = {
         date: /Date$/i,
       },
     },
+    backgrounds: { disable: true },
   },
   globalTypes: {
     locale: {

@@ -16,7 +16,7 @@ import { setDataFactoryDict } from "@/data-source/data-factory";
 export type Theme = "material" | "crab";
 export type Appearance = "light" | "dark" | "auto";
 
-function makeThemeContext() {
+export function makeThemeContext() {
   const LOCALE_KEY = "locale";
   const defaultLocale = (localStorage.getItem(LOCALE_KEY) || navigator.language)
     .toLowerCase()
@@ -64,7 +64,7 @@ function makeThemeContext() {
 }
 
 const dummyValue = undefined as unknown as ReturnType<typeof makeThemeContext>;
-const ThemeContext = createContext(dummyValue);
+export const ThemeContext = createContext(dummyValue);
 
 export function ThemeProvider(props: { readonly children: JSX.Element }) {
   const value = makeThemeContext();
