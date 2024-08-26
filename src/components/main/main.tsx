@@ -19,7 +19,9 @@ export function Main(): JSXElement {
 
   return (
     <div class="flex h-full flex-col">
-      <h5>{selectedProcess().detail.name}</h5>
+      <div class="h-6">
+        <h5 class="leading-6">{selectedProcess().detail.name}</h5>
+      </div>
       <div class="grow bg-background">
         <DiagramContainer />
       </div>

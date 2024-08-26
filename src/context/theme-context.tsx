@@ -1,5 +1,13 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createContext, createEffect, createMemo, createSignal, JSX, useContext } from "solid-js";
+import {
+  createContext,
+  createEffect,
+  createMemo,
+  createRenderEffect,
+  createSignal,
+  JSX,
+  useContext,
+} from "solid-js";
 
 import { i18nEnDict } from "@/constants/i18n";
 import { i18nJaDict } from "@/constants/i18n-ja";
@@ -8,7 +16,7 @@ import { setDataFactoryDict } from "@/data-source/data-factory";
 export type Theme = "material" | "crab";
 export type Appearance = "light" | "dark" | "auto";
 
-export function makeThemeContext() {
+function makeThemeContext() {
   const LOCALE_KEY = "locale";
   const defaultLocale = (localStorage.getItem(LOCALE_KEY) || navigator.language)
     .toLowerCase()
@@ -18,7 +26,7 @@ export function makeThemeContext() {
   const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
-  createEffect(() => {
+  createRenderEffect(() => {
     localStorage.setItem(LOCALE_KEY, locale());
     setDataFactoryDict(dict());
   });
@@ -56,7 +64,7 @@ export function makeThemeContext() {
 }
 
 const dummyValue = undefined as unknown as ReturnType<typeof makeThemeContext>;
-export const ThemeContext = createContext(dummyValue);
+const ThemeContext = createContext(dummyValue);
 
 export function ThemeProvider(props: { readonly children: JSX.Element }) {
   const value = makeThemeContext();

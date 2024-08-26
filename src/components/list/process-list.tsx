@@ -34,7 +34,9 @@ export function ProcessList(): JSXElement {
 
   return (
     <div class="flex h-full flex-col">
-      <h5>{t("process")}</h5>
+      <div class="h-6">
+        <h5 class="leading-6">{t("process")}</h5>
+      </div>
       <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
         <ul class="list-none">
           <For each={processList()}>

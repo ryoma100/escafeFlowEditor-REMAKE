@@ -49,6 +49,18 @@ export function makeDiagramModel() {
     setAddingLine({ p1: addingLine().p1, p2: { x, y } });
   }
 
+  function initViewBox() {
+    setZoom(1.0);
+
+    const newViewBox = {
+      x: graphRect().x + (graphRect().width - svgRect().width) / 2,
+      y: graphRect().y + (graphRect().height - svgRect().height) / 2,
+      width: svgRect().width,
+      height: svgRect().height,
+    };
+    setViewBox(newViewBox);
+  }
+
   function fitViewBox() {
     const newZoom = Math.min(
       svgRect().width / graphRect().width,
@@ -116,5 +128,6 @@ export function makeDiagramModel() {
     setViewBox,
     graphRect,
     changeGraphRect,
+    initViewBox,
   };
 }

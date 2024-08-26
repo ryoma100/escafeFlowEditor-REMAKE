@@ -266,7 +266,7 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
 
 function computeDelta(nodeList: INode[]) {
   const rect = computeMaxRectangle(nodeList);
-  return { x: Math.max(0, 0 - rect.x), y: Math.max(0, 0 - rect.y) };
+  return { x: 0 - rect.x, y: 0 - rect.y };
 }
 
 function stringifyExtendNodes(nodes: INode[], edges: IEdge[], delta: Point) {
