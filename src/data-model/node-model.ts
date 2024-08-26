@@ -125,35 +125,7 @@ export function makeNodeModel(diagramModel: ReturnType<typeof makeDiagramModel>)
   }
 
   function resetGraphRect() {
-    diagramModel.changeGraphRect(computeMaxRectangle());
-  }
-
-  function computeMaxRectangle(): Rectangle {
-    if (nodeList.length === 0) return defaultRectangle;
-
-    const area = nodeList.reduce(
-      (rect, node) => {
-        return {
-          left: Math.min(rect.left, node.x),
-          top: Math.min(rect.top, node.y),
-          right: Math.max(rect.right, node.x + node.width),
-          bottom: Math.max(rect.bottom, node.y + node.height),
-        };
-      },
-      {
-        left: Number.MAX_SAFE_INTEGER,
-        top: Number.MAX_SAFE_INTEGER,
-        right: Number.MIN_SAFE_INTEGER,
-        bottom: Number.MIN_SAFE_INTEGER,
-      },
-    );
-
-    return {
-      x: area.left - GRID_SPACING,
-      y: area.top - 10 - GRID_SPACING,
-      width: area.right - area.left + GRID_SPACING * 2,
-      height: area.bottom - area.top + 20 + GRID_SPACING * 2,
-    };
+    diagramModel.changeGraphRect(computeMaxRectangle(nodeList));
   }
 
   return {
@@ -171,5 +143,33 @@ export function makeNodeModel(diagramModel: ReturnType<typeof makeDiagramModel>)
     scaleSelectedNodes,
     rotateSelectedNodes,
     resetGraphRect,
+  };
+}
+
+export function computeMaxRectangle(nodes: INode[]): Rectangle {
+  if (nodes.length === 0) return defaultRectangle;
+
+  const area = nodes.reduce(
+    (rect, node) => {
+      return {
+        left: Math.min(rect.left, node.x),
+        top: Math.min(rect.top, node.y),
+        right: Math.max(rect.right, node.x + node.width),
+        bottom: Math.max(rect.bottom, node.y + node.height),
+      };
+    },
+    {
+      left: Number.MAX_SAFE_INTEGER,
+      top: Number.MAX_SAFE_INTEGER,
+      right: Number.MIN_SAFE_INTEGER,
+      bottom: Number.MIN_SAFE_INTEGER,
+    },
+  );
+
+  return {
+    x: area.left - GRID_SPACING * 1.25,
+    y: area.top - GRID_SPACING * 1.25,
+    width: area.right - area.left + GRID_SPACING * 2.5,
+    height: area.bottom - area.top + GRID_SPACING * 2.5,
   };
 }

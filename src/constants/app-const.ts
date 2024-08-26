@@ -2,6 +2,8 @@ import { Circle, Line, Point, Rectangle, Size } from "@/data-source/data-type";
 
 export const ACTIVITY_MIN_WIDTH = 88;
 export const ACTIVITY_MIN_HEIGHT = 72;
+export const START_END_WIDTH = 32;
+export const START_END_HEIGHT = 32;
 
 export const GRID_SPACING = 32;
 

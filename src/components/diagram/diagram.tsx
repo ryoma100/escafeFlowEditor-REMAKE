@@ -337,16 +337,20 @@ export function DiagramContainer(): JSXElement {
     const dy = rect.y % GRID_SPACING;
     const lines: Line[] = [];
     for (let x = 0; x < rect.width + dx; x += GRID_SPACING) {
-      lines.push({
-        p1: { x: x + rect.x - dx, y: rect.y },
-        p2: { x: x + rect.x - dx, y: rect.y + rect.height },
-      });
+      if (x + rect.x - dx > rect.x) {
+        lines.push({
+          p1: { x: x + rect.x - dx, y: rect.y },
+          p2: { x: x + rect.x - dx, y: rect.y + rect.height },
+        });
+      }
     }
     for (let y = 0; y < rect.height + dy; y += GRID_SPACING) {
-      lines.push({
-        p1: { x: rect.x, y: y + rect.y - dy },
-        p2: { x: rect.x + rect.width, y: y + rect.y - dy },
-      });
+      if (y + rect.y - dy > rect.y) {
+        lines.push({
+          p1: { x: rect.x, y: y + rect.y - dy },
+          p2: { x: rect.x + rect.width, y: y + rect.y - dy },
+        });
+      }
     }
     return lines;
   }

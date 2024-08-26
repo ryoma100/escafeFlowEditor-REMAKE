@@ -14,6 +14,7 @@ export function LoadDialog(): JSXElement {
   const {
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     processModel: { load },
+    diagramModel: { fitViewBox },
   } = useModelContext();
 
   function handleInput(data: string) {
@@ -63,6 +64,7 @@ export function LoadDialog(): JSXElement {
 
   function loadAndAutoZoom(project: ProjectEntity) {
     load(project);
+    setTimeout(() => fitViewBox(), 0);
   }
 
   function handleDialogClose() {
