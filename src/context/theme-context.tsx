@@ -13,8 +13,9 @@ import { i18nEnDict } from "@/constants/i18n";
 import { i18nJaDict } from "@/constants/i18n-ja";
 import { setDataFactoryDict } from "@/data-source/data-factory";
 
-export type Theme = "material" | "crab";
 export type Appearance = "light" | "dark" | "auto";
+export type Theme = "material" | "crab";
+export type Color = "green" | "red";
 
 export function makeThemeContext() {
   const LOCALE_KEY = "locale";
@@ -29,13 +30,6 @@ export function makeThemeContext() {
   createRenderEffect(() => {
     localStorage.setItem(LOCALE_KEY, locale());
     setDataFactoryDict(dict());
-  });
-
-  const THEME_KEY = "theme";
-  const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme) || "material";
-  const [theme, setTheme] = createSignal<Theme>(defaultTheme);
-  createEffect(() => {
-    localStorage.setItem(THEME_KEY, theme());
   });
 
   const APPEARANCE_KEY = "appearance";
@@ -60,7 +54,32 @@ export function makeThemeContext() {
     }
   });
 
-  return { dict, locale, setLocale, theme, setTheme, appearance, setAppearance };
+  const THEME_KEY = "theme";
+  const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme) || "material";
+  const [theme, setTheme] = createSignal<Theme>(defaultTheme);
+  createEffect(() => {
+    localStorage.setItem(THEME_KEY, theme());
+  });
+
+  const COLOR_KEY = "color";
+  const defaultColor = (localStorage.getItem(COLOR_KEY) as Color) || "green";
+  const [color, setColor] = createSignal<Color>(defaultColor);
+  createEffect(() => {
+    localStorage.setItem(COLOR_KEY, color());
+
+    switch (color()) {
+      case "red":
+        document.documentElement.style.setProperty("--THEME1-COLOR", "#C2185B");
+        document.documentElement.style.setProperty("--THEME2-COLOR", "#F48FB1");
+        break;
+      default:
+        document.documentElement.style.setProperty("--THEME1-COLOR", "#388e3c");
+        document.documentElement.style.setProperty("--THEME2-COLOR", "#8bc34a");
+        break;
+    }
+  });
+
+  return { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor };
 }
 
 const dummyValue = undefined as unknown as ReturnType<typeof makeThemeContext>;

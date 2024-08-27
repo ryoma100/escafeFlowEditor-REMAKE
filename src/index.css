@@ -5,15 +5,15 @@
 :root {
   --LIGHT-COLOR: #f5f5f5;
   --DARK-COLOR: #212121;
-  --GREEN1-COLOR: #388e3c;
-  --GREEN2-COLOR: #8bc34a;
+  --THEME1-COLOR: #388e3c;
+  --THEME2-COLOR: #8bc34a;
   --GRAY1-COLOR: #424242;
   --GRAY2-COLOR: #d8d8d8;
 
   --background-color: var(--LIGHT-COLOR);
   --foreground-color: var(--DARK-COLOR);
-  --primary-color: var(--GREEN1-COLOR);
-  --secondary-color: var(--GREEN2-COLOR);
+  --primary-color: var(--THEME1-COLOR);
+  --secondary-color: var(--THEME2-COLOR);
   --gridline-color: var(--GRAY2-COLOR);
 }
 
@@ -21,8 +21,8 @@
   :root {
     --background-color: var(--DARK-COLOR);
     --foreground-color: var(--LIGHT-COLOR);
-    --primary-color: var(--GREEN2-COLOR);
-    --secondary-color: var(--GREEN1-COLOR);
+    --primary-color: var(--THEME2-COLOR);
+    --secondary-color: var(--THEME1-COLOR);
     --gridline-color: var(--GRAY1-COLOR);
   }
 }
@@ -30,16 +30,16 @@
 .light-theme {
   --background-color: var(--LIGHT-COLOR);
   --foreground-color: var(--DARK-COLOR);
-  --primary-color: var(--GREEN1-COLOR);
-  --secondary-color: var(--GREEN2-COLOR);
+  --primary-color: var(--THEME1-COLOR);
+  --secondary-color: var(--THEME2-COLOR);
   --gridline-color: var(--GRAY2-COLOR);
 }
 
 .dark-theme {
   --background-color: var(--DARK-COLOR);
   --foreground-color: var(--LIGHT-COLOR);
-  --primary-color: var(--GREEN2-COLOR);
-  --secondary-color: var(--GREEN1-COLOR);
+  --primary-color: var(--THEME2-COLOR);
+  --secondary-color: var(--THEME1-COLOR);
   --gridline-color: var(--GRAY1-COLOR);
 }
 
