@@ -41,6 +41,18 @@ const preview = {
         ],
       },
     },
+    color: {
+      name: "Color",
+      description: "Change color",
+      defaultValue: "green",
+      toolbar: {
+        icon: "beaker",
+        items: [
+          { value: "green", right: "", title: "Green" },
+          { value: "red", right: "", title: "Red" },
+        ],
+      },
+    },
   },
   decorators: [
     withThemeByClassName({
@@ -54,6 +66,7 @@ const preview = {
       const value = makeThemeContext();
       value.setLocale(globals.locale);
       value.setTheme(globals.icon);
+      value.setColor(globals.color);
       return (
         <ThemeContext.Provider value={value}>
           <Story />
