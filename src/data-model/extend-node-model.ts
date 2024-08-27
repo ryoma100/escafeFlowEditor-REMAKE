@@ -70,6 +70,7 @@ export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>)
         }
       }),
     );
+    nodeModel.resetGraphRect();
   }
 
   function updateComment(node: CommentNode) {

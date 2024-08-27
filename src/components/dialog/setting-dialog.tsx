@@ -3,7 +3,7 @@ import { createEffect, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
-import { Appearance, Theme, useThemeContext } from "@/context/theme-context";
+import { Appearance, Color, Theme, useThemeContext } from "@/context/theme-context";
 
 export function SettingDialog(): JSXElement {
   const {
@@ -21,7 +21,8 @@ export function SettingDialogView(props: {
   readonly open: boolean;
   readonly onClose?: () => void;
 }) {
-  const { dict, locale, setLocale, theme, setTheme, appearance, setAppearance } = useThemeContext();
+  const { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor } =
+    useThemeContext();
   const t = i18n.translator(dict);
 
   createEffect(() => {
@@ -51,14 +52,6 @@ export function SettingDialogView(props: {
             </select>
           </div>
 
-          <div>{t("theme")}</div>
-          <div>
-            <select value={theme()} onChange={(e) => setTheme(e.currentTarget.value as Theme)}>
-              <option value="material">{t("themeMaterial")}</option>
-              <option value="crab">{t("themeCrab")}</option>
-            </select>
-          </div>
-
           <div>{t("appearance")}</div>
           <div>
             <select
@@ -68,6 +61,22 @@ export function SettingDialogView(props: {
               <option value="light">{t("light")}</option>
               <option value="dark">{t("dark")}</option>
               <option value="auto">{t("auto")}</option>
+            </select>
+          </div>
+
+          <div>{t("theme")}</div>
+          <div>
+            <select value={theme()} onChange={(e) => setTheme(e.currentTarget.value as Theme)}>
+              <option value="material">{t("themeMaterial")}</option>
+              <option value="crab">{t("themeCrab")}</option>
+            </select>
+          </div>
+
+          <div>{t("color")}</div>
+          <div>
+            <select value={color()} onChange={(e) => setColor(e.currentTarget.value as Color)}>
+              <option value="green">{t("colorGreen")}</option>
+              <option value="red">{t("colorRed")}</option>
             </select>
           </div>
         </div>
