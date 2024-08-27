@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 
+import { defaultPoint } from "@/constants/app-const";
+import { computeMaxRectangle } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import {
   ActivityJoinType,
@@ -16,6 +18,7 @@ import {
   EnvironmentEntity,
   IEdge,
   INode,
+  Point,
   ProcessDetailEntity,
   ProjectEntity,
   Rectangle,
@@ -47,7 +50,7 @@ const fxpOption = {
 const xp = new XMLParser(fxpOption);
 const xb = new XMLBuilder(fxpOption);
 
-export function exportXml(project: ProjectEntity): string {
+export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): string {
   const xmlObject = {
     "?xml": { "@_version": "1.0", "@_encoding": "UTF-8", "@_standalone": "no" },
     Package: {
@@ -63,6 +66,7 @@ export function exportXml(project: ProjectEntity): string {
         Created: project.created,
       },
       WorkflowProcesses: project.processes.map((process) => {
+        const delta = isAutoFit ? computeDelta(process.nodeList) : defaultPoint;
         return {
           WorkflowProcess: {
             "@_Id": process.detail.xpdlId,
@@ -183,13 +187,13 @@ export function exportXml(project: ProjectEntity): string {
                       {
                         ExtendedAttribute: {
                           "@_Name": "JaWE_GRAPH_OFFSET",
-                          "@_Value": `${Math.round(activity.x)},${Math.round(activity.y)}`,
+                          "@_Value": `${Math.round(activity.x + delta.x)},${Math.round(activity.y + delta.y)}`,
                         },
                       },
                       {
                         ExtendedAttribute: {
                           "@_Name": "BURI_GRAPH_RECTANGLE",
-                          "@_Value": `${Math.round(activity.x)},${Math.round(activity.y)},${Math.round(activity.width)},${Math.round(activity.height)}`,
+                          "@_Value": `${Math.round(activity.x + delta.x)},${Math.round(activity.y + delta.y)},${Math.round(activity.width)},${Math.round(activity.height)}`,
                         },
                       },
                     ],
@@ -233,7 +237,7 @@ export function exportXml(project: ProjectEntity): string {
                 };
               }),
             ExtendedAttributes: [
-              ...stringifyExtendNodes(process.nodeList, process.edgeList),
+              ...stringifyExtendNodes(process.nodeList, process.edgeList, delta),
               {
                 ExtendedAttribute: {
                   "@_Name": "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
@@ -260,7 +264,12 @@ export function exportXml(project: ProjectEntity): string {
   return xmlString;
 }
 
-function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
+function computeDelta(nodeList: INode[]) {
+  const rect = computeMaxRectangle(nodeList);
+  return { x: 0 - rect.x, y: 0 - rect.y };
+}
+
+function stringifyExtendNodes(nodes: INode[], edges: IEdge[], delta: Point) {
   const activityNodes = nodes.filter((it) => it.type === "activityNode") as ActivityNode[];
 
   const startNodes = nodes.filter((it) => it.type === "startNode") as StartNode[];
@@ -271,7 +280,7 @@ function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
     return {
       ExtendedAttribute: {
         "@_Name": "JaWE_GRAPH_START_OF_WORKFLOW",
-        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x)},Y_OFFSET=${Math.round(it.y)}`,
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x + delta.x)},Y_OFFSET=${Math.round(it.y + delta.y)},JaWE_GRAPH_TRANSITION_STYLE=SIMPLE_ROUTING_BEZIER,TYPE=START_DEFAULT`,
       },
     };
   });
@@ -284,7 +293,7 @@ function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
     return {
       ExtendedAttribute: {
         "@_Name": "JaWE_GRAPH_END_OF_WORKFLOW",
-        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x)},Y_OFFSET=${Math.round(it.y)}`,
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x + delta.x)},Y_OFFSET=${Math.round(it.y + delta.y)},JaWE_GRAPH_TRANSITION_STYLE=SIMPLE_ROUTING_BEZIER,TYPE=END_DEFAULT`,
       },
     };
   });
@@ -297,7 +306,7 @@ function stringifyExtendNodes(nodes: INode[], edges: IEdge[]) {
     return {
       ExtendedAttribute: {
         "@_Name": "BURI_GRAPH_COMMENT",
-        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x)},Y_OFFSET=${Math.round(it.y)},COMMENT=${it.comment}`,
+        "@_Value": `CONNECTING_ACTIVITY_ID=${activityXpdlId},X_OFFSET=${Math.round(it.x + delta.x)},Y_OFFSET=${Math.round(it.y + delta.y)},COMMENT=${it.comment}`,
       },
     };
   });
@@ -401,7 +410,7 @@ function parseExtendNode(
     .filter((it) => it["@_Name"] === "JaWE_GRAPH_START_OF_WORKFLOW")
     .forEach((it) => {
       const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+),JaWE_GRAPH_TRANSITION_STYLE=/,
       );
       if (val) {
         const startNode = dataFactory.createStartNode(nodeList, Number(val[2]), Number(val[3]));
@@ -418,7 +427,7 @@ function parseExtendNode(
     .filter((it) => it["@_Name"] === "JaWE_GRAPH_END_OF_WORKFLOW")
     .forEach((it) => {
       const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+)/,
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+),JaWE_GRAPH_TRANSITION_STYLE=/,
       );
       if (val) {
         const endNode = dataFactory.createEndNode(nodeList, Number(val[2]), Number(val[3]));
@@ -435,7 +444,7 @@ function parseExtendNode(
     .filter((it) => it["@_Name"] === "BURI_GRAPH_COMMENT")
     .forEach((it) => {
       const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(\d+),Y_OFFSET=(\d+),COMMENT=(.*)/,
+        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+),COMMENT=(.*)/,
       );
       if (val) {
         const commentNode = dataFactory.createCommentNode(nodeList, Number(val[2]), Number(val[3]));

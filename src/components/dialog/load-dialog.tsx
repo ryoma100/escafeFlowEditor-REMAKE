@@ -14,8 +14,7 @@ export function LoadDialog(): JSXElement {
   const {
     dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
     processModel: { load },
-    diagramModel: { autoRectangle },
-    nodeModel: { computeMaxRectangle },
+    diagramModel: { initViewBox },
   } = useModelContext();
 
   function handleInput(data: string) {
@@ -65,12 +64,7 @@ export function LoadDialog(): JSXElement {
 
   function loadAndAutoZoom(project: ProjectEntity) {
     load(project);
-    setTimeout(() => {
-      const rect = computeMaxRectangle();
-      if (rect) {
-        autoRectangle(rect);
-      }
-    }, 0);
+    setTimeout(() => initViewBox(), 0);
   }
 
   function handleDialogClose() {

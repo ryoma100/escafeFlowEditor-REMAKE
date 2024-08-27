@@ -1,12 +1,17 @@
 import { produce } from "solid-js/store";
 
+import { START_END_HEIGHT, START_END_WIDTH } from "@/constants/app-const";
 import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 
 export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   function addCommentNode(x: number, y: number): CommentNode {
-    const comment = dataFactory.createCommentNode(nodeModel.nodeList, x - 16, y - 16);
+    const comment = dataFactory.createCommentNode(
+      nodeModel.nodeList,
+      x - START_END_WIDTH / 2,
+      y - START_END_HEIGHT / 2,
+    );
     nodeModel.addNode(comment);
     return comment;
   }
@@ -20,7 +25,11 @@ export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>)
   }
 
   function addStartNode(x: number, y: number): StartNode {
-    const node = dataFactory.createStartNode(nodeModel.nodeList, x - 16, y - 16);
+    const node = dataFactory.createStartNode(
+      nodeModel.nodeList,
+      x - START_END_WIDTH / 2,
+      y - START_END_HEIGHT / 2,
+    );
     nodeModel.addNode(node);
     return node;
   }
@@ -34,7 +43,11 @@ export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>)
   }
 
   function addEndNode(x: number, y: number): EndNode {
-    const node = dataFactory.createEndNode(nodeModel.nodeList, x - 16, y - 16);
+    const node = dataFactory.createEndNode(
+      nodeModel.nodeList,
+      x - START_END_WIDTH / 2,
+      y - START_END_HEIGHT / 2,
+    );
     nodeModel.addNode(node);
     return node;
   }

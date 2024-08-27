@@ -39,6 +39,7 @@ export function makeDiagramModel() {
   const [addingLine, setAddingLine] = createSignal<Line>(defaultLine);
   const [svgRect, setSvgRect] = createSignal(defaultRectangle);
   const [viewBox, setViewBox] = createSignal(defaultRectangle);
+  const [graphRect, setGraphRect] = createSignal(defaultRectangle);
 
   function setAddingLineFrom(x: number, y: number) {
     setAddingLine({ p1: { x, y }, p2: { x, y } });
@@ -48,13 +49,28 @@ export function makeDiagramModel() {
     setAddingLine({ p1: addingLine().p1, p2: { x, y } });
   }
 
-  function autoRectangle(rect: Rectangle) {
-    const newZoom = Math.min(svgRect().width / rect.width, svgRect().height / rect.height);
+  function initViewBox() {
+    setZoom(1.0);
+
+    const newViewBox = {
+      x: graphRect().x + (graphRect().width - svgRect().width) / 2,
+      y: graphRect().y + (graphRect().height - svgRect().height) / 2,
+      width: svgRect().width,
+      height: svgRect().height,
+    };
+    setViewBox(newViewBox);
+  }
+
+  function fitViewBox() {
+    const newZoom = Math.min(
+      svgRect().width / graphRect().width,
+      svgRect().height / graphRect().height,
+    );
     changeZoom(newZoom);
 
     const newViewBox = {
-      x: rect.x + (rect.width - viewBox().width) / 2,
-      y: rect.y + (rect.height - viewBox().height) / 2,
+      x: graphRect().x + (graphRect().width - viewBox().width) / 2,
+      y: graphRect().y + (graphRect().height - viewBox().height) / 2,
       width: viewBox().width,
       height: viewBox().height,
     };
@@ -84,6 +100,17 @@ export function makeDiagramModel() {
     setViewBox({ x, y, width, height });
   }
 
+  function changeGraphRect(rect: Rectangle) {
+    if (
+      graphRect().x !== rect.x ||
+      graphRect().y !== rect.y ||
+      graphRect().width !== rect.width ||
+      graphRect().height !== rect.height
+    ) {
+      setGraphRect(rect);
+    }
+  }
+
   return {
     toolbar,
     setToolbar,
@@ -96,8 +123,11 @@ export function makeDiagramModel() {
     setAddingLineTo,
     svgRect,
     changeSvgRect,
-    autoRectangle,
+    fitViewBox,
     viewBox,
     setViewBox,
+    graphRect,
+    changeGraphRect,
+    initViewBox,
   };
 }

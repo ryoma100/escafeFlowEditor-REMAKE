@@ -7,11 +7,14 @@
   --DARK-COLOR: #212121;
   --GREEN1-COLOR: #388e3c;
   --GREEN2-COLOR: #8bc34a;
+  --GRAY1-COLOR: #424242;
+  --GRAY2-COLOR: #d8d8d8;
 
   --background-color: var(--LIGHT-COLOR);
   --foreground-color: var(--DARK-COLOR);
   --primary-color: var(--GREEN1-COLOR);
   --secondary-color: var(--GREEN2-COLOR);
+  --gridline-color: var(--GRAY2-COLOR);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,6 +23,7 @@
     --foreground-color: var(--LIGHT-COLOR);
     --primary-color: var(--GREEN2-COLOR);
     --secondary-color: var(--GREEN1-COLOR);
+    --gridline-color: var(--GRAY1-COLOR);
   }
 }
 
@@ -28,6 +32,7 @@
   --foreground-color: var(--DARK-COLOR);
   --primary-color: var(--GREEN1-COLOR);
   --secondary-color: var(--GREEN2-COLOR);
+  --gridline-color: var(--GRAY2-COLOR);
 }
 
 .dark-theme {
@@ -35,6 +40,7 @@
   --foreground-color: var(--LIGHT-COLOR);
   --primary-color: var(--GREEN2-COLOR);
   --secondary-color: var(--GREEN1-COLOR);
+  --gridline-color: var(--GRAY1-COLOR);
 }
 
 #root {

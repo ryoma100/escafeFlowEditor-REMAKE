@@ -1,5 +1,13 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createContext, createEffect, createMemo, createSignal, JSX, useContext } from "solid-js";
+import {
+  createContext,
+  createEffect,
+  createMemo,
+  createRenderEffect,
+  createSignal,
+  JSX,
+  useContext,
+} from "solid-js";
 
 import { i18nEnDict } from "@/constants/i18n";
 import { i18nJaDict } from "@/constants/i18n-ja";
@@ -18,7 +26,7 @@ export function makeThemeContext() {
   const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
-  createEffect(() => {
+  createRenderEffect(() => {
     localStorage.setItem(LOCALE_KEY, locale());
     setDataFactoryDict(dict());
   });

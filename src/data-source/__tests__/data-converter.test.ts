@@ -6,13 +6,13 @@ import { ActivityNode, CommentNode } from "@/data-source/data-type";
 
 describe("exportXml", () => {
   it("init project", () => {
-    expect(exportXml(initProjectData)).toEqual(initProjectXml);
+    expect(exportXml(initProjectData, false)).toEqual(initProjectXml);
   });
   it("one process", () => {
-    expect(exportXml(oneProcessData)).toEqual(oneProcessXml);
+    expect(exportXml(oneProcessData, false)).toEqual(oneProcessXml);
   });
   it("two process", () => {
-    expect(exportXml(twoProcessData)).toEqual(twoProcessXml);
+    expect(exportXml(twoProcessData, false)).toEqual(twoProcessXml);
   });
 });
 
@@ -363,8 +363,8 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         </Transition>
       </Transitions>
       <ExtendedAttributes>
-        <ExtendedAttribute Name="JaWE_GRAPH_START_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-1,X_OFFSET=10,Y_OFFSET=11"></ExtendedAttribute>
-        <ExtendedAttribute Name="JaWE_GRAPH_END_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=61,Y_OFFSET=62"></ExtendedAttribute>
+        <ExtendedAttribute Name="JaWE_GRAPH_START_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-1,X_OFFSET=10,Y_OFFSET=11,JaWE_GRAPH_TRANSITION_STYLE=SIMPLE_ROUTING_BEZIER,TYPE=START_DEFAULT"></ExtendedAttribute>
+        <ExtendedAttribute Name="JaWE_GRAPH_END_OF_WORKFLOW" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=61,Y_OFFSET=62,JaWE_GRAPH_TRANSITION_STYLE=SIMPLE_ROUTING_BEZIER,TYPE=END_DEFAULT"></ExtendedAttribute>
         <ExtendedAttribute Name="BURI_GRAPH_COMMENT" Value="CONNECTING_ACTIVITY_ID=activity-5,X_OFFSET=71,Y_OFFSET=72,COMMENT=Comment"></ExtendedAttribute>
         <ExtendedAttribute Name="JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER" Value="actor-1;actor-2"></ExtendedAttribute>
         <ExtendedAttribute Name="name1" Value="value1"></ExtendedAttribute>
