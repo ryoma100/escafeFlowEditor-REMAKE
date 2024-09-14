@@ -96,6 +96,7 @@ out
 .nuxt
 dist
 storybook-static
+__screenshots__
 
 # Gatsby files
 .cache/
