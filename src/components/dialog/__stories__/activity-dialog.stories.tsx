@@ -23,7 +23,7 @@ const activity = dataFactory.createActivityNode(
 
 export const Activity: Story = {
   args: {
-    openDialog: { type: "activity", activity },
+    activity,
     actorList: process.actors,
     applications: process.detail.applications,
   },

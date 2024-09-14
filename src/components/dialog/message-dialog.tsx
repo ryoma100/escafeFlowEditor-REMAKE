@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement } from "solid-js";
+import { createEffect, JSXElement, Show } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { I18nDict } from "@/constants/i18n";
@@ -15,39 +15,44 @@ export function MessageDialog(): JSXElement {
     setOpenMessageDialog(null);
   }
 
-  return <MessageDialogView message={openMessageDialog()} onDialogClose={handleDialogClose} />;
-}
-
-export function MessageDialogView(props: {
-  readonly message: keyof I18nDict | null;
-  readonly onDialogClose?: () => void;
-}) {
-  const { dict } = useThemeContext();
-  const t = i18n.translator(dict);
-
   createEffect(() => {
-    if (props.message) {
+    if (openMessageDialog() != null) {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
     }
   });
 
+  let dialogRef: HTMLDialogElement | undefined;
+  return (
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={openMessageDialog()} keyed>
+        {(message) => <MessageDialogView message={message} onDialogClose={handleDialogClose} />}
+      </Show>
+    </dialog>
+  );
+}
+
+export function MessageDialogView(props: {
+  readonly message: keyof I18nDict;
+  readonly onDialogClose?: () => void;
+}) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const handleFormSubmit = (e: Event) => {
     e.preventDefault();
     props.onDialogClose?.();
   };
 
-  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <div class="w-96 bg-primary p-2">
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
-        <div class="mb-4">{props.message ? t(props.message) : ""}</div>
-
+        <div class="mb-4">{t(props.message)}</div>
         <ButtonsContainer>
           <button type="submit">OK</button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

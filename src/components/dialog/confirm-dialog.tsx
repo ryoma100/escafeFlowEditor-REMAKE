@@ -1,10 +1,9 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement } from "solid-js";
+import { createEffect, JSXElement, Show } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 
 export function ConfirmDialog(): JSXElement {
   const {
@@ -30,33 +29,36 @@ export function ConfirmDialog(): JSXElement {
     setOpenDialog(null);
   }
 
-  return (
-    <ConfirmDialogView
-      openDialog={openDialog()}
-      onFormSubmit={handleSubmit}
-      onDialogClose={handleClose}
-    />
-  );
-}
-
-export function ConfirmDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
-  readonly onFormSubmit?: () => void;
-  readonly onDialogClose?: () => void;
-}) {
-  const { dict } = useThemeContext();
-  const t = i18n.translator(dict);
-
   createEffect(() => {
-    if (props.openDialog?.type === "initAll" || props.openDialog?.type === "deleteProcess") {
+    if (openDialog()?.type === "initAll" || openDialog()?.type === "deleteProcess") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
     }
   });
 
+  let dialogRef: HTMLDialogElement | undefined;
+  return (
+    <dialog ref={dialogRef} onClose={handleClose}>
+      <Show when={openDialog()?.type} keyed>
+        {(type) => (
+          <ConfirmDialogView type={type} onFormSubmit={handleSubmit} onDialogClose={handleClose} />
+        )}
+      </Show>
+    </dialog>
+  );
+}
+
+export function ConfirmDialogView(props: {
+  readonly type: string;
+  readonly onFormSubmit?: () => void;
+  readonly onDialogClose?: () => void;
+}) {
+  const { dict } = useThemeContext();
+  const t = i18n.translator(dict);
+
   const message = () => {
-    switch (props.openDialog?.type) {
+    switch (props.type) {
       case "initAll":
         return t("initAllConfirm");
       case "deleteProcess":
@@ -71,9 +73,8 @@ export function ConfirmDialogView(props: {
     props.onFormSubmit?.();
   };
 
-  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <div class="w-96 bg-primary p-2">
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <p class="mb-4">{message()}</p>
 
@@ -84,6 +85,6 @@ export function ConfirmDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

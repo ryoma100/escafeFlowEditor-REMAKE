@@ -1,12 +1,20 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, createSignal, For, JSXElement, Match, Switch } from "solid-js";
+import {
+  createEffect,
+  createSignal,
+  For,
+  JSXElement,
+  Match,
+  onMount,
+  Show,
+  Switch,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
 import { AutoActivityIcon } from "@/icons/auto-activity-icon";
@@ -14,8 +22,6 @@ import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
 import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
-
-const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
 
 export function ActivityDialog(): JSXElement {
   const {
@@ -42,19 +48,39 @@ export function ActivityDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "activity") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const activity = () => {
+    const dialogData = openDialog();
+    return dialogData?.type === "activity" ? dialogData.activity : undefined;
+  };
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <ActivityDialogView
-      openDialog={openDialog()}
-      applications={selectedProcess().detail.applications}
-      actorList={actorList}
-      onFormSubmit={handleFormSubmit}
-      onDialogClose={handleDialogClose}
-    />
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={activity()} keyed>
+        {(activity) => (
+          <ActivityDialogView
+            activity={activity}
+            applications={selectedProcess().detail.applications}
+            actorList={actorList}
+            onFormSubmit={handleFormSubmit}
+            onDialogClose={handleDialogClose}
+          />
+        )}
+      </Show>
+    </dialog>
   );
 }
 
 export function ActivityDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
+  readonly activity: ActivityNode;
   readonly applications: ApplicationEntity[];
   readonly actorList: ActorEntity[];
   readonly onFormSubmit?: (formData: ActivityNode) => void;
@@ -63,24 +89,21 @@ export function ActivityDialogView(props: {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
+  const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
   const [formData, setFormData] = createStore<ActivityNode>(dummy);
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
 
-  createEffect(() => {
-    if (props.openDialog?.type === "activity") {
-      const activity = deepUnwrap(props.openDialog.activity);
-      activity.applications = props.applications.map((app) => ({
-        id: app.id,
-        ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
-      }));
-      setFormData(activity);
-      setSelectedAppIndex(props.applications.length > 0 ? 0 : -1);
-      dialogRef?.showModal();
-      if (radioTabCenterRef) {
-        radioTabCenterRef.checked = true;
-      }
-    } else {
-      dialogRef?.close();
+  onMount(() => {
+    const activity = deepUnwrap(props.activity);
+    activity.applications = props.applications.map((app) => ({
+      id: app.id,
+      ognl: activity.applications.find((it) => it.id === app.id)?.ognl ?? "",
+    }));
+    setFormData(activity);
+    setSelectedAppIndex(props.applications.length > 0 ? 0 : -1);
+
+    if (radioTabCenterRef) {
+      radioTabCenterRef.checked = true;
     }
   });
 
@@ -101,14 +124,9 @@ export function ActivityDialogView(props: {
     props.onFormSubmit?.(activity);
   }
 
-  let dialogRef: HTMLDialogElement | undefined;
   let radioTabCenterRef: HTMLInputElement | undefined;
   return (
-    <dialog
-      class="w-[388px] bg-primary p-2"
-      ref={dialogRef}
-      onClose={() => props.onDialogClose?.()}
-    >
+    <div class="w-[388px] bg-primary p-2">
       <h5 class="mb-2">{t("editActivity")}</h5>
 
       <form class="bg-background p-2" onSubmit={handleSubmit}>
@@ -352,6 +370,6 @@ export function ActivityDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

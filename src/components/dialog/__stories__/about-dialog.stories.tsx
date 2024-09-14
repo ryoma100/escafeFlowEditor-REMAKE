@@ -12,5 +12,5 @@ export default meta;
 type Story = StoryObj<typeof AboutDialogView>;
 
 export const About: Story = {
-  args: { open: true, version: "v0.0.0" },
+  args: { version: "v0.0.0" },
 };

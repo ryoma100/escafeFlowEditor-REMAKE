@@ -15,7 +15,5 @@ type Story = StoryObj<typeof CommentDialogView>;
 const comment = dataFactory.createCommentNode([], 0, 0);
 
 export const Comment: Story = {
-  args: {
-    openDialog: { type: "comment", comment },
-  },
+  args: { comment },
 };

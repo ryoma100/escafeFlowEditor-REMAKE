@@ -1,15 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement } from "solid-js";
+import { createEffect, JSXElement, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActorEntity } from "@/data-source/data-type";
-
-const dummy = dataFactory.createActorEntity([]);
 
 export function ActorDialog(): JSXElement {
   const {
@@ -34,32 +31,48 @@ export function ActorDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "actor") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const actor = () => {
+    const dialogData = openDialog();
+    return dialogData?.type === "actor" ? dialogData.actor : undefined;
+  };
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <ActorDialogView
-      openDialog={openDialog()}
-      onFormSubmit={handleFormSubmit}
-      onDialogClose={handleDialogClose}
-    />
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={actor()} keyed>
+        {(actor) => (
+          <ActorDialogView
+            actor={actor}
+            onFormSubmit={handleFormSubmit}
+            onDialogClose={handleDialogClose}
+          />
+        )}
+      </Show>
+    </dialog>
   );
 }
 
 export function ActorDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
+  readonly actor: ActorEntity;
   readonly onFormSubmit?: (formData: ActorEntity) => void;
   readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
+  const dummy = dataFactory.createActorEntity([]);
   const [formData, setFormData] = createStore<ActorEntity>(dummy);
 
-  createEffect(() => {
-    if (props.openDialog?.type === "actor") {
-      setFormData(deepUnwrap(props.openDialog.actor));
-      dialogRef?.showModal();
-    } else {
-      dialogRef?.close();
-    }
+  onMount(() => {
+    setFormData(deepUnwrap(props.actor));
   });
 
   const handleSubmit = (e: Event) => {
@@ -67,9 +80,8 @@ export function ActorDialogView(props: {
     props.onFormSubmit?.(deepUnwrap(formData));
   };
 
-  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[388px] p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <div class="w-[388px] bg-primary p-2">
       <h5 class="mb-2">{t("editActor")}</h5>
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] gap-y-2">
@@ -94,6 +106,6 @@ export function ActorDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

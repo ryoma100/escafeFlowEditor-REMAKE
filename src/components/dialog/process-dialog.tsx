@@ -1,12 +1,11 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, createSignal, For, JSXElement } from "solid-js";
+import { createEffect, createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { i18nEnDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import {
   ActivityNode,
@@ -15,8 +14,6 @@ import {
   ProcessDetailEntity,
   ProcessEntity,
 } from "@/data-source/data-type";
-
-const dummy = dataFactory.createProcess([]);
 
 export function ProcessDialog(): JSXElement {
   const {
@@ -38,19 +35,39 @@ export function ProcessDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "process") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const process = () => {
+    const dialogData = openDialog();
+    return dialogData?.type === "process" ? dialogData.process : undefined;
+  };
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <ProcessDialogView
-      openDialog={openDialog()}
-      activityList={getActivityNodes()}
-      onFormSubmit={handleFormSubmit}
-      onDialogClose={handleDialogClose}
-      onOpenMessageDialog={setMessageAlert}
-    />
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={process()} keyed>
+        {(process) => (
+          <ProcessDialogView
+            process={process}
+            activityList={getActivityNodes()}
+            onFormSubmit={handleFormSubmit}
+            onDialogClose={handleDialogClose}
+            onOpenMessageDialog={setMessageAlert}
+          />
+        )}
+      </Show>
+    </dialog>
   );
 }
 
 export function ProcessDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
+  readonly process: ProcessEntity;
   readonly activityList: ActivityNode[];
   readonly onFormSubmit?: (formData: ProcessEntity) => void;
   readonly onDialogClose?: () => void;
@@ -59,17 +76,13 @@ export function ProcessDialogView(props: {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
+  const dummy = dataFactory.createProcess([]);
   const [formData, setFormData] = createStore<ProcessDetailEntity>(dummy.detail);
   const [selectedEnv, setSelectedEnv] = createSignal<EnvironmentEntity | null>(null);
   const [selectedApp, setSelectedApp] = createSignal<ApplicationEntity | null>(null);
 
-  createEffect(() => {
-    if (props.openDialog?.type === "process") {
-      setFormData(deepUnwrap(props.openDialog.process.detail));
-      dialogRef?.showModal();
-    } else {
-      dialogRef?.close();
-    }
+  onMount(() => {
+    setFormData(deepUnwrap(props.process.detail));
   });
 
   function handleEnvClick(env: EnvironmentEntity, _e: MouseEvent) {
@@ -114,15 +127,12 @@ export function ProcessDialogView(props: {
   function handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (props.openDialog?.type === "process") {
-      const newProcess = { ...props.openDialog.process, detail: deepUnwrap(formData) };
-      props.onFormSubmit?.(newProcess);
-    }
+    const newProcess = { ...props.process, detail: deepUnwrap(formData) };
+    props.onFormSubmit?.(newProcess);
   }
 
-  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-[520px] p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <div class="w-[520px] bg-primary p-2">
       <h5 class="mb-2">{t("editProcess")}</h5>
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
@@ -286,6 +296,6 @@ export function ProcessDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

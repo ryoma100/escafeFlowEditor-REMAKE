@@ -11,6 +11,4 @@ export default meta;
 
 type Story = StoryObj<typeof SettingDialogView>;
 
-export const Setting: Story = {
-  args: { open: true },
-};
+export const Setting: Story = {};

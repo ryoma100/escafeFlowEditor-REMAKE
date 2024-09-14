@@ -11,8 +11,4 @@ export default meta;
 
 type Story = StoryObj<typeof LoadDialogView>;
 
-export const Load: Story = {
-  args: {
-    openDialog: { type: "load" },
-  },
-};
+export const Load: Story = {};
