@@ -16,7 +16,7 @@ const process = dataFactory.createProcess([]);
 
 export const Process: Story = {
   args: {
-    openDialog: { type: "process", process },
+    process,
     activityList: [],
   },
 };

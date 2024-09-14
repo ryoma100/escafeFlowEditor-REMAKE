@@ -1,12 +1,11 @@
 import * as i18n from "@solid-primitives/i18n";
 import { dialog } from "@tauri-apps/api";
 import { readTextFile } from "@tauri-apps/api/fs";
-import { createEffect, createSignal, JSXElement } from "solid-js";
+import { createEffect, createSignal, JSXElement, onMount, Show } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { importXml } from "@/data-source/data-converter";
 import { ProjectEntity } from "@/data-source/data-type";
 
@@ -71,18 +70,29 @@ export function LoadDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "load") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <LoadDialogView
-      openDialog={openDialog()}
-      onLoadClick={handleFileLoad}
-      onInputClick={handleInput}
-      onDialogClose={handleDialogClose}
-    />
+    <dialog ref={dialogRef}>
+      <Show when={openDialog()?.type === "load"}>
+        <LoadDialogView
+          onLoadClick={handleFileLoad}
+          onInputClick={handleInput}
+          onDialogClose={handleDialogClose}
+        />
+      </Show>
+    </dialog>
   );
 }
 
 export function LoadDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
   readonly onLoadClick?: () => void;
   readonly onInputClick?: (data: string) => void;
   readonly onDialogClose?: () => void;
@@ -92,25 +102,18 @@ export function LoadDialogView(props: {
 
   const [data, setData] = createSignal<string>("");
 
-  createEffect(() => {
-    if (props.openDialog?.type === "load") {
-      dialogRef?.showModal();
-      loadButtonRef?.focus();
-      setData("");
-    } else {
-      dialogRef?.close();
-    }
-  });
-
   function handleFormSubmit(e: Event) {
     e.preventDefault();
     props.onLoadClick?.();
   }
 
-  let dialogRef: HTMLDialogElement | undefined;
+  onMount(() => {
+    loadButtonRef?.focus();
+  });
+
   let loadButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="h-[536px] w-[768px] p-2" ref={dialogRef}>
+    <div class="h-[536px] w-[768px] bg-primary p-2">
       <h5 class="mb-2">{t("openXpdl")}</h5>
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("inputXpdl")}</p>
@@ -133,6 +136,6 @@ export function LoadDialogView(props: {
           </ButtonsContainer>
         </div>
       </form>
-    </dialog>
+    </div>
   );
 }

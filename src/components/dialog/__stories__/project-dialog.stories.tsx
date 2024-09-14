@@ -15,7 +15,5 @@ type Story = StoryObj<typeof ProjectDialogView>;
 const project = dataFactory.createProject();
 
 export const Project: Story = {
-  args: {
-    openDialog: { type: "project", project },
-  },
+  args: { project },
 };

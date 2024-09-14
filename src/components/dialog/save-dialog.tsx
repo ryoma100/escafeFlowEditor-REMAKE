@@ -1,13 +1,13 @@
 import * as i18n from "@solid-primitives/i18n";
 import { dialog } from "@tauri-apps/api";
 import { writeTextFile } from "@tauri-apps/api/fs";
-import { createEffect, createSignal, JSXElement } from "solid-js";
+import { createEffect, JSXElement, onMount, Show } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { exportXml } from "@/data-source/data-converter";
+import { ProjectEntity } from "@/data-source/data-type";
 
 export function SaveDialog(): JSXElement {
   const {
@@ -47,33 +47,49 @@ export function SaveDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "save") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const project = () => {
+    const dialogData = openDialog();
+    return dialogData?.type === "save" ? dialogData.project : undefined;
+  };
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <SaveDialogView
-      openDialog={openDialog()}
-      onFormSubmit={handleFormSubmit}
-      onDialogClose={handleDialogClose}
-    />
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={project()} keyed>
+        {(project) => (
+          <SaveDialogView
+            project={project}
+            onFormSubmit={handleFormSubmit}
+            onDialogClose={handleDialogClose}
+          />
+        )}
+      </Show>
+    </dialog>
   );
 }
 
 export function SaveDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
+  readonly project: ProjectEntity;
   readonly onFormSubmit?: (formData: string) => void;
   readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
-  const [data, setData] = createSignal<string>("");
+  const data = () => {
+    return exportXml(props.project);
+  };
 
-  createEffect(() => {
-    if (props.openDialog?.type === "save") {
-      dialogRef?.showModal();
-      saveButtonRef?.focus();
-      setData(exportXml(props.openDialog.project));
-    } else {
-      dialogRef?.close();
-    }
+  onMount(() => {
+    saveButtonRef?.focus();
   });
 
   function handleFormSubmit(e: Event) {
@@ -81,10 +97,9 @@ export function SaveDialogView(props: {
     props.onFormSubmit?.(data());
   }
 
-  let dialogRef: HTMLDialogElement | undefined;
   let saveButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="h-[536px] w-[768px] p-2" ref={dialogRef}>
+    <div class="h-[536px] w-[768px] bg-primary p-2">
       <h5 class="mb-2">{t("saveXpdl")}</h5>
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("copyXpdl")}</p>
@@ -101,6 +116,6 @@ export function SaveDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

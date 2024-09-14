@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ConfirmDialogView } from "@/components/dialog/confirm-dialog";
-import { dataFactory } from "@/data-source/data-factory";
 
 const meta = {
   title: "Dialog/Confirm",
@@ -12,16 +11,6 @@ export default meta;
 
 type Story = StoryObj<typeof ConfirmDialogView>;
 
-const process = dataFactory.createProcess([]);
-
-export const InitAll: Story = {
-  args: {
-    openDialog: { type: "initAll" },
-  },
-};
-
-export const DeleteProcess: Story = {
-  args: {
-    openDialog: { type: "deleteProcess", process },
-  },
+export const Confirm: Story = {
+  args: { type: "initAll" },
 };

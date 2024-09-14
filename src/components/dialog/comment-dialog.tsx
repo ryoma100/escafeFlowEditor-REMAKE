@@ -1,15 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement } from "solid-js";
+import { createEffect, JSXElement, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { CommentNode } from "@/data-source/data-type";
-
-const dummy = dataFactory.createCommentNode([], 0, 0);
 
 export function CommentDialog(): JSXElement {
   const {
@@ -26,32 +23,47 @@ export function CommentDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "comment") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const comment = () => {
+    const dialogData = openDialog();
+    return dialogData?.type === "comment" ? dialogData.comment : undefined;
+  };
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <CommentDialogView
-      openDialog={openDialog()}
-      onFormSubmit={handleFormSubmit}
-      onDialogClose={handleDialogClose}
-    />
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={comment()} keyed>
+        {(comment) => (
+          <CommentDialogView
+            comment={comment}
+            onFormSubmit={handleFormSubmit}
+            onDialogClose={handleDialogClose}
+          />
+        )}
+      </Show>
+    </dialog>
   );
 }
 
 export function CommentDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
+  readonly comment: CommentNode;
   readonly onFormSubmit?: (formData: CommentNode) => void;
   readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
+  const dummy = dataFactory.createCommentNode([], 0, 0);
   const [formData, setFormData] = createStore<CommentNode>(dummy);
-
-  createEffect(() => {
-    if (props.openDialog?.type === "comment") {
-      setFormData(deepUnwrap(props.openDialog.comment));
-      dialogRef?.showModal();
-    } else {
-      dialogRef?.close();
-    }
+  onMount(() => {
+    setFormData(deepUnwrap(props.comment));
   });
 
   const handleSubmit = (e: Event) => {
@@ -59,9 +71,8 @@ export function CommentDialogView(props: {
     props.onFormSubmit?.(deepUnwrap(formData));
   };
 
-  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <div class="w-96 bg-primary p-2">
       <h5 class="mb-2">{t("editComment")}</h5>
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <textarea
@@ -77,6 +88,6 @@ export function CommentDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

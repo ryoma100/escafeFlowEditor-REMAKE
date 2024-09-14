@@ -1,15 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement } from "solid-js";
+import { createEffect, JSXElement, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ModalDialogType } from "@/data-model/dialog-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { ProjectDetailEntity } from "@/data-source/data-type";
-
-const dummy = dataFactory.createProject();
+import { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 
 export function ProjectDialog(): JSXElement {
   const {
@@ -26,32 +23,48 @@ export function ProjectDialog(): JSXElement {
     setOpenDialog(null);
   }
 
+  createEffect(() => {
+    if (openDialog()?.type === "project") {
+      dialogRef?.showModal();
+    } else {
+      dialogRef?.close();
+    }
+  });
+
+  const project = () => {
+    const dialogData = openDialog();
+    return dialogData?.type === "project" ? dialogData.project : undefined;
+  };
+
+  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <ProjectDialogView
-      openDialog={openDialog()}
-      onFormSubmit={handleFormSubmit}
-      onDialogClose={handleDialogClose}
-    />
+    <dialog ref={dialogRef} onClose={handleDialogClose}>
+      <Show when={project()} keyed>
+        {(project) => (
+          <ProjectDialogView
+            project={project}
+            onFormSubmit={handleFormSubmit}
+            onDialogClose={handleDialogClose}
+          />
+        )}
+      </Show>
+    </dialog>
   );
 }
 
 export function ProjectDialogView(props: {
-  readonly openDialog: ModalDialogType | null;
+  readonly project: ProjectEntity;
   readonly onFormSubmit?: (formData: ProjectDetailEntity) => void;
   readonly onDialogClose?: () => void;
 }) {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
+  const dummy = dataFactory.createProject();
   const [formData, setFormData] = createStore<ProjectDetailEntity>(dummy.detail);
 
-  createEffect(() => {
-    if (props.openDialog?.type === "project") {
-      setFormData(deepUnwrap(props.openDialog.project.detail));
-      dialogRef?.showModal();
-    } else {
-      dialogRef?.close();
-    }
+  onMount(() => {
+    setFormData(deepUnwrap(props.project.detail));
   });
 
   function handleSubmit(e: Event) {
@@ -59,9 +72,8 @@ export function ProjectDialogView(props: {
     props.onFormSubmit?.(deepUnwrap(formData));
   }
 
-  let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog class="w-96 p-2" ref={dialogRef} onClose={() => props.onDialogClose?.()}>
+    <div class="w-96 bg-primary p-2">
       <h5 class="mb-2">{t("editPackage")}</h5>
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
@@ -86,6 +98,6 @@ export function ProjectDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

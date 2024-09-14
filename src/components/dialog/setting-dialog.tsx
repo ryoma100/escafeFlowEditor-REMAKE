@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement } from "solid-js";
+import { createEffect, JSXElement, onMount, Show } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
@@ -14,30 +14,36 @@ export function SettingDialog(): JSXElement {
     setOpenDialog(null);
   }
 
-  return <SettingDialogView open={openDialog()?.type === "setting"} onClose={handleClose} />;
-}
-
-export function SettingDialogView(props: {
-  readonly open: boolean;
-  readonly onClose?: () => void;
-}) {
-  const { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor } =
-    useThemeContext();
-  const t = i18n.translator(dict);
-
   createEffect(() => {
-    if (props.open) {
+    if (openDialog()?.type === "setting") {
       dialogRef?.showModal();
-      okButtonRef?.focus();
     } else {
       dialogRef?.close();
     }
   });
 
   let dialogRef: HTMLDialogElement | undefined;
+  return (
+    <dialog ref={dialogRef} onClose={handleClose}>
+      <Show when={openDialog()?.type === "setting"}>
+        <SettingDialogView onClose={handleClose} />
+      </Show>
+    </dialog>
+  );
+}
+
+export function SettingDialogView(props: { readonly onClose?: () => void }) {
+  const { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor } =
+    useThemeContext();
+  const t = i18n.translator(dict);
+
+  onMount(() => {
+    okButtonRef?.focus();
+  });
+
   let okButtonRef: HTMLButtonElement | undefined;
   return (
-    <dialog class="p-2" ref={dialogRef} onClose={() => props.onClose?.()}>
+    <div class="bg-primary p-2">
       <h5 class="mb-2">{t("setting")}</h5>
       <form class="bg-background p-2">
         <div class="mb-4 grid grid-cols-[80px_360px] items-center gap-1">
@@ -87,6 +93,6 @@ export function SettingDialogView(props: {
           </button>
         </ButtonsContainer>
       </form>
-    </dialog>
+    </div>
   );
 }

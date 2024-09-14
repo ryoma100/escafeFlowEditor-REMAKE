@@ -15,7 +15,5 @@ type Story = StoryObj<typeof TransitionDialogView>;
 const transition = dataFactory.createTransitionEdge([], 1, 2);
 
 export const Transition: Story = {
-  args: {
-    openDialog: { type: "transition", transition },
-  },
+  args: { transition },
 };

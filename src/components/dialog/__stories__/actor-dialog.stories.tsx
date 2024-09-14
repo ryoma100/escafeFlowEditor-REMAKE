@@ -15,7 +15,5 @@ type Story = StoryObj<typeof ActorDialogView>;
 const actor = dataFactory.createActorEntity([]);
 
 export const Actor: Story = {
-  args: {
-    openDialog: { type: "actor", actor },
-  },
+  args: { actor },
 };
