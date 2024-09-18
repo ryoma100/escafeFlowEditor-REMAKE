@@ -12,7 +12,7 @@ import { makeProcessModel } from "@/data-model/process-model";
 import { makeProjectModel } from "@/data-model/project-model";
 import { makeTransactionEdgeModel } from "@/data-model/transaction-edge-model";
 
-function makeModelContext() {
+export function makeModelContext() {
   const diagramModel = makeDiagramModel();
   const nodeModel = makeNodeModel(diagramModel);
   const edgeModel = makeEdgeModel(nodeModel);
@@ -41,7 +41,7 @@ function makeModelContext() {
 }
 
 const dummyValue = undefined as unknown as ReturnType<typeof makeModelContext>;
-const ModelContext = createContext(dummyValue);
+export const ModelContext = createContext(dummyValue);
 
 export function ModelProvider(props: {
   readonly onChange?: (e: Event) => void;

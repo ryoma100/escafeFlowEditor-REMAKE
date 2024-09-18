@@ -26,17 +26,17 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
     diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
   } = useModelContext();
 
-  function handleLeftMouseDown(_e: MouseEvent) {
+  function handleLeftMouseDown(_e: MouseEvent | TouchEvent) {
     changeSelectNodes("select", [props.activity.id]);
     setDragType({ type: "resizeActivityLeft" });
   }
 
-  function handleRightMouseDown(_e: MouseEvent) {
+  function handleRightMouseDown(_e: MouseEvent | TouchEvent) {
     changeSelectNodes("select", [props.activity.id]);
     setDragType({ type: "resizeActivityRight" });
   }
 
-  function handleMouseDown(e: MouseEvent) {
+  function handleMouseDown(e: MouseEvent | TouchEvent) {
     e.stopPropagation();
 
     switch (toolbar()) {
@@ -132,9 +132,9 @@ export function ActivityNodeView(props: {
   readonly splitType: ActivitySplitType;
   readonly selected: boolean;
   readonly width: number;
-  readonly onLeftMouseDown?: (e: MouseEvent) => void;
-  readonly onMouseDown?: (e: MouseEvent) => void;
-  readonly onRightMouseDown?: (e: MouseEvent) => void;
+  readonly onLeftMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onRightMouseDown?: (e: MouseEvent | TouchEvent) => void;
   readonly onDblClick?: (e: MouseEvent) => void;
   readonly onChangeHeight?: (height: number) => void;
 }): JSXElement {
@@ -160,6 +160,7 @@ export function ActivityNodeView(props: {
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
         onMouseDown={(e) => props.onLeftMouseDown?.(e)}
+        onTouchStart={(e) => props.onLeftMouseDown?.(e)}
       >
         <Switch>
           <Match when={props.joinType === "oneJoin"}>
@@ -192,6 +193,7 @@ export function ActivityNodeView(props: {
       <div
         class="flex size-full cursor-move select-none flex-col border border-solid border-foreground bg-background hover:bg-secondary"
         onMouseDown={(e) => props.onMouseDown?.(e)}
+        onTouchStart={(e) => props.onMouseDown?.(e)}
         onDblClick={(e) => props.onDblClick?.(e)}
       >
         <div class="mx-0.5 w-full text-ellipsis whitespace-nowrap text-xs">{props.actorName}</div>
@@ -222,6 +224,7 @@ export function ActivityNodeView(props: {
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
         onMouseDown={(e) => props.onRightMouseDown?.(e)}
+        onTouchStart={(e) => props.onRightMouseDown?.(e)}
       >
         <Switch>
           <Match when={props.splitType === "oneSplit"}>

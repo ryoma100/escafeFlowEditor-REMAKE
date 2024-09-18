@@ -2,7 +2,7 @@ import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
-import { defaultCircle, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
+import { defaultCircle, defaultPoint, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -67,24 +67,31 @@ export function DiagramContainer(): JSXElement {
 
   onMount(() => {
     document.addEventListener("mousemove", handleDocumentMouseMove);
+    document.addEventListener("touchmove", handleDocumentMouseMove);
     document.addEventListener("mouseup", handleDocumentMouseUp);
+    document.addEventListener("touchend", handleDocumentMouseUp);
   });
 
+  let prevPoint: Point = defaultPoint;
   let mouseDownTime = new Date().getTime();
-  function handleMouseDown(e: MouseEvent) {
+  function handleMouseDown(e: MouseEvent | TouchEvent) {
     e.stopPropagation();
 
-    if (e.button === 2) {
+    const clientX = e instanceof TouchEvent ? e.touches[0].clientX : e.clientX;
+    const clientY = e instanceof TouchEvent ? e.touches[0].clientY : e.clientY;
+    prevPoint = { x: clientX, y: clientY };
+
+    if (e instanceof MouseEvent && e.button === 2) {
       setDragMode({ type: "contextMenuScroll" });
       return;
     }
 
-    if (e.button !== 0) return;
+    if (e instanceof MouseEvent && e.button !== 0) return;
     if (contextMenuPoint() != null) return;
     if (dragMode().type !== "none") return;
 
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
     switch (toolbar()) {
       case "cursor":
         {
@@ -175,11 +182,15 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
-  function handleDocumentMouseMove(e: MouseEvent) {
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-    const moveX = e.movementX / zoom();
-    const moveY = e.movementY / zoom();
+  function handleDocumentMouseMove(e: MouseEvent | TouchEvent) {
+    const clientX = e instanceof TouchEvent ? e.touches[0].clientX : e.clientX;
+    const clientY = e instanceof TouchEvent ? e.touches[0].clientY : e.clientY;
+    const moveX = (clientX - prevPoint.x) / zoom();
+    const moveY = (clientY - prevPoint.y) / zoom();
+    prevPoint = { x: clientX, y: clientY };
+
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
 
     const drag = dragMode();
     switch (drag.type) {
@@ -270,16 +281,18 @@ export function DiagramContainer(): JSXElement {
       case "addCommentEdge":
       case "addStartEdge":
         setAddingLineTo(
-          viewBox().x + (e.clientX - svgRect().x) / zoom(),
-          viewBox().y + (e.clientY - svgRect().y) / zoom(),
+          viewBox().x + (clientX - svgRect().x) / zoom(),
+          viewBox().y + (clientY - svgRect().y) / zoom(),
         );
         return;
     }
   }
 
-  function handleDocumentMouseUp(e: MouseEvent) {
+  function handleDocumentMouseUp(e: MouseEvent | TouchEvent) {
     if (dragMode().type === "contextMenuScroll") {
-      setContextMenuPoint({ x: e.pageX, y: e.pageY });
+      const pageX = e instanceof TouchEvent ? e.touches[0].pageX : e.pageX;
+      const pageY = e instanceof TouchEvent ? e.touches[0].pageY : e.pageY;
+      setContextMenuPoint({ x: pageX, y: pageY });
     }
     setDragMode({ type: "none" });
   }
@@ -410,7 +423,7 @@ export function DiagramView(props: {
   readonly selectBox: Rectangle | null;
   readonly selectCircle: Circle | null;
   readonly changeSvgRect?: (rect: Rectangle) => void;
-  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
   readonly onWheel?: (e: WheelEvent) => void;
@@ -448,6 +461,7 @@ export function DiagramView(props: {
         height={props.svgRect.height}
         viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}
         onMouseDown={(e) => props.onMouseDown?.(e)}
+        onTouchStart={(e) => props.onMouseDown?.(e)}
       >
         <defs>
           <marker
