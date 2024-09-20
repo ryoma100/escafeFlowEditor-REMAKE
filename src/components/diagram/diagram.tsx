@@ -22,7 +22,7 @@ import {
   TransitionEdge,
 } from "@/data-source/data-type";
 import { pointLength } from "@/utils/point-utils";
-import { intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
+import { containsRect, intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
 
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
@@ -72,14 +72,14 @@ export function DiagramContainer(): JSXElement {
     document.addEventListener("touchend", handleDocumentMouseUp);
   });
 
-  let prevPoint: Point = defaultPoint;
+  let prevClientPoint: Point = defaultPoint;
   let mouseDownTime = new Date().getTime();
   function handleMouseDown(e: MouseEvent | TouchEvent) {
-    e.stopPropagation();
+    e.preventDefault();
 
-    const clientX = e instanceof TouchEvent ? e.touches[0].clientX : e.clientX;
-    const clientY = e instanceof TouchEvent ? e.touches[0].clientY : e.clientY;
-    prevPoint = { x: clientX, y: clientY };
+    const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
+    const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
+    prevClientPoint = { x: clientX, y: clientY };
 
     if (e instanceof MouseEvent && e.button === 2) {
       setDragMode({ type: "contextMenuScroll" });
@@ -135,7 +135,7 @@ export function DiagramContainer(): JSXElement {
       case "transition":
         return;
       case "addManualActivity":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const activity = addActivity("manualActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
@@ -143,7 +143,7 @@ export function DiagramContainer(): JSXElement {
         }
         return;
       case "addAutoActivity":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const activity = addActivity("autoActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
@@ -151,7 +151,7 @@ export function DiagramContainer(): JSXElement {
         }
         return;
       case "addUserActivity":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const activity = addActivity("userActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
@@ -159,21 +159,21 @@ export function DiagramContainer(): JSXElement {
         }
         return;
       case "addCommentNode":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const comment = addCommentNode(x, y);
           changeSelectNodes("select", [comment.id]);
           setDragMode({ type: "addCommentNode" });
         }
         return;
       case "addStartNode":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const startNode = addStartNode(x, y);
           changeSelectNodes("select", [startNode.id]);
           setDragMode({ type: "addStartNode" });
         }
         return;
       case "addEndNode":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const endNode = addEndNode(x, y);
           changeSelectNodes("select", [endNode.id]);
           setDragMode({ type: "addEndNode" });
@@ -183,11 +183,11 @@ export function DiagramContainer(): JSXElement {
   }
 
   function handleDocumentMouseMove(e: MouseEvent | TouchEvent) {
-    const clientX = e instanceof TouchEvent ? e.touches[0].clientX : e.clientX;
-    const clientY = e instanceof TouchEvent ? e.touches[0].clientY : e.clientY;
-    const moveX = (clientX - prevPoint.x) / zoom();
-    const moveY = (clientY - prevPoint.y) / zoom();
-    prevPoint = { x: clientX, y: clientY };
+    const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
+    const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
+    const moveX = (clientX - prevClientPoint.x) / zoom();
+    const moveY = (clientY - prevClientPoint.y) / zoom();
+    prevClientPoint = { x: clientX, y: clientY };
 
     const x = viewBox().x + (clientX - svgRect().x) / zoom();
     const y = viewBox().y + (clientY - svgRect().y) / zoom();
@@ -290,8 +290,8 @@ export function DiagramContainer(): JSXElement {
 
   function handleDocumentMouseUp(e: MouseEvent | TouchEvent) {
     if (dragMode().type === "contextMenuScroll") {
-      const pageX = e instanceof TouchEvent ? e.touches[0].pageX : e.pageX;
-      const pageY = e instanceof TouchEvent ? e.touches[0].pageY : e.pageY;
+      const pageX = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX;
+      const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
       setContextMenuPoint({ x: pageX, y: pageY });
     }
     setDragMode({ type: "none" });
@@ -454,14 +454,14 @@ export function DiagramView(props: {
       onKeyDown={(e) => props.onKeyDown?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
       onWheel={(e) => props.onWheel?.(e)}
+      onTouchStart={(e) => props.onMouseDown?.(e)}
+      onMouseDown={(e) => props.onMouseDown?.(e)}
     >
       <svg
         class="absolute inset-0 size-full"
         width={props.svgRect.width}
         height={props.svgRect.height}
         viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}
-        onMouseDown={(e) => props.onMouseDown?.(e)}
-        onTouchStart={(e) => props.onMouseDown?.(e)}
       >
         <defs>
           <marker

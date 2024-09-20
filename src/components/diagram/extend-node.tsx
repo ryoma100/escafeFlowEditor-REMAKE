@@ -17,8 +17,8 @@ export function ExtendNodeContainer(props: {
     dialogModel: { setModalDialog: setOpenDialog },
   } = useModelContext();
 
-  function handleMouseDown(e: MouseEvent) {
-    e.stopPropagation();
+  function handleMouseDown(e: MouseEvent | TouchEvent) {
+    e.preventDefault();
 
     switch (toolbar()) {
       case "cursor":
@@ -101,7 +101,7 @@ export function ExtendNodeContainer(props: {
 export function CommentNodeView(props: {
   readonly comment: string;
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
   readonly onDblClick?: (e: MouseEvent) => void;
   readonly onChangeSize?: (width: number, height: number) => void;
 }): JSXElement {
@@ -127,6 +127,7 @@ export function CommentNodeView(props: {
         "p-0 border-2 border-primary": props.selected,
       }}
       onMouseDown={(e) => props.onMouseDown?.(e)}
+      onTouchStart={(e) => props.onMouseDown?.(e)}
       onDblClick={(e) => props.onDblClick?.(e)}
     >
       <div class="m-1 flex items-center">
@@ -144,7 +145,7 @@ export function CommentNodeView(props: {
 
 export function StartNodeView(props: {
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
 }) {
   return (
     <div
@@ -153,6 +154,7 @@ export function StartNodeView(props: {
         "border [border-color:var(--foreground-color)]": !props.selected,
         "border-2 border-primary": props.selected,
       }}
+      onTouchStart={(e) => props.onMouseDown?.(e)}
       onMouseDown={(e) => props.onMouseDown?.(e)}
     >
       <StartIcon class="[fill:var(--foreground-color)]" />
@@ -162,7 +164,7 @@ export function StartNodeView(props: {
 
 export function EndNodeView(props: {
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
   readonly onMouseUp?: (e: MouseEvent) => void;
 }) {
   return (
@@ -172,6 +174,7 @@ export function EndNodeView(props: {
         "border [border-color:var(--foreground-color)]": !props.selected,
         "border-2 border-primary": props.selected,
       }}
+      onTouchStart={(e) => props.onMouseDown?.(e)}
       onMouseDown={(e) => props.onMouseDown?.(e)}
       onMouseUp={(e) => props.onMouseUp?.(e)}
     >

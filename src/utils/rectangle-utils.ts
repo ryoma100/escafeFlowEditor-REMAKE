@@ -1,6 +1,15 @@
 import { Point, Rectangle } from "@/data-source/data-type";
 import { pointLength } from "@/utils/point-utils";
 
+export function containsRect(rect: Rectangle, point: Point): boolean {
+  return !(
+    point.x < rect.x ||
+    rect.x + rect.width < point.x ||
+    point.y < rect.y ||
+    rect.y + rect.height < point.y
+  );
+}
+
 export function intersectRect(r1: Rectangle, r2: Rectangle): boolean {
   return !(
     r2.x > r1.x + r1.width ||

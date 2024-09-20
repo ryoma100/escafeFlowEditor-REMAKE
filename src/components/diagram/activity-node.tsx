@@ -23,34 +23,34 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
     extendEdgeModel: { addCommentEdge, addStartEdge },
     transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
     dialogModel: { setModalDialog },
-    diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
+    diagramModel: { toolbar, dragMode, setDragMode, setAddingLineFrom },
   } = useModelContext();
 
   function handleLeftMouseDown(_e: MouseEvent | TouchEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType({ type: "resizeActivityLeft" });
+    setDragMode({ type: "resizeActivityLeft" });
   }
 
   function handleRightMouseDown(_e: MouseEvent | TouchEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType({ type: "resizeActivityRight" });
+    setDragMode({ type: "resizeActivityRight" });
   }
 
   function handleMouseDown(e: MouseEvent | TouchEvent) {
-    e.stopPropagation();
+    e.preventDefault();
 
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
           changeSelectNodes("toggle", [props.activity.id]);
-          setDragType({ type: "none" });
+          setDragMode({ type: "none" });
         } else {
           if (!props.activity.selected) {
             changeSelectNodes("select", [props.activity.id]);
             changeSelectEdges("clearAll");
           }
           changeTopLayer(props.activity.id);
-          setDragType({ type: "moveNodes" });
+          setDragMode({ type: "moveNodes" });
         }
         break;
       case "transition":
@@ -59,13 +59,13 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
           props.activity.x + props.activity.width,
           props.activity.y + props.activity.height / 2,
         );
-        setDragType({ type: "addTransition", fromActivity: props.activity });
+        setDragMode({ type: "addTransition", fromActivity: props.activity });
         break;
     }
   }
 
   function handleMouseUp(_e: MouseEvent) {
-    switch (dragType().type) {
+    switch (dragMode().type) {
       case "addTransition":
         {
           const transition = addTransitionEdge(props.activity.id);
@@ -79,16 +79,16 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
               getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
             );
           }
-          setDragType({ type: "none" });
+          setDragMode({ type: "none" });
         }
         break;
       case "addCommentEdge":
         addCommentEdge(props.activity.id);
-        setDragType({ type: "none" });
+        setDragMode({ type: "none" });
         break;
       case "addStartEdge":
         addStartEdge(props.activity.id);
-        setDragType({ type: "none" });
+        setDragMode({ type: "none" });
         break;
     }
   }
@@ -159,8 +159,8 @@ export function ActivityNodeView(props: {
     >
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
-        onMouseDown={(e) => props.onLeftMouseDown?.(e)}
         onTouchStart={(e) => props.onLeftMouseDown?.(e)}
+        onMouseDown={(e) => props.onLeftMouseDown?.(e)}
       >
         <Switch>
           <Match when={props.joinType === "oneJoin"}>
@@ -192,8 +192,8 @@ export function ActivityNodeView(props: {
 
       <div
         class="flex size-full cursor-move select-none flex-col border border-solid border-foreground bg-background hover:bg-secondary"
-        onMouseDown={(e) => props.onMouseDown?.(e)}
         onTouchStart={(e) => props.onMouseDown?.(e)}
+        onMouseDown={(e) => props.onMouseDown?.(e)}
         onDblClick={(e) => props.onDblClick?.(e)}
       >
         <div class="mx-0.5 w-full text-ellipsis whitespace-nowrap text-xs">{props.actorName}</div>
@@ -223,8 +223,8 @@ export function ActivityNodeView(props: {
 
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
-        onMouseDown={(e) => props.onRightMouseDown?.(e)}
         onTouchStart={(e) => props.onRightMouseDown?.(e)}
+        onMouseDown={(e) => props.onRightMouseDown?.(e)}
       >
         <Switch>
           <Match when={props.splitType === "oneSplit"}>
