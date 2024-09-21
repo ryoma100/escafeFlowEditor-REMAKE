@@ -70,3 +70,13 @@ export function computeLine(rect1: Rectangle, rect2: Rectangle, line: Line): Lin
   const p2 = intersectionLineRectangle(line, rect2) ?? line.p2;
   return { p1, p2 };
 }
+
+export function lineDistance(line: Line): number {
+  const { p1, p2 } = line;
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+}
+
+export function centerPoint(line: Line): Point {
+  const { p1, p2 } = line;
+  return { x: p1.x + (p2.x - p1.x) / 2, y: p1.y + (p2.y - p1.y) / 2 };
+}

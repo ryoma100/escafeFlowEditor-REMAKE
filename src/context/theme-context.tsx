@@ -67,15 +67,12 @@ export function makeThemeContext() {
   createEffect(() => {
     localStorage.setItem(COLOR_KEY, color());
 
-    switch (color()) {
-      case "red":
-        document.documentElement.style.setProperty("--THEME1-COLOR", "#C2185B");
-        document.documentElement.style.setProperty("--THEME2-COLOR", "#F48FB1");
-        break;
-      default:
-        document.documentElement.style.setProperty("--THEME1-COLOR", "#388e3c");
-        document.documentElement.style.setProperty("--THEME2-COLOR", "#8bc34a");
-        break;
+    if (color() === "red") {
+      document.documentElement.style.setProperty("--THEME1-COLOR", "#C2185B");
+      document.documentElement.style.setProperty("--THEME2-COLOR", "#F48FB1");
+    } else {
+      document.documentElement.style.setProperty("--THEME1-COLOR", "#388e3c");
+      document.documentElement.style.setProperty("--THEME2-COLOR", "#8bc34a");
     }
   });
 

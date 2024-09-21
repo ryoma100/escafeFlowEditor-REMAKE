@@ -2,7 +2,13 @@ import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
-import { defaultCircle, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
+import {
+  defaultCircle,
+  defaultLine,
+  defaultPoint,
+  defaultRectangle,
+  GRID_SPACING,
+} from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -21,8 +27,9 @@ import {
   StartNode,
   TransitionEdge,
 } from "@/data-source/data-type";
+import { centerPoint, lineDistance } from "@/utils/line-utils";
 import { pointLength } from "@/utils/point-utils";
-import { intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
+import { containsRect, intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
 
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
@@ -31,19 +38,21 @@ import { TransitionEdgeContainer } from "./transition-edge";
 
 export function DiagramContainer(): JSXElement {
   const {
-    activityNodeModel: { addActivity, resizeLeft, resizeRight },
     actorModel: { selectedActor },
-    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
     nodeModel: {
+      nodeList,
       changeSelectNodes,
       moveSelectedNodes,
       changeTopLayer,
-      nodeList,
       setNodeList,
       scaleSelectedNodes,
       rotateSelectedNodes,
     },
     edgeModel: { edgeList, setEdgeList },
+    activityNodeModel: { addActivity, resizeLeft, resizeRight, updateJoinType, updateSplitType },
+    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
+    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
+    extendEdgeModel: { addCommentEdge, addStartEdge, addEndEdge },
     diagramModel: {
       svgRect,
       changeSvgRect,
@@ -66,25 +75,33 @@ export function DiagramContainer(): JSXElement {
   const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
 
   onMount(() => {
+    document.addEventListener("touchstart", handleDocumentTouchStart, { passive: false });
     document.addEventListener("mousemove", handleDocumentMouseMove);
+    document.addEventListener("touchmove", handleDocumentTouchMove);
     document.addEventListener("mouseup", handleDocumentMouseUp);
+    document.addEventListener("touchend", handleDocumentMouseUp);
   });
 
+  let prevClientPoint: Point = defaultPoint;
   let mouseDownTime = new Date().getTime();
-  function handleMouseDown(e: MouseEvent) {
-    e.stopPropagation();
+  function handleMouseDown(e: MouseEvent | TouchEvent) {
+    e.preventDefault();
 
-    if (e.button === 2) {
+    const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
+    const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
+    prevClientPoint = { x: clientX, y: clientY };
+
+    if (e instanceof MouseEvent && e.button === 2) {
       setDragMode({ type: "contextMenuScroll" });
       return;
     }
 
-    if (e.button !== 0) return;
+    if (e instanceof MouseEvent && e.button !== 0) return;
     if (contextMenuPoint() != null) return;
     if (dragMode().type !== "none") return;
 
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
     switch (toolbar()) {
       case "cursor":
         {
@@ -125,10 +142,8 @@ export function DiagramContainer(): JSXElement {
           }
         }
         return;
-      case "transition":
-        return;
       case "addManualActivity":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const activity = addActivity("manualActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
@@ -136,7 +151,7 @@ export function DiagramContainer(): JSXElement {
         }
         return;
       case "addAutoActivity":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const activity = addActivity("autoActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
@@ -144,7 +159,7 @@ export function DiagramContainer(): JSXElement {
         }
         return;
       case "addUserActivity":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const activity = addActivity("userActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
@@ -152,21 +167,21 @@ export function DiagramContainer(): JSXElement {
         }
         return;
       case "addCommentNode":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const comment = addCommentNode(x, y);
           changeSelectNodes("select", [comment.id]);
           setDragMode({ type: "addCommentNode" });
         }
         return;
       case "addStartNode":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const startNode = addStartNode(x, y);
           changeSelectNodes("select", [startNode.id]);
           setDragMode({ type: "addStartNode" });
         }
         return;
       case "addEndNode":
-        {
+        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const endNode = addEndNode(x, y);
           changeSelectNodes("select", [endNode.id]);
           setDragMode({ type: "addEndNode" });
@@ -175,11 +190,48 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
-  function handleDocumentMouseMove(e: MouseEvent) {
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-    const moveX = e.movementX / zoom();
-    const moveY = e.movementY / zoom();
+  let prevTouchPoints: Line = defaultLine;
+  function handleDocumentTouchStart(e: TouchEvent) {
+    if (e.touches.length > 1) e.preventDefault(); // cancel default zoom
+    if (e.touches.length !== 2) return; // guard
+
+    const p1: Point = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    const p2: Point = { x: e.touches[1].clientX, y: e.touches[1].clientY };
+    prevTouchPoints = { p1, p2 };
+  }
+
+  function handleDocumentTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    if (e.touches.length === 1) return handleDocumentMouseMove(e);
+    if (e.touches.length !== 2) return; // guard
+
+    const p1: Point = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    const p2: Point = { x: e.touches[1].clientX, y: e.touches[1].clientY };
+    const newTouchPoints = { p1, p2 };
+    const newCenterPoint = centerPoint(newTouchPoints);
+    const newDistance = lineDistance(newTouchPoints);
+    const prevCenterPoint = centerPoint(prevTouchPoints);
+    const prevDistance = lineDistance(prevTouchPoints);
+    changeZoom(zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
+    setViewBox({
+      x: viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
+      y: viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
+      width: viewBox().width,
+      height: viewBox().height,
+    });
+
+    prevTouchPoints = newTouchPoints;
+  }
+
+  function handleDocumentMouseMove(e: MouseEvent | TouchEvent) {
+    const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
+    const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
+    const moveX = (clientX - prevClientPoint.x) / zoom();
+    const moveY = (clientY - prevClientPoint.y) / zoom();
+    prevClientPoint = { x: clientX, y: clientY };
+
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
 
     const drag = dragMode();
     switch (drag.type) {
@@ -270,17 +322,56 @@ export function DiagramContainer(): JSXElement {
       case "addCommentEdge":
       case "addStartEdge":
         setAddingLineTo(
-          viewBox().x + (e.clientX - svgRect().x) / zoom(),
-          viewBox().y + (e.clientY - svgRect().y) / zoom(),
+          viewBox().x + (clientX - svgRect().x) / zoom(),
+          viewBox().y + (clientY - svgRect().y) / zoom(),
         );
         return;
     }
   }
 
-  function handleDocumentMouseUp(e: MouseEvent) {
+  function handleDocumentMouseUp(e: MouseEvent | TouchEvent) {
     if (dragMode().type === "contextMenuScroll") {
-      setContextMenuPoint({ x: e.pageX, y: e.pageY });
+      const pageX = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX;
+      const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
+      setContextMenuPoint({ x: pageX, y: pageY });
+      return;
     }
+
+    const clientX = e instanceof MouseEvent ? e.clientX : e.changedTouches[0].clientX;
+    const clientY = e instanceof MouseEvent ? e.clientY : e.changedTouches[0].clientY;
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
+    const node = nodeList.find((it) => containsRect(it, { x, y }));
+    switch (dragMode().type) {
+      case "addTransition":
+        if (node?.type === "activityNode") {
+          const transition = addTransitionEdge(node.id);
+          if (transition) {
+            updateJoinType(
+              transition.toNodeId,
+              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
+            );
+            updateSplitType(
+              transition.fromNodeId,
+              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
+            );
+          }
+        } else if (node?.type === "endNode") {
+          addEndEdge(node.id);
+        }
+        break;
+      case "addCommentEdge":
+        if (node?.type === "activityNode") {
+          addCommentEdge(node.id);
+        }
+        break;
+      case "addStartEdge":
+        if (node?.type === "activityNode") {
+          addStartEdge(node.id);
+        }
+        break;
+    }
+
     setDragMode({ type: "none" });
   }
 
@@ -299,28 +390,28 @@ export function DiagramContainer(): JSXElement {
     switch (menuItem) {
       case "select":
         setToolbar("cursor");
-        break;
+        return;
       case "transition":
         setToolbar("transition");
-        break;
+        return;
       case "manualActivity":
         setToolbar("addManualActivity");
-        break;
+        return;
       case "autoActivity":
         setToolbar("addAutoActivity");
-        break;
+        return;
       case "handWork":
         setToolbar("addUserActivity");
-        break;
+        return;
       case "start":
         setToolbar("addStartNode");
-        break;
+        return;
       case "end":
         setToolbar("addEndNode");
-        break;
+        return;
       case "comment":
         setToolbar("addCommentNode");
-        break;
+        return;
     }
   }
 
@@ -410,7 +501,7 @@ export function DiagramView(props: {
   readonly selectBox: Rectangle | null;
   readonly selectCircle: Circle | null;
   readonly changeSvgRect?: (rect: Rectangle) => void;
-  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
   readonly onWheel?: (e: WheelEvent) => void;
@@ -441,13 +532,14 @@ export function DiagramView(props: {
       onKeyDown={(e) => props.onKeyDown?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
       onWheel={(e) => props.onWheel?.(e)}
+      onTouchStart={(e) => props.onMouseDown?.(e)}
+      onMouseDown={(e) => props.onMouseDown?.(e)}
     >
       <svg
         class="absolute inset-0 size-full"
         width={props.svgRect.width}
         height={props.svgRect.height}
         viewBox={`${props.viewBox.x} ${props.viewBox.y} ${props.viewBox.width} ${props.viewBox.height}`}
-        onMouseDown={(e) => props.onMouseDown?.(e)}
       >
         <defs>
           <marker

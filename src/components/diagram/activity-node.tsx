@@ -16,80 +16,49 @@ import { UserActivityIcon } from "@/icons/user-activity-icon";
 
 export function ActivityNodeContainer(props: { readonly activity: ActivityNode }): JSXElement {
   const {
-    activityNodeModel: { resizeActivityHeight, updateJoinType, updateSplitType },
+    activityNodeModel: { resizeActivityHeight },
     actorModel: { actorList },
     nodeModel: { changeSelectNodes, changeTopLayer },
     edgeModel: { changeSelectEdges },
-    extendEdgeModel: { addCommentEdge, addStartEdge },
-    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
     dialogModel: { setModalDialog },
-    diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
+    diagramModel: { toolbar, setDragMode, setAddingLineFrom },
   } = useModelContext();
 
-  function handleLeftMouseDown(_e: MouseEvent) {
+  function handleLeftMouseDown(_e: MouseEvent | TouchEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType({ type: "resizeActivityLeft" });
+    setDragMode({ type: "resizeActivityLeft" });
   }
 
-  function handleRightMouseDown(_e: MouseEvent) {
+  function handleRightMouseDown(_e: MouseEvent | TouchEvent) {
     changeSelectNodes("select", [props.activity.id]);
-    setDragType({ type: "resizeActivityRight" });
+    setDragMode({ type: "resizeActivityRight" });
   }
 
-  function handleMouseDown(e: MouseEvent) {
-    e.stopPropagation();
+  function handleMouseDown(e: MouseEvent | TouchEvent) {
+    e.preventDefault();
 
     switch (toolbar()) {
       case "cursor":
         if (e.shiftKey) {
           changeSelectNodes("toggle", [props.activity.id]);
-          setDragType({ type: "none" });
+          setDragMode({ type: "none" });
         } else {
           if (!props.activity.selected) {
             changeSelectNodes("select", [props.activity.id]);
             changeSelectEdges("clearAll");
           }
           changeTopLayer(props.activity.id);
-          setDragType({ type: "moveNodes" });
+          setDragMode({ type: "moveNodes" });
         }
-        break;
+        return;
       case "transition":
         changeSelectNodes("select", [props.activity.id]);
         setAddingLineFrom(
           props.activity.x + props.activity.width,
           props.activity.y + props.activity.height / 2,
         );
-        setDragType({ type: "addTransition", fromActivity: props.activity });
-        break;
-    }
-  }
-
-  function handleMouseUp(_e: MouseEvent) {
-    switch (dragType().type) {
-      case "addTransition":
-        {
-          const transition = addTransitionEdge(props.activity.id);
-          if (transition) {
-            updateJoinType(
-              transition.toNodeId,
-              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
-            );
-            updateSplitType(
-              transition.fromNodeId,
-              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
-            );
-          }
-          setDragType({ type: "none" });
-        }
-        break;
-      case "addCommentEdge":
-        addCommentEdge(props.activity.id);
-        setDragType({ type: "none" });
-        break;
-      case "addStartEdge":
-        addStartEdge(props.activity.id);
-        setDragType({ type: "none" });
-        break;
+        setDragMode({ type: "addTransition", fromActivity: props.activity });
+        return;
     }
   }
 
@@ -104,7 +73,6 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
       y={props.activity.y}
       width={props.activity.width}
       height={props.activity.height}
-      onMouseUp={handleMouseUp}
     >
       <ActivityNodeView
         activityType={props.activity.activityType}
@@ -132,9 +100,9 @@ export function ActivityNodeView(props: {
   readonly splitType: ActivitySplitType;
   readonly selected: boolean;
   readonly width: number;
-  readonly onLeftMouseDown?: (e: MouseEvent) => void;
-  readonly onMouseDown?: (e: MouseEvent) => void;
-  readonly onRightMouseDown?: (e: MouseEvent) => void;
+  readonly onLeftMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onRightMouseDown?: (e: MouseEvent | TouchEvent) => void;
   readonly onDblClick?: (e: MouseEvent) => void;
   readonly onChangeHeight?: (height: number) => void;
 }): JSXElement {
@@ -159,6 +127,7 @@ export function ActivityNodeView(props: {
     >
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
+        onTouchStart={(e) => props.onLeftMouseDown?.(e)}
         onMouseDown={(e) => props.onLeftMouseDown?.(e)}
       >
         <Switch>
@@ -191,6 +160,7 @@ export function ActivityNodeView(props: {
 
       <div
         class="flex size-full cursor-move select-none flex-col border border-solid border-foreground bg-background hover:bg-secondary"
+        onTouchStart={(e) => props.onMouseDown?.(e)}
         onMouseDown={(e) => props.onMouseDown?.(e)}
         onDblClick={(e) => props.onDblClick?.(e)}
       >
@@ -221,6 +191,7 @@ export function ActivityNodeView(props: {
 
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
+        onTouchStart={(e) => props.onRightMouseDown?.(e)}
         onMouseDown={(e) => props.onRightMouseDown?.(e)}
       >
         <Switch>

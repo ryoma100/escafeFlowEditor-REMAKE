@@ -32,20 +32,20 @@ function App(): JSXElement {
 
   return (
     <>
-      <div class="grid size-full select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr] bg-secondary">
+      <div class="grid h-svh w-svw select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr] bg-secondary">
         <div class="col-start-1 col-end-5 row-start-1">
           <AppMenu />
         </div>
-        <div class="col-start-1 row-start-2 ml-2 h-[calc(35vh_-_20px)]">
+        <div class="col-start-1 row-start-2 ml-2 h-[calc(35svh_-_20px)]">
           <ProcessList />
         </div>
-        <div class="col-start-1 row-start-3 ml-2 h-[calc(65vh_-_20px)]">
+        <div class="col-start-1 row-start-3 ml-2 h-[calc(65svh_-_20px)]">
           <ActorList />
         </div>
         <div class="col-start-2 row-start-2 row-end-4 mt-5">
           <Toolbar />
         </div>
-        <div class="col-start-3 row-start-2 row-end-4 h-[calc(100vh_-_28px)] w-[calc(100vw_-_254px)]">
+        <div class="col-start-3 row-start-2 row-end-4 h-[calc(100svh_-_28px)] w-[calc(100svw_-_254px)]">
           <Main />
         </div>
       </div>

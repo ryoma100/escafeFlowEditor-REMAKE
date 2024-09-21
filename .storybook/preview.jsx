@@ -1,5 +1,7 @@
 import { withThemeByClassName } from "@storybook/addon-themes";
 import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
+import { ModelContext, makeModelContext } from "../src/context/model-context";
+
 import "../src/index.css";
 
 const preview = {
@@ -69,7 +71,9 @@ const preview = {
       value.setColor(globals.color);
       return (
         <ThemeContext.Provider value={value}>
-          <Story />
+          <ModelContext.Provider value={makeModelContext()}>
+            <Story />
+          </ModelContext.Provider>
         </ThemeContext.Provider>
       );
     },

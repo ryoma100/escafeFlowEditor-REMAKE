@@ -18,14 +18,14 @@ export function Main(): JSXElement {
   }
 
   return (
-    <div class="flex h-full flex-col">
+    <div class="flex size-full flex-col">
       <div class="h-6">
         <h5 class="leading-6">{selectedProcess().detail.name}</h5>
       </div>
-      <div class="grow bg-background">
+      <div class="size-full grow bg-background">
         <DiagramContainer />
       </div>
-      <div class="mt-1 flex w-full flex-row justify-center gap-x-2">
+      <div class="mt-1 flex h-7 w-full flex-row justify-center gap-x-2">
         <button type="button" onClick={handleAutoZoomButtonClick}>
           Auto
         </button>
