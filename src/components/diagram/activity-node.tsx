@@ -16,14 +16,12 @@ import { UserActivityIcon } from "@/icons/user-activity-icon";
 
 export function ActivityNodeContainer(props: { readonly activity: ActivityNode }): JSXElement {
   const {
-    activityNodeModel: { resizeActivityHeight, updateJoinType, updateSplitType },
+    activityNodeModel: { resizeActivityHeight },
     actorModel: { actorList },
     nodeModel: { changeSelectNodes, changeTopLayer },
     edgeModel: { changeSelectEdges },
-    extendEdgeModel: { addCommentEdge, addStartEdge },
-    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
     dialogModel: { setModalDialog },
-    diagramModel: { toolbar, dragMode, setDragMode, setAddingLineFrom },
+    diagramModel: { toolbar, setDragMode, setAddingLineFrom },
   } = useModelContext();
 
   function handleLeftMouseDown(_e: MouseEvent | TouchEvent) {
@@ -52,7 +50,7 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
           changeTopLayer(props.activity.id);
           setDragMode({ type: "moveNodes" });
         }
-        break;
+        return;
       case "transition":
         changeSelectNodes("select", [props.activity.id]);
         setAddingLineFrom(
@@ -60,36 +58,7 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
           props.activity.y + props.activity.height / 2,
         );
         setDragMode({ type: "addTransition", fromActivity: props.activity });
-        break;
-    }
-  }
-
-  function handleMouseUp(_e: MouseEvent) {
-    switch (dragMode().type) {
-      case "addTransition":
-        {
-          const transition = addTransitionEdge(props.activity.id);
-          if (transition) {
-            updateJoinType(
-              transition.toNodeId,
-              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
-            );
-            updateSplitType(
-              transition.fromNodeId,
-              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
-            );
-          }
-          setDragMode({ type: "none" });
-        }
-        break;
-      case "addCommentEdge":
-        addCommentEdge(props.activity.id);
-        setDragMode({ type: "none" });
-        break;
-      case "addStartEdge":
-        addStartEdge(props.activity.id);
-        setDragMode({ type: "none" });
-        break;
+        return;
     }
   }
 
@@ -104,7 +73,6 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
       y={props.activity.y}
       width={props.activity.width}
       height={props.activity.height}
-      onMouseUp={handleMouseUp}
     >
       <ActivityNodeView
         activityType={props.activity.activityType}

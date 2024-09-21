@@ -31,19 +31,21 @@ import { TransitionEdgeContainer } from "./transition-edge";
 
 export function DiagramContainer(): JSXElement {
   const {
-    activityNodeModel: { addActivity, resizeLeft, resizeRight },
     actorModel: { selectedActor },
-    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
     nodeModel: {
+      nodeList,
       changeSelectNodes,
       moveSelectedNodes,
       changeTopLayer,
-      nodeList,
       setNodeList,
       scaleSelectedNodes,
       rotateSelectedNodes,
     },
     edgeModel: { edgeList, setEdgeList },
+    activityNodeModel: { addActivity, resizeLeft, resizeRight, updateJoinType, updateSplitType },
+    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
+    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
+    extendEdgeModel: { addCommentEdge, addStartEdge, addEndEdge },
     diagramModel: {
       svgRect,
       changeSvgRect,
@@ -131,8 +133,6 @@ export function DiagramContainer(): JSXElement {
             }, 250);
           }
         }
-        return;
-      case "transition":
         return;
       case "addManualActivity":
         if (nodeList.every((it) => !containsRect(it, { x, y }))) {
@@ -293,7 +293,44 @@ export function DiagramContainer(): JSXElement {
       const pageX = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX;
       const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
       setContextMenuPoint({ x: pageX, y: pageY });
+      return;
     }
+
+    const clientX = e instanceof MouseEvent ? e.clientX : e.changedTouches[0].clientX;
+    const clientY = e instanceof MouseEvent ? e.clientY : e.changedTouches[0].clientY;
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
+    const node = nodeList.find((it) => containsRect(it, { x, y }));
+    switch (dragMode().type) {
+      case "addTransition":
+        if (node?.type === "activityNode") {
+          const transition = addTransitionEdge(node.id);
+          if (transition) {
+            updateJoinType(
+              transition.toNodeId,
+              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
+            );
+            updateSplitType(
+              transition.fromNodeId,
+              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
+            );
+          }
+        } else if (node?.type === "endNode") {
+          addEndEdge(node.id);
+        }
+        break;
+      case "addCommentEdge":
+        if (node?.type === "activityNode") {
+          addCommentEdge(node.id);
+        }
+        break;
+      case "addStartEdge":
+        if (node?.type === "activityNode") {
+          addStartEdge(node.id);
+        }
+        break;
+    }
+
     setDragMode({ type: "none" });
   }
 
@@ -312,28 +349,28 @@ export function DiagramContainer(): JSXElement {
     switch (menuItem) {
       case "select":
         setToolbar("cursor");
-        break;
+        return;
       case "transition":
         setToolbar("transition");
-        break;
+        return;
       case "manualActivity":
         setToolbar("addManualActivity");
-        break;
+        return;
       case "autoActivity":
         setToolbar("addAutoActivity");
-        break;
+        return;
       case "handWork":
         setToolbar("addUserActivity");
-        break;
+        return;
       case "start":
         setToolbar("addStartNode");
-        break;
+        return;
       case "end":
         setToolbar("addEndNode");
-        break;
+        return;
       case "comment":
         setToolbar("addCommentNode");
-        break;
+        return;
     }
   }
 

@@ -11,9 +11,8 @@ export function ExtendNodeContainer(props: {
 }): JSXElement {
   const {
     extendNodeModel: { resizeCommentNode },
-    extendEdgeModel: { addEndEdge },
     nodeModel: { changeSelectNodes },
-    diagramModel: { toolbar, dragMode: dragType, setDragMode: setDragType, setAddingLineFrom },
+    diagramModel: { toolbar, setDragMode, setAddingLineFrom },
     dialogModel: { setModalDialog: setOpenDialog },
   } = useModelContext();
 
@@ -24,39 +23,27 @@ export function ExtendNodeContainer(props: {
       case "cursor":
         if (e.shiftKey) {
           changeSelectNodes("toggle", [props.node.id]);
-          setDragType({ type: "none" });
+          setDragMode({ type: "none" });
           e.stopPropagation();
         } else {
           if (!props.node.selected) {
             changeSelectNodes("select", [props.node.id]);
           }
-          setDragType({ type: "moveNodes" });
+          setDragMode({ type: "moveNodes" });
         }
-        break;
+        return;
       case "transition":
         changeSelectNodes("select", [props.node.id]);
         setAddingLineFrom(
           props.node.x + props.node.width / 2,
           props.node.y + props.node.height / 2,
         );
-        switch (props.node.type) {
-          case "commentNode":
-            setDragType({ type: "addCommentEdge", fromComment: props.node });
-            break;
-          case "startNode":
-            setDragType({ type: "addStartEdge", fromStart: props.node });
-            break;
+        if (props.node.type === "commentNode") {
+          setDragMode({ type: "addCommentEdge", fromComment: props.node });
+        } else if (props.node.type === "startNode") {
+          setDragMode({ type: "addStartEdge", fromStart: props.node });
         }
-        break;
-    }
-  }
-
-  function handleMouseUp(_e: MouseEvent) {
-    switch (dragType().type) {
-      case "addTransition":
-        addEndEdge(props.node.id);
-        setDragType({ type: "none" });
-        break;
+        return;
     }
   }
 
@@ -87,11 +74,7 @@ export function ExtendNodeContainer(props: {
           <StartNodeView selected={props.node.selected} onMouseDown={handleMouseDown} />
         </Match>
         <Match when={props.node.type === "endNode"}>
-          <EndNodeView
-            selected={props.node.selected}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-          />
+          <EndNodeView selected={props.node.selected} onMouseDown={handleMouseDown} />
         </Match>
       </Switch>
     </foreignObject>

@@ -53,20 +53,15 @@ export function AppMenu(): JSXElement {
   function handleEditPropertyClick() {
     if (getSelectedNodes().length + selectedEdges().length === 1) {
       getSelectedNodes().forEach((it) => {
-        switch (it.type) {
-          case "activityNode":
-            setOpenDialog({ type: "activity", activity: it });
-            break;
-          case "commentNode":
-            setOpenDialog({ type: "comment", comment: it });
-            break;
+        if (it.type === "activityNode") {
+          setOpenDialog({ type: "activity", activity: it });
+        } else if (it.type === "commentNode") {
+          setOpenDialog({ type: "comment", comment: it });
         }
       });
       selectedEdges().forEach((it) => {
-        switch (it.type) {
-          case "transitionEdge":
-            setOpenDialog({ type: "transition", transition: it });
-            break;
+        if (it.type === "transitionEdge") {
+          setOpenDialog({ type: "transition", transition: it });
         }
       });
     }

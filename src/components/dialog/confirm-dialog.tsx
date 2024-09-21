@@ -14,14 +14,8 @@ export function ConfirmDialog(): JSXElement {
 
   function handleSubmit() {
     const dialog = openDialog();
-    switch (dialog?.type) {
-      case "initAll":
-        initProject();
-        break;
-      case "deleteProcess":
-        removeProcess(dialog.process);
-        break;
-    }
+    if (dialog?.type === "initAll") initProject();
+    if (dialog?.type === "deleteProcess") removeProcess(dialog.process);
     setOpenDialog(null);
   }
 
