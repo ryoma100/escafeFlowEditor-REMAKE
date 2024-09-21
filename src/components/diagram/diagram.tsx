@@ -2,7 +2,13 @@ import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
-import { defaultCircle, defaultPoint, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
+import {
+  defaultCircle,
+  defaultLine,
+  defaultPoint,
+  defaultRectangle,
+  GRID_SPACING,
+} from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -21,6 +27,7 @@ import {
   StartNode,
   TransitionEdge,
 } from "@/data-source/data-type";
+import { centerPoint, lineDistance } from "@/utils/line-utils";
 import { pointLength } from "@/utils/point-utils";
 import { containsRect, intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
 
@@ -68,8 +75,9 @@ export function DiagramContainer(): JSXElement {
   const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
 
   onMount(() => {
+    document.addEventListener("touchstart", handleDocumentTouchStart, { passive: false });
     document.addEventListener("mousemove", handleDocumentMouseMove);
-    document.addEventListener("touchmove", handleDocumentMouseMove);
+    document.addEventListener("touchmove", handleDocumentTouchMove);
     document.addEventListener("mouseup", handleDocumentMouseUp);
     document.addEventListener("touchend", handleDocumentMouseUp);
   });
@@ -180,6 +188,39 @@ export function DiagramContainer(): JSXElement {
         }
         return;
     }
+  }
+
+  let prevTouchPoints: Line = defaultLine;
+  function handleDocumentTouchStart(e: TouchEvent) {
+    if (e.touches.length > 1) e.preventDefault(); // cancel default zoom
+    if (e.touches.length !== 2) return; // guard
+
+    const p1: Point = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    const p2: Point = { x: e.touches[1].clientX, y: e.touches[1].clientY };
+    prevTouchPoints = { p1, p2 };
+  }
+
+  function handleDocumentTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    if (e.touches.length === 1) return handleDocumentMouseMove(e);
+    if (e.touches.length !== 2) return; // guard
+
+    const p1: Point = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    const p2: Point = { x: e.touches[1].clientX, y: e.touches[1].clientY };
+    const newTouchPoints = { p1, p2 };
+    const newCenterPoint = centerPoint(newTouchPoints);
+    const newDistance = lineDistance(newTouchPoints);
+    const prevCenterPoint = centerPoint(prevTouchPoints);
+    const prevDistance = lineDistance(prevTouchPoints);
+    changeZoom(zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
+    setViewBox({
+      x: viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
+      y: viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
+      width: viewBox().width,
+      height: viewBox().height,
+    });
+
+    prevTouchPoints = newTouchPoints;
   }
 
   function handleDocumentMouseMove(e: MouseEvent | TouchEvent) {
