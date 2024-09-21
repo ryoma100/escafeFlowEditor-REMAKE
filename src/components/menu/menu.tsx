@@ -111,36 +111,50 @@ export function AppMenu(): JSXElement {
     return false;
   }
 
+  function handleFUllScreenClick() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.body.requestFullscreen();
+    }
+    return false;
+  }
+
   return (
-    <MenuBar>
-      <Menu title={t("file")}>
-        <MenuItem title={t("new")} onClick={handleFileNewClick} />
-        <MenuItem title={t("open")} onClick={handleFileOpenClick} />
-        <MenuItem title={t("save")} onClick={handleFileSaveClick} />
-        <MenuItem title={t("setting")} onClick={handleFileSettingClick} />
-      </Menu>
-      <Menu title={t("edit")}>
-        <MenuItem title={t("selectAll")} onClick={handleEditSelectAllClick} />
-        <MenuItem title={t("delete")} onClick={handleEditRemoveClick} />
-        <MenuItem title={t("property")} onClick={handleEditPropertyClick} />
-      </Menu>
-      <Menu title={t("package")}>
-        <MenuItem title={t("property")} onClick={handleProjectPropertyClick} />
-      </Menu>
-      <Menu title={t("process")}>
-        <MenuItem title={t("add")} onClick={handleProcessAddClick} />
-        <MenuItem title={t("delete")} onClick={handleProcessRemoveClick} />
-        <MenuItem title={t("property")} onClick={handleProcessPropertyClick} />
-      </Menu>
-      <Menu title={t("actor")}>
-        <MenuItem title={t("add")} onClick={handleActorAddClick} />
-        <MenuItem title={t("delete")} onClick={handleActorRemoveClick} />
-        <MenuItem title={t("property")} onClick={handleActorPropertyClick} />
-      </Menu>
-      <Menu title={t("help")}>
-        <MenuItem title={t("about")} onClick={handleHelpAboutClick} />
-      </Menu>
-    </MenuBar>
+    <div class="flex size-full flex-row justify-between bg-primary">
+      <MenuBar>
+        <Menu title={t("file")}>
+          <MenuItem title={t("new")} onClick={handleFileNewClick} />
+          <MenuItem title={t("open")} onClick={handleFileOpenClick} />
+          <MenuItem title={t("save")} onClick={handleFileSaveClick} />
+          <MenuItem title={t("setting")} onClick={handleFileSettingClick} />
+        </Menu>
+        <Menu title={t("edit")}>
+          <MenuItem title={t("selectAll")} onClick={handleEditSelectAllClick} />
+          <MenuItem title={t("delete")} onClick={handleEditRemoveClick} />
+          <MenuItem title={t("property")} onClick={handleEditPropertyClick} />
+        </Menu>
+        <Menu title={t("package")}>
+          <MenuItem title={t("property")} onClick={handleProjectPropertyClick} />
+        </Menu>
+        <Menu title={t("process")}>
+          <MenuItem title={t("add")} onClick={handleProcessAddClick} />
+          <MenuItem title={t("delete")} onClick={handleProcessRemoveClick} />
+          <MenuItem title={t("property")} onClick={handleProcessPropertyClick} />
+        </Menu>
+        <Menu title={t("actor")}>
+          <MenuItem title={t("add")} onClick={handleActorAddClick} />
+          <MenuItem title={t("delete")} onClick={handleActorRemoveClick} />
+          <MenuItem title={t("property")} onClick={handleActorPropertyClick} />
+        </Menu>
+        <Menu title={t("help")}>
+          <MenuItem title={t("about")} onClick={handleHelpAboutClick} />
+        </Menu>
+      </MenuBar>
+      <a class="flex items-center px-4 py-1" href="#" onClick={handleFUllScreenClick}>
+        {t("fullScreen")}
+      </a>
+    </div>
   );
 }
 

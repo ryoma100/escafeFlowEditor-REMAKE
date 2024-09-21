@@ -17,6 +17,7 @@ export const i18nJaDict: I18nDict = {
   add: "追加",
   help: "ヘルプ",
   about: "このエディタについて",
+  fullScreen: "フルスクリーン",
 
   // toolbar
   select: "選択",
