@@ -192,6 +192,8 @@ export function DiagramContainer(): JSXElement {
 
   let prevTouchPoints: Line = defaultLine;
   function handleDocumentTouchStart(e: TouchEvent) {
+    if (!(e.touches[0].pageX > 24 && e.touches[0].pageX < window.innerWidth - 24))
+      e.preventDefault(); // cancel iOS back swipe
     if (e.touches.length > 1) e.preventDefault(); // cancel default zoom
     if (e.touches.length !== 2) return; // guard
 

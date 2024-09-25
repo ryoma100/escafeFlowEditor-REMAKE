@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { For, JSXElement } from "solid-js";
+import { createSignal, For, JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
@@ -14,6 +14,8 @@ export function ActorList(): JSXElement {
     dialogModel: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
   } = useModelContext();
   const t = i18n.translator(dict);
+
+  const [hoverId, setHoverId] = createSignal<number>(0);
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
     if (selectedActor().id !== actor.id) {
@@ -36,6 +38,17 @@ export function ActorList(): JSXElement {
     }
   }
 
+  function handleItemPointerEnter(actor: ActorEntity, e: PointerEvent) {
+    if (e.pointerType !== "touch") {
+      setHoverId(actor.id);
+    }
+  }
+
+  function handleItemPointerLeave(e: PointerEvent) {
+    if (e.pointerType !== "touch") {
+      setHoverId(0);
+    }
+  }
   return (
     <div class="flex h-full flex-col">
       <h5>{t("actor")}</h5>
@@ -44,8 +57,13 @@ export function ActorList(): JSXElement {
           <For each={actorList}>
             {(it) => (
               <li
-                class="cursor-pointer p-1 hover:bg-primary"
-                classList={{ "bg-primary": it.id === selectedActor().id }}
+                class="cursor-pointer p-1"
+                classList={{
+                  "bg-primary": it.id === selectedActor().id,
+                  "bg-secondary": it.id === hoverId() && it.id !== selectedActor().id,
+                }}
+                onPointerEnter={[handleItemPointerEnter, it]}
+                onPointerLeave={handleItemPointerLeave}
                 onMouseDown={[handleItemMouseDown, it]}
                 onDblClick={[handleItemDblClick, it]}
               >
