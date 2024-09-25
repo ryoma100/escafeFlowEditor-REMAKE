@@ -4,7 +4,7 @@ import { i18nEnDict } from "@/constants/i18n";
 import { makeEdgeModel } from "@/data-model/edge-model";
 import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { TransitionEdge } from "@/data-source/data-type";
+import { NodeId, TransitionEdge } from "@/data-source/data-type";
 
 export function makeTransactionEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,
@@ -14,7 +14,7 @@ export function makeTransactionEdgeModel(
     return edgeModel.edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   }
 
-  function addTransitionEdge(toActivityId: number): TransitionEdge | null {
+  function addTransitionEdge(toActivityId: NodeId): TransitionEdge | null {
     const fromActivityId = nodeModel.nodeList.find((it) => it.selected)!.id;
     const transitionList = getTransitionEdges();
 

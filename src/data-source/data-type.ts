@@ -1,25 +1,29 @@
-type datetime = string;
+type Brand<K, T> = K & { __brand: T };
+
+export type DateTime = Brand<string, "DateTime">;
+export type XpdlId = Brand<string, "XpdlId">;
 
 export type ProjectEntity = {
-  created: datetime;
+  created: DateTime;
   detail: ProjectDetailEntity;
   processes: ProcessEntity[];
 };
 
 export type ProjectDetailEntity = {
-  xpdlId: string;
+  xpdlId: XpdlId;
   name: string;
 };
 
+export type ProcessId = Brand<number, "ProcessId">;
 export type ProcessEntity = Graph & {
-  id: number;
-  created: datetime;
+  id: ProcessId;
+  created: DateTime;
   detail: ProcessDetailEntity;
   actors: ActorEntity[];
 };
 
 export type ProcessDetailEntity = {
-  xpdlId: string;
+  xpdlId: XpdlId;
   name: string;
   validFrom: string;
   validTo: string;
@@ -27,23 +31,26 @@ export type ProcessDetailEntity = {
   applications: ApplicationEntity[];
 };
 
+export type EnvironmentId = Brand<number, "EnvironmentId">;
 export type EnvironmentEntity = {
-  id: number;
+  id: EnvironmentId;
   name: string;
   value: string;
 };
 
+export type ApplicationId = Brand<number, "ApplicationId">;
 export type ApplicationEntity = {
-  id: number;
-  xpdlId: string;
+  id: ApplicationId;
+  xpdlId: XpdlId;
   name: string;
   extendedName: string;
   extendedValue: string;
 };
 
+export type ActorId = Brand<number, "ActorId">;
 export type ActorEntity = {
-  id: number;
-  xpdlId: string;
+  id: ActorId;
+  xpdlId: XpdlId;
   name: string;
 };
 
@@ -86,8 +93,9 @@ export type Circle = { cx: number; cy: number; r: number };
 
 export type NodeType = "activityNode" | "startNode" | "endNode" | "commentNode";
 
+export type NodeId = Brand<number, "NodeId">;
 type IBaseNode = Rectangle & {
-  id: number;
+  id: NodeId;
   type: NodeType;
   selected: boolean;
 };
@@ -104,11 +112,11 @@ export type ActivitySplitType = "notSplit" | "oneSplit" | "xorSplit" | "andSplit
 export type ActivityNode = IBaseNode & {
   type: "activityNode";
   activityType: ActivityNodeType;
-  xpdlId: string;
-  actorId: number;
+  xpdlId: XpdlId;
+  actorId: ActorId;
   name: string;
   applications: {
-    id: number;
+    id: ApplicationId;
     ognl: string;
   }[];
   ognl: string;
@@ -137,17 +145,18 @@ export type INode = ActivityNode | StartNode | EndNode | CommentNode;
 
 export type EdgeType = "transitionEdge" | "startEdge" | "endEdge" | "commentEdge";
 
+export type EdgeId = Brand<number, "EdgeId">;
 type IBaseEdge = {
-  id: number;
+  id: EdgeId;
   type: EdgeType;
-  fromNodeId: number;
-  toNodeId: number;
+  fromNodeId: NodeId;
+  toNodeId: NodeId;
   selected: boolean;
 };
 
 export type TransitionEdge = IBaseEdge & {
   type: "transitionEdge";
-  xpdlId: string;
+  xpdlId: XpdlId;
   ognl: string;
 };
 

@@ -4,19 +4,27 @@ import {
   ActivityNode,
   ActivityNodeType,
   ActorEntity,
+  ActorId,
   ApplicationEntity,
+  ApplicationId,
   CommentEdge,
   CommentNode,
+  DateTime,
+  EdgeId,
   EndEdge,
   EndNode,
   EnvironmentEntity,
+  EnvironmentId,
   IEdge,
   INode,
+  NodeId,
   ProcessEntity,
+  ProcessId,
   ProjectEntity,
   StartEdge,
   StartNode,
   TransitionEdge,
+  XpdlId,
 } from "@/data-source/data-type";
 
 let dict: I18nDict = i18nEnDict;
@@ -25,11 +33,11 @@ export function setDataFactoryDict(newDict: I18nDict) {
   dict = newDict;
 }
 
-function createProject(created: string = new Date().toISOString()): ProjectEntity {
+function createProject(created: DateTime = new Date().toISOString() as DateTime): ProjectEntity {
   const project: ProjectEntity = {
     created,
     detail: {
-      xpdlId: "package",
+      xpdlId: "package" as XpdlId,
       name: dict.package,
     },
     processes: [createProcess([], created)],
@@ -39,13 +47,13 @@ function createProject(created: string = new Date().toISOString()): ProjectEntit
 
 function createProcess(
   processList: ProcessEntity[],
-  created: string = new Date().toISOString(),
+  created: DateTime = new Date().toISOString() as DateTime,
 ): ProcessEntity {
-  let id = maxId(processList);
-  let xpdlId = "";
+  let id = maxId(processList) as ProcessId;
+  let xpdlId = "" as XpdlId;
   do {
     id++;
-    xpdlId = `process-${id}`;
+    xpdlId = `process-${id}` as XpdlId;
   } while (processList.some((it) => it.detail.xpdlId === xpdlId));
 
   const process: ProcessEntity = {
@@ -67,7 +75,7 @@ function createProcess(
 }
 
 function createEnvironment(environmentList: EnvironmentEntity[]): EnvironmentEntity {
-  const id = maxId(environmentList) + 1;
+  const id = (maxId(environmentList) + 1) as EnvironmentId;
   return {
     id,
     name: `name${id}`,
@@ -76,11 +84,11 @@ function createEnvironment(environmentList: EnvironmentEntity[]): EnvironmentEnt
 }
 
 function createApplication(applicationList: ApplicationEntity[]): ApplicationEntity {
-  let id = maxId(applicationList);
-  let xpdlId = "";
+  let id = maxId(applicationList) as ApplicationId;
+  let xpdlId = "" as XpdlId;
   do {
     id++;
-    xpdlId = `application-${id}`;
+    xpdlId = `application-${id}` as XpdlId;
   } while (applicationList.some((it) => it.xpdlId === xpdlId));
 
   return {
@@ -93,11 +101,11 @@ function createApplication(applicationList: ApplicationEntity[]): ApplicationEnt
 }
 
 function createActorEntity(actorList: ActorEntity[]): ActorEntity {
-  let id = maxId(actorList);
-  let xpdlId = "";
+  let id = maxId(actorList) as ActorId;
+  let xpdlId = "" as XpdlId;
   do {
     id++;
-    xpdlId = `actor-${id}`;
+    xpdlId = `actor-${id}` as XpdlId;
   } while (actorList.some((it) => it.xpdlId === xpdlId));
 
   return {
@@ -109,21 +117,21 @@ function createActorEntity(actorList: ActorEntity[]): ActorEntity {
 
 function createActivityNode(
   nodeList: INode[],
-  actorId: number,
+  actorId: ActorId,
   activityType: ActivityNodeType,
   cx: number,
   cy: number,
 ): ActivityNode {
   const activityList = nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
   let activityId = activityList.length;
-  let xpdlId = "";
+  let xpdlId = "" as XpdlId;
   do {
     activityId++;
-    xpdlId = `activity-${activityId}`;
+    xpdlId = `activity-${activityId}` as XpdlId;
   } while (activityList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id: maxId(nodeList) + 1,
+    id: (maxId(nodeList) + 1) as NodeId,
     xpdlId,
     type: "activityNode",
     activityType,
@@ -143,19 +151,19 @@ function createActivityNode(
 
 function createTransitionEdge(
   edgeList: IEdge[],
-  fromNodeId: number,
-  toNodeId: number,
+  fromNodeId: NodeId,
+  toNodeId: NodeId,
 ): TransitionEdge {
   const transitionList = edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   let transitionId = transitionList.length;
-  let xpdlId = "";
+  let xpdlId = "" as XpdlId;
   do {
     transitionId++;
-    xpdlId = `transition-${transitionId}`;
+    xpdlId = `transition-${transitionId}` as XpdlId;
   } while (transitionList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id: maxId(edgeList) + 1,
+    id: (maxId(edgeList) + 1) as EdgeId,
     xpdlId,
     type: "transitionEdge",
     fromNodeId,
@@ -167,7 +175,7 @@ function createTransitionEdge(
 
 function createCommentNode(nodeList: INode[], x: number, y: number): CommentNode {
   return {
-    id: maxId(nodeList) + 1,
+    id: (maxId(nodeList) + 1) as NodeId,
     type: "commentNode",
     comment: dict.comment,
     x,
@@ -178,9 +186,9 @@ function createCommentNode(nodeList: INode[], x: number, y: number): CommentNode
   };
 }
 
-function createCommentEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number): CommentEdge {
+function createCommentEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): CommentEdge {
   return {
-    id: maxId(edgeList) + 1,
+    id: (maxId(edgeList) + 1) as EdgeId,
     type: "commentEdge",
     fromNodeId,
     toNodeId,
@@ -190,7 +198,7 @@ function createCommentEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: numb
 
 function createStartNode(nodeList: INode[], x: number, y: number): StartNode {
   return {
-    id: maxId(nodeList) + 1,
+    id: (maxId(nodeList) + 1) as NodeId,
     type: "startNode",
     x,
     y,
@@ -200,9 +208,9 @@ function createStartNode(nodeList: INode[], x: number, y: number): StartNode {
   };
 }
 
-function createStartEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number): StartEdge {
+function createStartEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): StartEdge {
   return {
-    id: maxId(edgeList) + 1,
+    id: (maxId(edgeList) + 1) as EdgeId,
     type: "startEdge",
     fromNodeId,
     toNodeId,
@@ -212,7 +220,7 @@ function createStartEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number
 
 function createEndNode(nodeList: INode[], x: number, y: number): EndNode {
   return {
-    id: maxId(nodeList) + 1,
+    id: (maxId(nodeList) + 1) as NodeId,
     type: "endNode",
     x,
     y,
@@ -222,9 +230,9 @@ function createEndNode(nodeList: INode[], x: number, y: number): EndNode {
   };
 }
 
-function createEndEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number): EndEdge {
+function createEndEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): EndEdge {
   return {
-    id: maxId(edgeList) + 1,
+    id: (maxId(edgeList) + 1) as EdgeId,
     type: "endEdge",
     fromNodeId,
     toNodeId,

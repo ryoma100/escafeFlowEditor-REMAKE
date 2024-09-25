@@ -16,6 +16,7 @@ import {
   EndEdge,
   EndNode,
   EnvironmentEntity,
+  EnvironmentId,
   IEdge,
   INode,
   Point,
@@ -467,7 +468,7 @@ function parseExtendNode(
         it["@_Name"] !== "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
     )
     .map((it, idx) => ({
-      id: idx + 1,
+      id: (idx + 1) as EnvironmentId,
       name: it["@_Name"],
       value: it["@_Value"],
     }));

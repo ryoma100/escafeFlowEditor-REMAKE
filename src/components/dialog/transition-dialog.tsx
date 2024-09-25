@@ -6,7 +6,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { TransitionEdge } from "@/data-source/data-type";
+import { NodeId, TransitionEdge } from "@/data-source/data-type";
 
 export function TransitionDialog(): JSXElement {
   const {
@@ -68,7 +68,7 @@ export function TransitionDialogView(props: {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
-  const dummy = dataFactory.createTransitionEdge([], 0, 0);
+  const dummy = dataFactory.createTransitionEdge([], 0 as NodeId, 0 as NodeId);
   const [formData, setFormData] = createStore<TransitionEdge>(dummy);
   const [showOgnl, setShowOgnl] = createSignal<boolean>(false);
 
