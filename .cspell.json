@@ -45,6 +45,7 @@
     "storybook-static/**",
     "pnpm-lock.yaml",
     "src-tauri/target/**",
+    "src-tauri/gen/**",
     "**/*.icns",
     "**/*.svg",
     "**/*.avif",
