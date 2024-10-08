@@ -2,47 +2,26 @@
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "escafeFlowEditor-REMAKE",
-    "version": "0.0.0"
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "fs": {
-        "readFile": true,
-        "writeFile": true
-      },
-      "dialog": {
-        "open": true,
-        "save": true,
-        "confirm": true
-      },
-      "shell": {
-        "open": true
-      },
-      "process": {
-        "exit": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "io.github.ryoma100.escafe-flow-editor-remake",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ]
-    },
-    "security": {
-      "csp": null
-    },
+  "productName": "escafeFlowEditor-REMAKE",
+  "mainBinaryName": "escafeFlowEditor-REMAKE",
+  "version": "0.0.0",
+  "identifier": "io.github.ryoma100.escafe-flow-editor-remake",
+  "plugins": {},
+  "app": {
     "windows": [
       {
         "fullscreen": false,
@@ -51,6 +30,9 @@
         "width": 800,
         "height": 600
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
   }
 }

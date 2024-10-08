@@ -1,7 +1,7 @@
-import { dialog } from "@tauri-apps/api";
 import { TauriEvent } from "@tauri-apps/api/event";
-import { exit } from "@tauri-apps/api/process";
-import { appWindow } from "@tauri-apps/api/window";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+import * as dialog from "@tauri-apps/plugin-dialog";
+import { exit } from "@tauri-apps/plugin-process";
 import { JSXElement, Show } from "solid-js";
 
 import { AboutDialog } from "@/components/dialog/about-dialog";
@@ -78,6 +78,7 @@ function WindowUnloadDialog() {
   });
 
   if ("__TAURI_IPC__" in window) {
+    const appWindow = getCurrentWebviewWindow();
     appWindow.listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
       const confirmed = await dialog.confirm(dict().exit);
       if (confirmed) {
