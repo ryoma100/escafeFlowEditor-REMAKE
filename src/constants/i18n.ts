@@ -17,7 +17,6 @@ export const i18nEnDict = {
   add: "Add",
   help: "Help",
   about: "About this Editor",
-  fullScreen: "Full Screen",
 
   // toolbar
   select: "Select",

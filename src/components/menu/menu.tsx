@@ -111,15 +111,6 @@ export function AppMenu(): JSXElement {
     return false;
   }
 
-  function handleFUllScreenClick() {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      document.body.requestFullscreen();
-    }
-    return false;
-  }
-
   return (
     <div class="flex size-full flex-row justify-between bg-primary">
       <MenuBar>
@@ -151,9 +142,6 @@ export function AppMenu(): JSXElement {
           <MenuItem title={t("about")} onClick={handleHelpAboutClick} />
         </Menu>
       </MenuBar>
-      <a class="flex items-center px-4 py-1" href="#" onClick={handleFUllScreenClick}>
-        {t("fullScreen")}
-      </a>
     </div>
   );
 }
