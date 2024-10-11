@@ -44,7 +44,7 @@ export function ProcessList(): JSXElement {
               <li
                 data-select={it.id === selectedProcess().id}
                 class="cursor-pointer p-1 hover:bg-primary data-[select=true]:bg-primary"
-                onMouseDown={[handleItemMouseDown, it]}
+                onPointerDown={[handleItemMouseDown, it]}
                 onDblClick={[handleItemDblClick, it]}
               >
                 {it.detail.name}

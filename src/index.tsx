@@ -31,3 +31,12 @@ window.addEventListener(
   },
   { passive: false },
 );
+
+// cancel touch panel zoom on mac
+window.addEventListener(
+  "wheel",
+  (e) => {
+    e.preventDefault();
+  },
+  { passive: false },
+);

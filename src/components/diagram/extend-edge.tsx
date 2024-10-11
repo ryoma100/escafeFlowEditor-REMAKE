@@ -24,7 +24,7 @@ export function ExtendEdgeContainer(props: {
     }
   };
 
-  function handleMouseDown(e: MouseEvent) {
+  function handlePointerDown(e: PointerEvent) {
     e.stopPropagation();
 
     if (e.shiftKey) {
@@ -42,7 +42,7 @@ export function ExtendEdgeContainer(props: {
       toX={fromToNode()[1].x + fromToNode()[1].width / 2}
       toY={fromToNode()[1].y + fromToNode()[1].height / 2}
       selected={props.edge.selected}
-      onMouseDown={handleMouseDown}
+      onPointerDown={handlePointerDown}
     />
   );
 }
@@ -53,7 +53,7 @@ export function OtherEdgeView(props: {
   readonly toX: number;
   readonly toY: number;
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent) => void;
+  readonly onPointerDown?: (e: PointerEvent) => void;
 }): JSXElement {
   return (
     <>
@@ -71,7 +71,7 @@ export function OtherEdgeView(props: {
           "stroke-transparent": !props.selected,
           "stroke-primary": props.selected,
         }}
-        onMouseDown={(e) => props.onMouseDown?.(e)}
+        onPointerDown={(e) => props.onPointerDown?.(e)}
         x1={props.fromX}
         y1={props.fromY}
         x2={props.toX}
