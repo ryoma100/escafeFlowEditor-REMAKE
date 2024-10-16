@@ -2,13 +2,7 @@ import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
 import { produce } from "solid-js/store";
 
 import { ContextMenu } from "@/components/parts/context-menu";
-import {
-  defaultCircle,
-  defaultLine,
-  defaultPoint,
-  defaultRectangle,
-  GRID_SPACING,
-} from "@/constants/app-const";
+import { defaultCircle, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -75,33 +69,28 @@ export function DiagramContainer(): JSXElement {
   const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
 
   onMount(() => {
-    document.addEventListener("touchstart", handleDocumentTouchStart, { passive: false });
-    document.addEventListener("mousemove", handleDocumentMouseMove);
-    document.addEventListener("touchmove", handleDocumentTouchMove);
-    document.addEventListener("mouseup", handleDocumentMouseUp);
-    document.addEventListener("touchend", handleDocumentMouseUp);
+    document.addEventListener("pointermove", handleDocumentPointerMove, { passive: true });
+    document.addEventListener("pointerup", handleDocumentPointerUp);
   });
 
-  let prevClientPoint: Point = defaultPoint;
+  const pointerEvents: Map<number, PointerEvent> = new Map();
   let mouseDownTime = new Date().getTime();
-  function handleMouseDown(e: MouseEvent | TouchEvent) {
+
+  function handleDiagramPointerDown(e: PointerEvent) {
     e.preventDefault();
+    pointerEvents.set(e.pointerId, e);
 
-    const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
-    const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
-    prevClientPoint = { x: clientX, y: clientY };
-
-    if (e instanceof MouseEvent && e.button === 2) {
+    if (e.pointerType === "mouse" && e.button === 2) {
       setDragMode({ type: "contextMenuScroll" });
       return;
     }
 
-    if (e instanceof MouseEvent && e.button !== 0) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
     if (contextMenuPoint() != null) return;
     if (dragMode().type !== "none") return;
 
-    const x = viewBox().x + (clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (clientY - svgRect().y) / zoom();
+    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
     switch (toolbar()) {
       case "cursor":
         {
@@ -190,48 +179,42 @@ export function DiagramContainer(): JSXElement {
     }
   }
 
-  let prevTouchPoints: Line = defaultLine;
-  function handleDocumentTouchStart(e: TouchEvent) {
-    if (e.touches.length > 1) e.preventDefault(); // cancel default zoom
-    if (e.touches.length !== 2) return; // guard
+  function handleDocumentPointerMove(e: PointerEvent) {
+    const prevEvent = pointerEvents.get(e.pointerId);
+    if (prevEvent == null || pointerEvents.size > 2) return;
 
-    const p1: Point = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    const p2: Point = { x: e.touches[1].clientX, y: e.touches[1].clientY };
-    prevTouchPoints = { p1, p2 };
-  }
+    if (pointerEvents.size === 2) {
+      const prevEvents = Array.from(pointerEvents.values());
+      const prevP1: Point = { x: prevEvents[0].clientX, y: prevEvents[0].clientY };
+      const prevP2: Point = { x: prevEvents[1].clientX, y: prevEvents[1].clientY };
+      const prevTouchPoints = { p1: prevP1, p2: prevP2 };
+      const prevCenterPoint = centerPoint(prevTouchPoints);
+      const prevDistance = lineDistance(prevTouchPoints);
 
-  function handleDocumentTouchMove(e: TouchEvent) {
-    e.preventDefault();
-    if (e.touches.length === 1) return handleDocumentMouseMove(e);
-    if (e.touches.length !== 2) return; // guard
+      pointerEvents.set(e.pointerId, e);
+      const newEvents = Array.from(pointerEvents.values());
+      const newP1: Point = { x: newEvents[0].clientX, y: newEvents[0].clientY };
+      const newP2: Point = { x: newEvents[1].clientX, y: newEvents[1].clientY };
+      const newTouchPoints = { p1: newP1, p2: newP2 };
+      const newCenterPoint = centerPoint(newTouchPoints);
+      const newDistance = lineDistance(newTouchPoints);
 
-    const p1: Point = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    const p2: Point = { x: e.touches[1].clientX, y: e.touches[1].clientY };
-    const newTouchPoints = { p1, p2 };
-    const newCenterPoint = centerPoint(newTouchPoints);
-    const newDistance = lineDistance(newTouchPoints);
-    const prevCenterPoint = centerPoint(prevTouchPoints);
-    const prevDistance = lineDistance(prevTouchPoints);
-    changeZoom(zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
-    setViewBox({
-      x: viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
-      y: viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
-      width: viewBox().width,
-      height: viewBox().height,
-    });
+      changeZoom(zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
+      setViewBox({
+        x: viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
+        y: viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
+        width: viewBox().width,
+        height: viewBox().height,
+      });
+      return;
+    }
 
-    prevTouchPoints = newTouchPoints;
-  }
+    const moveX = (e.clientX - prevEvent.clientX) / zoom();
+    const moveY = (e.clientY - prevEvent.clientY) / zoom();
+    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
 
-  function handleDocumentMouseMove(e: MouseEvent | TouchEvent) {
-    const clientX = e instanceof MouseEvent ? e.clientX : e.touches[0].clientX;
-    const clientY = e instanceof MouseEvent ? e.clientY : e.touches[0].clientY;
-    const moveX = (clientX - prevClientPoint.x) / zoom();
-    const moveY = (clientY - prevClientPoint.y) / zoom();
-    prevClientPoint = { x: clientX, y: clientY };
-
-    const x = viewBox().x + (clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (clientY - svgRect().y) / zoom();
+    pointerEvents.set(e.pointerId, e);
 
     const drag = dragMode();
     switch (drag.type) {
@@ -322,25 +305,23 @@ export function DiagramContainer(): JSXElement {
       case "addCommentEdge":
       case "addStartEdge":
         setAddingLineTo(
-          viewBox().x + (clientX - svgRect().x) / zoom(),
-          viewBox().y + (clientY - svgRect().y) / zoom(),
+          viewBox().x + (e.clientX - svgRect().x) / zoom(),
+          viewBox().y + (e.clientY - svgRect().y) / zoom(),
         );
         return;
     }
   }
 
-  function handleDocumentMouseUp(e: MouseEvent | TouchEvent) {
+  function handleDocumentPointerUp(e: PointerEvent) {
+    pointerEvents.delete(e.pointerId);
+
     if (dragMode().type === "contextMenuScroll") {
-      const pageX = e instanceof MouseEvent ? e.pageX : e.touches[0].pageX;
-      const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
-      setContextMenuPoint({ x: pageX, y: pageY });
+      setContextMenuPoint({ x: e.pageX, y: e.pageY });
       return;
     }
 
-    const clientX = e instanceof MouseEvent ? e.clientX : e.changedTouches[0].clientX;
-    const clientY = e instanceof MouseEvent ? e.clientY : e.changedTouches[0].clientY;
-    const x = viewBox().x + (clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (clientY - svgRect().y) / zoom();
+    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
     const node = nodeList.find((it) => containsRect(it, { x, y }));
     switch (dragMode().type) {
       case "addTransition":
@@ -416,6 +397,9 @@ export function DiagramContainer(): JSXElement {
   }
 
   function handleWheel(e: WheelEvent) {
+    console.log(e.deltaY);
+    if (Math.abs(e.deltaY) < 1) return;
+
     const newZoom = (zoom() * 100 + (e.deltaY < 0 ? -10 : 10)) / 100;
     changeZoom(newZoom, { x: e.clientX, y: e.clientY });
   }
@@ -467,7 +451,7 @@ export function DiagramContainer(): JSXElement {
           dragMode().type === "select" || dragMode().type === "boxSelect" ? selectBox() : null
         }
         selectCircle={dragMode().type === "circleSelect" ? selectCircle() : null}
-        onMouseDown={handleMouseDown}
+        onPointerDown={handleDiagramPointerDown}
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
         onWheel={handleWheel}
@@ -501,7 +485,7 @@ export function DiagramView(props: {
   readonly selectBox: Rectangle | null;
   readonly selectCircle: Circle | null;
   readonly changeSvgRect?: (rect: Rectangle) => void;
-  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onPointerDown?: (e: PointerEvent) => void;
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
   readonly onWheel?: (e: WheelEvent) => void;
@@ -526,14 +510,13 @@ export function DiagramView(props: {
   let diagramRef: HTMLDivElement | undefined;
   return (
     <div
-      class="relative size-full outline-none"
+      class="relative size-full touch-none outline-none"
       ref={diagramRef}
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
-      onContextMenu={(e) => props.onContextMenu?.(e)}
+      onPointerDown={(e) => props.onPointerDown?.(e)}
       onWheel={(e) => props.onWheel?.(e)}
-      onTouchStart={(e) => props.onMouseDown?.(e)}
-      onMouseDown={(e) => props.onMouseDown?.(e)}
+      onContextMenu={(e) => props.onContextMenu?.(e)}
     >
       <svg
         class="absolute inset-0 size-full"

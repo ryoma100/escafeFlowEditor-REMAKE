@@ -29,7 +29,7 @@ export function TransitionEdgeContainer(props: {
       },
     });
 
-  function handleMouseDown(e: MouseEvent) {
+  function handlePointerDown(e: PointerEvent) {
     e.stopPropagation();
 
     if (e.shiftKey) {
@@ -50,7 +50,7 @@ export function TransitionEdgeContainer(props: {
       line={line()}
       ognl={props.transition.ognl}
       selected={props.transition.selected}
-      handleMouseDown={handleMouseDown}
+      handlePointerDown={handlePointerDown}
       handleDblClick={handleDlbClick}
     />
   );
@@ -60,7 +60,7 @@ export function TransitionEdgeView(props: {
   readonly line: Line;
   readonly ognl: string;
   readonly selected: boolean;
-  readonly handleMouseDown?: (e: MouseEvent) => void;
+  readonly handlePointerDown?: (e: PointerEvent) => void;
   readonly handleDblClick?: (e: MouseEvent) => void;
 }): JSXElement {
   onMount(() => {
@@ -93,7 +93,7 @@ export function TransitionEdgeView(props: {
           "stroke-primary": props.selected,
         }}
         onDblClick={(e) => props.handleDblClick?.(e)}
-        onMouseDown={(e) => props.handleMouseDown?.(e)}
+        onPointerDown={(e) => props.handlePointerDown?.(e)}
         x1={props.line.p1.x}
         y1={props.line.p1.y}
         x2={props.line.p2.x}

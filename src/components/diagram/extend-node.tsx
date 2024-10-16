@@ -16,7 +16,7 @@ export function ExtendNodeContainer(props: {
     dialogModel: { setModalDialog: setOpenDialog },
   } = useModelContext();
 
-  function handleMouseDown(e: MouseEvent | TouchEvent) {
+  function handlePointerDown(e: PointerEvent) {
     e.preventDefault();
 
     switch (toolbar()) {
@@ -65,16 +65,16 @@ export function ExtendNodeContainer(props: {
           <CommentNodeView
             comment={(props.node as CommentNode).comment}
             selected={props.node.selected}
-            onMouseDown={handleMouseDown}
+            onPointerDown={handlePointerDown}
             onDblClick={handleDblClick}
             onChangeSize={(w, h) => resizeCommentNode(props.node as CommentNode, w, h)}
           />
         </Match>
         <Match when={props.node.type === "startNode"}>
-          <StartNodeView selected={props.node.selected} onMouseDown={handleMouseDown} />
+          <StartNodeView selected={props.node.selected} onPointerDown={handlePointerDown} />
         </Match>
         <Match when={props.node.type === "endNode"}>
-          <EndNodeView selected={props.node.selected} onMouseDown={handleMouseDown} />
+          <EndNodeView selected={props.node.selected} onPointerDown={handlePointerDown} />
         </Match>
       </Switch>
     </foreignObject>
@@ -84,7 +84,7 @@ export function ExtendNodeContainer(props: {
 export function CommentNodeView(props: {
   readonly comment: string;
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onPointerDown?: (e: PointerEvent) => void;
   readonly onDblClick?: (e: MouseEvent) => void;
   readonly onChangeSize?: (width: number, height: number) => void;
 }): JSXElement {
@@ -109,8 +109,7 @@ export function CommentNodeView(props: {
         "p-px border [border-color:var(--foreground-color)]": !props.selected,
         "p-0 border-2 border-primary": props.selected,
       }}
-      onMouseDown={(e) => props.onMouseDown?.(e)}
-      onTouchStart={(e) => props.onMouseDown?.(e)}
+      onPointerDown={(e) => props.onPointerDown?.(e)}
       onDblClick={(e) => props.onDblClick?.(e)}
     >
       <div class="m-1 flex items-center">
@@ -128,7 +127,7 @@ export function CommentNodeView(props: {
 
 export function StartNodeView(props: {
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onPointerDown?: (e: PointerEvent) => void;
 }) {
   return (
     <div
@@ -137,8 +136,7 @@ export function StartNodeView(props: {
         "border [border-color:var(--foreground-color)]": !props.selected,
         "border-2 border-primary": props.selected,
       }}
-      onTouchStart={(e) => props.onMouseDown?.(e)}
-      onMouseDown={(e) => props.onMouseDown?.(e)}
+      onPointerDown={(e) => props.onPointerDown?.(e)}
     >
       <StartIcon class="[fill:var(--foreground-color)]" />
     </div>
@@ -147,8 +145,8 @@ export function StartNodeView(props: {
 
 export function EndNodeView(props: {
   readonly selected: boolean;
-  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
-  readonly onMouseUp?: (e: MouseEvent) => void;
+  readonly onPointerDown?: (e: PointerEvent) => void;
+  readonly onPointerUp?: (e: PointerEvent) => void;
 }) {
   return (
     <div
@@ -157,9 +155,8 @@ export function EndNodeView(props: {
         "border [border-color:var(--foreground-color)]": !props.selected,
         "border-2 border-primary": props.selected,
       }}
-      onTouchStart={(e) => props.onMouseDown?.(e)}
-      onMouseDown={(e) => props.onMouseDown?.(e)}
-      onMouseUp={(e) => props.onMouseUp?.(e)}
+      onPointerDown={(e) => props.onPointerDown?.(e)}
+      onPointerUp={(e) => props.onPointerUp?.(e)}
     >
       <EndIcon class="[fill:var(--foreground-color)]" />
     </div>

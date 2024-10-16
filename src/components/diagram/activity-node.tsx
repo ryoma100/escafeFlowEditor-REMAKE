@@ -24,17 +24,17 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
     diagramModel: { toolbar, setDragMode, setAddingLineFrom },
   } = useModelContext();
 
-  function handleLeftMouseDown(_e: MouseEvent | TouchEvent) {
+  function handleLeftPointerDown(_e: PointerEvent) {
     changeSelectNodes("select", [props.activity.id]);
     setDragMode({ type: "resizeActivityLeft" });
   }
 
-  function handleRightMouseDown(_e: MouseEvent | TouchEvent) {
+  function handleRightPointerDown(_e: PointerEvent) {
     changeSelectNodes("select", [props.activity.id]);
     setDragMode({ type: "resizeActivityRight" });
   }
 
-  function handleMouseDown(e: MouseEvent | TouchEvent) {
+  function handlePointerDown(e: PointerEvent) {
     e.preventDefault();
 
     switch (toolbar()) {
@@ -82,9 +82,9 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
         splitType={props.activity.splitType}
         selected={props.activity.selected}
         width={props.activity.width}
-        onLeftMouseDown={handleLeftMouseDown}
-        onMouseDown={handleMouseDown}
-        onRightMouseDown={handleRightMouseDown}
+        onLeftPointerDown={handleLeftPointerDown}
+        onPointerDown={handlePointerDown}
+        onRightPointerDown={handleRightPointerDown}
         onDblClick={handleDblClick}
         onChangeHeight={(height) => resizeActivityHeight(props.activity, height)}
       />
@@ -100,9 +100,9 @@ export function ActivityNodeView(props: {
   readonly splitType: ActivitySplitType;
   readonly selected: boolean;
   readonly width: number;
-  readonly onLeftMouseDown?: (e: MouseEvent | TouchEvent) => void;
-  readonly onMouseDown?: (e: MouseEvent | TouchEvent) => void;
-  readonly onRightMouseDown?: (e: MouseEvent | TouchEvent) => void;
+  readonly onLeftPointerDown?: (e: PointerEvent) => void;
+  readonly onPointerDown?: (e: PointerEvent) => void;
+  readonly onRightPointerDown?: (e: PointerEvent) => void;
   readonly onDblClick?: (e: MouseEvent) => void;
   readonly onChangeHeight?: (height: number) => void;
 }): JSXElement {
@@ -127,8 +127,7 @@ export function ActivityNodeView(props: {
     >
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
-        onTouchStart={(e) => props.onLeftMouseDown?.(e)}
-        onMouseDown={(e) => props.onLeftMouseDown?.(e)}
+        onPointerDown={(e) => props.onLeftPointerDown?.(e)}
       >
         <Switch>
           <Match when={props.joinType === "oneJoin"}>
@@ -160,8 +159,7 @@ export function ActivityNodeView(props: {
 
       <div
         class="flex size-full cursor-move select-none flex-col border border-solid border-foreground bg-background hover:bg-secondary"
-        onTouchStart={(e) => props.onMouseDown?.(e)}
-        onMouseDown={(e) => props.onMouseDown?.(e)}
+        onPointerDown={(e) => props.onPointerDown?.(e)}
         onDblClick={(e) => props.onDblClick?.(e)}
       >
         <div class="mx-0.5 w-full text-ellipsis whitespace-nowrap text-xs">{props.actorName}</div>
@@ -191,8 +189,7 @@ export function ActivityNodeView(props: {
 
       <div
         class="w-[10px] hover:cursor-ew-resize hover:bg-secondary"
-        onTouchStart={(e) => props.onRightMouseDown?.(e)}
-        onMouseDown={(e) => props.onRightMouseDown?.(e)}
+        onPointerDown={(e) => props.onRightPointerDown?.(e)}
       >
         <Switch>
           <Match when={props.splitType === "oneSplit"}>
