@@ -397,11 +397,17 @@ export function DiagramContainer(): JSXElement {
   }
 
   function handleWheel(e: WheelEvent) {
-    console.log(e.deltaY);
-    if (Math.abs(e.deltaY) < 1) return;
-
-    const newZoom = (zoom() * 100 + (e.deltaY < 0 ? -10 : 10)) / 100;
-    changeZoom(newZoom, { x: e.clientX, y: e.clientY });
+    if (e.ctrlKey || e.metaKey) {
+      const newZoom = (zoom() * 100 + -e.deltaY) / 100;
+      changeZoom(newZoom, { x: e.clientX, y: e.clientY });
+    } else {
+      setViewBox({
+        x: viewBox().x + e.deltaX * 2,
+        y: viewBox().y + e.deltaY * 2,
+        width: viewBox().width,
+        height: viewBox().height,
+      });
+    }
   }
 
   function gridLines(): Line[] {
@@ -500,9 +506,15 @@ export function DiagramView(props: {
           width: rect.width,
           height: rect.height,
         });
+        if (props.onWheel) {
+          diagramRef.addEventListener("wheel", props.onWheel, { passive: true });
+        }
       }
     });
     if (diagramRef) {
+      if (props.onWheel) {
+        diagramRef.removeEventListener("wheel", props.onWheel);
+      }
       observer.observe(diagramRef);
     }
   });
@@ -515,7 +527,6 @@ export function DiagramView(props: {
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
       onPointerDown={(e) => props.onPointerDown?.(e)}
-      onWheel={(e) => props.onWheel?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
     >
       <svg
