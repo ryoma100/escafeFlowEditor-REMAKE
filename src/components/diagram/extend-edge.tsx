@@ -6,21 +6,25 @@ import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
 export function ExtendEdgeContainer(props: {
   readonly edge: CommentEdge | StartEdge | EndEdge;
 }): JSXElement {
-  const {
-    extendNodeModel: { getCommentNode, getStartNode, getEndNode },
-    activityNodeModel: { getActivityNode },
-    nodeModel: { changeSelectNodes },
-    edgeModel: { changeSelectEdges },
-  } = useModelContext();
+  const { extendNodeModel, activityNodeModel, nodeModel, edgeModel } = useModelContext();
 
   const fromToNode = () => {
     switch (props.edge.type) {
       case "commentEdge":
-        return [getCommentNode(props.edge.fromNodeId), getActivityNode(props.edge.toNodeId)];
+        return [
+          extendNodeModel.getCommentNode(props.edge.fromNodeId),
+          activityNodeModel.getActivityNode(props.edge.toNodeId),
+        ];
       case "startEdge":
-        return [getStartNode(props.edge.fromNodeId), getActivityNode(props.edge.toNodeId)];
+        return [
+          extendNodeModel.getStartNode(props.edge.fromNodeId),
+          activityNodeModel.getActivityNode(props.edge.toNodeId),
+        ];
       case "endEdge":
-        return [getActivityNode(props.edge.fromNodeId), getEndNode(props.edge.toNodeId)];
+        return [
+          activityNodeModel.getActivityNode(props.edge.fromNodeId),
+          extendNodeModel.getEndNode(props.edge.toNodeId),
+        ];
     }
   };
 
@@ -28,10 +32,10 @@ export function ExtendEdgeContainer(props: {
     e.stopPropagation();
 
     if (e.shiftKey) {
-      changeSelectEdges("toggle", [props.edge.id]);
+      edgeModel.changeSelectEdges("toggle", [props.edge.id]);
     } else if (!props.edge.selected) {
-      changeSelectEdges("select", [props.edge.id]);
-      changeSelectNodes("clearAll");
+      edgeModel.changeSelectEdges("select", [props.edge.id]);
+      nodeModel.changeSelectNodes("clearAll");
     }
   }
 

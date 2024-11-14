@@ -75,7 +75,7 @@ export function ActivityNodeContainer(props: {
   }
 
   function handleDblClick() {
-    dialogModel.setModalDialog({ type: "activity", activity: props.activity });
+    dialogModel.setOpenDialog({ type: "activity", activity: props.activity });
   }
 
   return (

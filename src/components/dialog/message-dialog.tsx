@@ -7,16 +7,14 @@ import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 
 export function MessageDialog(): JSXElement {
-  const {
-    dialogModel: { messageAlert: openMessageDialog, setMessageAlert: setOpenMessageDialog },
-  } = useModelContext();
+  const { dialogModel } = useModelContext();
 
   function handleDialogClose() {
-    setOpenMessageDialog(null);
+    dialogModel.setOpenMessage(null);
   }
 
   createEffect(() => {
-    if (openMessageDialog() != null) {
+    if (dialogModel.openMessage() != null) {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -26,7 +24,7 @@ export function MessageDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={openMessageDialog()} keyed>
+      <Show when={dialogModel.openMessage()} keyed>
         {(message) => <MessageDialogView message={message} onDialogClose={handleDialogClose} />}
       </Show>
     </dialog>

@@ -7,6 +7,8 @@ import { ActorEntity, INode, ProcessEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createActorEntity([]);
 
+export type ActorModel = ReturnType<typeof makeActorModel>;
+
 export function makeActorModel() {
   const [actorList, setActorList] = createStore<ActorEntity[]>([]);
   const [selectedActor, setSelectedActor] = createSignal<ActorEntity>(dummy);

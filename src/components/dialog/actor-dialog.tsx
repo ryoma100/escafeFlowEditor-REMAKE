@@ -9,30 +9,23 @@ import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ActorEntity } from "@/data-source/data-type";
 
 export function ActorDialog(): JSXElement {
-  const {
-    actorModel: { updateActor },
-    dialogModel: {
-      modalDialog: openDialog,
-      setModalDialog: setOpenDialog,
-      setMessageAlert: setOpenMessageDialog,
-    },
-  } = useModelContext();
+  const { actorModel, dialogModel } = useModelContext();
 
   function handleFormSubmit(formData: ActorEntity) {
-    const errorMessage = updateActor(deepUnwrap(formData));
+    const errorMessage = actorModel.updateActor(deepUnwrap(formData));
     if (errorMessage) {
-      setOpenMessageDialog(errorMessage);
+      dialogModel.setOpenMessage(errorMessage);
       return;
     }
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "actor") {
+    if (dialogModel.openDialog()?.type === "actor") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -40,7 +33,7 @@ export function ActorDialog(): JSXElement {
   });
 
   const actor = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "actor" ? dialogData.actor : undefined;
   };
 

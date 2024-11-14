@@ -47,7 +47,7 @@ export function ExtendNodeContainer(props: {
 
   function handleDblClick(_e: MouseEvent) {
     if (props.node.type === "commentNode") {
-      dialogModel.setModalDialog({ type: "comment", comment: props.node });
+      dialogModel.setOpenDialog({ type: "comment", comment: props.node });
     }
   }
 

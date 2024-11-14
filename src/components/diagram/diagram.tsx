@@ -37,16 +37,8 @@ import { ExtendNodeContainer } from "./extend-node";
 import { TransitionEdgeContainer } from "./transition-edge";
 
 export function DiagramContainer(): JSXElement {
-  const {
-    actorModel: { selectedActor },
-    nodeModel: { nodeList, changeSelectNodes, changeTopLayer, setNodeList },
-    edgeModel: { edgeList, setEdgeList },
-    activityNodeModel: { addActivity },
-    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
-    diagramModel,
-    nodeModel,
-    edgeModel,
-  } = useModelContext();
+  const { actorModel, diagramModel, nodeModel, activityNodeModel, extendNodeModel, edgeModel } =
+    useModelContext();
 
   let pointerStrategy: PointerStrategy | null = null;
   function setPointerStrategy(strategy: PointerStrategy) {
@@ -76,10 +68,7 @@ export function DiagramContainer(): JSXElement {
     if (diagramModel.contextMenuPoint() != null) return;
     if (pointerStrategy != null) return;
 
-    const x =
-      diagramModel.viewBox().x + (e.clientX - diagramModel.svgRect().x) / diagramModel.zoom();
-    const y =
-      diagramModel.viewBox().y + (e.clientY - diagramModel.svgRect().y) / diagramModel.zoom();
+    const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
     switch (diagramModel.toolbar()) {
       case "cursor":
         {
@@ -111,65 +100,80 @@ export function DiagramContainer(): JSXElement {
 
             setTimeout(() => {
               if (pointerStrategy == null) {
-                setNodeList(() => true, "selected", false);
-                setEdgeList(() => true, "selected", false);
+                nodeModel.setNodeList(() => true, "selected", false);
+                edgeModel.setEdgeList(() => true, "selected", false);
               }
             }, 250);
           }
         }
         return;
       case "addManualActivity":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const activity = addActivity("manualActivity", selectedActor().id, x, y);
-          changeTopLayer(activity.id);
-          changeSelectNodes("select", [activity.id]);
+        if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
+          const activity = activityNodeModel.addActivity(
+            "manualActivity",
+            actorModel.selectedActor().id,
+            x,
+            y,
+          );
+          nodeModel.changeTopLayer(activity.id);
+          nodeModel.changeSelectNodes("select", [activity.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
           strategy.handlePointerDown(e, { node: activity });
           setPointerStrategy(strategy);
         }
         return;
       case "addAutoActivity":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const activity = addActivity("autoActivity", selectedActor().id, x, y);
-          changeTopLayer(activity.id);
-          changeSelectNodes("select", [activity.id]);
+        if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
+          const activity = activityNodeModel.addActivity(
+            "autoActivity",
+            actorModel.selectedActor().id,
+            x,
+            y,
+          );
+          nodeModel.changeTopLayer(activity.id);
+          nodeModel.changeSelectNodes("select", [activity.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
           strategy.handlePointerDown(e, { node: activity });
           setPointerStrategy(strategy);
         }
         return;
       case "addUserActivity":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const activity = addActivity("userActivity", selectedActor().id, x, y);
-          changeTopLayer(activity.id);
-          changeSelectNodes("select", [activity.id]);
+        if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
+          const activity = activityNodeModel.addActivity(
+            "userActivity",
+            actorModel.selectedActor().id,
+            x,
+            y,
+          );
+          nodeModel.changeTopLayer(activity.id);
+          nodeModel.changeSelectNodes("select", [activity.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
           strategy.handlePointerDown(e, { node: activity });
           setPointerStrategy(strategy);
         }
         return;
       case "addCommentNode":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const comment = addCommentNode(x, y);
-          changeSelectNodes("select", [comment.id]);
+        if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
+          const comment = extendNodeModel.addCommentNode(x, y);
+          nodeModel.changeSelectNodes("select", [comment.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
           strategy.handlePointerDown(e, { node: comment });
           setPointerStrategy(strategy);
         }
         return;
       case "addStartNode":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const startNode = addStartNode(x, y);
-          changeSelectNodes("select", [startNode.id]);
+        if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
+          const startNode = extendNodeModel.addStartNode(x, y);
+          nodeModel.changeSelectNodes("select", [startNode.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
           strategy.handlePointerDown(e, { node: startNode });
           setPointerStrategy(strategy);
         }
         return;
       case "addEndNode":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const endNode = addEndNode(x, y);
-          changeSelectNodes("select", [endNode.id]);
+        if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
+          const endNode = extendNodeModel.addEndNode(x, y);
+          nodeModel.changeSelectNodes("select", [endNode.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
           strategy.handlePointerDown(e, { node: endNode });
           setPointerStrategy(strategy);
@@ -314,8 +318,8 @@ export function DiagramContainer(): JSXElement {
         svgRect={diagramModel.svgRect()}
         changeSvgRect={diagramModel.changeSvgRect}
         gridLines={gridLines()}
-        nodeList={nodeList}
-        edgeList={edgeList}
+        nodeList={nodeModel.nodeList}
+        edgeList={edgeModel.edgeList}
         addingLine={diagramModel.addingLine()}
         selectBox={diagramModel.selectBox()}
         selectCircle={diagramModel.selectCircle()}

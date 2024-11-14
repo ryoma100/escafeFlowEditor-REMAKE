@@ -1,14 +1,14 @@
 import { createStore, produce } from "solid-js/store";
 
 import { defaultRectangle, GRID_SPACING } from "@/constants/app-const";
-import { makeDiagramModel } from "@/data-model/diagram-model";
+import { DiagramModel } from "@/data-model/diagram-model";
 import { deepUnwrap } from "@/data-source/data-factory";
 import { INode, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
 import { rotatePoint } from "@/utils/point-utils";
 
 export type NodeModel = ReturnType<typeof makeNodeModel>;
 
-export function makeNodeModel(diagramModel: ReturnType<typeof makeDiagramModel>) {
+export function makeNodeModel(diagramModel: DiagramModel) {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
 
   function load(newProcess: ProcessEntity) {

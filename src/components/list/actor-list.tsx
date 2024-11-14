@@ -8,31 +8,27 @@ import { ActorEntity } from "@/data-source/data-type";
 
 export function ActorList(): JSXElement {
   const { dict } = useThemeContext();
-  const {
-    nodeModel: { nodeList },
-    actorModel: { actorList, selectedActor, setSelectedActor, addActor, removeSelectedActor },
-    dialogModel: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
-  } = useModelContext();
+  const { nodeModel, actorModel, dialogModel } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleItemMouseDown(actor: ActorEntity, _: MouseEvent) {
-    if (selectedActor().id !== actor.id) {
-      setSelectedActor(actor);
+    if (actorModel.selectedActor().id !== actor.id) {
+      actorModel.setSelectedActor(actor);
     }
   }
 
   function handleItemDblClick(actor: ActorEntity, _: MouseEvent) {
-    setOpenDialog({ type: "actor", actor });
+    dialogModel.setOpenDialog({ type: "actor", actor });
   }
 
   function handleAddButtonClick(_: MouseEvent) {
-    addActor();
+    actorModel.addActor();
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    const errorMessage = removeSelectedActor(nodeList);
+    const errorMessage = actorModel.removeSelectedActor(nodeModel.nodeList);
     if (errorMessage != null) {
-      setOpenMessageDialog(errorMessage);
+      dialogModel.setOpenMessage(errorMessage);
     }
   }
 
@@ -41,11 +37,11 @@ export function ActorList(): JSXElement {
       <h5>{t("actor")}</h5>
       <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
         <ul class="list-none">
-          <For each={actorList}>
+          <For each={actorModel.actorList}>
             {(it) => (
               <li
                 class="cursor-pointer p-1 hover:bg-primary"
-                classList={{ "bg-primary": it.id === selectedActor().id }}
+                classList={{ "bg-primary": it.id === actorModel.selectedActor().id }}
                 onPointerDown={[handleItemMouseDown, it]}
                 onDblClick={[handleItemDblClick, it]}
               >
@@ -60,7 +56,11 @@ export function ActorList(): JSXElement {
         <button type="submit" onClick={handleAddButtonClick}>
           {t("add")}
         </button>
-        <button type="button" onClick={handleRemoveButtonClick} disabled={actorList.length === 1}>
+        <button
+          type="button"
+          onClick={handleRemoveButtonClick}
+          disabled={actorModel.actorList.length === 1}
+        >
           {t("delete")}
         </button>
       </ButtonsContainer>

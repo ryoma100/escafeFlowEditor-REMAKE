@@ -9,22 +9,19 @@ import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { CommentNode } from "@/data-source/data-type";
 
 export function CommentDialog(): JSXElement {
-  const {
-    extendNodeModel: { updateComment },
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { extendNodeModel, dialogModel } = useModelContext();
 
   function handleFormSubmit(formData: CommentNode) {
-    updateComment(deepUnwrap(formData));
-    setOpenDialog(null);
+    extendNodeModel.updateComment(deepUnwrap(formData));
+    dialogModel.setOpenDialog(null);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "comment") {
+    if (dialogModel.openDialog()?.type === "comment") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -32,7 +29,7 @@ export function CommentDialog(): JSXElement {
   });
 
   const comment = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "comment" ? dialogData.comment : undefined;
   };
 

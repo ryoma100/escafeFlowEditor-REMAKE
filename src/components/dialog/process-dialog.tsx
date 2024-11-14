@@ -16,27 +16,23 @@ import {
 } from "@/data-source/data-type";
 
 export function ProcessDialog(): JSXElement {
-  const {
-    processModel: { updateProcessDetail },
-    activityNodeModel: { getActivityNodes },
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog, setMessageAlert },
-  } = useModelContext();
+  const { processModel, activityNodeModel, dialogModel } = useModelContext();
 
   function handleFormSubmit(process: ProcessEntity) {
-    const errorMessage = updateProcessDetail(process);
+    const errorMessage = processModel.updateProcessDetail(process);
     if (errorMessage) {
-      setMessageAlert(errorMessage);
+      dialogModel.setOpenMessage(errorMessage);
       return;
     }
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "process") {
+    if (dialogModel.openDialog()?.type === "process") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -44,7 +40,7 @@ export function ProcessDialog(): JSXElement {
   });
 
   const process = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "process" ? dialogData.process : undefined;
   };
 
@@ -55,10 +51,10 @@ export function ProcessDialog(): JSXElement {
         {(process) => (
           <ProcessDialogView
             process={process}
-            activityList={getActivityNodes()}
+            activityList={activityNodeModel.getActivityNodes()}
             onFormSubmit={handleFormSubmit}
             onDialogClose={handleDialogClose}
-            onOpenMessageDialog={setMessageAlert}
+            onOpenMessageDialog={dialogModel.setOpenMessage}
           />
         )}
       </Show>

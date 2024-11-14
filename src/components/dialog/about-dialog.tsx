@@ -4,16 +4,14 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 
 export function AboutDialog(): JSXElement {
-  const {
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { dialogModel } = useModelContext();
 
   function handleClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "about") {
+    if (dialogModel.openDialog()?.type === "about") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();

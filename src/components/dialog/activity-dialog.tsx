@@ -24,32 +24,23 @@ import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 
 export function ActivityDialog(): JSXElement {
-  const {
-    processModel: { selectedProcess },
-    actorModel: { actorList },
-    activityNodeModel: { updateActivity },
-    dialogModel: {
-      modalDialog: openDialog,
-      setModalDialog: setOpenDialog,
-      setMessageAlert: setOpenMessageDialog,
-    },
-  } = useModelContext();
+  const { processModel, actorModel, activityNodeModel, dialogModel } = useModelContext();
 
   function handleFormSubmit(formData: ActivityNode) {
-    const errorMessage = updateActivity(formData);
+    const errorMessage = activityNodeModel.updateActivity(formData);
     if (errorMessage) {
-      setOpenMessageDialog(errorMessage);
+      dialogModel.setOpenMessage(errorMessage);
       return;
     }
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "activity") {
+    if (dialogModel.openDialog()?.type === "activity") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -57,7 +48,7 @@ export function ActivityDialog(): JSXElement {
   });
 
   const activity = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "activity" ? dialogData.activity : undefined;
   };
 
@@ -68,8 +59,8 @@ export function ActivityDialog(): JSXElement {
         {(activity) => (
           <ActivityDialogView
             activity={activity}
-            applications={selectedProcess().detail.applications}
-            actorList={actorList}
+            applications={processModel.selectedProcess().detail.applications}
+            actorList={actorModel.actorList}
             onFormSubmit={handleFormSubmit}
             onDialogClose={handleDialogClose}
           />

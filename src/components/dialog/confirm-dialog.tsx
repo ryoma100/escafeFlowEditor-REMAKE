@@ -6,25 +6,24 @@ import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 
 export function ConfirmDialog(): JSXElement {
-  const {
-    projectModel: { initProject },
-    processModel: { removeProcess },
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { projectModel, processModel, dialogModel } = useModelContext();
 
   function handleSubmit() {
-    const dialog = openDialog();
-    if (dialog?.type === "initAll") initProject();
-    if (dialog?.type === "deleteProcess") removeProcess(dialog.process);
-    setOpenDialog(null);
+    const dialog = dialogModel.openDialog();
+    if (dialog?.type === "initAll") projectModel.initProject();
+    if (dialog?.type === "deleteProcess") processModel.removeProcess(dialog.process);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "initAll" || openDialog()?.type === "deleteProcess") {
+    if (
+      dialogModel.openDialog()?.type === "initAll" ||
+      dialogModel.openDialog()?.type === "deleteProcess"
+    ) {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -34,7 +33,7 @@ export function ConfirmDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleClose}>
-      <Show when={openDialog()?.type} keyed>
+      <Show when={dialogModel.openDialog()?.type} keyed>
         {(type) => (
           <ConfirmDialogView type={type} onFormSubmit={handleSubmit} onDialogClose={handleClose} />
         )}

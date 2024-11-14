@@ -4,23 +4,20 @@ import { DiagramContainer } from "@/components/diagram/diagram";
 import { useModelContext } from "@/context/model-context";
 
 export function Main(): JSXElement {
-  const {
-    processModel: { selectedProcess },
-    diagramModel: { zoom, changeZoom, fitViewBox },
-  } = useModelContext();
+  const { processModel, diagramModel } = useModelContext();
 
   function handleAutoZoomButtonClick() {
-    fitViewBox();
+    diagramModel.fitViewBox();
   }
 
   function handleNormalZoomButtonClick() {
-    changeZoom(1.0);
+    diagramModel.changeZoom(1.0);
   }
 
   return (
     <div class="flex size-full flex-col">
       <div class="h-6">
-        <h5 class="leading-6">{selectedProcess().detail.name}</h5>
+        <h5 class="leading-6">{processModel.selectedProcess().detail.name}</h5>
       </div>
       <div class="size-full grow bg-background">
         <DiagramContainer />
@@ -34,11 +31,11 @@ export function Main(): JSXElement {
           min="0.1"
           max="2"
           step="0.01"
-          value={zoom()}
-          onInput={(e) => changeZoom(Number(e.target.value))}
+          value={diagramModel.zoom()}
+          onInput={(e) => diagramModel.changeZoom(Number(e.target.value))}
         />
         <button type="button" onClick={handleNormalZoomButtonClick}>
-          {Math.trunc(zoom() * 100)}%
+          {Math.trunc(diagramModel.zoom() * 100)}%
         </button>
       </div>
     </div>

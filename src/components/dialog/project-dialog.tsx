@@ -9,22 +9,19 @@ import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 
 export function ProjectDialog(): JSXElement {
-  const {
-    projectModel: { setProjectDetail },
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { projectModel, dialogModel } = useModelContext();
 
   function handleFormSubmit(formData: ProjectDetailEntity) {
-    setProjectDetail(formData);
-    setOpenDialog(null);
+    projectModel.setProjectDetail(formData);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "project") {
+    if (dialogModel.openDialog()?.type === "project") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -32,7 +29,7 @@ export function ProjectDialog(): JSXElement {
   });
 
   const project = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "project" ? dialogData.project : undefined;
   };
 

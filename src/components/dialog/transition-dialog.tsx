@@ -9,30 +9,23 @@ import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
 
 export function TransitionDialog(): JSXElement {
-  const {
-    dialogModel: {
-      modalDialog: openDialog,
-      setModalDialog: setOpenDialog,
-      setMessageAlert: setOpenMessageDialog,
-    },
-    transitionEdgeModel: { updateTransitionEdge },
-  } = useModelContext();
+  const { dialogModel, transitionEdgeModel } = useModelContext();
 
   function handleFormSubmit(formData: TransitionEdge) {
-    const errorMessage = updateTransitionEdge(formData);
+    const errorMessage = transitionEdgeModel.updateTransitionEdge(formData);
     if (errorMessage) {
-      setOpenMessageDialog(errorMessage);
+      dialogModel.setOpenMessage(errorMessage);
       return;
     }
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "transition") {
+    if (dialogModel.openDialog()?.type === "transition") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -40,7 +33,7 @@ export function TransitionDialog(): JSXElement {
   });
 
   const transition = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "transition" ? dialogData.transition : undefined;
   };
 
