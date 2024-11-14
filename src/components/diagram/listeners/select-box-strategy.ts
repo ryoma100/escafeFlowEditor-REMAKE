@@ -1,6 +1,6 @@
 import { produce } from "solid-js/store";
 
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";

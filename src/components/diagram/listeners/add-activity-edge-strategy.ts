@@ -1,10 +1,10 @@
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { defaultPoint } from "@/constants/app-const";
 import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
 import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { ActivityNode, INode, Point } from "@/data-source/data-type";
+import { INode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeAddActivityEdgeStrategy(
@@ -16,14 +16,11 @@ export function makeAddActivityEdgeStrategy(
   const nodeModel = activityNodeModel.nodeModel;
   let fromPoint: Point = defaultPoint;
 
-  function handlePointerDown(e: PointerEvent, target: { activity: ActivityNode }) {
+  function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 
-    fromPoint = {
-      x: target.activity.x + target.activity.width,
-      y: target.activity.y + target.activity.height / 2,
-    };
-    nodeModel.changeSelectNodes("select", [target.activity.id]);
+    fromPoint = { x: node.x + node.width, y: node.y + node.height / 2 };
+    nodeModel.changeSelectNodes("select", [node.id]);
     diagramModel.setAddingLine({ p1: fromPoint, p2: fromPoint });
   }
 

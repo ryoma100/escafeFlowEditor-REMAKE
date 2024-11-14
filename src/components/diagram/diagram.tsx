@@ -1,6 +1,5 @@
 import { For, JSXElement, onMount, Show } from "solid-js";
 
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
 import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
 import { makeRotateNodesStrategy } from "@/components/diagram/listeners/rotate-nodes-strategy";
 import { makeScaleNodesStrategy } from "@/components/diagram/listeners/scale-nodes-strategy";
@@ -35,6 +34,12 @@ import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
 import { ExtendNodeContainer } from "./extend-node";
 import { TransitionEdgeContainer } from "./transition-edge";
+
+export type PointerStrategy = {
+  handlePointerDown(e: PointerEvent, node?: INode): void;
+  handlePointerMove(e: PointerEvent, pointerEvents: Map<number, PointerEvent>): void;
+  handlePointerUp(e: PointerEvent): void;
+};
 
 export function DiagramContainer(): JSXElement {
   const { actorModel, diagramModel, nodeModel, activityNodeModel, extendNodeModel, edgeModel } =
@@ -118,7 +123,7 @@ export function DiagramContainer(): JSXElement {
           nodeModel.changeTopLayer(activity.id);
           nodeModel.changeSelectNodes("select", [activity.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: activity });
+          strategy.handlePointerDown(e, activity);
           setPointerStrategy(strategy);
         }
         return;
@@ -133,7 +138,7 @@ export function DiagramContainer(): JSXElement {
           nodeModel.changeTopLayer(activity.id);
           nodeModel.changeSelectNodes("select", [activity.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: activity });
+          strategy.handlePointerDown(e, activity);
           setPointerStrategy(strategy);
         }
         return;
@@ -148,7 +153,7 @@ export function DiagramContainer(): JSXElement {
           nodeModel.changeTopLayer(activity.id);
           nodeModel.changeSelectNodes("select", [activity.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: activity });
+          strategy.handlePointerDown(e, activity);
           setPointerStrategy(strategy);
         }
         return;
@@ -157,7 +162,7 @@ export function DiagramContainer(): JSXElement {
           const comment = extendNodeModel.addCommentNode(x, y);
           nodeModel.changeSelectNodes("select", [comment.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: comment });
+          strategy.handlePointerDown(e, comment);
           setPointerStrategy(strategy);
         }
         return;
@@ -166,7 +171,7 @@ export function DiagramContainer(): JSXElement {
           const startNode = extendNodeModel.addStartNode(x, y);
           nodeModel.changeSelectNodes("select", [startNode.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: startNode });
+          strategy.handlePointerDown(e, startNode);
           setPointerStrategy(strategy);
         }
         return;
@@ -175,7 +180,7 @@ export function DiagramContainer(): JSXElement {
           const endNode = extendNodeModel.addEndNode(x, y);
           nodeModel.changeSelectNodes("select", [endNode.id]);
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: endNode });
+          strategy.handlePointerDown(e, endNode);
           setPointerStrategy(strategy);
         }
         return;

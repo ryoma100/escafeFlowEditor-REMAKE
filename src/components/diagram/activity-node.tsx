@@ -1,7 +1,7 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { makeAddActivityEdgeStrategy } from "@/components/diagram/listeners/add-activity-edge-strategy";
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
 import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
 import { makeResizeActivityLeftStrategy } from "@/components/diagram/listeners/resize-activity-left-strategy";
 import { makeResizeActivityRightStrategy } from "@/components/diagram/listeners/resize-activity-right-strategy";
@@ -36,13 +36,13 @@ export function ActivityNodeContainer(props: {
 
   function handleLeftPointerDown(e: PointerEvent) {
     const strategy = makeResizeActivityLeftStrategy(diagramModel, activityNodeModel);
-    strategy.handlePointerDown(e, { activity: props.activity });
+    strategy.handlePointerDown(e, props.activity);
     props.setPointerStrategy?.(strategy);
   }
 
   function handleRightPointerDown(e: PointerEvent) {
     const strategy = makeResizeActivityRightStrategy(diagramModel, activityNodeModel);
-    strategy.handlePointerDown(e, { activity: props.activity });
+    strategy.handlePointerDown(e, props.activity);
     props.setPointerStrategy?.(strategy);
   }
 
@@ -55,7 +55,7 @@ export function ActivityNodeContainer(props: {
           nodeModel.changeSelectNodes("toggle", [props.activity.id]);
         } else {
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: props.activity });
+          strategy.handlePointerDown(e, props.activity);
           props.setPointerStrategy?.(strategy);
         }
         return;
@@ -67,7 +67,7 @@ export function ActivityNodeContainer(props: {
             transitionEdgeModel,
             extendEdgeModel,
           );
-          strategy.handlePointerDown(e, { activity: props.activity });
+          strategy.handlePointerDown(e, props.activity);
           props.setPointerStrategy?.(strategy);
         }
         return;

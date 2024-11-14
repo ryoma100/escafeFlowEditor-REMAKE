@@ -1,16 +1,16 @@
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
-import { ActivityNode } from "@/data-source/data-type";
+import { INode } from "@/data-source/data-type";
 
 export function makeResizeActivityLeftStrategy(
   diagramModel: DiagramModel,
   activityModel: ActivityNodeModel,
 ): PointerStrategy {
-  function handlePointerDown(e: PointerEvent, target: { activity: ActivityNode }) {
+  function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 
-    activityModel.nodeModel.changeSelectNodes("select", [target.activity.id]);
+    activityModel.nodeModel.changeSelectNodes("select", [node.id]);
   }
 
   function handlePointerMove(e: PointerEvent, pointerEvents: Map<number, PointerEvent>) {

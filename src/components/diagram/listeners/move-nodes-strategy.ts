@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";
 import { NodeModel } from "@/data-model/node-model";
@@ -9,14 +9,14 @@ export function makeMoveNodesStrategy(
   nodeModel: NodeModel,
   edgeModel: EdgeModel,
 ): PointerStrategy {
-  function handlePointerDown(e: PointerEvent, target: { node: INode }) {
+  function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 
-    if (!target.node.selected) {
-      nodeModel.changeSelectNodes("select", [target.node.id]);
+    if (!node.selected) {
+      nodeModel.changeSelectNodes("select", [node.id]);
       edgeModel.changeSelectEdges("clearAll");
     }
-    nodeModel.changeTopLayer(target.node.id);
+    nodeModel.changeTopLayer(node.id);
   }
 
   function handlePointerMove(e: PointerEvent, pointerEvents: Map<number, PointerEvent>) {

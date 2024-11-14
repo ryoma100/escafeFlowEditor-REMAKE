@@ -1,8 +1,8 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { makeAddCommentEdgeStrategy } from "@/components/diagram/listeners/add-comment-edge-strategy";
 import { makeAddStartEdgeStrategy } from "@/components/diagram/listeners/add-start-edge-strategy";
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
 import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
 import { useModelContext } from "@/context/model-context";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
@@ -27,18 +27,18 @@ export function ExtendNodeContainer(props: {
           e.stopPropagation();
         } else {
           const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, { node: props.node });
+          strategy.handlePointerDown(e, props.node);
           props.setPointerStrategy?.(strategy);
         }
         return;
       case "transition":
         if (props.node.type === "commentNode") {
           const strategy = makeAddCommentEdgeStrategy(diagramModel, nodeModel, extendEdgeModel);
-          strategy.handlePointerDown(e, { node: props.node });
+          strategy.handlePointerDown(e, props.node);
           props.setPointerStrategy?.(strategy);
         } else if (props.node.type === "startNode") {
           const strategy = makeAddStartEdgeStrategy(diagramModel, nodeModel, extendEdgeModel);
-          strategy.handlePointerDown(e, { node: props.node });
+          strategy.handlePointerDown(e, props.node);
           props.setPointerStrategy?.(strategy);
         }
         return;

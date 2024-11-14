@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { NodeModel } from "@/data-model/node-model";

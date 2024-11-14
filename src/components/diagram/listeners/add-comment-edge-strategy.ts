@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { PointerStrategy } from "@/components/diagram/diagram";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
@@ -14,14 +14,11 @@ export function makeAddCommentEdgeStrategy(
 ): PointerStrategy {
   let fromPoint: Point = defaultPoint;
 
-  function handlePointerDown(e: PointerEvent, target: { node: INode }) {
+  function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 
-    fromPoint = {
-      x: target.node.x + target.node.width,
-      y: target.node.y + target.node.height / 2,
-    };
-    nodeModel.changeSelectNodes("select", [target.node.id]);
+    fromPoint = { x: node.x + node.width, y: node.y + node.height / 2 };
+    nodeModel.changeSelectNodes("select", [node.id]);
     diagramModel.setAddingLine({ p1: fromPoint, p2: fromPoint });
   }
 
