@@ -6,6 +6,8 @@ import { makeNodeModel } from "@/data-model//node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { ActivityNode, ActivityNodeType, IEdge } from "@/data-source/data-type";
 
+export type ActivityNodeModel = ReturnType<typeof makeActivityModel>;
+
 export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   function getActivityNodes(): ActivityNode[] {
     return nodeModel.nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
@@ -150,5 +152,6 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
     updateSplitType,
     updateAllJoinSplitType,
     getActivityNodes,
+    nodeModel,
   };
 }

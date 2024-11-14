@@ -6,6 +6,8 @@ import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
 
+export type TransitionEdgeModel = ReturnType<typeof makeTransactionEdgeModel>;
+
 export function makeTransactionEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,
   nodeModel: ReturnType<typeof makeNodeModel>,

@@ -1,5 +1,9 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
+import { makeAddCommentEdgeStrategy } from "@/components/diagram/listeners/add-comment-edge-strategy";
+import { makeAddStartEdgeStrategy } from "@/components/diagram/listeners/add-start-edge-strategy";
+import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
 import { useModelContext } from "@/context/model-context";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 import { CommentIcon } from "@/icons/comment";
@@ -8,40 +12,34 @@ import { StartIcon } from "@/icons/start-icon";
 
 export function ExtendNodeContainer(props: {
   readonly node: CommentNode | StartNode | EndNode;
+  readonly setPointerStrategy?: (strategy: PointerStrategy) => void;
 }): JSXElement {
-  const {
-    extendNodeModel: { resizeCommentNode },
-    nodeModel: { changeSelectNodes },
-    diagramModel: { toolbar, setDragMode, setAddingLineFrom },
-    dialogModel: { setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { extendNodeModel, nodeModel, diagramModel, dialogModel, edgeModel, extendEdgeModel } =
+    useModelContext();
 
   function handlePointerDown(e: PointerEvent) {
     e.preventDefault();
 
-    switch (toolbar()) {
+    switch (diagramModel.toolbar()) {
       case "cursor":
         if (e.shiftKey) {
-          changeSelectNodes("toggle", [props.node.id]);
-          setDragMode({ type: "none" });
+          nodeModel.changeSelectNodes("toggle", [props.node.id]);
           e.stopPropagation();
         } else {
-          if (!props.node.selected) {
-            changeSelectNodes("select", [props.node.id]);
-          }
-          setDragMode({ type: "moveNodes" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: props.node });
+          props.setPointerStrategy?.(strategy);
         }
         return;
       case "transition":
-        changeSelectNodes("select", [props.node.id]);
-        setAddingLineFrom(
-          props.node.x + props.node.width / 2,
-          props.node.y + props.node.height / 2,
-        );
         if (props.node.type === "commentNode") {
-          setDragMode({ type: "addCommentEdge", fromComment: props.node });
+          const strategy = makeAddCommentEdgeStrategy(diagramModel, nodeModel, extendEdgeModel);
+          strategy.handlePointerDown(e, { node: props.node });
+          props.setPointerStrategy?.(strategy);
         } else if (props.node.type === "startNode") {
-          setDragMode({ type: "addStartEdge", fromStart: props.node });
+          const strategy = makeAddStartEdgeStrategy(diagramModel, nodeModel, extendEdgeModel);
+          strategy.handlePointerDown(e, { node: props.node });
+          props.setPointerStrategy?.(strategy);
         }
         return;
     }
@@ -49,7 +47,7 @@ export function ExtendNodeContainer(props: {
 
   function handleDblClick(_e: MouseEvent) {
     if (props.node.type === "commentNode") {
-      setOpenDialog({ type: "comment", comment: props.node });
+      dialogModel.setModalDialog({ type: "comment", comment: props.node });
     }
   }
 
@@ -67,7 +65,9 @@ export function ExtendNodeContainer(props: {
             selected={props.node.selected}
             onPointerDown={handlePointerDown}
             onDblClick={handleDblClick}
-            onChangeSize={(w, h) => resizeCommentNode(props.node as CommentNode, w, h)}
+            onChangeSize={(w, h) =>
+              extendNodeModel.resizeCommentNode(props.node as CommentNode, w, h)
+            }
           />
         </Match>
         <Match when={props.node.type === "startNode"}>

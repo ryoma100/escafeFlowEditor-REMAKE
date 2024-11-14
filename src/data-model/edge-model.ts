@@ -11,6 +11,8 @@ import {
   TransitionEdge,
 } from "@/data-source/data-type";
 
+export type EdgeModel = ReturnType<typeof makeEdgeModel>;
+
 export function makeEdgeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
   const [edgeList, setEdgeList] = createStore<IEdge[]>([]);
 

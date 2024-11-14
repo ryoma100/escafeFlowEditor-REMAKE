@@ -6,6 +6,8 @@ import { deepUnwrap } from "@/data-source/data-factory";
 import { INode, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
 import { rotatePoint } from "@/utils/point-utils";
 
+export type NodeModel = ReturnType<typeof makeNodeModel>;
+
 export function makeNodeModel(diagramModel: ReturnType<typeof makeDiagramModel>) {
   const [nodeList, setNodeList] = createStore<INode[]>([]);
 

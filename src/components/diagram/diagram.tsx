@@ -1,8 +1,15 @@
-import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
-import { produce } from "solid-js/store";
+import { For, JSXElement, onMount, Show } from "solid-js";
 
+import { PointerStrategy } from "@/components/diagram/listeners/base-strategy";
+import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
+import { makeRotateNodesStrategy } from "@/components/diagram/listeners/rotate-nodes-strategy";
+import { makeScaleNodesStrategy } from "@/components/diagram/listeners/scale-nodes-strategy";
+import { makeScrollStrategy } from "@/components/diagram/listeners/scroll-strategy";
+import { makeSelectBoxStrategy } from "@/components/diagram/listeners/select-box-strategy";
+import { makeSelectCircleStrategy } from "@/components/diagram/listeners/select-circle-strategy";
+import { makeSelectStrategy } from "@/components/diagram/listeners/select-strategy";
 import { ContextMenu } from "@/components/parts/context-menu";
-import { defaultCircle, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
+import { GRID_SPACING } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -22,8 +29,7 @@ import {
   TransitionEdge,
 } from "@/data-source/data-type";
 import { centerPoint, lineDistance } from "@/utils/line-utils";
-import { pointLength } from "@/utils/point-utils";
-import { containsRect, intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
+import { containsRect } from "@/utils/rectangle-utils";
 
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
@@ -33,40 +39,19 @@ import { TransitionEdgeContainer } from "./transition-edge";
 export function DiagramContainer(): JSXElement {
   const {
     actorModel: { selectedActor },
-    nodeModel: {
-      nodeList,
-      changeSelectNodes,
-      moveSelectedNodes,
-      changeTopLayer,
-      setNodeList,
-      scaleSelectedNodes,
-      rotateSelectedNodes,
-    },
+    nodeModel: { nodeList, changeSelectNodes, changeTopLayer, setNodeList },
     edgeModel: { edgeList, setEdgeList },
-    activityNodeModel: { addActivity, resizeLeft, resizeRight, updateJoinType, updateSplitType },
-    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
+    activityNodeModel: { addActivity },
     extendNodeModel: { addCommentNode, addStartNode, addEndNode },
-    extendEdgeModel: { addCommentEdge, addStartEdge, addEndEdge },
-    diagramModel: {
-      svgRect,
-      changeSvgRect,
-      viewBox,
-      setViewBox,
-      graphRect,
-      toolbar,
-      setToolbar,
-      zoom,
-      changeZoom,
-      dragMode,
-      setDragMode,
-      addingLine,
-      setAddingLineTo,
-    },
+    diagramModel,
+    nodeModel,
+    edgeModel,
   } = useModelContext();
 
-  const [selectBox, setSelectBox] = createSignal<Rectangle>(defaultRectangle);
-  const [selectCircle, setSelectCircle] = createSignal<Circle>(defaultCircle);
-  const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
+  let pointerStrategy: PointerStrategy | null = null;
+  function setPointerStrategy(strategy: PointerStrategy) {
+    pointerStrategy = strategy;
+  }
 
   onMount(() => {
     document.addEventListener("pointermove", handleDocumentPointerMove, { passive: true });
@@ -81,49 +66,51 @@ export function DiagramContainer(): JSXElement {
     pointerEvents.set(e.pointerId, e);
 
     if (e.pointerType === "mouse" && e.button === 2) {
-      setDragMode({ type: "contextMenuScroll" });
+      const strategy = makeScrollStrategy(diagramModel);
+      strategy.handlePointerDown(e);
+      setPointerStrategy(strategy);
       return;
     }
 
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    if (contextMenuPoint() != null) return;
-    if (dragMode().type !== "none") return;
+    if (diagramModel.contextMenuPoint() != null) return;
+    if (pointerStrategy != null) return;
 
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-    switch (toolbar()) {
+    const x =
+      diagramModel.viewBox().x + (e.clientX - diagramModel.svgRect().x) / diagramModel.zoom();
+    const y =
+      diagramModel.viewBox().y + (e.clientY - diagramModel.svgRect().y) / diagramModel.zoom();
+    switch (diagramModel.toolbar()) {
       case "cursor":
         {
           if (mouseDownTime + 250 > new Date().getTime()) {
             // onDoubleMouseDown
             if (e.ctrlKey || e.metaKey) {
-              setDragMode({
-                type: "rotateNodes",
-                basePoint: { x, y },
-              });
+              pointerStrategy = makeRotateNodesStrategy(diagramModel, nodeModel);
+              pointerStrategy.handlePointerDown(e);
             } else if (e.shiftKey) {
-              setDragMode({
-                type: "scaleNodes",
-                basePoint: { x, y },
-              });
+              pointerStrategy = makeScaleNodesStrategy(diagramModel, nodeModel);
+              pointerStrategy.handlePointerDown(e);
             } else {
-              setDragMode({ type: "scroll" });
+              pointerStrategy = makeScrollStrategy(diagramModel);
+              pointerStrategy.handlePointerDown(e);
             }
           } else {
             // onSingleMouseDown
             mouseDownTime = new Date().getTime();
-            setSelectBox(defaultRectangle);
-            setSelectCircle(defaultCircle);
             if (e.ctrlKey || e.metaKey) {
-              setDragMode({ type: "circleSelect", centerPoint: { x, y } });
+              pointerStrategy = makeSelectCircleStrategy(diagramModel, nodeModel, edgeModel);
+              pointerStrategy.handlePointerDown(e);
             } else if (e.shiftKey) {
-              setDragMode({ type: "boxSelect", centerPoint: { x, y } });
+              pointerStrategy = makeSelectBoxStrategy(diagramModel, nodeModel, edgeModel);
+              pointerStrategy.handlePointerDown(e);
             } else {
-              setDragMode({ type: "select", startPoint: { x, y } });
+              pointerStrategy = makeSelectStrategy(diagramModel, nodeModel, edgeModel);
+              pointerStrategy.handlePointerDown(e);
             }
 
             setTimeout(() => {
-              if (dragMode().type === "none") {
+              if (pointerStrategy == null) {
                 setNodeList(() => true, "selected", false);
                 setEdgeList(() => true, "selected", false);
               }
@@ -136,7 +123,9 @@ export function DiagramContainer(): JSXElement {
           const activity = addActivity("manualActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
-          setDragMode({ type: "addActivity" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: activity });
+          setPointerStrategy(strategy);
         }
         return;
       case "addAutoActivity":
@@ -144,7 +133,9 @@ export function DiagramContainer(): JSXElement {
           const activity = addActivity("autoActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
-          setDragMode({ type: "addActivity" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: activity });
+          setPointerStrategy(strategy);
         }
         return;
       case "addUserActivity":
@@ -152,34 +143,48 @@ export function DiagramContainer(): JSXElement {
           const activity = addActivity("userActivity", selectedActor().id, x, y);
           changeTopLayer(activity.id);
           changeSelectNodes("select", [activity.id]);
-          setDragMode({ type: "addActivity" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: activity });
+          setPointerStrategy(strategy);
         }
         return;
       case "addCommentNode":
         if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const comment = addCommentNode(x, y);
           changeSelectNodes("select", [comment.id]);
-          setDragMode({ type: "addCommentNode" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: comment });
+          setPointerStrategy(strategy);
         }
         return;
       case "addStartNode":
         if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const startNode = addStartNode(x, y);
           changeSelectNodes("select", [startNode.id]);
-          setDragMode({ type: "addStartNode" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: startNode });
+          setPointerStrategy(strategy);
         }
         return;
       case "addEndNode":
         if (nodeList.every((it) => !containsRect(it, { x, y }))) {
           const endNode = addEndNode(x, y);
           changeSelectNodes("select", [endNode.id]);
-          setDragMode({ type: "addEndNode" });
+          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
+          strategy.handlePointerDown(e, { node: endNode });
+          setPointerStrategy(strategy);
         }
         return;
     }
   }
 
   function handleDocumentPointerMove(e: PointerEvent) {
+    if (pointerStrategy != null) {
+      pointerStrategy.handlePointerMove(e, pointerEvents);
+      pointerEvents.set(e.pointerId, e);
+      return;
+    }
+
     const prevEvent = pointerEvents.get(e.pointerId);
     if (prevEvent == null || pointerEvents.size > 2) return;
 
@@ -199,166 +204,32 @@ export function DiagramContainer(): JSXElement {
       const newCenterPoint = centerPoint(newTouchPoints);
       const newDistance = lineDistance(newTouchPoints);
 
-      changeZoom(zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
-      setViewBox({
-        x: viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
-        y: viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
-        width: viewBox().width,
-        height: viewBox().height,
+      diagramModel.changeZoom(
+        diagramModel.zoom() + (newDistance - prevDistance) / prevDistance,
+        newCenterPoint,
+      );
+      diagramModel.setViewBox({
+        x: diagramModel.viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
+        y: diagramModel.viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
+        width: diagramModel.viewBox().width,
+        height: diagramModel.viewBox().height,
       });
       return;
     }
 
-    const moveX = (e.clientX - prevEvent.clientX) / zoom();
-    const moveY = (e.clientY - prevEvent.clientY) / zoom();
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-
     pointerEvents.set(e.pointerId, e);
-
-    const drag = dragMode();
-    switch (drag.type) {
-      case "select":
-        {
-          const rect: Rectangle = {
-            x: Math.min(drag.startPoint.x, x),
-            y: Math.min(drag.startPoint.y, y),
-            width: Math.abs(x - drag.startPoint.x),
-            height: Math.abs(y - drag.startPoint.y),
-          };
-          setSelectBox(rect);
-          setNodeList(
-            () => true,
-            produce((it) => (it.selected = intersectRect(rect, it))),
-          );
-          setEdgeList(() => true, "selected", false);
-        }
-        return;
-      case "boxSelect":
-        {
-          const diffX = Math.abs(x - drag.centerPoint.x);
-          const diffY = Math.abs(y - drag.centerPoint.y);
-          const rect: Rectangle = {
-            x: drag.centerPoint.x - diffX,
-            y: drag.centerPoint.y - diffY,
-            width: diffX * 2,
-            height: diffY * 2,
-          };
-          setSelectBox(rect);
-          setNodeList(
-            (_it) => true,
-            produce((it) => (it.selected = intersectRect(rect, it))),
-          );
-          setEdgeList(() => true, "selected", false);
-        }
-        return;
-      case "circleSelect":
-        {
-          const r = pointLength(drag.centerPoint, { x, y });
-          setSelectCircle({ cx: drag.centerPoint.x, cy: drag.centerPoint.y, r });
-          setNodeList(
-            (_it) => true,
-            produce((it) => (it.selected = minLengthOfPointToRect(drag.centerPoint, it) < r)),
-          );
-          setEdgeList(() => true, "selected", false);
-        }
-        return;
-      case "scroll":
-        setViewBox({
-          x: viewBox().x - moveX,
-          y: viewBox().y - moveY,
-          width: viewBox().width,
-          height: viewBox().height,
-        });
-        return;
-      case "contextMenuScroll":
-        if (contextMenuPoint() == null) {
-          setDragMode({ type: "scroll" });
-          setViewBox({
-            x: viewBox().x - moveX,
-            y: viewBox().y - moveY,
-            width: viewBox().width,
-            height: viewBox().height,
-          });
-        }
-        return;
-      case "addActivity":
-      case "addCommentNode":
-      case "addStartNode":
-      case "addEndNode":
-      case "moveNodes":
-        moveSelectedNodes(moveX, moveY);
-        return;
-      case "scaleNodes":
-        scaleSelectedNodes(drag.basePoint, moveX, moveY);
-        return;
-      case "rotateNodes":
-        rotateSelectedNodes(drag.basePoint, moveX, moveY);
-        return;
-      case "resizeActivityLeft":
-        resizeLeft(moveX);
-        return;
-      case "resizeActivityRight":
-        resizeRight(moveX);
-        return;
-      case "addTransition":
-      case "addCommentEdge":
-      case "addStartEdge":
-        setAddingLineTo(
-          viewBox().x + (e.clientX - svgRect().x) / zoom(),
-          viewBox().y + (e.clientY - svgRect().y) / zoom(),
-        );
-        return;
-    }
   }
 
   function handleDocumentPointerUp(e: PointerEvent) {
     pointerEvents.delete(e.pointerId);
 
-    if (dragMode().type === "contextMenuScroll") {
-      setContextMenuPoint({ x: e.pageX, y: e.pageY });
-      return;
-    }
-
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-    const node = nodeList.find((it) => containsRect(it, { x, y }));
-    switch (dragMode().type) {
-      case "addTransition":
-        if (node?.type === "activityNode") {
-          const transition = addTransitionEdge(node.id);
-          if (transition) {
-            updateJoinType(
-              transition.toNodeId,
-              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
-            );
-            updateSplitType(
-              transition.fromNodeId,
-              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
-            );
-          }
-        } else if (node?.type === "endNode") {
-          addEndEdge(node.id);
-        }
-        break;
-      case "addCommentEdge":
-        if (node?.type === "activityNode") {
-          addCommentEdge(node.id);
-        }
-        break;
-      case "addStartEdge":
-        if (node?.type === "activityNode") {
-          addStartEdge(node.id);
-        }
-        break;
-    }
-
-    setDragMode({ type: "none" });
+    pointerStrategy?.handlePointerUp(e);
+    pointerStrategy = null;
   }
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Escape") {
-      setToolbar("cursor");
+      diagramModel.setToolbar("cursor");
     }
   }
 
@@ -367,51 +238,51 @@ export function DiagramContainer(): JSXElement {
   }
 
   function onContextMenuSelect(menuItem: keyof I18nDict | null) {
-    setContextMenuPoint(null);
+    diagramModel.setContextMenuPoint(null);
     switch (menuItem) {
       case "select":
-        setToolbar("cursor");
+        diagramModel.setToolbar("cursor");
         return;
       case "transition":
-        setToolbar("transition");
+        diagramModel.setToolbar("transition");
         return;
       case "manualActivity":
-        setToolbar("addManualActivity");
+        diagramModel.setToolbar("addManualActivity");
         return;
       case "autoActivity":
-        setToolbar("addAutoActivity");
+        diagramModel.setToolbar("addAutoActivity");
         return;
       case "handWork":
-        setToolbar("addUserActivity");
+        diagramModel.setToolbar("addUserActivity");
         return;
       case "start":
-        setToolbar("addStartNode");
+        diagramModel.setToolbar("addStartNode");
         return;
       case "end":
-        setToolbar("addEndNode");
+        diagramModel.setToolbar("addEndNode");
         return;
       case "comment":
-        setToolbar("addCommentNode");
+        diagramModel.setToolbar("addCommentNode");
         return;
     }
   }
 
   function handleWheel(e: WheelEvent) {
     if (e.ctrlKey || e.metaKey) {
-      const newZoom = (zoom() * 100 + -e.deltaY) / 100;
-      changeZoom(newZoom, { x: e.clientX, y: e.clientY });
+      const newZoom = (diagramModel.zoom() * 100 + -e.deltaY) / 100;
+      diagramModel.changeZoom(newZoom, { x: e.clientX, y: e.clientY });
     } else {
-      setViewBox({
-        x: viewBox().x + e.deltaX * 2,
-        y: viewBox().y + e.deltaY * 2,
-        width: viewBox().width,
-        height: viewBox().height,
+      diagramModel.setViewBox({
+        x: diagramModel.viewBox().x + e.deltaX * 2,
+        y: diagramModel.viewBox().y + e.deltaY * 2,
+        width: diagramModel.viewBox().width,
+        height: diagramModel.viewBox().height,
       });
     }
   }
 
   function gridLines(): Line[] {
-    const rect = graphRect();
+    const rect = diagramModel.graphRect();
     if (rect.width === 0) return [];
 
     const dx = rect.x % GRID_SPACING;
@@ -439,32 +310,24 @@ export function DiagramContainer(): JSXElement {
   return (
     <>
       <DiagramView
-        viewBox={viewBox()}
-        svgRect={svgRect()}
-        changeSvgRect={changeSvgRect}
+        viewBox={diagramModel.viewBox()}
+        svgRect={diagramModel.svgRect()}
+        changeSvgRect={diagramModel.changeSvgRect}
         gridLines={gridLines()}
         nodeList={nodeList}
         edgeList={edgeList}
-        addingLine={
-          dragMode().type === "addTransition" ||
-          dragMode().type === "addStartEdge" ||
-          dragMode().type === "addEndEdge" ||
-          dragMode().type === "addCommentEdge"
-            ? addingLine()
-            : null
-        }
-        selectBox={
-          dragMode().type === "select" || dragMode().type === "boxSelect" ? selectBox() : null
-        }
-        selectCircle={dragMode().type === "circleSelect" ? selectCircle() : null}
+        addingLine={diagramModel.addingLine()}
+        selectBox={diagramModel.selectBox()}
+        selectCircle={diagramModel.selectCircle()}
         onPointerDown={handleDiagramPointerDown}
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
         onWheel={handleWheel}
+        setPointerStrategy={setPointerStrategy}
       />
 
       <ContextMenu
-        openPoint={contextMenuPoint()}
+        openPoint={diagramModel.contextMenuPoint()}
         menuItems={[
           "select",
           "transition",
@@ -495,6 +358,7 @@ export function DiagramView(props: {
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
   readonly onWheel?: (e: WheelEvent) => void;
+  readonly setPointerStrategy?: (strategy: PointerStrategy) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -582,12 +446,22 @@ export function DiagramView(props: {
         </g>
         <g data-id="activity-nodes">
           <For each={props.nodeList.filter((it) => it.type === "activityNode")}>
-            {(it) => <ActivityNodeContainer activity={it as ActivityNode} />}
+            {(it) => (
+              <ActivityNodeContainer
+                activity={it as ActivityNode}
+                setPointerStrategy={props.setPointerStrategy}
+              />
+            )}
           </For>
         </g>
         <g data-id="extend-nodes">
           <For each={props.nodeList.filter((it) => it.type !== "activityNode")}>
-            {(it) => <ExtendNodeContainer node={it as StartNode | EndNode | CommentNode} />}
+            {(it) => (
+              <ExtendNodeContainer
+                node={it as StartNode | EndNode | CommentNode}
+                setPointerStrategy={props.setPointerStrategy}
+              />
+            )}
           </For>
         </g>
         <g data-id="transition-edges">

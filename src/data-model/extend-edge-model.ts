@@ -3,6 +3,8 @@ import { makeNodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
 
+export type ExtendEdgeModel = ReturnType<typeof makeExtendEdgeModel>;
+
 export function makeExtendEdgeModel(
   edgeModel: ReturnType<typeof makeEdgeModel>,
   nodeModel: ReturnType<typeof makeNodeModel>,
