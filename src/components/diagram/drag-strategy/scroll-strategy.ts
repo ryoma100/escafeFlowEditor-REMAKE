@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/diagram";
+import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
 import { DiagramModel } from "@/data-model/diagram-model";
 
 export function makeScrollStrategy(diagramModel: DiagramModel): PointerStrategy {

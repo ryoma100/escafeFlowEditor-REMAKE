@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/diagram";
+import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";
 import { NodeModel } from "@/data-model/node-model";

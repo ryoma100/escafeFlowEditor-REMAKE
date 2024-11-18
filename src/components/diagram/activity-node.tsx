@@ -1,10 +1,5 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
-import { PointerStrategy } from "@/components/diagram/diagram";
-import { makeAddActivityEdgeStrategy } from "@/components/diagram/listeners/add-activity-edge-strategy";
-import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
-import { makeResizeActivityLeftStrategy } from "@/components/diagram/listeners/resize-activity-left-strategy";
-import { makeResizeActivityRightStrategy } from "@/components/diagram/listeners/resize-activity-right-strategy";
 import { ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -21,57 +16,22 @@ import { UserActivityIcon } from "@/icons/user-activity-icon";
 
 export function ActivityNodeContainer(props: {
   readonly activity: ActivityNode;
-  readonly setPointerStrategy?: (strategy: PointerStrategy) => void;
+  readonly onActivityLeftPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onActivityRightPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onActivityPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
 }): JSXElement {
-  const {
-    activityNodeModel,
-    actorModel,
-    nodeModel,
-    edgeModel,
-    dialogModel,
-    diagramModel,
-    transitionEdgeModel,
-    extendEdgeModel,
-  } = useModelContext();
+  const { activityNodeModel, actorModel, dialogModel } = useModelContext();
 
   function handleLeftPointerDown(e: PointerEvent) {
-    const strategy = makeResizeActivityLeftStrategy(diagramModel, activityNodeModel);
-    strategy.handlePointerDown(e, props.activity);
-    props.setPointerStrategy?.(strategy);
+    props.onActivityLeftPointerDown?.(e, props.activity);
   }
 
   function handleRightPointerDown(e: PointerEvent) {
-    const strategy = makeResizeActivityRightStrategy(diagramModel, activityNodeModel);
-    strategy.handlePointerDown(e, props.activity);
-    props.setPointerStrategy?.(strategy);
+    props.onActivityRightPointerDown?.(e, props.activity);
   }
 
   function handlePointerDown(e: PointerEvent) {
-    e.preventDefault();
-
-    switch (diagramModel.toolbar()) {
-      case "cursor":
-        if (e.shiftKey) {
-          nodeModel.changeSelectNodes("toggle", [props.activity.id]);
-        } else {
-          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, props.activity);
-          props.setPointerStrategy?.(strategy);
-        }
-        return;
-      case "transition":
-        {
-          const strategy = makeAddActivityEdgeStrategy(
-            diagramModel,
-            activityNodeModel,
-            transitionEdgeModel,
-            extendEdgeModel,
-          );
-          strategy.handlePointerDown(e, props.activity);
-          props.setPointerStrategy?.(strategy);
-        }
-        return;
-    }
+    props.onActivityPointerDown?.(e, props.activity);
   }
 
   function handleDblClick() {

@@ -1,10 +1,10 @@
-import { PointerStrategy } from "@/components/diagram/diagram";
+import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { NodeModel } from "@/data-model/node-model";
 import { Point } from "@/data-source/data-type";
 
-export function makeScaleNodesStrategy(
+export function makeRotateNodesStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
 ): PointerStrategy {
@@ -20,7 +20,7 @@ export function makeScaleNodesStrategy(
 
     const moveX = (e.clientX - prevEvent.clientX) / diagramModel.zoom();
     const moveY = (e.clientY - prevEvent.clientY) / diagramModel.zoom();
-    nodeModel.scaleSelectedNodes(basePoint, moveX, moveY);
+    nodeModel.rotateSelectedNodes(basePoint, moveX, moveY);
   }
 
   function handlePointerUp(_e: PointerEvent) {}

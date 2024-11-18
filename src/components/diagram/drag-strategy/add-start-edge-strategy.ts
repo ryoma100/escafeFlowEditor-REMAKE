@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/diagram";
+import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
@@ -7,7 +7,7 @@ import { Point } from "@/data-source/data-type";
 import { INode } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
-export function makeAddCommentEdgeStrategy(
+export function makeAddStartEdgeStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
   extendEdgeModel: ExtendEdgeModel,
@@ -38,7 +38,7 @@ export function makeAddCommentEdgeStrategy(
     const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
     if (node?.type !== "activityNode") return;
 
-    extendEdgeModel.addCommentEdge(node.id);
+    extendEdgeModel.addStartEdge(node.id);
   }
 
   return {

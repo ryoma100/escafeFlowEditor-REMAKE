@@ -1,44 +1,40 @@
 import { produce } from "solid-js/store";
 
-import { PointerStrategy } from "@/components/diagram/diagram";
+import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";
 import { NodeModel } from "@/data-model/node-model";
-import { Point, Rectangle } from "@/data-source/data-type";
-import { intersectRect } from "@/utils/rectangle-utils";
+import { Point } from "@/data-source/data-type";
+import { pointLength } from "@/utils/point-utils";
+import { minLengthOfPointToRect } from "@/utils/rectangle-utils";
 
-export function makeSelectStrategy(
+export function makeSelectCircleStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
   edgeModel: EdgeModel,
 ): PointerStrategy {
-  let startPoint: Point = defaultPoint;
+  let centerPoint: Point = defaultPoint;
 
   function handlePointerDown(e: PointerEvent) {
-    startPoint = diagramModel.normalizePoint(e.clientX, e.clientY);
-    diagramModel.setSelectBox(null);
+    centerPoint = diagramModel.normalizePoint(e.clientX, e.clientY);
+    diagramModel.setSelectCircle(null);
   }
 
   function handlePointerMove(e: PointerEvent, _pointerEvents: Map<number, PointerEvent>) {
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
 
-    const rect: Rectangle = {
-      x: Math.min(startPoint.x, x),
-      y: Math.min(startPoint.y, y),
-      width: Math.abs(x - startPoint.x),
-      height: Math.abs(y - startPoint.y),
-    };
-    diagramModel.setSelectBox(rect);
+    const r = pointLength(centerPoint, { x, y });
+    diagramModel.setSelectCircle({ cx: centerPoint.x, cy: centerPoint.y, r });
     nodeModel.setNodeList(
-      () => true,
-      produce((it) => (it.selected = intersectRect(rect, it))),
+      (_it) => true,
+      produce((it) => (it.selected = minLengthOfPointToRect(centerPoint, it) < r)),
     );
     edgeModel.setEdgeList(() => true, "selected", false);
   }
 
   function handlePointerUp(_e: PointerEvent) {
-    diagramModel.setSelectBox(null);
+    diagramModel.setSelectCircle(null);
   }
 
   return {

@@ -1,48 +1,19 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
-import { PointerStrategy } from "@/components/diagram/diagram";
-import { makeAddCommentEdgeStrategy } from "@/components/diagram/listeners/add-comment-edge-strategy";
-import { makeAddStartEdgeStrategy } from "@/components/diagram/listeners/add-start-edge-strategy";
-import { makeMoveNodesStrategy } from "@/components/diagram/listeners/move-nodes-strategy";
 import { useModelContext } from "@/context/model-context";
-import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
+import { CommentNode, EndNode, INode, StartNode } from "@/data-source/data-type";
 import { CommentIcon } from "@/icons/comment";
 import { EndIcon } from "@/icons/end-icon";
 import { StartIcon } from "@/icons/start-icon";
 
 export function ExtendNodeContainer(props: {
   readonly node: CommentNode | StartNode | EndNode;
-  readonly setPointerStrategy?: (strategy: PointerStrategy) => void;
+  readonly onExtendNodePointerDown?: (e: PointerEvent, node: INode) => void;
 }): JSXElement {
-  const { extendNodeModel, nodeModel, diagramModel, dialogModel, edgeModel, extendEdgeModel } =
-    useModelContext();
+  const { extendNodeModel, dialogModel } = useModelContext();
 
   function handlePointerDown(e: PointerEvent) {
-    e.preventDefault();
-
-    switch (diagramModel.toolbar()) {
-      case "cursor":
-        if (e.shiftKey) {
-          nodeModel.changeSelectNodes("toggle", [props.node.id]);
-          e.stopPropagation();
-        } else {
-          const strategy = makeMoveNodesStrategy(diagramModel, nodeModel, edgeModel);
-          strategy.handlePointerDown(e, props.node);
-          props.setPointerStrategy?.(strategy);
-        }
-        return;
-      case "transition":
-        if (props.node.type === "commentNode") {
-          const strategy = makeAddCommentEdgeStrategy(diagramModel, nodeModel, extendEdgeModel);
-          strategy.handlePointerDown(e, props.node);
-          props.setPointerStrategy?.(strategy);
-        } else if (props.node.type === "startNode") {
-          const strategy = makeAddStartEdgeStrategy(diagramModel, nodeModel, extendEdgeModel);
-          strategy.handlePointerDown(e, props.node);
-          props.setPointerStrategy?.(strategy);
-        }
-        return;
-    }
+    props.onExtendNodePointerDown?.(e, props.node);
   }
 
   function handleDblClick(_e: MouseEvent) {

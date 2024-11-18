@@ -5,6 +5,8 @@ import { NodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 
+export type ExtendNodeModel = ReturnType<typeof makeExtendNodeModel>;
+
 export function makeExtendNodeModel(nodeModel: NodeModel) {
   function addCommentNode(x: number, y: number): CommentNode {
     const comment = dataFactory.createCommentNode(

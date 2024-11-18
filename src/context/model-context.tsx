@@ -43,10 +43,7 @@ export function makeModelContext() {
 const dummyValue = undefined as unknown as ReturnType<typeof makeModelContext>;
 export const ModelContext = createContext(dummyValue);
 
-export function ModelProvider(props: {
-  readonly onChange?: (e: Event) => void;
-  readonly children: JSX.Element;
-}) {
+export function ModelProvider(props: { readonly children: JSX.Element }) {
   const value = makeModelContext();
   return <ModelContext.Provider value={value}>{props.children}</ModelContext.Provider>;
 }
