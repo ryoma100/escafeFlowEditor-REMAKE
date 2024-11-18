@@ -1,55 +1,24 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
-import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
+import { CommentNode, EndNode, INode, StartNode } from "@/data-source/data-type";
 import { CommentIcon } from "@/icons/comment";
 import { EndIcon } from "@/icons/end-icon";
 import { StartIcon } from "@/icons/start-icon";
 
 export function ExtendNodeContainer(props: {
   readonly node: CommentNode | StartNode | EndNode;
+  readonly onExtendNodePointerDown?: (e: PointerEvent, node: INode) => void;
 }): JSXElement {
-  const {
-    extendNodeModel: { resizeCommentNode },
-    nodeModel: { changeSelectNodes },
-    diagramModel: { toolbar, setDragMode, setAddingLineFrom },
-    dialogModel: { setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { extendNodeModel, dialogModel } = useModelContext();
 
   function handlePointerDown(e: PointerEvent) {
-    e.preventDefault();
-
-    switch (toolbar()) {
-      case "cursor":
-        if (e.shiftKey) {
-          changeSelectNodes("toggle", [props.node.id]);
-          setDragMode({ type: "none" });
-          e.stopPropagation();
-        } else {
-          if (!props.node.selected) {
-            changeSelectNodes("select", [props.node.id]);
-          }
-          setDragMode({ type: "moveNodes" });
-        }
-        return;
-      case "transition":
-        changeSelectNodes("select", [props.node.id]);
-        setAddingLineFrom(
-          props.node.x + props.node.width / 2,
-          props.node.y + props.node.height / 2,
-        );
-        if (props.node.type === "commentNode") {
-          setDragMode({ type: "addCommentEdge", fromComment: props.node });
-        } else if (props.node.type === "startNode") {
-          setDragMode({ type: "addStartEdge", fromStart: props.node });
-        }
-        return;
-    }
+    props.onExtendNodePointerDown?.(e, props.node);
   }
 
   function handleDblClick(_e: MouseEvent) {
     if (props.node.type === "commentNode") {
-      setOpenDialog({ type: "comment", comment: props.node });
+      dialogModel.setOpenDialog({ type: "comment", comment: props.node });
     }
   }
 
@@ -67,7 +36,9 @@ export function ExtendNodeContainer(props: {
             selected={props.node.selected}
             onPointerDown={handlePointerDown}
             onDblClick={handleDblClick}
-            onChangeSize={(w, h) => resizeCommentNode(props.node as CommentNode, w, h)}
+            onChangeSize={(w, h) =>
+              extendNodeModel.resizeCommentNode(props.node as CommentNode, w, h)
+            }
           />
         </Match>
         <Match when={props.node.type === "startNode"}>

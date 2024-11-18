@@ -7,61 +7,61 @@ import { useThemeContext } from "@/context/theme-context";
 export function AppMenu(): JSXElement {
   const { dict } = useThemeContext();
   const {
-    projectModel: { project, save },
-    processModel: { addProcess, selectedProcess, processList },
-    actorModel: { addActor, removeSelectedActor, selectedActor },
-    nodeModel: { deleteSelectedNodes, changeSelectNodes, getSelectedNodes, nodeList },
-    activityNodeModel: { updateAllJoinSplitType },
-    edgeModel: { deleteSelectedEdge, selectedEdges, edgeList },
-    dialogModel: { setModalDialog: setOpenDialog, setMessageAlert: setOpenMessageDialog },
+    projectModel,
+    processModel,
+    actorModel,
+    nodeModel,
+    activityNodeModel,
+    edgeModel,
+    dialogModel,
   } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {
-    setOpenDialog({ type: "initAll" });
+    dialogModel.setOpenDialog({ type: "initAll" });
     return false;
   }
 
   function handleFileOpenClick() {
-    setOpenDialog({ type: "load" });
+    dialogModel.setOpenDialog({ type: "load" });
     return false;
   }
 
   function handleFileSettingClick() {
-    setOpenDialog({ type: "setting" });
+    dialogModel.setOpenDialog({ type: "setting" });
     return false;
   }
 
   function handleFileSaveClick() {
-    save();
-    setOpenDialog({ type: "save", project: project() });
+    projectModel.save();
+    dialogModel.setOpenDialog({ type: "save", project: projectModel.project() });
     return false;
   }
 
   function handleEditSelectAllClick() {
-    changeSelectNodes("selectAll");
+    nodeModel.changeSelectNodes("selectAll");
     return false;
   }
 
   function handleEditRemoveClick() {
-    deleteSelectedEdge();
-    deleteSelectedNodes();
-    updateAllJoinSplitType(edgeList);
+    edgeModel.deleteSelectedEdge();
+    nodeModel.deleteSelectedNodes();
+    activityNodeModel.updateAllJoinSplitType(edgeModel.edgeList);
     return false;
   }
 
   function handleEditPropertyClick() {
-    if (getSelectedNodes().length + selectedEdges().length === 1) {
-      getSelectedNodes().forEach((it) => {
+    if (nodeModel.getSelectedNodes().length + edgeModel.selectedEdges().length === 1) {
+      nodeModel.getSelectedNodes().forEach((it) => {
         if (it.type === "activityNode") {
-          setOpenDialog({ type: "activity", activity: it });
+          dialogModel.setOpenDialog({ type: "activity", activity: it });
         } else if (it.type === "commentNode") {
-          setOpenDialog({ type: "comment", comment: it });
+          dialogModel.setOpenDialog({ type: "comment", comment: it });
         }
       });
-      selectedEdges().forEach((it) => {
+      edgeModel.selectedEdges().forEach((it) => {
         if (it.type === "transitionEdge") {
-          setOpenDialog({ type: "transition", transition: it });
+          dialogModel.setOpenDialog({ type: "transition", transition: it });
         }
       });
     }
@@ -69,45 +69,45 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProjectPropertyClick() {
-    setOpenDialog({ type: "project", project: project() });
+    dialogModel.setOpenDialog({ type: "project", project: projectModel.project() });
     return false;
   }
 
   function handleProcessAddClick() {
-    addProcess(processList());
+    processModel.addProcess(processModel.processList());
     return false;
   }
 
   function handleProcessRemoveClick() {
-    setOpenDialog({ type: "deleteProcess", process: selectedProcess() });
+    dialogModel.setOpenDialog({ type: "deleteProcess", process: processModel.selectedProcess() });
     return false;
   }
 
   function handleProcessPropertyClick() {
-    setOpenDialog({ type: "process", process: selectedProcess() });
+    dialogModel.setOpenDialog({ type: "process", process: processModel.selectedProcess() });
     return false;
   }
 
   function handleActorAddClick() {
-    addActor();
+    actorModel.addActor();
     return false;
   }
 
   function handleActorRemoveClick() {
-    const err = removeSelectedActor(nodeList);
+    const err = actorModel.removeSelectedActor(nodeModel.nodeList);
     if (err != null) {
-      setOpenMessageDialog(err);
+      dialogModel.setOpenMessage(err);
     }
     return false;
   }
 
   function handleActorPropertyClick() {
-    setOpenDialog({ type: "actor", actor: selectedActor() });
+    dialogModel.setOpenDialog({ type: "actor", actor: actorModel.selectedActor() });
     return false;
   }
 
   function handleHelpAboutClick() {
-    setOpenDialog({ type: "about" });
+    dialogModel.setOpenDialog({ type: "about" });
     return false;
   }
 

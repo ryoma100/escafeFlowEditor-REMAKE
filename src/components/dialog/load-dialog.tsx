@@ -11,16 +11,12 @@ import { importXml } from "@/data-source/data-converter";
 import { ProjectEntity } from "@/data-source/data-type";
 
 export function LoadDialog(): JSXElement {
-  const {
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-    processModel: { load },
-    diagramModel: { initViewBox },
-  } = useModelContext();
+  const { dialogModel, processModel, diagramModel } = useModelContext();
 
   function handleInput(data: string) {
     const project: ProjectEntity = importXml(data);
     loadAndAutoZoom(project);
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   function handleFileLoad() {
@@ -29,7 +25,7 @@ export function LoadDialog(): JSXElement {
     } else {
       webLoad();
     }
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   async function tauriLoad() {
@@ -63,16 +59,16 @@ export function LoadDialog(): JSXElement {
   }
 
   function loadAndAutoZoom(project: ProjectEntity) {
-    load(project);
-    setTimeout(() => initViewBox(), 0);
+    processModel.load(project);
+    setTimeout(() => diagramModel.initViewBox(), 0);
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "load") {
+    if (dialogModel.openDialog()?.type === "load") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -82,7 +78,7 @@ export function LoadDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef}>
-      <Show when={openDialog()?.type === "load"}>
+      <Show when={dialogModel.openDialog()?.type === "load"}>
         <LoadDialogView
           onLoadClick={handleFileLoad}
           onInputClick={handleInput}

@@ -25,14 +25,12 @@ export type ToolbarType =
 
 export function Toolbar(): JSXElement {
   const { dict } = useThemeContext();
-  const {
-    diagramModel: { toolbar, setToolbar },
-  } = useModelContext();
+  const { diagramModel } = useModelContext();
   const t = i18n.translator(dict);
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Escape") {
-      setToolbar("cursor");
+      diagramModel.setToolbar("cursor");
     }
   }
 
@@ -41,8 +39,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-cursor"
         title={t("select")}
-        checked={toolbar() === "cursor"}
-        onChange={() => setToolbar("cursor")}
+        checked={diagramModel.toolbar() === "cursor"}
+        onChange={() => diagramModel.setToolbar("cursor")}
         margin="4px 0 8px 0"
       >
         <CursorIcon class="[fill:var(--foreground-color)]" />
@@ -51,8 +49,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-transition"
         title={t("transition")}
-        checked={toolbar() === "transition"}
-        onChange={() => setToolbar("transition")}
+        checked={diagramModel.toolbar() === "transition"}
+        onChange={() => diagramModel.setToolbar("transition")}
         margin="0 0 16px 0"
       >
         <TransitionIcon class="[fill:var(--foreground-color)]" />
@@ -61,8 +59,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-manual"
         title={t("manualActivity")}
-        checked={toolbar() === "addManualActivity"}
-        onChange={() => setToolbar("addManualActivity")}
+        checked={diagramModel.toolbar() === "addManualActivity"}
+        onChange={() => diagramModel.setToolbar("addManualActivity")}
         margin="0 0 8px 0"
       >
         <ManualActivityIcon class="[fill:var(--foreground-color)]" />
@@ -71,8 +69,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-auto"
         title={t("autoActivity")}
-        checked={toolbar() === "addAutoActivity"}
-        onChange={() => setToolbar("addAutoActivity")}
+        checked={diagramModel.toolbar() === "addAutoActivity"}
+        onChange={() => diagramModel.setToolbar("addAutoActivity")}
         margin="0 0 8px 0"
       >
         <AutoActivityIcon class="[fill:var(--foreground-color)]" />
@@ -81,8 +79,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-hand"
         title={t("handWork")}
-        checked={toolbar() === "addUserActivity"}
-        onChange={() => setToolbar("addUserActivity")}
+        checked={diagramModel.toolbar() === "addUserActivity"}
+        onChange={() => diagramModel.setToolbar("addUserActivity")}
         margin="0 0 16px 0"
       >
         <UserActivityIcon class="[fill:var(--foreground-color)]" />
@@ -91,8 +89,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-start"
         title={t("start")}
-        checked={toolbar() === "addStartNode"}
-        onChange={() => setToolbar("addStartNode")}
+        checked={diagramModel.toolbar() === "addStartNode"}
+        onChange={() => diagramModel.setToolbar("addStartNode")}
         margin="0 0 8px 0"
       >
         <div class="flex h-12 w-16 items-center justify-center">
@@ -103,8 +101,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-end"
         title={t("end")}
-        checked={toolbar() === "addEndNode"}
-        onChange={() => setToolbar("addEndNode")}
+        checked={diagramModel.toolbar() === "addEndNode"}
+        onChange={() => diagramModel.setToolbar("addEndNode")}
         margin="0 0 8px 0"
       >
         <div class="flex h-12 w-16 items-center justify-center">
@@ -115,8 +113,8 @@ export function Toolbar(): JSXElement {
       <ToggleIconButton
         id="toolbar-comment"
         title={t("comment")}
-        checked={toolbar() === "addCommentNode"}
-        onChange={() => setToolbar("addCommentNode")}
+        checked={diagramModel.toolbar() === "addCommentNode"}
+        onChange={() => diagramModel.setToolbar("addCommentNode")}
       >
         <div class="flex h-12 w-16 items-center justify-center">
           <CommentIcon class="[fill:var(--foreground-color)]" />

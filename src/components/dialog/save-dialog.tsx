@@ -11,9 +11,7 @@ import { exportXml } from "@/data-source/data-converter";
 import { ProjectEntity } from "@/data-source/data-type";
 
 export function SaveDialog(): JSXElement {
-  const {
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { dialogModel } = useModelContext();
 
   function handleFormSubmit(formData: string) {
     if ("__TAURI_IPC__" in window) {
@@ -21,7 +19,7 @@ export function SaveDialog(): JSXElement {
     } else {
       webSave(formData);
     }
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   function webSave(data: string) {
@@ -45,11 +43,11 @@ export function SaveDialog(): JSXElement {
   }
 
   function handleDialogClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "save") {
+    if (dialogModel.openDialog()?.type === "save") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -57,7 +55,7 @@ export function SaveDialog(): JSXElement {
   });
 
   const project = () => {
-    const dialogData = openDialog();
+    const dialogData = dialogModel.openDialog();
     return dialogData?.type === "save" ? dialogData.project : undefined;
   };
 

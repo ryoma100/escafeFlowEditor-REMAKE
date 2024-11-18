@@ -6,16 +6,14 @@ import { useModelContext } from "@/context/model-context";
 import { Appearance, Color, Theme, useThemeContext } from "@/context/theme-context";
 
 export function SettingDialog(): JSXElement {
-  const {
-    dialogModel: { modalDialog: openDialog, setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { dialogModel } = useModelContext();
 
   function handleClose() {
-    setOpenDialog(null);
+    dialogModel.setOpenDialog(null);
   }
 
   createEffect(() => {
-    if (openDialog()?.type === "setting") {
+    if (dialogModel.openDialog()?.type === "setting") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -25,7 +23,7 @@ export function SettingDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleClose}>
-      <Show when={openDialog()?.type === "setting"}>
+      <Show when={dialogModel.openDialog()?.type === "setting"}>
         <SettingDialogView onClose={handleClose} />
       </Show>
     </dialog>

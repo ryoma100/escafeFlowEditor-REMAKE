@@ -1,53 +1,21 @@
 import { createSignal } from "solid-js";
 
 import { ToolbarType } from "@/components/toolbar/toolbar";
-import { defaultLine, defaultRectangle } from "@/constants/app-const";
-import {
-  ActivityNode,
-  CommentNode,
-  Line,
-  Point,
-  Rectangle,
-  StartNode,
-} from "@/data-source/data-type";
+import { defaultRectangle } from "@/constants/app-const";
+import { Circle, Line, Point, Rectangle } from "@/data-source/data-type";
 
-export type DragModeType =
-  | { type: "none" }
-  | { type: "select"; startPoint: Point }
-  | { type: "boxSelect"; centerPoint: Point }
-  | { type: "circleSelect"; centerPoint: Point }
-  | { type: "scroll" }
-  | { type: "contextMenuScroll" }
-  | { type: "moveNodes" }
-  | { type: "scaleNodes"; basePoint: Point }
-  | { type: "rotateNodes"; basePoint: Point }
-  | { type: "resizeActivityLeft" }
-  | { type: "resizeActivityRight" }
-  | { type: "addActivity" }
-  | { type: "addTransition"; fromActivity: ActivityNode }
-  | { type: "addCommentNode" }
-  | { type: "addCommentEdge"; fromComment: CommentNode }
-  | { type: "addStartNode" }
-  | { type: "addStartEdge"; fromStart: StartNode }
-  | { type: "addEndNode" }
-  | { type: "addEndEdge"; fromActivity: ActivityNode };
+export type DiagramModel = ReturnType<typeof makeDiagramModel>;
 
 export function makeDiagramModel() {
   const [toolbar, setToolbar] = createSignal<ToolbarType>("cursor");
   const [zoom, setZoom] = createSignal<number>(1.0);
-  const [dragMode, setDragMode] = createSignal<DragModeType>({ type: "none" });
-  const [addingLine, setAddingLine] = createSignal<Line>(defaultLine);
+  const [addingLine, setAddingLine] = createSignal<Line | null>(null);
   const [svgRect, setSvgRect] = createSignal(defaultRectangle);
   const [viewBox, setViewBox] = createSignal(defaultRectangle);
   const [graphRect, setGraphRect] = createSignal(defaultRectangle);
-
-  function setAddingLineFrom(x: number, y: number) {
-    setAddingLine({ p1: { x, y }, p2: { x, y } });
-  }
-
-  function setAddingLineTo(x: number, y: number) {
-    setAddingLine({ p1: addingLine().p1, p2: { x, y } });
-  }
+  const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
+  const [selectBox, setSelectBox] = createSignal<Rectangle | null>(null);
+  const [selectCircle, setSelectCircle] = createSignal<Circle | null>(null);
 
   function initViewBox() {
     setZoom(1.0);
@@ -111,16 +79,19 @@ export function makeDiagramModel() {
     }
   }
 
+  function normalizePoint(clientX: number, clientY: number): Point {
+    const x = viewBox().x + (clientX - svgRect().x) / zoom();
+    const y = viewBox().y + (clientY - svgRect().y) / zoom();
+    return { x, y };
+  }
+
   return {
     toolbar,
     setToolbar,
     zoom,
     changeZoom,
-    dragMode,
-    setDragMode,
     addingLine,
-    setAddingLineFrom,
-    setAddingLineTo,
+    setAddingLine,
     svgRect,
     changeSvgRect,
     fitViewBox,
@@ -129,5 +100,12 @@ export function makeDiagramModel() {
     graphRect,
     changeGraphRect,
     initViewBox,
+    contextMenuPoint,
+    setContextMenuPoint,
+    normalizePoint,
+    selectBox,
+    setSelectBox,
+    selectCircle,
+    setSelectCircle,
   };
 }

@@ -1,18 +1,20 @@
 import { batch, createSignal } from "solid-js";
 
 import { i18nEnDict } from "@/constants/i18n";
-import { makeActorModel } from "@/data-model/actor-model";
-import { makeEdgeModel } from "@/data-model/edge-model";
-import { makeNodeModel } from "@/data-model/node-model";
+import { ActorModel } from "@/data-model/actor-model";
+import { EdgeModel } from "@/data-model/edge-model";
+import { NodeModel } from "@/data-model/node-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import { ProcessEntity, ProjectEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createProcess([]);
 
+export type ProcessModel = ReturnType<typeof makeProcessModel>;
+
 export function makeProcessModel(
-  actorModel: ReturnType<typeof makeActorModel>,
-  nodeModel: ReturnType<typeof makeNodeModel>,
-  edgeModel: ReturnType<typeof makeEdgeModel>,
+  actorModel: ActorModel,
+  nodeModel: NodeModel,
+  edgeModel: EdgeModel,
 ) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
   const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(dummy);

@@ -25,13 +25,13 @@ export type ModalDialogType =
   | { type: "about" };
 
 export function makeDialogModel() {
-  const [modalDialog, setModalDialog] = createSignal<ModalDialogType | null>(null);
-  const [messageAlert, setMessageAlert] = createSignal<keyof typeof i18nEnDict | null>(null);
+  const [openDialog, setOpenDialog] = createSignal<ModalDialogType | null>(null);
+  const [openMessage, setOpenMessage] = createSignal<keyof typeof i18nEnDict | null>(null);
 
   return {
-    modalDialog,
-    setModalDialog,
-    messageAlert,
-    setMessageAlert,
+    openDialog,
+    setOpenDialog,
+    openMessage,
+    setOpenMessage,
   };
 }

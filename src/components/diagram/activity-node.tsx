@@ -14,56 +14,28 @@ import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 
-export function ActivityNodeContainer(props: { readonly activity: ActivityNode }): JSXElement {
-  const {
-    activityNodeModel: { resizeActivityHeight },
-    actorModel: { actorList },
-    nodeModel: { changeSelectNodes, changeTopLayer },
-    edgeModel: { changeSelectEdges },
-    dialogModel: { setModalDialog },
-    diagramModel: { toolbar, setDragMode, setAddingLineFrom },
-  } = useModelContext();
+export function ActivityNodeContainer(props: {
+  readonly activity: ActivityNode;
+  readonly onActivityLeftPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onActivityRightPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onActivityPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+}): JSXElement {
+  const { activityNodeModel, actorModel, dialogModel } = useModelContext();
 
-  function handleLeftPointerDown(_e: PointerEvent) {
-    changeSelectNodes("select", [props.activity.id]);
-    setDragMode({ type: "resizeActivityLeft" });
+  function handleLeftPointerDown(e: PointerEvent) {
+    props.onActivityLeftPointerDown?.(e, props.activity);
   }
 
-  function handleRightPointerDown(_e: PointerEvent) {
-    changeSelectNodes("select", [props.activity.id]);
-    setDragMode({ type: "resizeActivityRight" });
+  function handleRightPointerDown(e: PointerEvent) {
+    props.onActivityRightPointerDown?.(e, props.activity);
   }
 
   function handlePointerDown(e: PointerEvent) {
-    e.preventDefault();
-
-    switch (toolbar()) {
-      case "cursor":
-        if (e.shiftKey) {
-          changeSelectNodes("toggle", [props.activity.id]);
-          setDragMode({ type: "none" });
-        } else {
-          if (!props.activity.selected) {
-            changeSelectNodes("select", [props.activity.id]);
-            changeSelectEdges("clearAll");
-          }
-          changeTopLayer(props.activity.id);
-          setDragMode({ type: "moveNodes" });
-        }
-        return;
-      case "transition":
-        changeSelectNodes("select", [props.activity.id]);
-        setAddingLineFrom(
-          props.activity.x + props.activity.width,
-          props.activity.y + props.activity.height / 2,
-        );
-        setDragMode({ type: "addTransition", fromActivity: props.activity });
-        return;
-    }
+    props.onActivityPointerDown?.(e, props.activity);
   }
 
   function handleDblClick() {
-    setModalDialog({ type: "activity", activity: props.activity });
+    dialogModel.setOpenDialog({ type: "activity", activity: props.activity });
   }
 
   return (
@@ -77,7 +49,7 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
       <ActivityNodeView
         activityType={props.activity.activityType}
         name={props.activity.name}
-        actorName={actorList.find((it) => it.id === props.activity.actorId)?.name ?? ""}
+        actorName={actorModel.actorList.find((it) => it.id === props.activity.actorId)?.name ?? ""}
         joinType={props.activity.joinType}
         splitType={props.activity.splitType}
         selected={props.activity.selected}
@@ -86,7 +58,7 @@ export function ActivityNodeContainer(props: { readonly activity: ActivityNode }
         onPointerDown={handlePointerDown}
         onRightPointerDown={handleRightPointerDown}
         onDblClick={handleDblClick}
-        onChangeHeight={(height) => resizeActivityHeight(props.activity, height)}
+        onChangeHeight={(height) => activityNodeModel.resizeActivityHeight(props.activity, height)}
       />
     </foreignObject>
   );

@@ -1,8 +1,9 @@
-import { createSignal, For, JSXElement, onMount, Show } from "solid-js";
-import { produce } from "solid-js/store";
+import { For, JSXElement, onMount, Show } from "solid-js";
 
+import { makePointerListener } from "@/components/diagram/listener/pointer-listener";
+import { makeWheelListener } from "@/components/diagram/listener/wheel-listener";
 import { ContextMenu } from "@/components/parts/context-menu";
-import { defaultCircle, defaultRectangle, GRID_SPACING } from "@/constants/app-const";
+import { GRID_SPACING } from "@/constants/app-const";
 import { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import {
@@ -15,15 +16,11 @@ import {
   IEdge,
   INode,
   Line,
-  Point,
   Rectangle,
   StartEdge,
   StartNode,
   TransitionEdge,
 } from "@/data-source/data-type";
-import { centerPoint, lineDistance } from "@/utils/line-utils";
-import { pointLength } from "@/utils/point-utils";
-import { containsRect, intersectRect, minLengthOfPointToRect } from "@/utils/rectangle-utils";
 
 import { ActivityNodeContainer } from "./activity-node";
 import { ExtendEdgeContainer } from "./extend-edge";
@@ -32,386 +29,75 @@ import { TransitionEdgeContainer } from "./transition-edge";
 
 export function DiagramContainer(): JSXElement {
   const {
-    actorModel: { selectedActor },
-    nodeModel: {
-      nodeList,
-      changeSelectNodes,
-      moveSelectedNodes,
-      changeTopLayer,
-      setNodeList,
-      scaleSelectedNodes,
-      rotateSelectedNodes,
-    },
-    edgeModel: { edgeList, setEdgeList },
-    activityNodeModel: { addActivity, resizeLeft, resizeRight, updateJoinType, updateSplitType },
-    transitionEdgeModel: { addTransitionEdge, getTransitionEdges },
-    extendNodeModel: { addCommentNode, addStartNode, addEndNode },
-    extendEdgeModel: { addCommentEdge, addStartEdge, addEndEdge },
-    diagramModel: {
-      svgRect,
-      changeSvgRect,
-      viewBox,
-      setViewBox,
-      graphRect,
-      toolbar,
-      setToolbar,
-      zoom,
-      changeZoom,
-      dragMode,
-      setDragMode,
-      addingLine,
-      setAddingLineTo,
-    },
+    actorModel,
+    diagramModel,
+    nodeModel,
+    activityNodeModel,
+    extendNodeModel,
+    extendEdgeModel,
+    edgeModel,
+    transitionEdgeModel,
   } = useModelContext();
-
-  const [selectBox, setSelectBox] = createSignal<Rectangle>(defaultRectangle);
-  const [selectCircle, setSelectCircle] = createSignal<Circle>(defaultCircle);
-  const [contextMenuPoint, setContextMenuPoint] = createSignal<Point | null>(null);
+  const pointerListener = makePointerListener(
+    diagramModel,
+    nodeModel,
+    edgeModel,
+    activityNodeModel,
+    transitionEdgeModel,
+    extendNodeModel,
+    extendEdgeModel,
+    actorModel,
+  );
 
   onMount(() => {
-    document.addEventListener("pointermove", handleDocumentPointerMove, { passive: true });
-    document.addEventListener("pointerup", handleDocumentPointerUp);
+    document.addEventListener("pointermove", pointerListener.handleDocumentPointerMove, {
+      passive: true,
+    });
+    document.addEventListener("pointerup", pointerListener.handleDocumentPointerUp);
   });
-
-  const pointerEvents: Map<number, PointerEvent> = new Map();
-  let mouseDownTime = new Date().getTime();
-
-  function handleDiagramPointerDown(e: PointerEvent) {
-    e.preventDefault();
-    pointerEvents.set(e.pointerId, e);
-
-    if (e.pointerType === "mouse" && e.button === 2) {
-      setDragMode({ type: "contextMenuScroll" });
-      return;
-    }
-
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    if (contextMenuPoint() != null) return;
-    if (dragMode().type !== "none") return;
-
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-    switch (toolbar()) {
-      case "cursor":
-        {
-          if (mouseDownTime + 250 > new Date().getTime()) {
-            // onDoubleMouseDown
-            if (e.ctrlKey || e.metaKey) {
-              setDragMode({
-                type: "rotateNodes",
-                basePoint: { x, y },
-              });
-            } else if (e.shiftKey) {
-              setDragMode({
-                type: "scaleNodes",
-                basePoint: { x, y },
-              });
-            } else {
-              setDragMode({ type: "scroll" });
-            }
-          } else {
-            // onSingleMouseDown
-            mouseDownTime = new Date().getTime();
-            setSelectBox(defaultRectangle);
-            setSelectCircle(defaultCircle);
-            if (e.ctrlKey || e.metaKey) {
-              setDragMode({ type: "circleSelect", centerPoint: { x, y } });
-            } else if (e.shiftKey) {
-              setDragMode({ type: "boxSelect", centerPoint: { x, y } });
-            } else {
-              setDragMode({ type: "select", startPoint: { x, y } });
-            }
-
-            setTimeout(() => {
-              if (dragMode().type === "none") {
-                setNodeList(() => true, "selected", false);
-                setEdgeList(() => true, "selected", false);
-              }
-            }, 250);
-          }
-        }
-        return;
-      case "addManualActivity":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const activity = addActivity("manualActivity", selectedActor().id, x, y);
-          changeTopLayer(activity.id);
-          changeSelectNodes("select", [activity.id]);
-          setDragMode({ type: "addActivity" });
-        }
-        return;
-      case "addAutoActivity":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const activity = addActivity("autoActivity", selectedActor().id, x, y);
-          changeTopLayer(activity.id);
-          changeSelectNodes("select", [activity.id]);
-          setDragMode({ type: "addActivity" });
-        }
-        return;
-      case "addUserActivity":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const activity = addActivity("userActivity", selectedActor().id, x, y);
-          changeTopLayer(activity.id);
-          changeSelectNodes("select", [activity.id]);
-          setDragMode({ type: "addActivity" });
-        }
-        return;
-      case "addCommentNode":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const comment = addCommentNode(x, y);
-          changeSelectNodes("select", [comment.id]);
-          setDragMode({ type: "addCommentNode" });
-        }
-        return;
-      case "addStartNode":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const startNode = addStartNode(x, y);
-          changeSelectNodes("select", [startNode.id]);
-          setDragMode({ type: "addStartNode" });
-        }
-        return;
-      case "addEndNode":
-        if (nodeList.every((it) => !containsRect(it, { x, y }))) {
-          const endNode = addEndNode(x, y);
-          changeSelectNodes("select", [endNode.id]);
-          setDragMode({ type: "addEndNode" });
-        }
-        return;
-    }
-  }
-
-  function handleDocumentPointerMove(e: PointerEvent) {
-    const prevEvent = pointerEvents.get(e.pointerId);
-    if (prevEvent == null || pointerEvents.size > 2) return;
-
-    if (pointerEvents.size === 2) {
-      const prevEvents = Array.from(pointerEvents.values());
-      const prevP1: Point = { x: prevEvents[0].clientX, y: prevEvents[0].clientY };
-      const prevP2: Point = { x: prevEvents[1].clientX, y: prevEvents[1].clientY };
-      const prevTouchPoints = { p1: prevP1, p2: prevP2 };
-      const prevCenterPoint = centerPoint(prevTouchPoints);
-      const prevDistance = lineDistance(prevTouchPoints);
-
-      pointerEvents.set(e.pointerId, e);
-      const newEvents = Array.from(pointerEvents.values());
-      const newP1: Point = { x: newEvents[0].clientX, y: newEvents[0].clientY };
-      const newP2: Point = { x: newEvents[1].clientX, y: newEvents[1].clientY };
-      const newTouchPoints = { p1: newP1, p2: newP2 };
-      const newCenterPoint = centerPoint(newTouchPoints);
-      const newDistance = lineDistance(newTouchPoints);
-
-      changeZoom(zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
-      setViewBox({
-        x: viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
-        y: viewBox().y - (newCenterPoint.y - prevCenterPoint.y),
-        width: viewBox().width,
-        height: viewBox().height,
-      });
-      return;
-    }
-
-    const moveX = (e.clientX - prevEvent.clientX) / zoom();
-    const moveY = (e.clientY - prevEvent.clientY) / zoom();
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-
-    pointerEvents.set(e.pointerId, e);
-
-    const drag = dragMode();
-    switch (drag.type) {
-      case "select":
-        {
-          const rect: Rectangle = {
-            x: Math.min(drag.startPoint.x, x),
-            y: Math.min(drag.startPoint.y, y),
-            width: Math.abs(x - drag.startPoint.x),
-            height: Math.abs(y - drag.startPoint.y),
-          };
-          setSelectBox(rect);
-          setNodeList(
-            () => true,
-            produce((it) => (it.selected = intersectRect(rect, it))),
-          );
-          setEdgeList(() => true, "selected", false);
-        }
-        return;
-      case "boxSelect":
-        {
-          const diffX = Math.abs(x - drag.centerPoint.x);
-          const diffY = Math.abs(y - drag.centerPoint.y);
-          const rect: Rectangle = {
-            x: drag.centerPoint.x - diffX,
-            y: drag.centerPoint.y - diffY,
-            width: diffX * 2,
-            height: diffY * 2,
-          };
-          setSelectBox(rect);
-          setNodeList(
-            (_it) => true,
-            produce((it) => (it.selected = intersectRect(rect, it))),
-          );
-          setEdgeList(() => true, "selected", false);
-        }
-        return;
-      case "circleSelect":
-        {
-          const r = pointLength(drag.centerPoint, { x, y });
-          setSelectCircle({ cx: drag.centerPoint.x, cy: drag.centerPoint.y, r });
-          setNodeList(
-            (_it) => true,
-            produce((it) => (it.selected = minLengthOfPointToRect(drag.centerPoint, it) < r)),
-          );
-          setEdgeList(() => true, "selected", false);
-        }
-        return;
-      case "scroll":
-        setViewBox({
-          x: viewBox().x - moveX,
-          y: viewBox().y - moveY,
-          width: viewBox().width,
-          height: viewBox().height,
-        });
-        return;
-      case "contextMenuScroll":
-        if (contextMenuPoint() == null) {
-          setDragMode({ type: "scroll" });
-          setViewBox({
-            x: viewBox().x - moveX,
-            y: viewBox().y - moveY,
-            width: viewBox().width,
-            height: viewBox().height,
-          });
-        }
-        return;
-      case "addActivity":
-      case "addCommentNode":
-      case "addStartNode":
-      case "addEndNode":
-      case "moveNodes":
-        moveSelectedNodes(moveX, moveY);
-        return;
-      case "scaleNodes":
-        scaleSelectedNodes(drag.basePoint, moveX, moveY);
-        return;
-      case "rotateNodes":
-        rotateSelectedNodes(drag.basePoint, moveX, moveY);
-        return;
-      case "resizeActivityLeft":
-        resizeLeft(moveX);
-        return;
-      case "resizeActivityRight":
-        resizeRight(moveX);
-        return;
-      case "addTransition":
-      case "addCommentEdge":
-      case "addStartEdge":
-        setAddingLineTo(
-          viewBox().x + (e.clientX - svgRect().x) / zoom(),
-          viewBox().y + (e.clientY - svgRect().y) / zoom(),
-        );
-        return;
-    }
-  }
-
-  function handleDocumentPointerUp(e: PointerEvent) {
-    pointerEvents.delete(e.pointerId);
-
-    if (dragMode().type === "contextMenuScroll") {
-      setContextMenuPoint({ x: e.pageX, y: e.pageY });
-      return;
-    }
-
-    const x = viewBox().x + (e.clientX - svgRect().x) / zoom();
-    const y = viewBox().y + (e.clientY - svgRect().y) / zoom();
-    const node = nodeList.find((it) => containsRect(it, { x, y }));
-    switch (dragMode().type) {
-      case "addTransition":
-        if (node?.type === "activityNode") {
-          const transition = addTransitionEdge(node.id);
-          if (transition) {
-            updateJoinType(
-              transition.toNodeId,
-              getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
-            );
-            updateSplitType(
-              transition.fromNodeId,
-              getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
-            );
-          }
-        } else if (node?.type === "endNode") {
-          addEndEdge(node.id);
-        }
-        break;
-      case "addCommentEdge":
-        if (node?.type === "activityNode") {
-          addCommentEdge(node.id);
-        }
-        break;
-      case "addStartEdge":
-        if (node?.type === "activityNode") {
-          addStartEdge(node.id);
-        }
-        break;
-    }
-
-    setDragMode({ type: "none" });
-  }
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Escape") {
-      setToolbar("cursor");
+      diagramModel.setToolbar("cursor");
     }
   }
 
   function handleContextMenu(e: MouseEvent) {
-    e.preventDefault();
+    e.preventDefault(); // Do not show default context menu
   }
 
   function onContextMenuSelect(menuItem: keyof I18nDict | null) {
-    setContextMenuPoint(null);
+    diagramModel.setContextMenuPoint(null);
     switch (menuItem) {
       case "select":
-        setToolbar("cursor");
+        diagramModel.setToolbar("cursor");
         return;
       case "transition":
-        setToolbar("transition");
+        diagramModel.setToolbar("transition");
         return;
       case "manualActivity":
-        setToolbar("addManualActivity");
+        diagramModel.setToolbar("addManualActivity");
         return;
       case "autoActivity":
-        setToolbar("addAutoActivity");
+        diagramModel.setToolbar("addAutoActivity");
         return;
       case "handWork":
-        setToolbar("addUserActivity");
+        diagramModel.setToolbar("addUserActivity");
         return;
       case "start":
-        setToolbar("addStartNode");
+        diagramModel.setToolbar("addStartNode");
         return;
       case "end":
-        setToolbar("addEndNode");
+        diagramModel.setToolbar("addEndNode");
         return;
       case "comment":
-        setToolbar("addCommentNode");
+        diagramModel.setToolbar("addCommentNode");
         return;
-    }
-  }
-
-  function handleWheel(e: WheelEvent) {
-    if (e.ctrlKey || e.metaKey) {
-      const newZoom = (zoom() * 100 + -e.deltaY) / 100;
-      changeZoom(newZoom, { x: e.clientX, y: e.clientY });
-    } else {
-      setViewBox({
-        x: viewBox().x + e.deltaX * 2,
-        y: viewBox().y + e.deltaY * 2,
-        width: viewBox().width,
-        height: viewBox().height,
-      });
     }
   }
 
   function gridLines(): Line[] {
-    const rect = graphRect();
+    const rect = diagramModel.graphRect();
     if (rect.width === 0) return [];
 
     const dx = rect.x % GRID_SPACING;
@@ -439,32 +125,27 @@ export function DiagramContainer(): JSXElement {
   return (
     <>
       <DiagramView
-        viewBox={viewBox()}
-        svgRect={svgRect()}
-        changeSvgRect={changeSvgRect}
+        viewBox={diagramModel.viewBox()}
+        svgRect={diagramModel.svgRect()}
+        changeSvgRect={diagramModel.changeSvgRect}
         gridLines={gridLines()}
-        nodeList={nodeList}
-        edgeList={edgeList}
-        addingLine={
-          dragMode().type === "addTransition" ||
-          dragMode().type === "addStartEdge" ||
-          dragMode().type === "addEndEdge" ||
-          dragMode().type === "addCommentEdge"
-            ? addingLine()
-            : null
-        }
-        selectBox={
-          dragMode().type === "select" || dragMode().type === "boxSelect" ? selectBox() : null
-        }
-        selectCircle={dragMode().type === "circleSelect" ? selectCircle() : null}
-        onPointerDown={handleDiagramPointerDown}
+        nodeList={nodeModel.nodeList}
+        edgeList={edgeModel.edgeList}
+        addingLine={diagramModel.addingLine()}
+        selectBox={diagramModel.selectBox()}
+        selectCircle={diagramModel.selectCircle()}
         onKeyDown={handleKeyDown}
         onContextMenu={handleContextMenu}
-        onWheel={handleWheel}
+        onWheel={makeWheelListener(diagramModel).handleWheel}
+        onDiagramPointerDown={pointerListener.handleDiagramPointerDown}
+        onActivityLeftPointerDown={pointerListener.handleActivityLeftPointerDown}
+        onActivityPointerDown={pointerListener.handleActivityPointerDown}
+        onActivityRightPointerDown={pointerListener.handleActivityRightPointerDown}
+        onExtendNodePointerDown={pointerListener.handleExtendNodePointerDown}
       />
 
       <ContextMenu
-        openPoint={contextMenuPoint()}
+        openPoint={diagramModel.contextMenuPoint()}
         menuItems={[
           "select",
           "transition",
@@ -491,10 +172,14 @@ export function DiagramView(props: {
   readonly selectBox: Rectangle | null;
   readonly selectCircle: Circle | null;
   readonly changeSvgRect?: (rect: Rectangle) => void;
-  readonly onPointerDown?: (e: PointerEvent) => void;
   readonly onKeyDown?: (e: KeyboardEvent) => void;
   readonly onContextMenu?: (e: MouseEvent) => void;
   readonly onWheel?: (e: WheelEvent) => void;
+  readonly onDiagramPointerDown?: (e: PointerEvent) => void;
+  readonly onActivityLeftPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onActivityPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onActivityRightPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
+  readonly onExtendNodePointerDown?: (e: PointerEvent, node: INode) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -526,7 +211,7 @@ export function DiagramView(props: {
       ref={diagramRef}
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
-      onPointerDown={(e) => props.onPointerDown?.(e)}
+      onPointerDown={(e) => props.onDiagramPointerDown?.(e)}
       onContextMenu={(e) => props.onContextMenu?.(e)}
     >
       <svg
@@ -582,12 +267,24 @@ export function DiagramView(props: {
         </g>
         <g data-id="activity-nodes">
           <For each={props.nodeList.filter((it) => it.type === "activityNode")}>
-            {(it) => <ActivityNodeContainer activity={it as ActivityNode} />}
+            {(it) => (
+              <ActivityNodeContainer
+                activity={it as ActivityNode}
+                onActivityLeftPointerDown={props.onActivityLeftPointerDown}
+                onActivityPointerDown={props.onActivityPointerDown}
+                onActivityRightPointerDown={props.onActivityRightPointerDown}
+              />
+            )}
           </For>
         </g>
         <g data-id="extend-nodes">
           <For each={props.nodeList.filter((it) => it.type !== "activityNode")}>
-            {(it) => <ExtendNodeContainer node={it as StartNode | EndNode | CommentNode} />}
+            {(it) => (
+              <ExtendNodeContainer
+                node={it as StartNode | EndNode | CommentNode}
+                onExtendNodePointerDown={props.onExtendNodePointerDown}
+              />
+            )}
           </For>
         </g>
         <g data-id="transition-edges">

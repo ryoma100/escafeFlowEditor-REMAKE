@@ -2,11 +2,13 @@ import { produce } from "solid-js/store";
 
 import { ACTIVITY_MIN_WIDTH } from "@/constants/app-const";
 import { i18nEnDict } from "@/constants/i18n";
-import { makeNodeModel } from "@/data-model//node-model";
+import { NodeModel } from "@/data-model//node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { ActivityNode, ActivityNodeType, IEdge } from "@/data-source/data-type";
 
-export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
+export type ActivityNodeModel = ReturnType<typeof makeActivityModel>;
+
+export function makeActivityModel(nodeModel: NodeModel) {
   function getActivityNodes(): ActivityNode[] {
     return nodeModel.nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
   }
@@ -150,5 +152,6 @@ export function makeActivityModel(nodeModel: ReturnType<typeof makeNodeModel>) {
     updateSplitType,
     updateAllJoinSplitType,
     getActivityNodes,
+    nodeModel,
   };
 }

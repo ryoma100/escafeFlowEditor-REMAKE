@@ -1,11 +1,13 @@
 import { produce } from "solid-js/store";
 
 import { START_END_HEIGHT, START_END_WIDTH } from "@/constants/app-const";
-import { makeNodeModel } from "@/data-model/node-model";
+import { NodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
 
-export function makeExtendNodeModel(nodeModel: ReturnType<typeof makeNodeModel>) {
+export type ExtendNodeModel = ReturnType<typeof makeExtendNodeModel>;
+
+export function makeExtendNodeModel(nodeModel: NodeModel) {
   function addCommentNode(x: number, y: number): CommentNode {
     const comment = dataFactory.createCommentNode(
       nodeModel.nodeList,

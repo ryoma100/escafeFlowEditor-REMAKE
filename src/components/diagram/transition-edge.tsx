@@ -7,16 +7,10 @@ import { computeLine } from "@/utils/line-utils";
 export function TransitionEdgeContainer(props: {
   readonly transition: TransitionEdge;
 }): JSXElement {
-  const {
-    activityNodeModel: { getActivityNode },
-    nodeModel: { changeSelectNodes },
-    edgeModel: { changeSelectEdges },
-    diagramModel: { setDragMode: setDragType },
-    dialogModel: { setModalDialog: setOpenDialog },
-  } = useModelContext();
+  const { activityNodeModel, nodeModel, edgeModel, dialogModel } = useModelContext();
 
-  const fromActivity = () => getActivityNode(props.transition.fromNodeId);
-  const toActivity = () => getActivityNode(props.transition.toNodeId);
+  const fromActivity = () => activityNodeModel.getActivityNode(props.transition.fromNodeId);
+  const toActivity = () => activityNodeModel.getActivityNode(props.transition.toNodeId);
   const line = () =>
     computeLine(fromActivity(), toActivity(), {
       p1: {
@@ -33,16 +27,15 @@ export function TransitionEdgeContainer(props: {
     e.stopPropagation();
 
     if (e.shiftKey) {
-      changeSelectEdges("toggle", [props.transition.id]);
-      setDragType({ type: "none" });
+      edgeModel.changeSelectEdges("toggle", [props.transition.id]);
     } else if (!props.transition.selected) {
-      changeSelectNodes("clearAll");
-      changeSelectEdges("select", [props.transition.id]);
+      nodeModel.changeSelectNodes("clearAll");
+      edgeModel.changeSelectEdges("select", [props.transition.id]);
     }
   }
 
   function handleDlbClick(_e: MouseEvent) {
-    setOpenDialog({ type: "transition", transition: props.transition });
+    dialogModel.setOpenDialog({ type: "transition", transition: props.transition });
   }
 
   return (
