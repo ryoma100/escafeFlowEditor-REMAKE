@@ -100,7 +100,6 @@ export function makePointerListener(
       case "cursor":
         if (e.shiftKey) {
           nodeModel.changeSelectNodes("toggle", [node.id]);
-          e.stopPropagation();
         } else {
           pointerStrategy = strategies.moveNodesStrategy;
           pointerStrategy.handlePointerDown(e, node);
@@ -119,7 +118,6 @@ export function makePointerListener(
   }
 
   function handleDiagramPointerDown(e: PointerEvent) {
-    e.preventDefault(); // TODO: comment
     pointerEvents.set(e.pointerId, e);
     if (pointerEvents.size > 1) return;
 
