@@ -41,6 +41,7 @@ jobs:
           pnpm build-storybook
 
       - name: SonarCloud Scan
+        if: ${{ contains(github.head_ref, 'dependabot') == false }}
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
