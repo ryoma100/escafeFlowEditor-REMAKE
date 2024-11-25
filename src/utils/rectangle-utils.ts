@@ -29,3 +29,7 @@ export function minLengthOfPointToRect(point: Point, rect: Rectangle): number {
   radius = Math.min(radius, pointLength(point, { x: rect.x, y: rect.y + rect.height }));
   return radius;
 }
+
+export function centerPoint(rect: Rectangle): Point {
+  return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+}

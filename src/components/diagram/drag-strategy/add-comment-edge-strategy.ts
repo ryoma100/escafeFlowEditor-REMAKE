@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
@@ -11,7 +11,7 @@ export function makeAddCommentEdgeStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
   extendEdgeModel: ExtendEdgeModel,
-): PointerStrategy {
+): DragStrategy {
   let fromPoint: Point = defaultPoint;
 
   function handlePointerDown(e: PointerEvent, node: INode) {

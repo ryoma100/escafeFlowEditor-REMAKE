@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";
 import { NodeModel } from "@/data-model/node-model";
@@ -8,7 +8,7 @@ export function makeMoveNodesStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
   edgeModel: EdgeModel,
-): PointerStrategy {
+): DragStrategy {
   function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 

@@ -1,7 +1,7 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { DiagramModel } from "@/data-model/diagram-model";
 
-export function makeScrollStrategy(diagramModel: DiagramModel): PointerStrategy {
+export function makeScrollStrategy(diagramModel: DiagramModel): DragStrategy {
   let isContextMenu = false;
 
   function handlePointerDown(e: PointerEvent) {

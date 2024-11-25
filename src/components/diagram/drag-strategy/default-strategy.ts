@@ -1,6 +1,6 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 
-export function makePointStrategy(): PointerStrategy {
+export function makeDefaultStrategy(): DragStrategy {
   function handlePointerDown(_e: PointerEvent) {}
 
   function handlePointerMove(_e: PointerEvent, _pointerEvents: Map<number, PointerEvent>) {}
