@@ -40,7 +40,8 @@ export function makeSelectStrategy(
     edgeModel.setEdgeList(() => true, "selected", false);
   }
 
-  function handlePointerUp(_e: PointerEvent) {
+  function handlePointerUp(e: PointerEvent) {
+    dragScrollDelegate.handlePointerUp(e);
     diagramModel.setSelectBox(null);
   }
 
