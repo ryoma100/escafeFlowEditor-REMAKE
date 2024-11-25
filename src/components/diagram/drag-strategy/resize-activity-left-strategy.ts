@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { INode } from "@/data-source/data-type";
@@ -6,7 +6,7 @@ import { INode } from "@/data-source/data-type";
 export function makeResizeActivityLeftStrategy(
   diagramModel: DiagramModel,
   activityModel: ActivityNodeModel,
-): PointerStrategy {
+): DragStrategy {
   function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 

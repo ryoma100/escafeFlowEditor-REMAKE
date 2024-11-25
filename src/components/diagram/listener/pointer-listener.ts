@@ -1,8 +1,9 @@
 import { makeAddActivityEdgeStrategy } from "@/components/diagram/drag-strategy/add-activity-edge-strategy";
 import { makeAddCommentEdgeStrategy } from "@/components/diagram/drag-strategy/add-comment-edge-strategy";
 import { makeAddStartEdgeStrategy } from "@/components/diagram/drag-strategy/add-start-edge-strategy";
+import { makeDefaultStrategy } from "@/components/diagram/drag-strategy/default-strategy";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { makeMoveNodesStrategy } from "@/components/diagram/drag-strategy/move-nodes-strategy";
-import { makePointStrategy } from "@/components/diagram/drag-strategy/point-strategy";
 import { makeResizeActivityLeftStrategy } from "@/components/diagram/drag-strategy/resize-activity-left-strategy";
 import { makeResizeActivityRightStrategy } from "@/components/diagram/drag-strategy/resize-activity-right-strategy";
 import { makeRotateNodesStrategy } from "@/components/diagram/drag-strategy/rotate-nodes-strategy";
@@ -24,12 +25,6 @@ import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
 import { ActivityNode, INode } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
-export type PointerStrategy = {
-  handlePointerDown(e: PointerEvent, node?: INode): void;
-  handlePointerMove(e: PointerEvent, pointerEvents: Map<number, PointerEvent>): void;
-  handlePointerUp(e: PointerEvent): void;
-};
-
 export function makePointerListener(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
@@ -40,8 +35,8 @@ export function makePointerListener(
   extendEdgeModel: ExtendEdgeModel,
   actorModel: ActorModel,
 ) {
-  const strategies = {
-    pointStrategy: makePointStrategy(),
+  const dragStrategies = {
+    defaultStrategy: makeDefaultStrategy(),
     resizeActivityLeftStrategy: makeResizeActivityLeftStrategy(diagramModel, activityNodeModel),
     resizeActivityRightStrategy: makeResizeActivityRightStrategy(diagramModel, activityNodeModel),
     scrollStrategy: makeScrollStrategy(diagramModel),
@@ -60,20 +55,20 @@ export function makePointerListener(
       extendEdgeModel,
     ),
   };
-  let pointerStrategy: PointerStrategy = strategies.pointStrategy;
+  let dragStrategy: DragStrategy = dragStrategies.defaultStrategy;
   const pointerEvents: Map<number, PointerEvent> = new Map();
   let mouseDownTime = new Date().getTime();
 
   function handleActivityLeftPointerDown(e: PointerEvent, activity: ActivityNode) {
     e.preventDefault(); // Do not call handleDiagramPointerDown
-    pointerStrategy = strategies.resizeActivityLeftStrategy;
-    pointerStrategy.handlePointerDown(e, activity);
+    dragStrategy = dragStrategies.resizeActivityLeftStrategy;
+    dragStrategy.handlePointerDown(e, activity);
   }
 
   function handleActivityRightPointerDown(e: PointerEvent, activity: ActivityNode) {
     e.preventDefault(); // Do not call handleDiagramPointerDown
-    pointerStrategy = strategies.resizeActivityRightStrategy;
-    pointerStrategy.handlePointerDown(e, activity);
+    dragStrategy = dragStrategies.resizeActivityRightStrategy;
+    dragStrategy.handlePointerDown(e, activity);
   }
 
   function handleActivityPointerDown(e: PointerEvent, activity: ActivityNode) {
@@ -83,13 +78,13 @@ export function makePointerListener(
         if (e.shiftKey) {
           nodeModel.changeSelectNodes("toggle", [activity.id]);
         } else {
-          pointerStrategy = strategies.moveNodesStrategy;
-          pointerStrategy.handlePointerDown(e, activity);
+          dragStrategy = dragStrategies.moveNodesStrategy;
+          dragStrategy.handlePointerDown(e, activity);
         }
         return;
       case "transition":
-        pointerStrategy = strategies.addActivityEdgeStrategy;
-        pointerStrategy.handlePointerDown(e, activity);
+        dragStrategy = dragStrategies.addActivityEdgeStrategy;
+        dragStrategy.handlePointerDown(e, activity);
         return;
     }
   }
@@ -101,17 +96,17 @@ export function makePointerListener(
         if (e.shiftKey) {
           nodeModel.changeSelectNodes("toggle", [node.id]);
         } else {
-          pointerStrategy = strategies.moveNodesStrategy;
-          pointerStrategy.handlePointerDown(e, node);
+          dragStrategy = dragStrategies.moveNodesStrategy;
+          dragStrategy.handlePointerDown(e, node);
         }
         return;
       case "transition":
         if (node.type === "commentNode") {
-          pointerStrategy = strategies.addCommentEdgeStrategy;
-          pointerStrategy.handlePointerDown(e, node);
+          dragStrategy = dragStrategies.addCommentEdgeStrategy;
+          dragStrategy.handlePointerDown(e, node);
         } else if (node.type === "startNode") {
-          pointerStrategy = strategies.addStartEdgeStrategy;
-          pointerStrategy.handlePointerDown(e, node);
+          dragStrategy = dragStrategies.addStartEdgeStrategy;
+          dragStrategy.handlePointerDown(e, node);
         }
         return;
     }
@@ -123,8 +118,8 @@ export function makePointerListener(
 
     if (e.pointerType === "mouse") {
       if (e.button === 2) {
-        pointerStrategy = strategies.scrollStrategy;
-        pointerStrategy.handlePointerDown(e);
+        dragStrategy = dragStrategies.scrollStrategy;
+        dragStrategy.handlePointerDown(e);
         return;
       }
       if (e.button !== 0) {
@@ -138,31 +133,31 @@ export function makePointerListener(
           if (mouseDownTime + 250 > new Date().getTime()) {
             // onDoubleMouseDown
             if (e.ctrlKey || e.metaKey) {
-              pointerStrategy = strategies.rotateNodesStrategy;
-              pointerStrategy.handlePointerDown(e);
+              dragStrategy = dragStrategies.rotateNodesStrategy;
+              dragStrategy.handlePointerDown(e);
             } else if (e.shiftKey) {
-              pointerStrategy = strategies.scaleNodesStrategy;
-              pointerStrategy.handlePointerDown(e);
+              dragStrategy = dragStrategies.scaleNodesStrategy;
+              dragStrategy.handlePointerDown(e);
             } else {
-              pointerStrategy = strategies.scrollStrategy;
-              pointerStrategy.handlePointerDown(e);
+              dragStrategy = dragStrategies.scrollStrategy;
+              dragStrategy.handlePointerDown(e);
             }
           } else {
             // onSingleMouseDown
             mouseDownTime = new Date().getTime();
             if (e.ctrlKey || e.metaKey) {
-              pointerStrategy = strategies.selectCircleStrategy;
-              pointerStrategy.handlePointerDown(e);
+              dragStrategy = dragStrategies.selectCircleStrategy;
+              dragStrategy.handlePointerDown(e);
             } else if (e.shiftKey) {
-              pointerStrategy = strategies.selectBoxStrategy;
-              pointerStrategy.handlePointerDown(e);
+              dragStrategy = dragStrategies.selectBoxStrategy;
+              dragStrategy.handlePointerDown(e);
             } else {
-              pointerStrategy = strategies.selectStrategy;
-              pointerStrategy.handlePointerDown(e);
+              dragStrategy = dragStrategies.selectStrategy;
+              dragStrategy.handlePointerDown(e);
             }
 
             setTimeout(() => {
-              if (pointerStrategy == null) {
+              if (dragStrategy == null) {
                 nodeModel.setNodeList(() => true, "selected", false);
                 edgeModel.setEdgeList(() => true, "selected", false);
               }
@@ -180,8 +175,8 @@ export function makePointerListener(
           const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
           if (nodeModel.nodeList.every((it) => !containsRect(it, { x, y }))) {
             const node = addNode(diagramModel.toolbar(), x, y);
-            pointerStrategy = strategies.moveNodesStrategy;
-            pointerStrategy.handlePointerDown(e, node);
+            dragStrategy = dragStrategies.moveNodesStrategy;
+            dragStrategy.handlePointerDown(e, node);
           }
         }
         return;
@@ -209,7 +204,7 @@ export function makePointerListener(
 
   function handleDocumentPointerMove(e: PointerEvent) {
     if (pointerEvents.size === 1) {
-      pointerStrategy.handlePointerMove(e, pointerEvents);
+      dragStrategy.handlePointerMove(e, pointerEvents);
     } else if (pointerEvents.size === 2) {
       makeMultiTouchListener(diagramModel).handlePointerMove(e, pointerEvents);
     }
@@ -218,8 +213,8 @@ export function makePointerListener(
 
   function handleDocumentPointerUp(e: PointerEvent) {
     if (pointerEvents.size === 1) {
-      pointerStrategy.handlePointerUp(e);
-      pointerStrategy = strategies.pointStrategy;
+      dragStrategy.handlePointerUp(e);
+      dragStrategy = dragStrategies.defaultStrategy;
     }
     pointerEvents.delete(e.pointerId);
   }
