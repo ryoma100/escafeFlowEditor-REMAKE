@@ -1,6 +1,6 @@
 import { produce } from "solid-js/store";
 
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";
@@ -13,7 +13,7 @@ export function makeSelectCircleStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
   edgeModel: EdgeModel,
-): PointerStrategy {
+): DragStrategy {
   let centerPoint: Point = defaultPoint;
 
   function handlePointerDown(e: PointerEvent) {

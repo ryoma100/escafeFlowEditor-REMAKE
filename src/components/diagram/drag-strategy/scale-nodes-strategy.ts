@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { NodeModel } from "@/data-model/node-model";
@@ -7,7 +7,7 @@ import { Point } from "@/data-source/data-type";
 export function makeScaleNodesStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
-): PointerStrategy {
+): DragStrategy {
   let basePoint: Point = defaultPoint;
 
   function handlePointerDown(e: PointerEvent) {

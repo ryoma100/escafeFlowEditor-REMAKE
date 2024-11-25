@@ -1,6 +1,7 @@
 import { produce } from "solid-js/store";
 
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { EdgeModel } from "@/data-model/edge-model";
@@ -12,7 +13,8 @@ export function makeSelectStrategy(
   diagramModel: DiagramModel,
   nodeModel: NodeModel,
   edgeModel: EdgeModel,
-): PointerStrategy {
+): DragStrategy {
+  const dragScrollDelegate = makeDragScrollDelegate(diagramModel);
   let startPoint: Point = defaultPoint;
 
   function handlePointerDown(e: PointerEvent) {
@@ -21,6 +23,7 @@ export function makeSelectStrategy(
   }
 
   function handlePointerMove(e: PointerEvent, _pointerEvents: Map<number, PointerEvent>) {
+    dragScrollDelegate.handlePointerMove(e);
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
 
     const rect: Rectangle = {

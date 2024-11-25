@@ -1,4 +1,4 @@
-import { PointerStrategy } from "@/components/diagram/listener/pointer-listener";
+import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
 import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
@@ -12,7 +12,7 @@ export function makeAddActivityEdgeStrategy(
   activityNodeModel: ActivityNodeModel,
   transitionEdgeModel: TransitionEdgeModel,
   extendEdgeModel: ExtendEdgeModel,
-): PointerStrategy {
+): DragStrategy {
   const nodeModel = activityNodeModel.nodeModel;
   let fromPoint: Point = defaultPoint;
 
