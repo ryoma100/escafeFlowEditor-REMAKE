@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { TransitionDialogView } from "@/components/dialog/transition-dialog";
-import { dataFactory } from "@/data-source/data-factory";
+import { dataFactory, toNodeId } from "@/data-source/data-factory";
 
 const meta = {
   title: "Dialog/Transition",
@@ -12,7 +12,7 @@ export default meta;
 
 type Story = StoryObj<typeof TransitionDialogView>;
 
-const transition = dataFactory.createTransitionEdge([], 1, 2);
+const transition = dataFactory.createTransitionEdge([], toNodeId(1), toNodeId(2));
 
 export const Transition: Story = {
   args: { transition },

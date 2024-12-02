@@ -35,6 +35,9 @@ importers:
       solid-js:
         specifier: ^1.9.3
         version: 1.9.3
+      valibot:
+        specifier: 1.0.0-beta.8
+        version: 1.0.0-beta.8(typescript@5.7.2)
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^3.2.2
@@ -1162,11 +1165,11 @@ packages:
       react-dom:
         optional: true
 
-  '@storybook/builder-vite@8.5.0-alpha.10':
-    resolution: {integrity: sha512-QnAaY/DJCQRaUY0naOIbNTi+q3bYiQOhh6tV+P6W8vCXCSTKaQWSnmKbTrL+1AEDl03H0z1rKg5TVZViblCbgQ==}
+  '@storybook/builder-vite@8.5.0-alpha.11':
+    resolution: {integrity: sha512-AX5GCyd1Mr7iAAlDjO7heAY9SW6fcN8t86+uSpKpzHWkCFoX3uqcYL9XTfwP9FG7zWAOtbunkdbvNdNoN25znQ==}
     peerDependencies:
-      storybook: ^8.5.0-alpha.10
-      vite: ^4.0.0 || ^5.0.0
+      storybook: ^8.5.0-alpha.11
+      vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
   '@storybook/core@8.4.5':
     resolution: {integrity: sha512-aB1sQNX5nRoUAqg5u1py0MuR/VPd6c6PhECa4rW6pmr7kZcfyP4PP6UFpXuN71ypTQlkRE3Vc5PQZ3gLhE9o3g==}
@@ -1181,10 +1184,10 @@ packages:
     peerDependencies:
       storybook: ^8.4.5
 
-  '@storybook/csf-plugin@8.5.0-alpha.10':
-    resolution: {integrity: sha512-He8y7nA9r7zNHHEU1LcxdF4S1Y3/Xi7MxlwbvPuDg3gbwkoRA5XXRxwcXQYfLfynlWmJdfcbI53qPI4HrsZxWA==}
+  '@storybook/csf-plugin@8.5.0-alpha.11':
+    resolution: {integrity: sha512-1WBNdgvM+iGnP7f5H/rn1860XbpXASoVHHWNDPWQQRFBJb4N2pGCYsnaW2PsS8hvCQLLfwp5AtLkAsRcfBmfPg==}
     peerDependencies:
-      storybook: ^8.5.0-alpha.10
+      storybook: ^8.5.0-alpha.11
 
   '@storybook/csf@0.1.11':
     resolution: {integrity: sha512-dHYFQH3mA+EtnCkHXzicbLgsvzYjcDJ1JWsogbItZogkPHgSJM/Wr71uMkcvw8v9mmCyP4NpXJuu6bPoVsOnzg==}
@@ -4197,6 +4200,14 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
+  valibot@1.0.0-beta.8:
+    resolution: {integrity: sha512-OPAwJZtowb0j91b+bd77+ny7D1VVzsCzD7Jl9waLUlMprTsfI9Y3HHbW3hAQD7wKDKHsmGEesuiYWaYvcZL2wg==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   validate-html-nesting@1.2.2:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
 
@@ -5363,9 +5374,9 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@storybook/builder-vite@8.5.0-alpha.10(storybook@8.4.5(prettier@3.3.3))(vite@5.4.11(@types/node@22.9.3))':
+  '@storybook/builder-vite@8.5.0-alpha.11(storybook@8.4.5(prettier@3.3.3))(vite@5.4.11(@types/node@22.9.3))':
     dependencies:
-      '@storybook/csf-plugin': 8.5.0-alpha.10(storybook@8.4.5(prettier@3.3.3))
+      '@storybook/csf-plugin': 8.5.0-alpha.11(storybook@8.4.5(prettier@3.3.3))
       browser-assert: 1.2.1
       storybook: 8.4.5(prettier@3.3.3)
       ts-dedent: 2.2.0
@@ -5396,7 +5407,7 @@ snapshots:
       storybook: 8.4.5(prettier@3.3.3)
       unplugin: 1.16.0
 
-  '@storybook/csf-plugin@8.5.0-alpha.10(storybook@8.4.5(prettier@3.3.3))':
+  '@storybook/csf-plugin@8.5.0-alpha.11(storybook@8.4.5(prettier@3.3.3))':
     dependencies:
       storybook: 8.4.5(prettier@3.3.3)
       unplugin: 1.16.0
@@ -8333,7 +8344,7 @@ snapshots:
 
   storybook-solidjs-vite@1.0.0-beta.6(@testing-library/jest-dom@6.6.3)(solid-js@1.9.3)(storybook@8.4.5(prettier@3.3.3))(vite@5.4.11(@types/node@22.9.3)):
     dependencies:
-      '@storybook/builder-vite': 8.5.0-alpha.10(storybook@8.4.5(prettier@3.3.3))(vite@5.4.11(@types/node@22.9.3))
+      '@storybook/builder-vite': 8.5.0-alpha.11(storybook@8.4.5(prettier@3.3.3))(vite@5.4.11(@types/node@22.9.3))
       magic-string: 0.30.13
       vite-plugin-solid: 2.10.2(@testing-library/jest-dom@6.6.3)(solid-js@1.9.3)(vite@5.4.11(@types/node@22.9.3))
     transitivePeerDependencies:
@@ -8721,6 +8732,10 @@ snapshots:
       which-typed-array: 1.1.15
 
   uuid@9.0.1: {}
+
+  valibot@1.0.0-beta.8(typescript@5.7.2):
+    optionalDependencies:
+      typescript: 5.7.2
 
   validate-html-nesting@1.2.2: {}
 

@@ -33,6 +33,7 @@
     "tailwindcss",
     "tauri",
     "textareas",
+    "valibot",
     "VITE"
   ],
   // flagWords - list of words to be always considered incorrect
