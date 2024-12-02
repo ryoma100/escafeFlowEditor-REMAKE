@@ -203,16 +203,6 @@ export const edgeSchema = v.union([
 export type IEdge = v.InferOutput<typeof edgeSchema>;
 
 //
-// Graph
-//
-
-export const graphSchema = v.object({
-  nodeList: v.array(baseNodeSchema),
-  edgeList: v.array(baseEdgeSchema),
-});
-export type Graph = v.InferOutput<typeof graphSchema>;
-
-//
 // Application
 //
 

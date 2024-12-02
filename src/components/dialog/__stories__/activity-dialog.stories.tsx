@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ActivityDialogView } from "@/components/dialog/activity-dialog";
 import { dataFactory } from "@/data-source/data-factory";
-import { INode } from "@/data-source/data-type";
 
 const meta = {
   title: "Dialog/Activity",
@@ -15,7 +14,7 @@ type Story = StoryObj<typeof ActivityDialogView>;
 
 const process = dataFactory.createProcess([]);
 const activity = dataFactory.createActivityNode(
-  process.nodeList as INode[],
+  process.nodeList,
   process.actors[0].id,
   "autoActivity",
   0,
