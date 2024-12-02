@@ -4,7 +4,7 @@ import { ACTIVITY_MIN_WIDTH } from "@/constants/app-const";
 import { i18nEnDict } from "@/constants/i18n";
 import { NodeModel } from "@/data-model//node-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { ActivityNode, ActivityNodeType, IEdge } from "@/data-source/data-type";
+import { ActivityNode, ActivityNodeType, ActorId, IEdge } from "@/data-source/data-type";
 
 export type ActivityNodeModel = ReturnType<typeof makeActivityModel>;
 
@@ -15,7 +15,7 @@ export function makeActivityModel(nodeModel: NodeModel) {
 
   function addActivity(
     type: ActivityNodeType,
-    actorId: number,
+    actorId: ActorId,
     cx: number,
     cy: number,
   ): ActivityNode {

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
-import { dataFactory } from "@/data-source/data-factory";
+import { dataFactory, toActorId, toDateTime, toNodeId, toXpdlId } from "@/data-source/data-factory";
 
 describe("createProject", () => {
   it("one project", () => {
-    const created = new Date().toISOString();
+    const created = toDateTime();
     expect(dataFactory.createProject(created)).toStrictEqual({
       created,
       detail: {
@@ -41,7 +41,7 @@ describe("createProject", () => {
 
 describe("createProcess", () => {
   it("one process", () => {
-    const created = new Date().toISOString();
+    const created = toDateTime();
     expect(dataFactory.createProcess([], created)).toStrictEqual({
       id: 1,
       created,
@@ -66,7 +66,7 @@ describe("createProcess", () => {
   });
 
   it("two process", () => {
-    const created = new Date().toISOString();
+    const created = toDateTime();
     const processes = dataFactory.createProcess([], created);
     expect(dataFactory.createProcess([processes], created)).toStrictEqual({
       id: 2,
@@ -92,9 +92,9 @@ describe("createProcess", () => {
   });
 
   it("duplicate process", () => {
-    const created = new Date().toISOString();
+    const created = toDateTime();
     const processes = dataFactory.createProcess([], created);
-    processes.detail.xpdlId = "process-2";
+    processes.detail.xpdlId = toXpdlId("process-2");
     expect(dataFactory.createProcess([processes], created)).toStrictEqual({
       id: 3,
       created,
@@ -162,7 +162,7 @@ describe("createApplication", () => {
 
   it("duplicate application", () => {
     const application = dataFactory.createApplication([]);
-    application.xpdlId = "application-2";
+    application.xpdlId = toXpdlId("application-2");
     expect(dataFactory.createApplication([application])).toStrictEqual({
       id: 3,
       xpdlId: "application-3",
@@ -193,7 +193,7 @@ describe("createActorEntity", () => {
 
   it("duplicate application", () => {
     const application = dataFactory.createActorEntity([]);
-    application.xpdlId = "actor-2";
+    application.xpdlId = toXpdlId("actor-2");
     expect(dataFactory.createActorEntity([application])).toStrictEqual({
       id: 3,
       xpdlId: "actor-3",
@@ -204,7 +204,7 @@ describe("createActorEntity", () => {
 
 describe("createActivityNode", () => {
   it("one activity", () => {
-    expect(dataFactory.createActivityNode([], 1, "autoActivity", 11, 12)).toStrictEqual({
+    expect(dataFactory.createActivityNode([], toActorId(1), "autoActivity", 11, 12)).toStrictEqual({
       id: 1,
       xpdlId: "activity-1",
       type: "activityNode",
@@ -224,8 +224,10 @@ describe("createActivityNode", () => {
   });
 
   it("two activity", () => {
-    const activity = dataFactory.createActivityNode([], 1, "autoActivity", 0, 0);
-    expect(dataFactory.createActivityNode([activity], 11, "manualActivity", 21, 22)).toStrictEqual({
+    const activity = dataFactory.createActivityNode([], toActorId(1), "autoActivity", 0, 0);
+    expect(
+      dataFactory.createActivityNode([activity], toActorId(11), "manualActivity", 21, 22),
+    ).toStrictEqual({
       id: 2,
       xpdlId: "activity-2",
       type: "activityNode",
@@ -245,9 +247,11 @@ describe("createActivityNode", () => {
   });
 
   it("duplicate activity", () => {
-    const activity = dataFactory.createActivityNode([], 1, "autoActivity", 0, 0);
-    activity.xpdlId = "activity-2";
-    expect(dataFactory.createActivityNode([activity], 21, "userActivity", 31, 32)).toStrictEqual({
+    const activity = dataFactory.createActivityNode([], toActorId(1), "autoActivity", 0, 0);
+    activity.xpdlId = toXpdlId("activity-2");
+    expect(
+      dataFactory.createActivityNode([activity], toActorId(21), "userActivity", 31, 32),
+    ).toStrictEqual({
       id: 2,
       xpdlId: "activity-3",
       type: "activityNode",
@@ -269,7 +273,7 @@ describe("createActivityNode", () => {
 
 describe("createTransitionEdge", () => {
   it("one transition", () => {
-    expect(dataFactory.createTransitionEdge([], 1, 2)).toStrictEqual({
+    expect(dataFactory.createTransitionEdge([], toNodeId(1), toNodeId(2))).toStrictEqual({
       id: 1,
       xpdlId: "transition-1",
       type: "transitionEdge",
@@ -281,8 +285,10 @@ describe("createTransitionEdge", () => {
   });
 
   it("two transition", () => {
-    const transition = dataFactory.createTransitionEdge([], 1, 2);
-    expect(dataFactory.createTransitionEdge([transition], 11, 12)).toStrictEqual({
+    const transition = dataFactory.createTransitionEdge([], toNodeId(1), toNodeId(2));
+    expect(
+      dataFactory.createTransitionEdge([transition], toNodeId(11), toNodeId(12)),
+    ).toStrictEqual({
       id: 2,
       xpdlId: "transition-2",
       type: "transitionEdge",
@@ -294,9 +300,11 @@ describe("createTransitionEdge", () => {
   });
 
   it("duplicate transition", () => {
-    const transition = dataFactory.createTransitionEdge([], 1, 2);
-    transition.xpdlId = "transition-2";
-    expect(dataFactory.createTransitionEdge([transition], 21, 22)).toStrictEqual({
+    const transition = dataFactory.createTransitionEdge([], toNodeId(1), toNodeId(2));
+    transition.xpdlId = toXpdlId("transition-2");
+    expect(
+      dataFactory.createTransitionEdge([transition], toNodeId(21), toNodeId(22)),
+    ).toStrictEqual({
       id: 2,
       xpdlId: "transition-3",
       type: "transitionEdge",
@@ -339,7 +347,7 @@ describe("createCommentNode", () => {
 
 describe("createCommentEdge", () => {
   it("one comment-edge", () => {
-    expect(dataFactory.createCommentEdge([], 1, 2)).toStrictEqual({
+    expect(dataFactory.createCommentEdge([], toNodeId(1), toNodeId(2))).toStrictEqual({
       id: 1,
       type: "commentEdge",
       fromNodeId: 1,
@@ -349,8 +357,8 @@ describe("createCommentEdge", () => {
   });
 
   it("two comment-edge", () => {
-    const edge = dataFactory.createCommentEdge([], 1, 2);
-    expect(dataFactory.createCommentEdge([edge], 11, 12)).toStrictEqual({
+    const edge = dataFactory.createCommentEdge([], toNodeId(1), toNodeId(2));
+    expect(dataFactory.createCommentEdge([edge], toNodeId(11), toNodeId(12))).toStrictEqual({
       id: 2,
       type: "commentEdge",
       fromNodeId: 11,
@@ -389,7 +397,7 @@ describe("createStartNode", () => {
 
 describe("createStartEdge", () => {
   it("one start-edge", () => {
-    expect(dataFactory.createStartEdge([], 1, 2)).toStrictEqual({
+    expect(dataFactory.createStartEdge([], toNodeId(1), toNodeId(2))).toStrictEqual({
       id: 1,
       type: "startEdge",
       fromNodeId: 1,
@@ -399,8 +407,8 @@ describe("createStartEdge", () => {
   });
 
   it("two start-edge", () => {
-    const edge = dataFactory.createStartEdge([], 1, 2);
-    expect(dataFactory.createStartEdge([edge], 11, 12)).toStrictEqual({
+    const edge = dataFactory.createStartEdge([], toNodeId(1), toNodeId(2));
+    expect(dataFactory.createStartEdge([edge], toNodeId(11), toNodeId(12))).toStrictEqual({
       id: 2,
       type: "startEdge",
       fromNodeId: 11,
@@ -439,7 +447,7 @@ describe("createEndNode", () => {
 
 describe("createEndEdge", () => {
   it("one end-edge", () => {
-    expect(dataFactory.createEndEdge([], 1, 2)).toStrictEqual({
+    expect(dataFactory.createEndEdge([], toNodeId(1), toNodeId(2))).toStrictEqual({
       id: 1,
       type: "endEdge",
       fromNodeId: 1,
@@ -449,8 +457,8 @@ describe("createEndEdge", () => {
   });
 
   it("two end-edge", () => {
-    const edge = dataFactory.createEndEdge([], 1, 2);
-    expect(dataFactory.createEndEdge([edge], 11, 12)).toStrictEqual({
+    const edge = dataFactory.createEndEdge([], toNodeId(1), toNodeId(2));
+    expect(dataFactory.createEndEdge([edge], toNodeId(11), toNodeId(12))).toStrictEqual({
       id: 2,
       type: "endEdge",
       fromNodeId: 11,

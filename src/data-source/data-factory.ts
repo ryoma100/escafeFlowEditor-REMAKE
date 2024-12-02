@@ -1,22 +1,37 @@
+import * as v from "valibot";
+
 import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
 import { I18nDict, i18nEnDict } from "@/constants/i18n";
 import {
   ActivityNode,
   ActivityNodeType,
   ActorEntity,
+  ActorId,
+  actorIdSchema,
   ApplicationEntity,
+  applicationIdSchema,
   CommentEdge,
   CommentNode,
+  DateTime,
+  dateTimeSchema,
+  EdgeId,
+  edgeIdSchema,
   EndEdge,
   EndNode,
   EnvironmentEntity,
+  EnvironmentId,
+  environmentIdSchema,
   IEdge,
   INode,
+  NodeId,
+  nodeIdSchema,
   ProcessEntity,
   ProjectEntity,
   StartEdge,
   StartNode,
   TransitionEdge,
+  XpdlId,
+  xpdlIdSchema,
 } from "@/data-source/data-type";
 
 let dict: I18nDict = i18nEnDict;
@@ -25,11 +40,19 @@ export function setDataFactoryDict(newDict: I18nDict) {
   dict = newDict;
 }
 
-function createProject(created: string = new Date().toISOString()): ProjectEntity {
+export function toDateTime(dateTime = new Date().toISOString()): DateTime {
+  return v.parse(dateTimeSchema, dateTime);
+}
+
+export function toXpdlId(xpdlId: string): XpdlId {
+  return v.parse(xpdlIdSchema, xpdlId);
+}
+
+function createProject(created: DateTime = toDateTime()): ProjectEntity {
   const project: ProjectEntity = {
     created,
     detail: {
-      xpdlId: "package",
+      xpdlId: toXpdlId("package"),
       name: dict.package,
     },
     processes: [createProcess([], created)],
@@ -39,7 +62,7 @@ function createProject(created: string = new Date().toISOString()): ProjectEntit
 
 function createProcess(
   processList: ProcessEntity[],
-  created: string = new Date().toISOString(),
+  created: DateTime = toDateTime(),
 ): ProcessEntity {
   let id = maxId(processList);
   let xpdlId = "";
@@ -52,7 +75,7 @@ function createProcess(
     id,
     created,
     detail: {
-      xpdlId,
+      xpdlId: toXpdlId(xpdlId),
       name: `${dict.process}${id}`,
       validFrom: "",
       validTo: "",
@@ -66,10 +89,14 @@ function createProcess(
   return process;
 }
 
+export function toEnvironmentId(envId: number): EnvironmentId {
+  return v.parse(environmentIdSchema, envId);
+}
+
 function createEnvironment(environmentList: EnvironmentEntity[]): EnvironmentEntity {
   const id = maxId(environmentList) + 1;
   return {
-    id,
+    id: toEnvironmentId(id),
     name: `name${id}`,
     value: `value${id}`,
   };
@@ -84,12 +111,16 @@ function createApplication(applicationList: ApplicationEntity[]): ApplicationEnt
   } while (applicationList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id,
-    xpdlId,
+    id: v.parse(applicationIdSchema, id),
+    xpdlId: toXpdlId(xpdlId),
     name: `name${id}`,
     extendedName: "",
     extendedValue: "",
   };
+}
+
+export function toActorId(actorId: number): ActorId {
+  return v.parse(actorIdSchema, actorId);
 }
 
 function createActorEntity(actorList: ActorEntity[]): ActorEntity {
@@ -101,15 +132,19 @@ function createActorEntity(actorList: ActorEntity[]): ActorEntity {
   } while (actorList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id,
-    xpdlId,
+    id: toActorId(id),
+    xpdlId: toXpdlId(xpdlId),
     name: `${dict.actor}${id}`,
   };
 }
 
+export function toNodeId(nodeId: number): NodeId {
+  return v.parse(nodeIdSchema, nodeId);
+}
+
 function createActivityNode(
   nodeList: INode[],
-  actorId: number,
+  actorId: ActorId,
   activityType: ActivityNodeType,
   cx: number,
   cy: number,
@@ -123,8 +158,8 @@ function createActivityNode(
   } while (activityList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id: maxId(nodeList) + 1,
-    xpdlId,
+    id: toNodeId(maxId(nodeList) + 1),
+    xpdlId: toXpdlId(xpdlId),
     type: "activityNode",
     activityType,
     name: `${dict.work}${activityId}`,
@@ -141,10 +176,14 @@ function createActivityNode(
   };
 }
 
+export function toEdgeId(id: number): EdgeId {
+  return v.parse(edgeIdSchema, id);
+}
+
 function createTransitionEdge(
   edgeList: IEdge[],
-  fromNodeId: number,
-  toNodeId: number,
+  fromNodeId: NodeId,
+  toNodeId: NodeId,
 ): TransitionEdge {
   const transitionList = edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   let transitionId = transitionList.length;
@@ -155,8 +194,8 @@ function createTransitionEdge(
   } while (transitionList.some((it) => it.xpdlId === xpdlId));
 
   return {
-    id: maxId(edgeList) + 1,
-    xpdlId,
+    id: toEdgeId(maxId(edgeList) + 1),
+    xpdlId: toXpdlId(xpdlId),
     type: "transitionEdge",
     fromNodeId,
     toNodeId,
@@ -167,7 +206,7 @@ function createTransitionEdge(
 
 function createCommentNode(nodeList: INode[], x: number, y: number): CommentNode {
   return {
-    id: maxId(nodeList) + 1,
+    id: toNodeId(maxId(nodeList) + 1),
     type: "commentNode",
     comment: dict.comment,
     x,
@@ -178,9 +217,9 @@ function createCommentNode(nodeList: INode[], x: number, y: number): CommentNode
   };
 }
 
-function createCommentEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number): CommentEdge {
+function createCommentEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): CommentEdge {
   return {
-    id: maxId(edgeList) + 1,
+    id: toEdgeId(maxId(edgeList) + 1),
     type: "commentEdge",
     fromNodeId,
     toNodeId,
@@ -190,7 +229,7 @@ function createCommentEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: numb
 
 function createStartNode(nodeList: INode[], x: number, y: number): StartNode {
   return {
-    id: maxId(nodeList) + 1,
+    id: toNodeId(maxId(nodeList) + 1),
     type: "startNode",
     x,
     y,
@@ -200,9 +239,9 @@ function createStartNode(nodeList: INode[], x: number, y: number): StartNode {
   };
 }
 
-function createStartEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number): StartEdge {
+function createStartEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): StartEdge {
   return {
-    id: maxId(edgeList) + 1,
+    id: toEdgeId(maxId(edgeList) + 1),
     type: "startEdge",
     fromNodeId,
     toNodeId,
@@ -212,7 +251,7 @@ function createStartEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number
 
 function createEndNode(nodeList: INode[], x: number, y: number): EndNode {
   return {
-    id: maxId(nodeList) + 1,
+    id: toNodeId(maxId(nodeList) + 1),
     type: "endNode",
     x,
     y,
@@ -222,9 +261,9 @@ function createEndNode(nodeList: INode[], x: number, y: number): EndNode {
   };
 }
 
-function createEndEdge(edgeList: IEdge[], fromNodeId: number, toNodeId: number): EndEdge {
+function createEndEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): EndEdge {
   return {
-    id: maxId(edgeList) + 1,
+    id: toEdgeId(maxId(edgeList) + 1),
     type: "endEdge",
     fromNodeId,
     toNodeId,

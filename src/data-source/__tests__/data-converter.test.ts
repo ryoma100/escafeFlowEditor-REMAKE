@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { exportXml, importXml } from "@/data-source/data-converter";
-import { dataFactory } from "@/data-source/data-factory";
+import { dataFactory, toDateTime, toXpdlId } from "@/data-source/data-factory";
 import { ActivityNode, CommentNode } from "@/data-source/data-type";
 
 describe("exportXml", () => {
@@ -28,7 +28,7 @@ describe("importXml", () => {
   });
 });
 
-const initProjectData = dataFactory.createProject("0001-01-01T00:00:00.000Z");
+const initProjectData = dataFactory.createProject(toDateTime("0001-01-01T00:00:00.000Z"));
 const initProjectXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="package" Name="Package" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">
   <PackageHeader>
@@ -71,17 +71,17 @@ const initProjectXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
  * autoTimerActivity#3,comment -> (oneJoin)userActivity#5(oneSplit) -> autoActivity#2,end
  */
 const oneProcessData = (function () {
-  const project = dataFactory.createProject("0001-01-01T00:00:00.000Z");
+  const project = dataFactory.createProject(toDateTime("0001-01-01T00:00:00.000Z"));
   const process = project.processes[0];
   process.detail.applications.push(dataFactory.createApplication(process.detail.applications));
   const application1 = process.detail.applications[0];
-  application1.xpdlId = "app1";
+  application1.xpdlId = toXpdlId("app1");
   application1.name = "name1";
   application1.extendedName = "extName1";
   application1.extendedValue = "extValue1";
   process.detail.applications.push(dataFactory.createApplication(process.detail.applications));
   const application2 = process.detail.applications[1];
-  application2.xpdlId = "app2";
+  application2.xpdlId = toXpdlId("app2");
   application2.name = "name2";
   application2.extendedName = "extName2";
   application2.extendedValue = "extValue2";
@@ -379,9 +379,9 @@ const oneProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 </Package>
 `;
 
-const twoProcessData = dataFactory.createProject("0001-01-01T00:00:00.000Z");
+const twoProcessData = dataFactory.createProject(toDateTime("0001-01-01T00:00:00.000Z"));
 twoProcessData.processes.push(
-  dataFactory.createProcess(twoProcessData.processes, "9999-01-01T00:00:00.000Z"),
+  dataFactory.createProcess(twoProcessData.processes, toDateTime("9999-01-01T00:00:00.000Z")),
 );
 const twoProcessXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Package xmlns="http://www.wfmc.org/2002/XPDL1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="package" Name="Package" xsi:schemaLocation="http://www.wfmc.org/2002/XPDL1.0 http://wfmc.org/standards/docs/TC-1025_schema_10_xpdl.xsd">

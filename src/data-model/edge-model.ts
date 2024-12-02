@@ -2,14 +2,7 @@ import { createStore, produce } from "solid-js/store";
 
 import { NodeModel } from "@/data-model/node-model";
 import { deepUnwrap } from "@/data-source/data-factory";
-import {
-  CommentEdge,
-  EndEdge,
-  IEdge,
-  ProcessEntity,
-  StartEdge,
-  TransitionEdge,
-} from "@/data-source/data-type";
+import { IEdge, ProcessEntity } from "@/data-source/data-type";
 
 export type EdgeModel = ReturnType<typeof makeEdgeModel>;
 
@@ -20,7 +13,7 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     setEdgeList(process.edgeList);
   }
 
-  function save(): (TransitionEdge | CommentEdge | StartEdge | EndEdge)[] {
+  function save(): IEdge[] {
     return deepUnwrap(edgeList);
   }
 

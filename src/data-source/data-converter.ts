@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
+import * as v from "valibot";
 
 import { defaultPoint } from "@/constants/app-const";
 import { computeMaxRectangle } from "@/data-model/node-model";
-import { dataFactory } from "@/data-source/data-factory";
+import { dataFactory, toEnvironmentId } from "@/data-source/data-factory";
 import {
   ActivityJoinType,
   ActivityNode,
@@ -21,6 +22,7 @@ import {
   Point,
   ProcessDetailEntity,
   ProjectEntity,
+  projectEntitySchema,
   Rectangle,
   StartEdge,
   StartNode,
@@ -397,7 +399,7 @@ export function importXml(xmlString: string): ProjectEntity {
     }),
   };
 
-  return project;
+  return v.parse(projectEntitySchema, project);
 }
 
 function parseExtendNode(
@@ -467,7 +469,7 @@ function parseExtendNode(
         it["@_Name"] !== "JaWE_GRAPH_WORKFLOW_PARTICIPANT_ORDER",
     )
     .map((it, idx) => ({
-      id: idx + 1,
+      id: toEnvironmentId(idx + 1),
       name: it["@_Name"],
       value: it["@_Value"],
     }));

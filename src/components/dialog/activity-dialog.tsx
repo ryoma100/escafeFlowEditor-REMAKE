@@ -15,7 +15,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
+import { dataFactory, deepUnwrap, toActorId } from "@/data-source/data-factory";
 import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
 import { AutoActivityIcon } from "@/icons/auto-activity-icon";
 import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
@@ -80,7 +80,7 @@ export function ActivityDialogView(props: {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
-  const dummy = dataFactory.createActivityNode([], 0, "autoActivity", 0, 0);
+  const dummy = dataFactory.createActivityNode([], toActorId(0), "autoActivity", 0, 0);
   const [formData, setFormData] = createStore<ActivityNode>(dummy);
   const [selectedAppIndex, setSelectedAppIndex] = createSignal(-1);
 

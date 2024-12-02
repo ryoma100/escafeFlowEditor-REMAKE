@@ -5,7 +5,7 @@ import { createStore } from "solid-js/store";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
+import { dataFactory, deepUnwrap, toNodeId } from "@/data-source/data-factory";
 import { TransitionEdge } from "@/data-source/data-type";
 
 export function TransitionDialog(): JSXElement {
@@ -61,7 +61,7 @@ export function TransitionDialogView(props: {
   const { dict } = useThemeContext();
   const t = i18n.translator(dict);
 
-  const dummy = dataFactory.createTransitionEdge([], 0, 0);
+  const dummy = dataFactory.createTransitionEdge([], toNodeId(0), toNodeId(0));
   const [formData, setFormData] = createStore<TransitionEdge>(dummy);
   const [showOgnl, setShowOgnl] = createSignal<boolean>(false);
 
