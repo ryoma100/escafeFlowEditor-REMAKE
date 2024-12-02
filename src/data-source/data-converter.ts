@@ -5,6 +5,7 @@ import * as v from "valibot";
 import { defaultPoint } from "@/constants/app-const";
 import { computeMaxRectangle } from "@/data-model/node-model";
 import { dataFactory, toEnvironmentId } from "@/data-source/data-factory";
+import { projectEntitySchema } from "@/data-source/data-schema";
 import {
   ActivityJoinType,
   ActivityNode,
@@ -22,7 +23,6 @@ import {
   Point,
   ProcessDetailEntity,
   ProjectEntity,
-  projectEntitySchema,
   Rectangle,
   StartEdge,
   StartNode,
