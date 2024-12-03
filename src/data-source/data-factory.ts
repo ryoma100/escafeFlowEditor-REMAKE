@@ -3,35 +3,37 @@ import * as v from "valibot";
 import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
 import { I18nDict, i18nEnDict } from "@/constants/i18n";
 import {
+  actorIdSchema,
+  applicationIdSchema,
+  dateTimeSchema,
+  edgeIdSchema,
+  environmentIdSchema,
+  nodeIdSchema,
+  xpdlIdSchema,
+} from "@/data-source/data-schema";
+import {
   ActivityNode,
   ActivityNodeType,
   ActorEntity,
   ActorId,
-  actorIdSchema,
   ApplicationEntity,
-  applicationIdSchema,
   CommentEdge,
   CommentNode,
   DateTime,
-  dateTimeSchema,
   EdgeId,
-  edgeIdSchema,
   EndEdge,
   EndNode,
   EnvironmentEntity,
   EnvironmentId,
-  environmentIdSchema,
   IEdge,
   INode,
   NodeId,
-  nodeIdSchema,
   ProcessEntity,
   ProjectEntity,
   StartEdge,
   StartNode,
   TransitionEdge,
   XpdlId,
-  xpdlIdSchema,
 } from "@/data-source/data-type";
 
 let dict: I18nDict = i18nEnDict;
