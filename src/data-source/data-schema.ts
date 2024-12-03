@@ -78,23 +78,28 @@ export const activitySplitTypeSchema = v.union([
   v.literal("andSplit"),
 ]);
 
-export const activityNodeSchema = v.object({
-  ...baseNodeSchema.entries,
-  type: v.literal("activityNode"),
-  activityType: activityNodeTypeSchema,
-  xpdlId: xpdlIdSchema,
-  actorId: actorIdSchema,
-  name: v.string(),
-  applications: v.array(
-    v.object({
-      id: applicationIdSchema,
-      ognl: v.string(),
-    }),
-  ),
-  ognl: v.string(),
-  joinType: activityJoinTypeSchema,
-  splitType: activitySplitTypeSchema,
-});
+export const activityNodeSchema = v.pipe(
+  v.object({
+    ...baseNodeSchema.entries,
+    type: v.literal("activityNode"),
+    activityType: activityNodeTypeSchema,
+    xpdlId: xpdlIdSchema,
+    actorId: actorIdSchema,
+    name: v.string(),
+    applications: v.array(
+      v.object({
+        id: applicationIdSchema,
+        ognl: v.string(),
+      }),
+    ),
+    ognl: v.string(),
+    joinType: activityJoinTypeSchema,
+    splitType: activitySplitTypeSchema,
+  }),
+  v.check(({ applications }) => {
+    return new Set(applications.map((it) => it.id)).size === applications.length;
+  }, "duplicate application id"),
+);
 
 export const startNodeSchema = v.object({
   ...baseNodeSchema.entries,
@@ -185,14 +190,25 @@ export const applicationEntitySchema = v.object({
   extendedValue: v.string(),
 });
 
-export const processDetailEntitySchema = v.object({
-  xpdlId: xpdlIdSchema,
-  name: v.string(),
-  validFrom: v.string(),
-  validTo: v.string(),
-  environments: v.array(environmentEntitySchema),
-  applications: v.array(applicationEntitySchema),
-});
+export const processDetailEntitySchema = v.pipe(
+  v.object({
+    xpdlId: xpdlIdSchema,
+    name: v.string(),
+    validFrom: v.string(),
+    validTo: v.string(),
+    environments: v.array(environmentEntitySchema),
+    applications: v.array(applicationEntitySchema),
+  }),
+  v.check(({ environments }) => {
+    return new Set(environments.map((it) => it.id)).size === environments.length;
+  }, "duplicate environment id"),
+  v.check(({ applications }) => {
+    return new Set(applications.map((it) => it.id)).size === applications.length;
+  }, "duplicate application id"),
+  v.check(({ applications }) => {
+    return new Set(applications.map((it) => it.xpdlId)).size === applications.length;
+  }, "duplicate application xpdlId"),
+);
 
 export const actorEntitySchema = v.object({
   id: actorIdSchema,
@@ -200,22 +216,89 @@ export const actorEntitySchema = v.object({
   name: v.string(),
 });
 
-export const processEntitySchema = v.object({
-  id: v.number(),
-  created: dateTimeSchema,
-  detail: processDetailEntitySchema,
-  actors: v.array(actorEntitySchema),
-  nodeList: v.array(nodeSchema),
-  edgeList: v.array(edgeSchema),
-});
+export const processEntitySchema = v.pipe(
+  v.object({
+    id: v.number(),
+    created: dateTimeSchema,
+    detail: processDetailEntitySchema,
+    actors: v.array(actorEntitySchema),
+    nodeList: v.array(nodeSchema),
+    edgeList: v.array(edgeSchema),
+  }),
+  v.check(({ actors }) => {
+    return new Set(actors.map((it) => it.id)).size === actors.length;
+  }, "duplicate actor id"),
+  v.check(({ actors }) => {
+    return new Set(actors.map((it) => it.xpdlId)).size === actors.length;
+  }, "duplicate actor xpdlId"),
+  v.check(({ nodeList }) => {
+    return new Set(nodeList.map((it) => it.id)).size === nodeList.length;
+  }, "duplicate node id"),
+  v.check(({ nodeList }) => {
+    const activities = nodeList.filter((it) => it.type === "activityNode");
+    return new Set(activities.map((it) => it.xpdlId)).size === activities.length;
+  }, "duplicate activity xpdlId"),
+  v.check(({ edgeList }) => {
+    return new Set(edgeList.map((it) => it.id)).size === edgeList.length;
+  }, "duplicate edge id"),
+  v.check(({ edgeList }) => {
+    const transitions = edgeList.filter((it) => it.type === "transitionEdge");
+    return new Set(transitions.map((it) => it.xpdlId)).size === transitions.length;
+  }, "duplicate edge xpdlId"),
+  v.check(({ edgeList }) => {
+    return edgeList.every((edge) => edge.fromNodeId !== edge.toNodeId);
+  }, "nodeFromId and nodeToId of edge are equal"),
+  v.check(({ edgeList, nodeList }) => {
+    const activities = nodeList.filter((it) => it.type === "activityNode");
+    const transitions = edgeList.filter((it) => it.type === "transitionEdge");
+    return transitions.every((transition) =>
+      activities.some(
+        (activity) => transition.fromNodeId === activity.id || transition.toNodeId === activity.id,
+      ),
+    );
+  }, "no activity referenced by transition"),
+  v.check(({ edgeList, nodeList }) => {
+    const activities = nodeList.filter((it) => it.type === "activityNode");
+    const startNodes = nodeList.filter((it) => it.type === "startNode");
+    const startEdges = edgeList.filter((it) => it.type === "startEdge");
+    return startEdges.every(
+      (startEdge) =>
+        startNodes.some((startNode) => startEdge.fromNodeId === startNode.id) &&
+        activities.some((activity) => startEdge.toNodeId === activity.id),
+    );
+  }, "no node referenced by start edge"),
+  v.check(({ edgeList, nodeList }) => {
+    const activities = nodeList.filter((it) => it.type === "activityNode");
+    const endNodes = nodeList.filter((it) => it.type === "endNode");
+    const endEdges = edgeList.filter((it) => it.type === "endEdge");
+    return endEdges.every(
+      (endEdge) =>
+        activities.some((activity) => endEdge.fromNodeId === activity.id) &&
+        endNodes.some((endNode) => endEdge.toNodeId === endNode.id),
+    );
+  }, "no node referenced by end edge"),
+  v.check(({ nodeList, detail: { applications } }) => {
+    const activities = nodeList.filter((it) => it.type === "activityNode");
+    return activities.every((activity) =>
+      activity.applications.every((activityApp) =>
+        applications.some((application) => application.id === activityApp.id),
+      ),
+    );
+  }, "no application id for activity"),
+);
 
 export const projectDetailEntitySchema = v.object({
   xpdlId: xpdlIdSchema,
   name: v.string(),
 });
 
-export const projectEntitySchema = v.object({
-  created: dateTimeSchema,
-  detail: projectDetailEntitySchema,
-  processes: v.array(processEntitySchema),
-});
+export const projectEntitySchema = v.pipe(
+  v.object({
+    created: dateTimeSchema,
+    detail: projectDetailEntitySchema,
+    processes: v.array(processEntitySchema),
+  }),
+  v.check(({ processes }) => {
+    return new Set(processes.map((it) => it.id)).size === processes.length;
+  }, "duplicate process id"),
+);
