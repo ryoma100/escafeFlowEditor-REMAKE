@@ -16,6 +16,7 @@ import {
   IEdge,
   INode,
   Line,
+  NodeId,
   Rectangle,
   StartEdge,
   StartNode,
@@ -142,6 +143,8 @@ export function DiagramContainer(): JSXElement {
         onActivityPointerDown={pointerListener.handleActivityPointerDown}
         onActivityRightPointerDown={pointerListener.handleActivityRightPointerDown}
         onExtendNodePointerDown={pointerListener.handleExtendNodePointerDown}
+        onFromEdgePointerDown={pointerListener.handleMoveStartEdgePointerDown}
+        onToEdgePointerDown={pointerListener.handleMoveEndEdgePointerDown}
       />
 
       <ContextMenu
@@ -180,6 +183,8 @@ export function DiagramView(props: {
   readonly onActivityPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
   readonly onActivityRightPointerDown?: (e: PointerEvent, activity: ActivityNode) => void;
   readonly onExtendNodePointerDown?: (e: PointerEvent, node: INode) => void;
+  readonly onFromEdgePointerDown?: (e: PointerEvent, edge: IEdge, endNodeId: NodeId) => void;
+  readonly onToEdgePointerDown?: (e: PointerEvent, edge: IEdge, startNodeId: NodeId) => void;
 }) {
   onMount(() => {
     const observer = new ResizeObserver(() => {
@@ -260,11 +265,7 @@ export function DiagramView(props: {
             )}
           </For>
         </g>
-        <g data-id="extend-edges">
-          <For each={props.edgeList.filter((it) => it.type !== "transitionEdge")}>
-            {(it) => <ExtendEdgeContainer edge={it as StartEdge | EndEdge | CommentEdge} />}
-          </For>
-        </g>
+
         <g data-id="activity-nodes">
           <For each={props.nodeList.filter((it) => it.type === "activityNode")}>
             {(it) => (
@@ -289,10 +290,26 @@ export function DiagramView(props: {
         </g>
         <g data-id="transition-edges">
           <For each={props.edgeList.filter((it) => it.type === "transitionEdge")}>
-            {(it) => <TransitionEdgeContainer transition={it as TransitionEdge} />}
+            {(it) => (
+              <TransitionEdgeContainer
+                transition={it as TransitionEdge}
+                onFromPointerDown={(e, nodeId) => props.onFromEdgePointerDown?.(e, it, nodeId)}
+                onToPointerDown={(e, nodeId) => props.onToEdgePointerDown?.(e, it, nodeId)}
+              />
+            )}
           </For>
         </g>
-
+        <g data-id="extend-edges">
+          <For each={props.edgeList.filter((it) => it.type !== "transitionEdge")}>
+            {(it) => (
+              <ExtendEdgeContainer
+                edge={it as StartEdge | EndEdge | CommentEdge}
+                onFromPointerDown={(e, nodeId) => props.onFromEdgePointerDown?.(e, it, nodeId)}
+                onToPointerDown={(e, nodeId) => props.onToEdgePointerDown?.(e, it, nodeId)}
+              />
+            )}
+          </For>
+        </g>
         <g data-id="adding-line">
           <Show when={props.addingLine != null}>
             <line
@@ -316,7 +333,6 @@ export function DiagramView(props: {
             />
           </Show>
         </g>
-
         <g data-id="select-circle">
           <Show when={props.selectCircle != null}>
             <circle

@@ -33,3 +33,12 @@ export function minLengthOfPointToRect(point: Point, rect: Rectangle): number {
 export function centerPoint(rect: Rectangle): Point {
   return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
 }
+
+export function extendRectangle(rect: Rectangle, size: number): Rectangle {
+  return {
+    x: rect.x - size,
+    y: rect.y - size,
+    width: rect.width + size * 2,
+    height: rect.height + size * 2,
+  };
+}

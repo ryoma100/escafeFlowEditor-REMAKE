@@ -2,7 +2,7 @@ import { createStore, produce } from "solid-js/store";
 
 import { NodeModel } from "@/data-model/node-model";
 import { deepUnwrap } from "@/data-source/data-factory";
-import { IEdge, ProcessEntity } from "@/data-source/data-type";
+import { EdgeId, IEdge, ProcessEntity } from "@/data-source/data-type";
 
 export type EdgeModel = ReturnType<typeof makeEdgeModel>;
 
@@ -42,6 +42,10 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     );
   }
 
+  function deleteEdge(edgeId: EdgeId) {
+    setEdgeList(edgeList.filter((it) => it.id !== edgeId));
+  }
+
   function deleteSelectedEdge() {
     setEdgeList(
       edgeList.filter(
@@ -71,5 +75,6 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     deleteSelectedEdge,
     selectedEdges,
     addEdge,
+    deleteEdge,
   };
 }

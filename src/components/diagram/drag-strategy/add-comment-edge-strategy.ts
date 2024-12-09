@@ -1,5 +1,4 @@
 import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
-import { defaultPoint } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
 import { NodeModel } from "@/data-model/node-model";
@@ -12,11 +11,13 @@ export function makeAddCommentEdgeStrategy(
   nodeModel: NodeModel,
   extendEdgeModel: ExtendEdgeModel,
 ): DragStrategy {
-  let fromPoint: Point = defaultPoint;
+  let fromNode: INode;
+  let fromPoint: Point;
 
   function handlePointerDown(e: PointerEvent, node: INode) {
     e.stopPropagation();
 
+    fromNode = node;
     fromPoint = { x: node.x + node.width, y: node.y + node.height / 2 };
     nodeModel.changeSelectNodes("select", [node.id]);
     diagramModel.setAddingLine({ p1: fromPoint, p2: fromPoint });
@@ -38,7 +39,7 @@ export function makeAddCommentEdgeStrategy(
     const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
     if (node?.type !== "activityNode") return;
 
-    extendEdgeModel.addCommentEdge(node.id);
+    extendEdgeModel.addCommentEdge(fromNode.id, node.id);
   }
 
   return {

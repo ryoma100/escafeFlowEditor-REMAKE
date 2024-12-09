@@ -1,6 +1,6 @@
 import { JSXElement, Match, onMount, Switch } from "solid-js";
 
-import { ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
+import { ACTIVITY_EAR_WIDTH, ACTIVITY_MIN_HEIGHT } from "@/constants/app-const";
 import { useModelContext } from "@/context/model-context";
 import {
   ActivityJoinType,
@@ -41,9 +41,9 @@ export function ActivityNodeContainer(props: {
   return (
     <foreignObject
       data-id={props.activity.xpdlId}
-      x={props.activity.x}
+      x={props.activity.x - ACTIVITY_EAR_WIDTH}
       y={props.activity.y}
-      width={props.activity.width}
+      width={props.activity.width + ACTIVITY_EAR_WIDTH * 2}
       height={props.activity.height}
     >
       <ActivityNodeView
@@ -93,7 +93,7 @@ export function ActivityNodeView(props: {
   let titleDiv: HTMLDivElement | undefined;
   return (
     <div
-      style={{ width: `${props.width}px` }}
+      style={{ width: `${props.width + ACTIVITY_EAR_WIDTH * 2}px` }}
       data-select={props.selected}
       class="flex size-full flex-row justify-between border-2 border-solid border-transparent data-[select=true]:border-primary"
     >

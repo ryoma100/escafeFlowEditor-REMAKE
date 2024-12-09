@@ -3,7 +3,9 @@ import { makeAddCommentEdgeStrategy } from "@/components/diagram/drag-strategy/a
 import { makeAddStartEdgeStrategy } from "@/components/diagram/drag-strategy/add-start-edge-strategy";
 import { makeDefaultStrategy } from "@/components/diagram/drag-strategy/default-strategy";
 import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import { makeMoveEndEdgeStrategy } from "@/components/diagram/drag-strategy/move-end-edge-strategy";
 import { makeMoveNodesStrategy } from "@/components/diagram/drag-strategy/move-nodes-strategy";
+import { makeMoveStartEdgeStrategy } from "@/components/diagram/drag-strategy/move-start-edge-strategy";
 import { makeResizeActivityLeftStrategy } from "@/components/diagram/drag-strategy/resize-activity-left-strategy";
 import { makeResizeActivityRightStrategy } from "@/components/diagram/drag-strategy/resize-activity-right-strategy";
 import { makeRotateNodesStrategy } from "@/components/diagram/drag-strategy/rotate-nodes-strategy";
@@ -22,7 +24,7 @@ import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
 import { ExtendNodeModel } from "@/data-model/extend-node-model";
 import { NodeModel } from "@/data-model/node-model";
 import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { ActivityNode, INode } from "@/data-source/data-type";
+import { ActivityNode, IEdge, INode, NodeId } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makePointerListener(
@@ -49,6 +51,18 @@ export function makePointerListener(
     addCommentEdgeStrategy: makeAddCommentEdgeStrategy(diagramModel, nodeModel, extendEdgeModel),
     addStartEdgeStrategy: makeAddStartEdgeStrategy(diagramModel, nodeModel, extendEdgeModel),
     addActivityEdgeStrategy: makeAddActivityEdgeStrategy(
+      diagramModel,
+      activityNodeModel,
+      transitionEdgeModel,
+      extendEdgeModel,
+    ),
+    moveStartEdgeStrategy: makeMoveStartEdgeStrategy(
+      diagramModel,
+      activityNodeModel,
+      transitionEdgeModel,
+      extendEdgeModel,
+    ),
+    moveEndEdgeStrategy: makeMoveEndEdgeStrategy(
       diagramModel,
       activityNodeModel,
       transitionEdgeModel,
@@ -109,6 +123,24 @@ export function makePointerListener(
           dragStrategy.handlePointerDown(e, node);
         }
         return;
+    }
+  }
+
+  function handleMoveStartEdgePointerDown(e: PointerEvent, edge: IEdge, endNodeId: NodeId) {
+    e.preventDefault(); // Do not call handleDiagramPointerDown
+    const endNode = nodeModel.nodeList.find((it) => it.id === endNodeId);
+    if (endNode) {
+      dragStrategy = dragStrategies.moveStartEdgeStrategy;
+      dragStrategy.handlePointerDown(e, endNode, edge);
+    }
+  }
+
+  function handleMoveEndEdgePointerDown(e: PointerEvent, edge: IEdge, startNodeId: NodeId) {
+    e.preventDefault(); // Do not call handleDiagramPointerDown
+    const startNode = nodeModel.nodeList.find((it) => it.id === startNodeId);
+    if (startNode) {
+      dragStrategy = dragStrategies.moveEndEdgeStrategy;
+      dragStrategy.handlePointerDown(e, startNode, edge);
     }
   }
 
@@ -224,6 +256,8 @@ export function makePointerListener(
     handleActivityRightPointerDown,
     handleActivityPointerDown,
     handleExtendNodePointerDown,
+    handleMoveStartEdgePointerDown,
+    handleMoveEndEdgePointerDown,
     handleDiagramPointerDown,
     handleDocumentPointerMove,
     handleDocumentPointerUp,
