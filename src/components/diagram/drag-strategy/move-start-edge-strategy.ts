@@ -1,20 +1,18 @@
 import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
-import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
-import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
+import { ExtendNodeModel } from "@/data-model/extend-node-model";
 import { IEdge, INode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeMoveStartEdgeStrategy(
   diagramModel: DiagramModel,
-  activityNodeModel: ActivityNodeModel,
-  transitionEdgeModel: TransitionEdgeModel,
+  extendNodeModel: ExtendNodeModel,
   extendEdgeModel: ExtendEdgeModel,
 ) {
   const dragScrollDelegate = makeDragScrollDelegate(diagramModel);
-  const nodeModel = activityNodeModel.nodeModel;
-  const edgeModel = transitionEdgeModel.edgeModel;
+  const nodeModel = extendNodeModel.nodeModel;
+  const edgeModel = extendEdgeModel.edgeModel;
   let targetEdge: IEdge;
   let endNode: INode;
   let endPoint: Point;
@@ -53,16 +51,19 @@ export function makeMoveStartEdgeStrategy(
 
     switch (node.type) {
       case "activityNode":
-        edgeModel.deleteEdge(targetEdge.id);
-        transitionEdgeModel.addTransitionEdge(node.id, endNode.id);
+        if (extendEdgeModel.addEndEdge(node.id, endNode.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
       case "startNode":
-        edgeModel.deleteEdge(targetEdge.id);
-        extendEdgeModel.addStartEdge(node.id, endNode.id);
+        if (extendEdgeModel.addStartEdge(node.id, endNode.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
       case "commentNode":
-        edgeModel.deleteEdge(targetEdge.id);
-        extendEdgeModel.addCommentEdge(node.id, endNode.id);
+        if (extendEdgeModel.addCommentEdge(node.id, endNode.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
     }
   }

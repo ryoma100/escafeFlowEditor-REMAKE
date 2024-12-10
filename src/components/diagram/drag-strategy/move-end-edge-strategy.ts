@@ -53,12 +53,14 @@ export function makeMoveEndEdgeStrategy(
 
     switch (node.type) {
       case "activityNode":
-        edgeModel.deleteEdge(targetEdge.id);
-        transitionEdgeModel.addTransitionEdge(startNode.id, node.id);
+        if (extendEdgeModel.addStartEdge(startNode.id, node.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
       case "endNode":
-        edgeModel.deleteEdge(targetEdge.id);
-        extendEdgeModel.addEndEdge(startNode.id, node.id);
+        if (extendEdgeModel.addEndEdge(startNode.id, node.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
     }
   }

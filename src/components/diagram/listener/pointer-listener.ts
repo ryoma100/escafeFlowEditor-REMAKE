@@ -58,8 +58,7 @@ export function makePointerListener(
     ),
     moveStartEdgeStrategy: makeMoveStartEdgeStrategy(
       diagramModel,
-      activityNodeModel,
-      transitionEdgeModel,
+      extendNodeModel,
       extendEdgeModel,
     ),
     moveEndEdgeStrategy: makeMoveEndEdgeStrategy(
