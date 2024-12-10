@@ -1,32 +1,29 @@
 import { JSXElement } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
-import { CommentEdge, EndEdge, StartEdge } from "@/data-source/data-type";
+import { CommentEdge, EndEdge, Line, NodeId, StartEdge } from "@/data-source/data-type";
+import { computeLine, extendLine } from "@/utils/line-utils";
 
 export function ExtendEdgeContainer(props: {
   readonly edge: CommentEdge | StartEdge | EndEdge;
+  readonly onFromPointerDown: (e: PointerEvent, endNodeId: NodeId) => void;
+  readonly onToPointerDown: (e: PointerEvent, startNodeId: NodeId) => void;
 }): JSXElement {
-  const { extendNodeModel, activityNodeModel, nodeModel, edgeModel } = useModelContext();
+  const { nodeModel, edgeModel } = useModelContext();
 
-  const fromToNode = () => {
-    switch (props.edge.type) {
-      case "commentEdge":
-        return [
-          extendNodeModel.getCommentNode(props.edge.fromNodeId),
-          activityNodeModel.getActivityNode(props.edge.toNodeId),
-        ];
-      case "startEdge":
-        return [
-          extendNodeModel.getStartNode(props.edge.fromNodeId),
-          activityNodeModel.getActivityNode(props.edge.toNodeId),
-        ];
-      case "endEdge":
-        return [
-          activityNodeModel.getActivityNode(props.edge.fromNodeId),
-          extendNodeModel.getEndNode(props.edge.toNodeId),
-        ];
-    }
-  };
+  const fromRect = () => nodeModel.getNode(props.edge.fromNodeId);
+  const toRect = () => nodeModel.getNode(props.edge.toNodeId);
+  const line = () =>
+    computeLine(fromRect(), toRect(), {
+      p1: {
+        x: fromRect().x + fromRect().width / 2,
+        y: fromRect().y + fromRect().height / 2,
+      },
+      p2: {
+        x: toRect().x + toRect().width / 2,
+        y: toRect().y + toRect().height / 2,
+      },
+    });
 
   function handlePointerDown(e: PointerEvent) {
     e.stopPropagation();
@@ -39,35 +36,43 @@ export function ExtendEdgeContainer(props: {
     }
   }
 
+  function handleFromPointerDown(e: PointerEvent) {
+    props.onFromPointerDown(e, props.edge.toNodeId);
+  }
+
+  function handleToPointerDown(e: PointerEvent) {
+    props.onToPointerDown(e, props.edge.fromNodeId);
+  }
+
   return (
     <OtherEdgeView
-      fromX={fromToNode()[0].x + fromToNode()[0].width / 2}
-      fromY={fromToNode()[0].y + fromToNode()[0].height / 2}
-      toX={fromToNode()[1].x + fromToNode()[1].width / 2}
-      toY={fromToNode()[1].y + fromToNode()[1].height / 2}
+      line={line()}
       selected={props.edge.selected}
       onPointerDown={handlePointerDown}
+      onFromPointerDown={handleFromPointerDown}
+      onToPointerDown={handleToPointerDown}
     />
   );
 }
 
 export function OtherEdgeView(props: {
-  readonly fromX: number;
-  readonly fromY: number;
-  readonly toX: number;
-  readonly toY: number;
+  readonly line: Line;
   readonly selected: boolean;
   readonly onPointerDown?: (e: PointerEvent) => void;
+  readonly onFromPointerDown?: (e: PointerEvent) => void;
+  readonly onToPointerDown?: (e: PointerEvent) => void;
 }): JSXElement {
+  const connectors = () => extendLine(props.line, -5);
+
   return (
     <>
       <line
         /* eslint-disable-next-line tailwindcss/no-custom-classname */
         class="stroke fill-none [stroke:var(--foreground-color)] [vector-effect:non-scaling-stroke]"
-        x1={props.fromX}
-        y1={props.fromY}
-        x2={props.toX}
-        y2={props.toY}
+        x1={props.line.p1.x}
+        y1={props.line.p1.y}
+        x2={props.line.p2.x}
+        y2={props.line.p2.y}
       />
       <line
         class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary"
@@ -76,10 +81,24 @@ export function OtherEdgeView(props: {
           "stroke-primary": props.selected,
         }}
         onPointerDown={(e) => props.onPointerDown?.(e)}
-        x1={props.fromX}
-        y1={props.fromY}
-        x2={props.toX}
-        y2={props.toY}
+        x1={props.line.p1.x}
+        y1={props.line.p1.y}
+        x2={props.line.p2.x}
+        y2={props.line.p2.y}
+      />
+      <circle
+        class="fill-none stroke-transparent hover:cursor-pointer hover:fill-primary"
+        onPointerDown={(e) => props.onFromPointerDown?.(e)}
+        cx={connectors().p1.x}
+        cy={connectors().p1.y}
+        r={10}
+      />
+      <circle
+        class="fill-none stroke-transparent hover:cursor-pointer hover:fill-primary"
+        onPointerDown={(e) => props.onToPointerDown?.(e)}
+        cx={connectors().p2.x}
+        cy={connectors().p2.y}
+        r={10}
       />
     </>
   );

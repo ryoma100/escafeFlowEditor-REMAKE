@@ -1,20 +1,22 @@
 import { produce } from "solid-js/store";
 
 import { i18nEnDict } from "@/constants/i18n";
+import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { EdgeModel } from "@/data-model/edge-model";
-import { NodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
 import { NodeId, TransitionEdge } from "@/data-source/data-type";
 
 export type TransitionEdgeModel = ReturnType<typeof makeTransactionEdgeModel>;
 
-export function makeTransactionEdgeModel(edgeModel: EdgeModel, nodeModel: NodeModel) {
+export function makeTransactionEdgeModel(
+  edgeModel: EdgeModel,
+  activityNodeModel: ActivityNodeModel,
+) {
   function getTransitionEdges(): TransitionEdge[] {
     return edgeModel.edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   }
 
-  function addTransitionEdge(toActivityId: NodeId): TransitionEdge | null {
-    const fromActivityId = nodeModel.nodeList.find((it) => it.selected)!.id;
+  function addTransitionEdge(fromActivityId: NodeId, toActivityId: NodeId): TransitionEdge | null {
     const transitionList = getTransitionEdges();
 
     if (
@@ -32,6 +34,15 @@ export function makeTransactionEdgeModel(edgeModel: EdgeModel, nodeModel: NodeMo
       toActivityId,
     );
     edgeModel.setEdgeList([...edgeModel.edgeList, transition]);
+
+    activityNodeModel.updateJoinType(
+      transition.toNodeId,
+      getTransitionEdges().filter((it) => it.toNodeId === transition.toNodeId).length,
+    );
+    activityNodeModel.updateSplitType(
+      transition.fromNodeId,
+      getTransitionEdges().filter((it) => it.fromNodeId === transition.fromNodeId).length,
+    );
 
     return transition;
   }
@@ -59,5 +70,5 @@ export function makeTransactionEdgeModel(edgeModel: EdgeModel, nodeModel: NodeMo
     );
   }
 
-  return { addTransitionEdge, getTransitionEdges, updateTransitionEdge };
+  return { addTransitionEdge, getTransitionEdges, updateTransitionEdge, edgeModel };
 }

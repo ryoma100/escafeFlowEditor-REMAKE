@@ -20,9 +20,9 @@ export function makeModelContext() {
   const processModel = makeProcessModel(actorModel, nodeModel, edgeModel);
   const projectModel = makeProjectModel(processModel);
   const activityNodeModel = makeActivityModel(nodeModel);
-  const transitionEdgeModel = makeTransactionEdgeModel(edgeModel, nodeModel);
+  const transitionEdgeModel = makeTransactionEdgeModel(edgeModel, activityNodeModel);
   const extendNodeModel = makeExtendNodeModel(nodeModel);
-  const extendEdgeModel = makeExtendEdgeModel(edgeModel, nodeModel);
+  const extendEdgeModel = makeExtendEdgeModel(edgeModel);
   const dialogModel = makeDialogModel();
 
   return {
