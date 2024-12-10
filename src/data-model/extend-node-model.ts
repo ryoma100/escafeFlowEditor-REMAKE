@@ -87,6 +87,7 @@ export function makeExtendNodeModel(nodeModel: NodeModel) {
   }
 
   return {
+    nodeModel,
     addCommentNode,
     addStartNode,
     addEndNode,

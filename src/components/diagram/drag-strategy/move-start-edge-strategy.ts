@@ -1,40 +1,43 @@
 import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
-import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
-import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { INode, Point } from "@/data-source/data-type";
+import { ExtendNodeModel } from "@/data-model/extend-node-model";
+import { IEdge, INode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
-export function makeAddActivityEdgeStrategy(
+export function makeMoveStartEdgeStrategy(
   diagramModel: DiagramModel,
-  activityNodeModel: ActivityNodeModel,
-  transitionEdgeModel: TransitionEdgeModel,
+  extendNodeModel: ExtendNodeModel,
   extendEdgeModel: ExtendEdgeModel,
-): DragStrategy {
+) {
   const dragScrollDelegate = makeDragScrollDelegate(diagramModel);
-  const nodeModel = activityNodeModel.nodeModel;
-  let fromNode: INode;
-  let fromPoint: Point;
+  const nodeModel = extendNodeModel.nodeModel;
+  const edgeModel = extendEdgeModel.edgeModel;
+  let targetEdge: IEdge;
+  let endNode: INode;
+  let endPoint: Point;
 
-  function handlePointerDown(e: PointerEvent, node: INode) {
+  function handlePointerDown(e: PointerEvent, node: INode, edge: IEdge) {
     e.stopPropagation();
 
-    fromNode = node;
-    fromPoint = { x: node.x + node.width, y: node.y + node.height / 2 };
-    nodeModel.changeSelectNodes("select", [node.id]);
-    diagramModel.setAddingLine({ p1: fromPoint, p2: fromPoint });
+    targetEdge = edge;
+    endNode = node;
+    endPoint = { x: endNode.x + endNode.width / 2, y: endNode.y + endNode.height / 2 };
+    drawEdge(e);
   }
 
   function handlePointerMove(e: PointerEvent, _pointerEvents: Map<number, PointerEvent>) {
     dragScrollDelegate.handlePointerMove(e);
+    drawEdge(e);
+  }
+
+  function drawEdge(e: PointerEvent) {
     diagramModel.setAddingLine({
-      p1: fromPoint,
-      p2: {
+      p1: {
         x: diagramModel.viewBox().x + (e.clientX - diagramModel.svgRect().x) / diagramModel.zoom(),
         y: diagramModel.viewBox().y + (e.clientY - diagramModel.svgRect().y) / diagramModel.zoom(),
       },
+      p2: endPoint,
     });
   }
 
@@ -44,14 +47,23 @@ export function makeAddActivityEdgeStrategy(
 
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
     const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
-    if (node == null) return;
+    if (node == null || node.id === endNode.id) return;
 
     switch (node.type) {
       case "activityNode":
-        transitionEdgeModel.addTransitionEdge(fromNode.id, node.id);
+        if (extendEdgeModel.addEndEdge(node.id, endNode.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
-      case "endNode":
-        extendEdgeModel.addEndEdge(fromNode.id, node.id);
+      case "startNode":
+        if (extendEdgeModel.addStartEdge(node.id, endNode.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
+        break;
+      case "commentNode":
+        if (extendEdgeModel.addCommentEdge(node.id, endNode.id)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
         break;
     }
   }

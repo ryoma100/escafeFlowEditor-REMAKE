@@ -76,6 +76,16 @@ export function lineDistance(line: Line): number {
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }
 
+export function extendLine(line: Line, diffDistance: number): Line {
+  const delta = diffDistance / lineDistance(line);
+  const deltaX = (line.p2.x - line.p1.x) * delta;
+  const deltaY = (line.p2.y - line.p1.y) * delta;
+  return {
+    p1: { x: line.p1.x - deltaX, y: line.p1.y - deltaY },
+    p2: { x: line.p2.x + deltaX, y: line.p2.y + deltaY },
+  };
+}
+
 export function centerPoint(line: Line): Point {
   const { p1, p2 } = line;
   return { x: p1.x + (p2.x - p1.x) / 2, y: p1.y + (p2.y - p1.y) / 2 };
