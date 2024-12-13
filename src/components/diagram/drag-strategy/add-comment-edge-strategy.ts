@@ -49,7 +49,7 @@ export function makeAddCommentEdgeStrategy(
     const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
     if (node?.type !== "activityNode") return;
 
-    extendEdgeModel.addCommentEdge(fromNode.id, node.id);
+    extendEdgeModel.addCommentEdge(fromNode, node);
   }
 
   return {

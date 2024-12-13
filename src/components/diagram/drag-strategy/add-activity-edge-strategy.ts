@@ -51,7 +51,7 @@ export function makeAddActivityEdgeStrategy(
         transitionEdgeModel.addTransitionEdge(fromNode.id, node.id);
         break;
       case "endNode":
-        extendEdgeModel.addEndEdge(fromNode.id, node.id);
+        extendEdgeModel.addEndEdge(fromNode, node);
         break;
     }
   }

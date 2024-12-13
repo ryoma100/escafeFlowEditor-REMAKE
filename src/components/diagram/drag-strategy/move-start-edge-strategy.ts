@@ -51,17 +51,17 @@ export function makeMoveStartEdgeStrategy(
 
     switch (node.type) {
       case "activityNode":
-        if (extendEdgeModel.addEndEdge(node.id, endNode.id)) {
+        if (extendEdgeModel.addEndEdge(node, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
         break;
       case "startNode":
-        if (extendEdgeModel.addStartEdge(node.id, endNode.id)) {
+        if (extendEdgeModel.addStartEdge(node, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
         break;
       case "commentNode":
-        if (extendEdgeModel.addCommentEdge(node.id, endNode.id)) {
+        if (extendEdgeModel.addCommentEdge(node, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
         break;

@@ -1,28 +1,31 @@
 import { EdgeModel } from "@/data-model/edge-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { CommentEdge, EndEdge, NodeId, StartEdge } from "@/data-source/data-type";
+import { CommentEdge, EndEdge, INode, StartEdge } from "@/data-source/data-type";
 
 export type ExtendEdgeModel = ReturnType<typeof makeExtendEdgeModel>;
 
 export function makeExtendEdgeModel(edgeModel: EdgeModel) {
-  function addCommentEdge(fromCommentId: NodeId, toActivityId: NodeId): CommentEdge | null {
-    if (edgeModel.edgeList.some((it) => it.toNodeId === toActivityId)) return null;
+  function addCommentEdge(fromNode: INode, toNode: INode): CommentEdge | null {
+    if (edgeModel.edgeList.some((it) => it.fromNodeId === fromNode.id && it.toNodeId === toNode.id))
+      return null;
 
-    const edge = dataFactory.createCommentEdge(edgeModel.edgeList, fromCommentId, toActivityId);
+    const edge = dataFactory.createCommentEdge(edgeModel.edgeList, fromNode.id, toNode.id);
     return edgeModel.addEdge(edge);
   }
 
-  function addStartEdge(fromStartId: NodeId, toActivityId: NodeId): StartEdge | null {
-    if (edgeModel.edgeList.some((it) => it.toNodeId === toActivityId)) return null;
+  function addStartEdge(fromNode: INode, toNode: INode): StartEdge | null {
+    if (edgeModel.edgeList.some((it) => fromNode.id === it.fromNodeId && it.toNodeId === toNode.id))
+      return null;
 
-    const edge = dataFactory.createStartEdge(edgeModel.edgeList, fromStartId, toActivityId);
+    const edge = dataFactory.createStartEdge(edgeModel.edgeList, fromNode.id, toNode.id);
     return edgeModel.addEdge(edge);
   }
 
-  function addEndEdge(fromActivityId: NodeId, toEndNodeId: NodeId): EndEdge | null {
-    if (edgeModel.edgeList.some((it) => it.fromNodeId === fromActivityId)) return null;
+  function addEndEdge(fromNode: INode, toNode: INode): EndEdge | null {
+    if (edgeModel.edgeList.some((it) => it.fromNodeId === fromNode.id && toNode.type === "endNode"))
+      return null;
 
-    const edge = dataFactory.createEndEdge(edgeModel.edgeList, fromActivityId, toEndNodeId);
+    const edge = dataFactory.createEndEdge(edgeModel.edgeList, fromNode.id, toNode.id);
     return edgeModel.addEdge(edge);
   }
 
