@@ -24,17 +24,6 @@ jobs:
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install
 
-  lint:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm run lint
-
   build-and-test:
     needs: install
     runs-on: ubuntu-latest
@@ -53,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build-storybook:
+  lint-and-storybook:
     needs: install
     runs-on: ubuntu-latest
     steps:
@@ -62,4 +51,5 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: npm run lint
       - run: npm run build-storybook
