@@ -10,6 +10,9 @@ const config: StorybookConfig = {
     "@storybook/addon-mdx-gfm",
     "@storybook/addon-themes",
   ],
+  core: {
+    builder: "@storybook/builder-vite",
+  },
   framework: {
     name: "storybook-solidjs-vite",
     options: {},
