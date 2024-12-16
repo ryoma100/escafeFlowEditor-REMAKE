@@ -32,24 +32,36 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
       - run: pnpm lint
 
   build:
     needs: install
     runs-on: ubuntu-latest
     steps:
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
       - run: pnpm build
 
   build-storybook:
     needs: install
     runs-on: ubuntu-latest
     steps:
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
       - run: pnpm build-storybook
 
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
       - run: pnpm coverage
       - name: SonarCloud
         if: ${{ contains(github.head_ref, 'dependabot') == false }}
