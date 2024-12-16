@@ -34,10 +34,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - run: pnpm lint
+      - run: npm run lint
 
   build:
     needs: install
@@ -47,10 +44,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - run: pnpm build
+      - run: npm run build
 
   build-storybook:
     needs: install
@@ -60,10 +54,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - run: pnpm build-storybook
+      - run: npm run build-storybook
 
   test:
     needs: build
@@ -73,10 +64,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - run: pnpm coverage
+      - run: npm run coverage
       - name: SonarCloud
         if: ${{ contains(github.head_ref, 'dependabot') == false }}
         uses: SonarSource/sonarcloud-github-action@master
