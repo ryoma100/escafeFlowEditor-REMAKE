@@ -9,16 +9,12 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
+    outputs:
+      checkout:
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: pnpm/action-setup@v3
-        with:
-          version: 9
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
       - uses: actions/cache@v4
         id: pnpm-cache
         with:
@@ -32,36 +28,44 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: pnpm/action-setup@v3
+      - uses: actions/cache/restore@v4
         with:
-          version: 9
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: pnpm/action-setup@v3
       - run: pnpm lint
 
   build:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: pnpm/action-setup@v3
+      - uses: actions/cache/restore@v4
         with:
-          version: 9
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: pnpm/action-setup@v3
       - run: pnpm build
 
   build-storybook:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: pnpm/action-setup@v3
+      - uses: actions/cache/restore@v4
         with:
-          version: 9
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: pnpm/action-setup@v3
       - run: pnpm build-storybook
 
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: pnpm/action-setup@v3
+      - uses: actions/cache/restore@v4
         with:
-          version: 9
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: pnpm/action-setup@v3
       - run: pnpm coverage
       - name: SonarCloud
         if: ${{ contains(github.head_ref, 'dependabot') == false }}
