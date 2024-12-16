@@ -16,12 +16,17 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: 9
-      - name: setup node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
-      - run: pnpm install
+      - uses: actions/cache@v4
+        id: pnpm-cache
+        with:
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: pnpm install
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
+        run: pnpm install
 
   lint:
     needs: install
