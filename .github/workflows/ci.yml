@@ -73,3 +73,9 @@ jobs:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run build-storybook
+
+  finish:
+    needs: [lint, test, build, build-storybook]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "finish"
