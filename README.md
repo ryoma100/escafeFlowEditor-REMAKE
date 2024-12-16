@@ -7,7 +7,6 @@ This is a remake of [escafeFlowEditor](https://github.com/ryoma100/escafeFlowEdi
 - [Web Application](https://ryoma100.github.io/escafeFlowEditor-REMAKE/editor/)
 - [PC Installer](https://github.com/ryoma100/escafeFlowEditor-REMAKE/releases)
 - [Storybook](https://ryoma100.github.io/escafeFlowEditor-REMAKE/storybook-static/)
-- [SonarCloud](https://sonarcloud.io/project/overview?id=ryoma100_escafeFlowEditor-REMAKE)
 
 ## Development
 
