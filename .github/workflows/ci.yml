@@ -24,25 +24,7 @@ jobs:
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install
 
-  build-and-test:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm run build
-      - run: npm run coverage
-      - name: SonarCloud
-        if: ${{ contains(github.head_ref, 'dependabot') == false }}
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  lint-and-storybook:
+  lint:
     needs: install
     runs-on: ubuntu-latest
     steps:
@@ -52,4 +34,48 @@ jobs:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run lint
+
+  test:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: npm run coverage
+      - name: SonarCloud
+        if: ${{ contains(github.head_ref, 'dependabot') == false }}
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: npm run build
+
+  build-storybook:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run build-storybook
+
+  finish:
+    needs: [lint, test, build, build-storybook]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "finish"
