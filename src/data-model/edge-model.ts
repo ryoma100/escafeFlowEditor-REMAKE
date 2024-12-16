@@ -19,7 +19,7 @@ export function makeEdgeModel(nodeModel: NodeModel) {
 
   function changeSelectEdges(
     type: "select" | "selectAll" | "toggle" | "clearAll",
-    ids: number[] = [],
+    ids: EdgeId[] = [],
   ) {
     setEdgeList(
       (it) => type !== "toggle" || (type === "toggle" && ids.includes(it.id)),
@@ -38,6 +38,15 @@ export function makeEdgeModel(nodeModel: NodeModel) {
             it.selected = false;
             break;
         }
+      }),
+    );
+  }
+
+  function changeDisableEdge(type: "disable" | "clearDisable", edgeId: EdgeId) {
+    setEdgeList(
+      (it) => it.id === edgeId,
+      produce((it) => {
+        it.disabled = type === "disable";
       }),
     );
   }
@@ -76,5 +85,6 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     selectedEdges,
     addEdge,
     deleteEdge,
+    changeDisableEdge,
   };
 }

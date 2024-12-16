@@ -203,6 +203,7 @@ function createTransitionEdge(
     toNodeId,
     ognl: "",
     selected: false,
+    disabled: false,
   };
 }
 
@@ -226,6 +227,7 @@ function createCommentEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: Node
     fromNodeId,
     toNodeId,
     selected: false,
+    disabled: false,
   };
 }
 
@@ -248,6 +250,7 @@ function createStartEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId
     fromNodeId,
     toNodeId,
     selected: false,
+    disabled: false,
   };
 }
 
@@ -270,6 +273,7 @@ function createEndEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId):
     fromNodeId,
     toNodeId,
     selected: false,
+    disabled: false,
   };
 }
 

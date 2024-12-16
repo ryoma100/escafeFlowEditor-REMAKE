@@ -48,6 +48,7 @@ export function ExtendEdgeContainer(props: {
     <OtherEdgeView
       line={line()}
       selected={props.edge.selected}
+      disabled={props.edge.disabled}
       onPointerDown={handlePointerDown}
       onFromPointerDown={handleFromPointerDown}
       onToPointerDown={handleToPointerDown}
@@ -58,6 +59,7 @@ export function ExtendEdgeContainer(props: {
 export function OtherEdgeView(props: {
   readonly line: Line;
   readonly selected: boolean;
+  readonly disabled: boolean;
   readonly onPointerDown?: (e: PointerEvent) => void;
   readonly onFromPointerDown?: (e: PointerEvent) => void;
   readonly onToPointerDown?: (e: PointerEvent) => void;
@@ -68,7 +70,11 @@ export function OtherEdgeView(props: {
     <>
       <line
         /* eslint-disable-next-line tailwindcss/no-custom-classname */
-        class="stroke fill-none [stroke:var(--foreground-color)] [vector-effect:non-scaling-stroke]"
+        class="stroke fill-none [vector-effect:non-scaling-stroke]"
+        classList={{
+          "[stroke:var(--foreground-color)]": !props.disabled,
+          "[stroke:var(--gridline-color)]": props.disabled,
+        }}
         x1={props.line.p1.x}
         y1={props.line.p1.y}
         x2={props.line.p2.x}

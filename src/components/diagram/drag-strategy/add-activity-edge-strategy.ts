@@ -15,6 +15,7 @@ export function makeAddActivityEdgeStrategy(
 ): DragStrategy {
   const dragScrollDelegate = makeDragScrollDelegate(diagramModel);
   const nodeModel = activityNodeModel.nodeModel;
+  const edgeModel = transitionEdgeModel.edgeModel;
   let fromNode: INode;
   let fromPoint: Point;
 
@@ -22,8 +23,9 @@ export function makeAddActivityEdgeStrategy(
     e.stopPropagation();
 
     fromNode = node;
-    fromPoint = { x: node.x + node.width, y: node.y + node.height / 2 };
+    fromPoint = { x: node.x + node.width / 2, y: node.y + node.height / 2 };
     nodeModel.changeSelectNodes("select", [node.id]);
+    edgeModel.changeSelectEdges("clearAll");
     diagramModel.setAddingLine({ p1: fromPoint, p2: fromPoint });
   }
 

@@ -22,7 +22,12 @@ export function makeExtendEdgeModel(edgeModel: EdgeModel) {
   }
 
   function addEndEdge(fromNode: INode, toNode: INode): EndEdge | null {
-    if (edgeModel.edgeList.some((it) => it.fromNodeId === fromNode.id && toNode.type === "endNode"))
+    if (
+      edgeModel.edgeList.some(
+        (it) =>
+          it.fromNodeId === fromNode.id && (it.toNodeId === toNode.id || toNode.type === "endNode"),
+      )
+    )
       return null;
 
     const edge = dataFactory.createEndEdge(edgeModel.edgeList, fromNode.id, toNode.id);
