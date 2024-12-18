@@ -28,8 +28,7 @@ export default defineConfig(async () => ({
   test: {
     global: true,
     coverage: {
-      reporter: ["text", "lcov"],
-      reportsDirectory: "coverage",
+      reporter: ["text", "json-summary", "json"],
     },
   },
 

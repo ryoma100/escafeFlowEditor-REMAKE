@@ -4,7 +4,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
   install:
@@ -45,6 +45,9 @@ jobs:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run coverage
+      - uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: ${{ env.WORKING_DIRECTORY }}
 
   build:
     needs: install
