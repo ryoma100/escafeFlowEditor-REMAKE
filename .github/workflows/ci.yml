@@ -4,7 +4,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
   install:
@@ -44,7 +44,10 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm run coverage
+      - run: npx vitest --coverage.enabled true
+      - name: report coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
 
   build:
     needs: install
@@ -68,8 +71,8 @@ jobs:
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run build-storybook
 
-  finish:
+  complete-ci:
     needs: [lint, test, build, build-storybook]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "finish"
+      - run: echo "complete"
