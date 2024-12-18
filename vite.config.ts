@@ -29,6 +29,7 @@ export default defineConfig(async () => ({
     global: true,
     coverage: {
       reporter: ["text", "json-summary", "json"],
+      reportOnFailure: true,
     },
   },
 
