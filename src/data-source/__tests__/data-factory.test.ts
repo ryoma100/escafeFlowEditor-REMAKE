@@ -281,6 +281,7 @@ describe("createTransitionEdge", () => {
       toNodeId: 2,
       ognl: "",
       selected: false,
+      disabled: false,
     });
   });
 
@@ -296,6 +297,7 @@ describe("createTransitionEdge", () => {
       toNodeId: 12,
       ognl: "",
       selected: false,
+      disabled: false,
     });
   });
 
@@ -312,6 +314,7 @@ describe("createTransitionEdge", () => {
       toNodeId: 22,
       ognl: "",
       selected: false,
+      disabled: false,
     });
   });
 });
@@ -353,6 +356,7 @@ describe("createCommentEdge", () => {
       fromNodeId: 1,
       toNodeId: 2,
       selected: false,
+      disabled: false,
     });
   });
 
@@ -364,6 +368,7 @@ describe("createCommentEdge", () => {
       fromNodeId: 11,
       toNodeId: 12,
       selected: false,
+      disabled: false,
     });
   });
 });
@@ -403,6 +408,7 @@ describe("createStartEdge", () => {
       fromNodeId: 1,
       toNodeId: 2,
       selected: false,
+      disabled: false,
     });
   });
 
@@ -414,6 +420,7 @@ describe("createStartEdge", () => {
       fromNodeId: 11,
       toNodeId: 12,
       selected: false,
+      disabled: false,
     });
   });
 });
@@ -453,6 +460,7 @@ describe("createEndEdge", () => {
       fromNodeId: 1,
       toNodeId: 2,
       selected: false,
+      disabled: false,
     });
   });
 
@@ -464,6 +472,7 @@ describe("createEndEdge", () => {
       fromNodeId: 11,
       toNodeId: 12,
       selected: false,
+      disabled: false,
     });
   });
 });

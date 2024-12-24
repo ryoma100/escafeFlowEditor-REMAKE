@@ -42,6 +42,15 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     );
   }
 
+  function changeDisableEdge(type: "disable" | "clearDisable", edgeId: EdgeId) {
+    setEdgeList(
+      (it) => it.id === edgeId,
+      produce((it) => {
+        it.disabled = type === "disable";
+      }),
+    );
+  }
+
   function deleteEdge(edgeId: EdgeId) {
     setEdgeList(edgeList.filter((it) => it.id !== edgeId));
   }
@@ -76,5 +85,6 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     selectedEdges,
     addEdge,
     deleteEdge,
+    changeDisableEdge,
   };
 }

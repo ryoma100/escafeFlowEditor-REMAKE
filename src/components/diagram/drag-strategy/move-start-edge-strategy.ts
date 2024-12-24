@@ -1,4 +1,5 @@
 import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
+import { ACTIVITY_EAR_WIDTH } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
 import { ExtendNodeModel } from "@/data-model/extend-node-model";
@@ -24,7 +25,12 @@ export function makeMoveStartEdgeStrategy(
 
     targetEdge = edge;
     endNode = node;
-    endPoint = { x: endNode.x + endNode.width / 2, y: endNode.y + endNode.height / 2 };
+    if (edge.type === "transitionEdge") {
+      endPoint = { x: endNode.x - ACTIVITY_EAR_WIDTH, y: endNode.y + endNode.height / 2 };
+    } else {
+      endPoint = { x: endNode.x + endNode.width / 2, y: endNode.y + endNode.height / 2 };
+    }
+    edgeModel.changeDisableEdge("disable", edge.id);
     drawEdge(e);
   }
 
@@ -45,6 +51,7 @@ export function makeMoveStartEdgeStrategy(
 
   function handlePointerUp(e: PointerEvent) {
     dragScrollDelegate.handlePointerUp(e);
+    edgeModel.changeDisableEdge("clearDisable", targetEdge.id);
     diagramModel.setAddingLine(null);
 
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);

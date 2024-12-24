@@ -375,6 +375,7 @@ export function importXml(xmlString: string): ProjectEntity {
             fromNodeId: activityList.find((it) => it.xpdlId === transition["@_From"])!.id,
             toNodeId: activityList.find((it) => it.xpdlId === transition["@_To"])!.id,
             selected: false,
+            disabled: false,
           };
         },
       );

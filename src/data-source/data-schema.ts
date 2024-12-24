@@ -141,6 +141,7 @@ export const baseEdgeSchema = v.object({
   fromNodeId: nodeIdSchema,
   toNodeId: nodeIdSchema,
   selected: v.boolean(),
+  disabled: v.boolean(),
 });
 
 export const transitionEdgeSchema = v.object({
