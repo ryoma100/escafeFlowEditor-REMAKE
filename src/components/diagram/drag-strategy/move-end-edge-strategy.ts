@@ -1,4 +1,5 @@
 import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
+import { ACTIVITY_EAR_WIDTH } from "@/constants/app-const";
 import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
@@ -24,7 +25,15 @@ export function makeMoveEndEdgeStrategy(
 
     targetEdge = edge;
     startNode = node;
-    startPoint = { x: startNode.x + startNode.width / 2, y: startNode.y + startNode.height / 2 };
+    if (edge.type === "transitionEdge") {
+      startPoint = {
+        x: startNode.x + startNode.width + ACTIVITY_EAR_WIDTH,
+        y: startNode.y + startNode.height / 2,
+      };
+    } else {
+      startPoint = { x: startNode.x + startNode.width / 2, y: startNode.y + startNode.height / 2 };
+    }
+    edgeModel.changeDisableEdge("disable", edge.id);
     drawEdge(e);
   }
 
@@ -45,23 +54,34 @@ export function makeMoveEndEdgeStrategy(
 
   function handlePointerUp(e: PointerEvent) {
     dragScrollDelegate.handlePointerUp(e);
+    edgeModel.changeDisableEdge("clearDisable", targetEdge.id);
     diagramModel.setAddingLine(null);
 
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
-    const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
-    if (node == null || node.id === startNode.id) return;
+    const endNode = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
+    if (endNode == null || endNode.id === startNode.id) return;
 
-    switch (node.type) {
-      case "activityNode":
-        if (extendEdgeModel.addStartEdge(startNode.id, node.id)) {
+    switch (true) {
+      case startNode.type === "activityNode" && endNode.type === "activityNode":
+        if (transitionEdgeModel.addTransitionEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
-      case "endNode":
-        if (extendEdgeModel.addEndEdge(startNode.id, node.id)) {
+        return;
+      case startNode.type === "startNode" && endNode.type === "activityNode":
+        if (extendEdgeModel.addStartEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
+        return;
+      case startNode.type === "commentNode" && endNode.type === "activityNode":
+        if (extendEdgeModel.addCommentEdge(startNode, endNode)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
+        return;
+      case startNode.type === "activityNode" && endNode.type === "endNode":
+        if (extendEdgeModel.addEndEdge(startNode, endNode)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
+        return;
     }
   }
 

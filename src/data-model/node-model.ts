@@ -3,7 +3,7 @@ import { createStore, produce } from "solid-js/store";
 import { defaultRectangle, GRID_SPACING } from "@/constants/app-const";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { deepUnwrap } from "@/data-source/data-factory";
-import { INode, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
+import { INode, NodeId, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
 import { rotatePoint } from "@/utils/point-utils";
 
 export type NodeModel = ReturnType<typeof makeNodeModel>;
@@ -97,7 +97,7 @@ export function makeNodeModel(diagramModel: DiagramModel) {
     resetGraphRect();
   }
 
-  function getNode(nodeId: number): INode {
+  function getNode(nodeId: NodeId): INode {
     const node = nodeList.find((it) => it.id === nodeId);
     if (node == null) {
       throw new Error(`getNode(${nodeId}) is not found.`);
@@ -120,7 +120,7 @@ export function makeNodeModel(diagramModel: DiagramModel) {
     return nodeList.filter((it) => it.selected);
   }
 
-  function changeTopLayer(id: number) {
+  function changeTopLayer(id: NodeId) {
     const target = getNode(id);
     const listWithoutTarget = nodeList.filter((it) => it.id !== id);
     setNodeList([...listWithoutTarget, target]);

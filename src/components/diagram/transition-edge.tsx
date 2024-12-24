@@ -63,6 +63,7 @@ export function TransitionEdgeContainer(props: {
       line={line()}
       ognl={props.transition.ognl}
       selected={props.transition.selected}
+      disabled={props.transition.disabled}
       onPointerDown={handlePointerDown}
       onDblClick={handleDlbClick}
       onFromPointerDown={handleFromPointerDown}
@@ -75,6 +76,7 @@ export function TransitionEdgeView(props: {
   readonly line: Line;
   readonly ognl: string;
   readonly selected: boolean;
+  readonly disabled: boolean;
   readonly onPointerDown?: (e: PointerEvent) => void;
   readonly onDblClick?: (e: MouseEvent) => void;
   readonly onFromPointerDown?: (e: PointerEvent) => void;
@@ -98,7 +100,11 @@ export function TransitionEdgeView(props: {
   return (
     <>
       <line
-        class="fill-none stroke-1 [stroke:var(--foreground-color)] [vector-effect:non-scaling-stroke]"
+        class="fill-none stroke-1 [vector-effect:non-scaling-stroke]"
+        classList={{
+          "[stroke:var(--foreground-color)]": !props.disabled,
+          "[stroke:var(--gridline-color)]": props.disabled,
+        }}
         x1={props.line.p1.x}
         y1={props.line.p1.y}
         x2={props.line.p2.x}

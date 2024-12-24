@@ -4,7 +4,7 @@ import { ACTIVITY_MIN_WIDTH } from "@/constants/app-const";
 import { i18nEnDict } from "@/constants/i18n";
 import { NodeModel } from "@/data-model//node-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { ActivityNode, ActivityNodeType, ActorId, IEdge } from "@/data-source/data-type";
+import { ActivityNode, ActivityNodeType, ActorId, IEdge, NodeId } from "@/data-source/data-type";
 
 export type ActivityNodeModel = ReturnType<typeof makeActivityModel>;
 
@@ -35,7 +35,7 @@ export function makeActivityModel(nodeModel: NodeModel) {
     return nodeModel.nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
   }
 
-  function getActivityNode(nodeId: number): ActivityNode {
+  function getActivityNode(nodeId: NodeId): ActivityNode {
     const node = nodeModel.getNode(nodeId);
     if (node.type !== "activityNode") {
       throw new Error(`getActivityNode(${nodeId}) is not found.`);
@@ -79,7 +79,7 @@ export function makeActivityModel(nodeModel: NodeModel) {
     nodeModel.resetGraphRect();
   }
 
-  function updateJoinType(activityId: number, joinCount: number) {
+  function updateJoinType(activityId: NodeId, joinCount: number) {
     nodeModel.setNodeList(
       (it) => it.id === activityId,
       produce((it) => {
@@ -102,7 +102,7 @@ export function makeActivityModel(nodeModel: NodeModel) {
     );
   }
 
-  function updateSplitType(activityId: number, splitCount: number) {
+  function updateSplitType(activityId: NodeId, splitCount: number) {
     nodeModel.setNodeList(
       (it) => it.id === activityId,
       produce((it) => {
