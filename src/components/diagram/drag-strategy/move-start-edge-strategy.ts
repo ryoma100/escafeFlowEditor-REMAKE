@@ -2,12 +2,14 @@ import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
 import { ExtendNodeModel } from "@/data-model/extend-node-model";
+import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
 import { IEdge, INode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeMoveStartEdgeStrategy(
   diagramModel: DiagramModel,
   extendNodeModel: ExtendNodeModel,
+  transitionEdgeModel: TransitionEdgeModel,
   extendEdgeModel: ExtendEdgeModel,
 ) {
   const dragScrollDelegate = makeDragScrollDelegate(diagramModel);
@@ -46,25 +48,30 @@ export function makeMoveStartEdgeStrategy(
     diagramModel.setAddingLine(null);
 
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
-    const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
-    if (node == null || node.id === endNode.id) return;
+    const startNode = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
+    if (startNode == null || startNode.id === endNode.id) return;
 
-    switch (node.type) {
-      case "activityNode":
-        if (extendEdgeModel.addEndEdge(node.id, endNode.id)) {
+    switch (true) {
+      case startNode.type === "activityNode" && endNode.type === "activityNode":
+        if (transitionEdgeModel.addTransitionEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
-      case "startNode":
-        if (extendEdgeModel.addStartEdge(node.id, endNode.id)) {
+        return;
+      case startNode.type === "startNode" && endNode.type === "activityNode":
+        if (extendEdgeModel.addStartEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
-      case "commentNode":
-        if (extendEdgeModel.addCommentEdge(node.id, endNode.id)) {
+        return;
+      case startNode.type === "commentNode" && endNode.type === "activityNode":
+        if (extendEdgeModel.addCommentEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
+        return;
+      case startNode.type === "activityNode" && endNode.type === "endNode":
+        if (extendEdgeModel.addEndEdge(startNode, endNode)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
+        return;
     }
   }
 

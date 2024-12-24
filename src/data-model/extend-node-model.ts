@@ -3,7 +3,7 @@ import { produce } from "solid-js/store";
 import { START_END_HEIGHT, START_END_WIDTH } from "@/constants/app-const";
 import { NodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { CommentNode, EndNode, StartNode } from "@/data-source/data-type";
+import { CommentNode, EndNode, NodeId, StartNode } from "@/data-source/data-type";
 
 export type ExtendNodeModel = ReturnType<typeof makeExtendNodeModel>;
 
@@ -18,7 +18,7 @@ export function makeExtendNodeModel(nodeModel: NodeModel) {
     return comment;
   }
 
-  function getCommentNode(nodeId: number): CommentNode {
+  function getCommentNode(nodeId: NodeId): CommentNode {
     const node = nodeModel.getNode(nodeId);
     if (node.type !== "commentNode") {
       throw new Error(`getCommentNode(${nodeId}) is not found.`);
@@ -36,7 +36,7 @@ export function makeExtendNodeModel(nodeModel: NodeModel) {
     return node;
   }
 
-  function getStartNode(nodeId: number): StartNode {
+  function getStartNode(nodeId: NodeId): StartNode {
     const node = nodeModel.getNode(nodeId);
     if (node.type !== "startNode") {
       throw new Error(`getStartNode(${nodeId}) is not found.`);
@@ -54,7 +54,7 @@ export function makeExtendNodeModel(nodeModel: NodeModel) {
     return node;
   }
 
-  function getEndNode(nodeId: number): EndNode {
+  function getEndNode(nodeId: NodeId): EndNode {
     const node = nodeModel.getNode(nodeId);
     if (node.type !== "endNode") {
       throw new Error(`getEndNode(${nodeId}) is not found.`);

@@ -19,7 +19,7 @@ export function makeEdgeModel(nodeModel: NodeModel) {
 
   function changeSelectEdges(
     type: "select" | "selectAll" | "toggle" | "clearAll",
-    ids: number[] = [],
+    ids: EdgeId[] = [],
   ) {
     setEdgeList(
       (it) => type !== "toggle" || (type === "toggle" && ids.includes(it.id)),

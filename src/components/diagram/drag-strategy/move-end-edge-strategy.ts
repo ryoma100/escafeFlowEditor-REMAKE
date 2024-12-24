@@ -48,20 +48,30 @@ export function makeMoveEndEdgeStrategy(
     diagramModel.setAddingLine(null);
 
     const { x, y } = diagramModel.normalizePoint(e.clientX, e.clientY);
-    const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
-    if (node == null || node.id === startNode.id) return;
+    const endNode = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
+    if (endNode == null || endNode.id === startNode.id) return;
 
-    switch (node.type) {
-      case "activityNode":
-        if (extendEdgeModel.addStartEdge(startNode.id, node.id)) {
+    switch (true) {
+      case startNode.type === "activityNode" && endNode.type === "activityNode":
+        if (transitionEdgeModel.addTransitionEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
-      case "endNode":
-        if (extendEdgeModel.addEndEdge(startNode.id, node.id)) {
+        return;
+      case startNode.type === "startNode" && endNode.type === "activityNode":
+        if (extendEdgeModel.addStartEdge(startNode, endNode)) {
           edgeModel.deleteEdge(targetEdge.id);
         }
-        break;
+        return;
+      case startNode.type === "commentNode" && endNode.type === "activityNode":
+        if (extendEdgeModel.addCommentEdge(startNode, endNode)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
+        return;
+      case startNode.type === "activityNode" && endNode.type === "endNode":
+        if (extendEdgeModel.addEndEdge(startNode, endNode)) {
+          edgeModel.deleteEdge(targetEdge.id);
+        }
+        return;
     }
   }
 

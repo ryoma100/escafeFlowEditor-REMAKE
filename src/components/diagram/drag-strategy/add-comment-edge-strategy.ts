@@ -24,7 +24,7 @@ export function makeAddCommentEdgeStrategy(
     }
 
     fromNode = node;
-    fromPoint = { x: node.x + node.width, y: node.y + node.height / 2 };
+    fromPoint = { x: node.x + node.width / 2, y: node.y + node.height / 2 };
     nodeModel.changeSelectNodes("select", [node.id]);
     diagramModel.setAddingLine({ p1: fromPoint, p2: fromPoint });
   }
@@ -49,7 +49,7 @@ export function makeAddCommentEdgeStrategy(
     const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
     if (node?.type !== "activityNode") return;
 
-    extendEdgeModel.addCommentEdge(fromNode.id, node.id);
+    extendEdgeModel.addCommentEdge(fromNode, node);
   }
 
   return {

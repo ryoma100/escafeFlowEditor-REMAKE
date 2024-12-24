@@ -49,7 +49,7 @@ export function makeAddStartEdgeStrategy(
     const node = nodeModel.nodeList.find((it) => containsRect(it, { x, y }));
     if (node?.type !== "activityNode") return;
 
-    extendEdgeModel.addStartEdge(fromNode.id, node.id);
+    extendEdgeModel.addStartEdge(fromNode, node);
   }
 
   return {

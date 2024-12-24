@@ -4,7 +4,7 @@ import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { DiagramModel } from "@/data-model/diagram-model";
 import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
 import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { INode, Point } from "@/data-source/data-type";
+import { ActivityNode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeAddActivityEdgeStrategy(
@@ -15,10 +15,10 @@ export function makeAddActivityEdgeStrategy(
 ): DragStrategy {
   const dragScrollDelegate = makeDragScrollDelegate(diagramModel);
   const nodeModel = activityNodeModel.nodeModel;
-  let fromNode: INode;
+  let fromNode: ActivityNode;
   let fromPoint: Point;
 
-  function handlePointerDown(e: PointerEvent, node: INode) {
+  function handlePointerDown(e: PointerEvent, node: ActivityNode) {
     e.stopPropagation();
 
     fromNode = node;
@@ -48,10 +48,10 @@ export function makeAddActivityEdgeStrategy(
 
     switch (node.type) {
       case "activityNode":
-        transitionEdgeModel.addTransitionEdge(fromNode.id, node.id);
+        transitionEdgeModel.addTransitionEdge(fromNode, node);
         break;
       case "endNode":
-        extendEdgeModel.addEndEdge(fromNode.id, node.id);
+        extendEdgeModel.addEndEdge(fromNode, node);
         break;
     }
   }

@@ -4,7 +4,7 @@ import { i18nEnDict } from "@/constants/i18n";
 import { ActivityNodeModel } from "@/data-model/activity-node-model";
 import { EdgeModel } from "@/data-model/edge-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { NodeId, TransitionEdge } from "@/data-source/data-type";
+import { ActivityNode, TransitionEdge } from "@/data-source/data-type";
 
 export type TransitionEdgeModel = ReturnType<typeof makeTransactionEdgeModel>;
 
@@ -16,13 +16,16 @@ export function makeTransactionEdgeModel(
     return edgeModel.edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   }
 
-  function addTransitionEdge(fromActivityId: NodeId, toActivityId: NodeId): TransitionEdge | null {
+  function addTransitionEdge(
+    fromActivity: ActivityNode,
+    toActivity: ActivityNode,
+  ): TransitionEdge | null {
     const transitionList = getTransitionEdges();
 
     if (
-      fromActivityId === toActivityId ||
-      transitionList.find((it) => it.fromNodeId === fromActivityId)?.toNodeId === toActivityId ||
-      transitionList.find((it) => it.toNodeId === toActivityId)?.fromNodeId === fromActivityId
+      fromActivity.id === toActivity.id ||
+      transitionList.find((it) => it.fromNodeId === fromActivity.id)?.toNodeId === toActivity.id ||
+      transitionList.find((it) => it.toNodeId === toActivity.id)?.fromNodeId === fromActivity.id
     ) {
       // Exclude duplicate transitions
       return null;
@@ -30,8 +33,8 @@ export function makeTransactionEdgeModel(
 
     const transition = dataFactory.createTransitionEdge(
       edgeModel.edgeList,
-      fromActivityId,
-      toActivityId,
+      fromActivity.id,
+      toActivity.id,
     );
     edgeModel.setEdgeList([...edgeModel.edgeList, transition]);
 
