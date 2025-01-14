@@ -41,7 +41,7 @@ export function AboutDialogView(props: {
   return (
     <div class="w-96 bg-primary p-2">
       <h5 class="mb-2">escafeFlowEditor-REMAKE</h5>
-      <form class="my-1 bg-background p-2" onClick={() => props.onClose?.()}>
+      <form class="my-1 bg-background p-2" onSubmit={() => props.onClose?.()}>
         <div>version: {props.version.substring(1)}</div>
         <div>author: Ryouichi Matsuda</div>
         <div class="mb-4">
