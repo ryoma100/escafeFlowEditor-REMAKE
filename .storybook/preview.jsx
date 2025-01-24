@@ -14,6 +14,7 @@ const preview = {
     },
     backgrounds: { disable: true },
   },
+
   globalTypes: {
     locale: {
       name: "Locale",
@@ -56,6 +57,7 @@ const preview = {
       },
     },
   },
+
   decorators: [
     withThemeByClassName({
       themes: {
@@ -78,6 +80,8 @@ const preview = {
       );
     },
   ],
+
+  tags: ["autodocs"]
 };
 
 export default preview;
