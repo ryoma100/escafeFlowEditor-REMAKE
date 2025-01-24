@@ -51,6 +51,7 @@
     "**/*.svg",
     "**/*.avif",
     "lefthook.yml",
-    "**/*.mp4"
+    "**/*.mp4",
+    ".vscode/**"
   ]
 }
