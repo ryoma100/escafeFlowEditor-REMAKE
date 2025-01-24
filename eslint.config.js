@@ -4,7 +4,7 @@ import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
-import tailwindcss from "eslint-plugin-tailwindcss";
+// import tailwindcss from "eslint-plugin-tailwindcss";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 
@@ -18,12 +18,12 @@ export default [
   ...compat.extends(
     "plugin:@typescript-eslint/recommended",
     "plugin:solid/typescript",
-    "plugin:tailwindcss/recommended",
+    // "plugin:tailwindcss/recommended",
   ),
   {
     plugins: {
       typescriptEslint,
-      tailwindcss,
+      // tailwindcss,
       "unused-imports": unusedImports,
       "simple-import-sort": simpleImportSort,
     },

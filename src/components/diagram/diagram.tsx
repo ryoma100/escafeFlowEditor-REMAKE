@@ -212,7 +212,7 @@ export function DiagramView(props: {
   let diagramRef: HTMLDivElement | undefined;
   return (
     <div
-      class="relative size-full touch-none outline-none"
+      class="relative size-full touch-none outline-hidden"
       ref={diagramRef}
       tabindex={-1}
       onKeyDown={(e) => props.onKeyDown?.(e)}
