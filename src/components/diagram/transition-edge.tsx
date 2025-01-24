@@ -112,7 +112,7 @@ export function TransitionEdgeView(props: {
         marker-end={props.ognl !== "" ? "url(#ognl-arrow-end)" : "url(#arrow-end)"}
       />
       <line
-        class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary"
+        class="fill-none stroke-5 hover:cursor-pointer hover:stroke-primary"
         classList={{
           "stroke-transparent": !props.selected,
           "stroke-primary": props.selected,

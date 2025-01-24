@@ -69,7 +69,6 @@ export function OtherEdgeView(props: {
   return (
     <>
       <line
-        /* eslint-disable-next-line tailwindcss/no-custom-classname */
         class="stroke fill-none [vector-effect:non-scaling-stroke]"
         classList={{
           "[stroke:var(--foreground-color)]": !props.disabled,
@@ -81,7 +80,7 @@ export function OtherEdgeView(props: {
         y2={props.line.p2.y}
       />
       <line
-        class="fill-none stroke-[5] hover:cursor-pointer hover:stroke-primary"
+        class="fill-none stroke-5 hover:cursor-pointer hover:stroke-primary"
         classList={{
           "stroke-transparent": !props.selected,
           "stroke-primary": props.selected,
