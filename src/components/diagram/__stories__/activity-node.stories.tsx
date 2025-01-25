@@ -6,7 +6,6 @@ const meta = {
   title: "Node/Activity",
   component: ActivityNodeView,
   parameters: { layout: "centered" },
-  tags: ["autodocs"],
   argTypes: {
     activityType: {
       control: "select",
