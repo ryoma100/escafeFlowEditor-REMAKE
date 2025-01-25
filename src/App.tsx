@@ -32,23 +32,7 @@ function App(): JSXElement {
 
   return (
     <>
-      <div class="grid size-full select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr] bg-secondary">
-        <div class="col-start-1 col-end-5 row-start-1">
-          <AppMenu />
-        </div>
-        <div class="col-start-1 row-start-2 ml-2 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
-          <ProcessList />
-        </div>
-        <div class="col-start-1 row-start-3 ml-2 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
-          <ActorList />
-        </div>
-        <div class="col-start-2 row-start-2 row-end-4 mt-5">
-          <Toolbar />
-        </div>
-        <div class="col-start-3 col-end-5 row-start-2 row-end-4 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
-          <Main />
-        </div>
-      </div>
+      <AppView />
 
       <ProjectDialog />
       <ProcessDialog />
@@ -67,6 +51,28 @@ function App(): JSXElement {
         <WindowUnloadDialog />
       </Show>
     </>
+  );
+}
+
+export function AppView() {
+  return (
+    <div class="grid size-full select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr] bg-secondary">
+      <div class="col-start-1 col-end-5 row-start-1">
+        <AppMenu />
+      </div>
+      <div class="col-start-1 row-start-2 ml-2 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
+        <ProcessList />
+      </div>
+      <div class="col-start-1 row-start-3 ml-2 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
+        <ActorList />
+      </div>
+      <div class="col-start-2 row-start-2 row-end-4 mt-5">
+        <Toolbar />
+      </div>
+      <div class="col-start-3 col-end-5 row-start-2 row-end-4 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
+        <Main />
+      </div>
+    </div>
   );
 }
 
