@@ -15,11 +15,12 @@ td {
 
 .header {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
+  column-gap: 16px;
 }
 
 .header h2 {
+  margin-right: auto;
   margin-top: 0;
 }
 
