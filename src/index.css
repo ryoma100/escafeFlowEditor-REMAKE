@@ -92,6 +92,7 @@ dialog {
   color: var(--foreground-color);
   background-color: var(--primary-color);
   border-radius: 4px;
+  margin: auto;
 }
 
 button {
