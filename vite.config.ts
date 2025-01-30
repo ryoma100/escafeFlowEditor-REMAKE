@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 import devtools from "solid-devtools/vite";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
@@ -7,6 +8,7 @@ import solidSvg from "vite-plugin-solid-svg";
 export default defineConfig(async () => ({
   base: process.env.VITE_BASE_PATH,
   plugins: [
+    tailwindcss(),
     devtools({
       /* features options - all disabled by default */
       autoname: true, // e.g. enable autoname
