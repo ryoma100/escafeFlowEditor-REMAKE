@@ -33,7 +33,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: pnpm lint
+      - run: npm run lint
 
   test:
     needs: install
@@ -44,7 +44,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: pnpm dlx vitest --coverage.enabled true
+      - run: npx vitest --coverage.enabled true
       - name: report coverage
         if: always()
         uses: davelosert/vitest-coverage-report-action@v2
@@ -58,7 +58,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: pnpm build
+      - run: npm run build
 
   build-storybook:
     needs: install
@@ -69,7 +69,7 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: pnpm build-storybook
+      - run: npm run build-storybook
 
   complete-ci:
     needs: [lint, test, build, build-storybook]
