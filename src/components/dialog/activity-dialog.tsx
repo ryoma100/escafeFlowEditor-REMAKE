@@ -1,14 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import {
-  createEffect,
-  createSignal,
-  For,
-  JSXElement,
-  Match,
-  onMount,
-  Show,
-  Switch,
-} from "solid-js";
+import { For, type JSXElement, Match, Show, Switch, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
@@ -16,7 +7,7 @@ import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap, toActorId } from "@/data-source/data-factory";
-import { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
+import type { ActivityNode, ActorEntity, ApplicationEntity } from "@/data-source/data-type";
 import { AutoActivityIcon } from "@/icons/auto-activity-icon";
 import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
 import { ManualActivityIcon } from "@/icons/manual-activity-icon";
@@ -55,7 +46,7 @@ export function ActivityDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={activity()} keyed>
+      <Show when={activity()} keyed={true}>
         {(activity) => (
           <ActivityDialogView
             activity={activity}
@@ -103,12 +94,9 @@ export function ActivityDialogView(props: {
 
     const activity: ActivityNode = deepUnwrap(formData);
     activity.applications =
-      activity.activityType === "autoActivity"
-        ? formData.applications.filter((it) => it.ognl !== "")
-        : [];
+      activity.activityType === "autoActivity" ? formData.applications.filter((it) => it.ognl !== "") : [];
     activity.ognl =
-      formData.activityType === "manualTimerActivity" ||
-      formData.activityType === "autoTimerActivity"
+      formData.activityType === "manualTimerActivity" || formData.activityType === "autoTimerActivity"
         ? formData.ognl
         : "";
 
@@ -174,7 +162,7 @@ export function ActivityDialogView(props: {
             data-testId="tab-join"
             type="radio"
             name="tab-switch"
-            class="peer/tab-switch1 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+            class="peer/tab-switch1 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
           <label
             class="-order-1 mr-1 cursor-pointer bg-secondary px-2 py-1 hover:bg-primary peer-checked/tab-switch1:bg-primary"
@@ -183,7 +171,7 @@ export function ActivityDialogView(props: {
             {t("beginning")}
           </label>
           <div
-            class="hidden h-[300px] w-full border border-solid border-secondary py-4 pl-2 peer-checked/tab-switch1:block"
+            class="hidden h-[300px] w-full border border-secondary border-solid py-4 pl-2 peer-checked/tab-switch1:block"
             classList={{
               "opacity-50": formData.joinType === "notJoin" || formData.joinType === "oneJoin",
             }}
@@ -222,7 +210,7 @@ export function ActivityDialogView(props: {
             id="tab-work"
             type="radio"
             name="tab-switch"
-            class="peer/tab-switch2 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+            class="peer/tab-switch2 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
             ref={radioTabCenterRef}
           />
           <label
@@ -231,21 +219,13 @@ export function ActivityDialogView(props: {
           >
             {t("work")}
           </label>
-          <div class="hidden h-[300px] w-full border border-solid border-secondary py-4 pl-2 peer-checked/tab-switch2:block">
+          <div class="hidden h-[300px] w-full border border-secondary border-solid py-4 pl-2 peer-checked/tab-switch2:block">
             <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
-              <input
-                type="text"
-                value={formData.xpdlId}
-                onChange={(e) => setFormData("xpdlId", e.target.value)}
-              />
+              <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
 
               <div>{t("jobTitle")}</div>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData("name", e.target.value)}
-              />
+              <input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
 
               <div>{t("actor")}</div>
               <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
@@ -261,7 +241,7 @@ export function ActivityDialogView(props: {
               <Switch>
                 <Match when={formData.activityType === "autoActivity"}>
                   <div>{t("processingDetails")}</div>
-                  <div class="flex h-[160px] flex-col border-solid border-gray-300">
+                  <div class="flex h-[160px] flex-col border-gray-300 border-solid">
                     <select
                       disabled={selectedAppIndex() < 0}
                       value={selectedAppIndex()}
@@ -270,27 +250,20 @@ export function ActivityDialogView(props: {
                       }}
                     >
                       <For each={props.applications}>
-                        {(app, index) => (
-                          <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>
-                        )}
+                        {(app, index) => <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>}
                       </For>
                     </select>
                     <textarea
                       class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
-                      value={
-                        formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")
-                      }
-                      onChange={(e) =>
-                        setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)
-                      }
+                      value={formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")}
+                      onChange={(e) => setFormData("applications", [selectedAppIndex()], "ognl", e.target.value)}
                     />
                   </div>
                 </Match>
                 <Match
                   when={
-                    formData.activityType === "manualTimerActivity" ||
-                    formData.activityType === "autoTimerActivity"
+                    formData.activityType === "manualTimerActivity" || formData.activityType === "autoTimerActivity"
                   }
                 >
                   <div>{t("whenRunAutomatically")}</div>
@@ -311,7 +284,7 @@ export function ActivityDialogView(props: {
             data-testId="tab-split"
             type="radio"
             name="tab-switch"
-            class="peer/tab-switch3 absolute -m-px size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+            class="peer/tab-switch3 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
           <label
             class="-order-1 mr-1 cursor-pointer bg-secondary px-2 py-1 hover:bg-primary peer-checked/tab-switch3:bg-primary"
@@ -320,7 +293,7 @@ export function ActivityDialogView(props: {
             {t("termination")}
           </label>
           <div
-            class="hidden h-[300px] w-full border border-solid border-secondary py-4 pl-2 peer-checked/tab-switch3:block"
+            class="hidden h-[300px] w-full border border-secondary border-solid py-4 pl-2 peer-checked/tab-switch3:block"
             classList={{
               "opacity-50": formData.splitType === "notSplit" || formData.splitType === "oneSplit",
             }}

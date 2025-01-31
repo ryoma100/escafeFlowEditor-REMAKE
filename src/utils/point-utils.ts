@@ -1,4 +1,4 @@
-import { Point } from "@/data-source/data-type";
+import type { Point } from "@/data-source/data-type";
 
 export function pointLength(p1: Point, p2: Point): number {
   return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
@@ -9,7 +9,7 @@ export function rotatePoint(center: Point, angle: number, target: Point): Point 
   let dx: number = target.x - center.x;
   let dy: number = center.y - target.y;
   const dist: number = Math.sqrt(dx * dx + dy * dy);
-  if (dist != 0.0) {
+  if (dist !== 0.0) {
     let drad: number = Math.atan2(dy, dx);
     drad -= Math.PI / 2.0;
     drad += rad;

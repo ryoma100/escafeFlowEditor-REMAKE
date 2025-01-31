@@ -1,11 +1,11 @@
 import { produce } from "solid-js/store";
 
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { EdgeModel } from "@/data-model/edge-model";
-import { NodeModel } from "@/data-model/node-model";
-import { Point, Rectangle } from "@/data-source/data-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { EdgeModel } from "@/data-model/edge-model";
+import type { NodeModel } from "@/data-model/node-model";
+import type { Point, Rectangle } from "@/data-source/data-type";
 import { intersectRect } from "@/utils/rectangle-utils";
 
 export function makeSelectBoxStrategy(
@@ -34,7 +34,9 @@ export function makeSelectBoxStrategy(
     diagramModel.setSelectBox(rect);
     nodeModel.setNodeList(
       (_it) => true,
-      produce((it) => (it.selected = intersectRect(rect, it))),
+      produce((it) => {
+        it.selected = intersectRect(rect, it);
+      }),
     );
     edgeModel.setEdgeList(() => true, "selected", false);
   }

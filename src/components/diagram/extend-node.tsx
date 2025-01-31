@@ -1,7 +1,7 @@
-import { JSXElement, Match, onMount, Switch } from "solid-js";
+import { type JSXElement, Match, Switch, onMount } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
-import { CommentNode, EndNode, INode, StartNode } from "@/data-source/data-type";
+import type { CommentNode, EndNode, INode, StartNode } from "@/data-source/data-type";
 import { CommentIcon } from "@/icons/comment";
 import { EndIcon } from "@/icons/end-icon";
 import { StartIcon } from "@/icons/start-icon";
@@ -23,12 +23,7 @@ export function ExtendNodeContainer(props: {
   }
 
   return (
-    <foreignObject
-      x={props.node.x}
-      y={props.node.y}
-      width={props.node.width}
-      height={props.node.height}
-    >
+    <foreignObject x={props.node.x} y={props.node.y} width={props.node.width} height={props.node.height}>
       <Switch>
         <Match when={props.node.type === "commentNode"}>
           <CommentNodeView
@@ -36,9 +31,7 @@ export function ExtendNodeContainer(props: {
             selected={props.node.selected}
             onPointerDown={handlePointerDown}
             onDblClick={handleDblClick}
-            onChangeSize={(w, h) =>
-              extendNodeModel.resizeCommentNode(props.node as CommentNode, w, h)
-            }
+            onChangeSize={(w, h) => extendNodeModel.resizeCommentNode(props.node as CommentNode, w, h)}
           />
         </Match>
         <Match when={props.node.type === "startNode"}>
@@ -86,10 +79,7 @@ export function CommentNodeView(props: {
       <div class="m-1 flex items-center">
         <CommentIcon class="[fill:var(--foreground-color)]" />
       </div>
-      <div
-        ref={titleDiv}
-        class="whitespace-pre p-1 text-[11px] leading-[1.1] [color:var(--foreground-color)]"
-      >
+      <div ref={titleDiv} class="whitespace-pre p-1 text-[11px] leading-[1.1] [color:var(--foreground-color)]">
         {props.comment}
       </div>
     </div>

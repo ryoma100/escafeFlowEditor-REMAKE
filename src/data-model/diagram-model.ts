@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
 
-import { ToolbarType } from "@/components/toolbar/toolbar";
+import type { ToolbarType } from "@/components/toolbar/toolbar";
 import { defaultRectangle } from "@/constants/app-const";
-import { Circle, Line, Point, Rectangle } from "@/data-source/data-type";
+import type { Circle, Line, Point, Rectangle } from "@/data-source/data-type";
 
 export type DiagramModel = ReturnType<typeof makeDiagramModel>;
 
@@ -30,10 +30,7 @@ export function makeDiagramModel() {
   }
 
   function fitViewBox() {
-    const newZoom = Math.min(
-      svgRect().width / graphRect().width,
-      svgRect().height / graphRect().height,
-    );
+    const newZoom = Math.min(svgRect().width / graphRect().width, svgRect().height / graphRect().height);
     changeZoom(newZoom);
 
     const newViewBox = {

@@ -1,10 +1,10 @@
 import * as i18n from "@solid-primitives/i18n";
-import { For, JSXElement } from "solid-js";
+import { For, type JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ProcessEntity } from "@/data-source/data-type";
+import type { ProcessEntity } from "@/data-source/data-type";
 
 export function ProcessList(): JSXElement {
   const { dict } = useThemeContext();
@@ -26,7 +26,10 @@ export function ProcessList(): JSXElement {
   }
 
   function handleRemoveButtonClick(_: MouseEvent) {
-    dialogModel.setOpenDialog({ type: "deleteProcess", process: processModel.selectedProcess() });
+    dialogModel.setOpenDialog({
+      type: "deleteProcess",
+      process: processModel.selectedProcess(),
+    });
   }
 
   return (
@@ -55,11 +58,7 @@ export function ProcessList(): JSXElement {
         <button type="submit" onClick={handleAddButtonClick}>
           {t("add")}
         </button>
-        <button
-          type="button"
-          onClick={handleRemoveButtonClick}
-          disabled={processModel.processList().length === 1}
-        >
+        <button type="button" onClick={handleRemoveButtonClick} disabled={processModel.processList().length === 1}>
           {t("delete")}
         </button>
       </ButtonsContainer>

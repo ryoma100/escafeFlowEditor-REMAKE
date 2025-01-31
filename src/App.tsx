@@ -2,7 +2,7 @@ import { TauriEvent } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import * as dialog from "@tauri-apps/plugin-dialog";
 import { exit } from "@tauri-apps/plugin-process";
-import { JSXElement, Show } from "solid-js";
+import { type JSXElement, Show } from "solid-js";
 
 import { AboutDialog } from "@/components/dialog/about-dialog";
 import { ActivityDialog } from "@/components/dialog/activity-dialog";
@@ -79,7 +79,7 @@ export function AppView() {
 function WindowUnloadDialog() {
   const { dict } = useThemeContext();
 
-  window.addEventListener("beforeunload", function (e) {
+  window.addEventListener("beforeunload", (e) => {
     e.preventDefault();
   });
 

@@ -1,5 +1,5 @@
-import { DiagramModel } from "@/data-model/diagram-model";
-import { Point } from "@/data-source/data-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { Point } from "@/data-source/data-type";
 import { centerPoint, lineDistance } from "@/utils/line-utils";
 
 export function makeMultiTouchListener(diagramModel: DiagramModel) {
@@ -8,8 +8,14 @@ export function makeMultiTouchListener(diagramModel: DiagramModel) {
     if (prevEvent == null) return;
 
     const prevEvents = Array.from(pointerEvents.values());
-    const prevP1: Point = { x: prevEvents[0].clientX, y: prevEvents[0].clientY };
-    const prevP2: Point = { x: prevEvents[1].clientX, y: prevEvents[1].clientY };
+    const prevP1: Point = {
+      x: prevEvents[0].clientX,
+      y: prevEvents[0].clientY,
+    };
+    const prevP2: Point = {
+      x: prevEvents[1].clientX,
+      y: prevEvents[1].clientY,
+    };
     const prevTouchPoints = { p1: prevP1, p2: prevP2 };
     const prevCenterPoint = centerPoint(prevTouchPoints);
     const prevDistance = lineDistance(prevTouchPoints);
@@ -22,10 +28,7 @@ export function makeMultiTouchListener(diagramModel: DiagramModel) {
     const newCenterPoint = centerPoint(newTouchPoints);
     const newDistance = lineDistance(newTouchPoints);
 
-    diagramModel.changeZoom(
-      diagramModel.zoom() + (newDistance - prevDistance) / prevDistance,
-      newCenterPoint,
-    );
+    diagramModel.changeZoom(diagramModel.zoom() + (newDistance - prevDistance) / prevDistance, newCenterPoint);
     diagramModel.setViewBox({
       x: diagramModel.viewBox().x - (newCenterPoint.x - prevCenterPoint.x),
       y: diagramModel.viewBox().y - (newCenterPoint.y - prevCenterPoint.y),

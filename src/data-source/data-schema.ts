@@ -36,7 +36,11 @@ export const rectangleSchema = v.object({
   ...sizeSchema.entries,
 });
 
-export const circleSchema = v.object({ cx: v.number(), cy: v.number(), r: v.number() });
+export const circleSchema = v.object({
+  cx: v.number(),
+  cy: v.number(),
+  r: v.number(),
+});
 
 //
 // Node
@@ -117,12 +121,7 @@ export const commentNodeSchema = v.object({
   comment: v.string(),
 });
 
-export const nodeSchema = v.union([
-  activityNodeSchema,
-  startNodeSchema,
-  endNodeSchema,
-  commentNodeSchema,
-]);
+export const nodeSchema = v.union([activityNodeSchema, startNodeSchema, endNodeSchema, commentNodeSchema]);
 
 //
 // Edge
@@ -166,12 +165,7 @@ export const commentEdgeSchema = v.object({
   type: v.literal("commentEdge"),
 });
 
-export const edgeSchema = v.union([
-  transitionEdgeSchema,
-  startEdgeSchema,
-  endEdgeSchema,
-  commentEdgeSchema,
-]);
+export const edgeSchema = v.union([transitionEdgeSchema, startEdgeSchema, endEdgeSchema, commentEdgeSchema]);
 
 //
 // Application
@@ -253,9 +247,7 @@ export const processEntitySchema = v.pipe(
     const activities = nodeList.filter((it) => it.type === "activityNode");
     const transitions = edgeList.filter((it) => it.type === "transitionEdge");
     return transitions.every((transition) =>
-      activities.some(
-        (activity) => transition.fromNodeId === activity.id || transition.toNodeId === activity.id,
-      ),
+      activities.some((activity) => transition.fromNodeId === activity.id || transition.toNodeId === activity.id),
     );
   }, "no activity referenced by transition"),
   v.check(({ edgeList, nodeList }) => {

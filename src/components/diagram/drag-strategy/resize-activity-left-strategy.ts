@@ -1,7 +1,7 @@
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
-import { ActivityNodeModel } from "@/data-model/activity-node-model";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { INode } from "@/data-source/data-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { ActivityNodeModel } from "@/data-model/activity-node-model";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { INode } from "@/data-source/data-type";
 
 export function makeResizeActivityLeftStrategy(
   diagramModel: DiagramModel,

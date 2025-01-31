@@ -1,9 +1,9 @@
 import { createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
-import { i18nEnDict } from "@/constants/i18n";
+import type { i18nEnDict } from "@/constants/i18n";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { ActorEntity, INode, ProcessEntity } from "@/data-source/data-type";
+import type { ActorEntity, INode, ProcessEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createActorEntity([]);
 

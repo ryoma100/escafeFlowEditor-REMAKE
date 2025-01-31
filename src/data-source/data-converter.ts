@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import * as v from "valibot";
 
@@ -6,7 +5,7 @@ import { defaultPoint } from "@/constants/app-const";
 import { computeMaxRectangle } from "@/data-model/node-model";
 import { dataFactory, toEnvironmentId } from "@/data-source/data-factory";
 import { projectEntitySchema } from "@/data-source/data-schema";
-import {
+import type {
   ActivityJoinType,
   ActivityNode,
   ActivityNodeType,
@@ -28,6 +27,9 @@ import {
   StartNode,
   TransitionEdge,
 } from "@/data-source/data-type";
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+type Xml = any;
 
 const alwaysArray = [
   "Package.WorkflowProcesses.WorkflowProcess",
@@ -52,7 +54,7 @@ const fxpOption = {
 const xp = new XMLParser(fxpOption);
 const xb = new XMLBuilder(fxpOption);
 
-export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): string {
+export function exportXml(project: ProjectEntity, isAutoFit = true): string {
   const xmlObject = {
     "?xml": { "@_version": "1.0", "@_encoding": "UTF-8", "@_standalone": "no" },
     Package: {
@@ -90,7 +92,10 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                 "@_Id": app.xpdlId,
                 "@_Name": app.name,
                 ExtendedAttributes: {
-                  ExtendedAttribute: { "@_Name": app.extendedName, "@_Value": app.extendedValue },
+                  ExtendedAttribute: {
+                    "@_Name": app.extendedName,
+                    "@_Value": app.extendedValue,
+                  },
                 },
               },
             })),
@@ -103,11 +108,13 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                     ? {
                         Implementation: activity.applications.map((it) => ({
                           Tool: {
-                            "@_Id": process.detail.applications.find((app) => app.id === it.id)
-                              ?.xpdlId,
+                            "@_Id": process.detail.applications.find((app) => app.id === it.id)?.xpdlId,
                             "@_Type": "APPLICATION",
                             ExtendedAttributes: {
-                              ExtendedAttribute: { "@_Name": "ognl", "@_Value": it.ognl },
+                              ExtendedAttribute: {
+                                "@_Name": "ognl",
+                                "@_Value": it.ognl,
+                              },
                             },
                           },
                         })),
@@ -119,9 +126,7 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                         Join: {
                           "@_Type": activity.joinType === "xorJoin" ? "XOR" : "AND",
                           TransitionRefs: process.edgeList
-                            .filter(
-                              (it) => it.type === "transitionEdge" && it.toNodeId === activity.id,
-                            )
+                            .filter((it) => it.type === "transitionEdge" && it.toNodeId === activity.id)
                             .map((transition) => ({
                               TransitionRef: {
                                 "@_Id": (transition as TransitionEdge).xpdlId,
@@ -136,9 +141,7 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                         Split: {
                           "@_Type": activity.splitType === "xorSplit" ? "XOR" : "AND",
                           TransitionRefs: process.edgeList
-                            .filter(
-                              (it) => it.type === "transitionEdge" && it.fromNodeId === activity.id,
-                            )
+                            .filter((it) => it.type === "transitionEdge" && it.fromNodeId === activity.id)
                             .map((transition) => ({
                               TransitionRef: {
                                 "@_Id": (transition as TransitionEdge).xpdlId,
@@ -148,16 +151,13 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                       }
                     : {};
                 const finishMode =
-                  activity.activityType === "manualActivity" ||
-                  activity.activityType === "manualTimerActivity"
+                  activity.activityType === "manualActivity" || activity.activityType === "manualTimerActivity"
                     ? { FinishMode: { Manual: null } }
-                    : activity.activityType === "autoActivity" ||
-                        activity.activityType === "autoTimerActivity"
+                    : activity.activityType === "autoActivity" || activity.activityType === "autoTimerActivity"
                       ? { FinishMode: { Automatic: null } }
                       : {};
                 const limit =
-                  activity.activityType === "manualTimerActivity" ||
-                  activity.activityType === "autoTimerActivity"
+                  activity.activityType === "manualTimerActivity" || activity.activityType === "autoTimerActivity"
                     ? {
                         Limit: { "#text": activity.ognl },
                       }
@@ -168,7 +168,7 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                     "@_Id": activity.xpdlId,
                     "@_Name": activity.name,
                     ...implementation,
-                    Performer: process.actors.find((it) => it.id === activity.actorId)!.xpdlId,
+                    Performer: process.actors.find((it) => it.id === activity.actorId)?.xpdlId,
                     ...finishMode,
                     ...limit,
                     TransitionRestrictions: {
@@ -181,9 +181,7 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
                       {
                         ExtendedAttribute: {
                           "@_Name": "JaWE_GRAPH_PARTICIPANT_ID",
-                          "@_Value": (
-                            process.actors.find((it) => it.id === activity.actorId) as ActorEntity
-                          ).xpdlId,
+                          "@_Value": (process.actors.find((it) => it.id === activity.actorId) as ActorEntity).xpdlId,
                         },
                       },
                       {
@@ -257,8 +255,18 @@ export function exportXml(project: ProjectEntity, isAutoFit: boolean = true): st
         };
       }),
       ExtendedAttributes: [
-        { ExtendedAttribute: { "@_Name": "EDITING_TOOL", "@_Value": "EscafeFlow Editor" } },
-        { ExtendedAttribute: { "@_Name": "EDITING_TOOL_VERSION", "@_Value": "0.2.0" } },
+        {
+          ExtendedAttribute: {
+            "@_Name": "EDITING_TOOL",
+            "@_Value": "EscafeFlow Editor",
+          },
+        },
+        {
+          ExtendedAttribute: {
+            "@_Name": "EDITING_TOOL_VERSION",
+            "@_Value": "0.2.0",
+          },
+        },
       ],
     },
   };
@@ -325,11 +333,9 @@ export function importXml(xmlString: string): ProjectEntity {
       xpdlId: xml.Package["@_Id"],
       name: xml.Package["@_Name"],
     },
-    // @ts-ignore
-    processes: xml.Package.WorkflowProcesses.WorkflowProcess.map((process, processIdx) => {
+    processes: xml.Package.WorkflowProcesses.WorkflowProcess.map((process: Xml, processIdx: number) => {
       const applications: ApplicationEntity[] = (process.Applications.Application || []).map(
-        // @ts-ignore
-        (app, appIdx) => ({
+        (app: Xml, appIdx: number) => ({
           id: appIdx + 1,
           xpdlId: app["@_Id"],
           name: app["@_Name"],
@@ -337,23 +343,19 @@ export function importXml(xmlString: string): ProjectEntity {
           extendedValue: app.ExtendedAttributes.ExtendedAttribute["@_Value"],
         }),
       );
-      const actors: ActorEntity[] = process.Participants.Participant.map(
-        // @ts-ignore
-        (actor, actorIdx) => ({
-          id: actorIdx + 1,
-          xpdlId: actor["@_Id"],
-          name: actor["@_Name"],
-        }),
-      );
+      const actors: ActorEntity[] = process.Participants.Participant.map((actor: Xml, actorIdx: number) => ({
+        id: actorIdx + 1,
+        xpdlId: actor["@_Id"],
+        name: actor["@_Name"],
+      }));
       const activityList: ActivityNode[] = (process.Activities.Activity || []).map(
-        // @ts-ignore
-        (activity, activityIdx) => {
+        (activity: Xml, activityIdx: number) => {
           return {
             id: activityIdx + 1,
             type: "activityNode",
             activityType: parseActivityType(activity),
             xpdlId: activity["@_Id"],
-            actorId: actors.find((it) => it.xpdlId === activity.Performer)!.id,
+            actorId: actors.find((it) => it.xpdlId === activity.Performer)?.id,
             name: activity["@_Name"],
             applications: parseActivityApplication(activity, applications),
             ognl: activity.Limit?.["#text"] ?? "",
@@ -365,15 +367,14 @@ export function importXml(xmlString: string): ProjectEntity {
         },
       );
       const transitionList: TransitionEdge[] = (process.Transitions.Transition || []).map(
-        // @ts-ignore
-        (transition, transitionIdx) => {
+        (transition: Xml, transitionIdx: number) => {
           return {
             id: transitionIdx + 1,
             type: "transitionEdge",
             xpdlId: transition["@_Id"],
             ognl: transition.Condition ?? "",
-            fromNodeId: activityList.find((it) => it.xpdlId === transition["@_From"])!.id,
-            toNodeId: activityList.find((it) => it.xpdlId === transition["@_To"])!.id,
+            fromNodeId: activityList.find((it) => it.xpdlId === transition["@_From"])?.id,
+            toNodeId: activityList.find((it) => it.xpdlId === transition["@_To"])?.id,
             selected: false,
             disabled: false,
           };
@@ -403,12 +404,7 @@ export function importXml(xmlString: string): ProjectEntity {
   return v.parse(projectEntitySchema, project);
 }
 
-function parseExtendNode(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  process: any,
-  nodeList: INode[],
-  edgeList: IEdge[],
-) {
+function parseExtendNode(process: Xml, nodeList: INode[], edgeList: IEdge[]) {
   (process.ExtendedAttributes.ExtendedAttribute as [])
     .filter((it) => it["@_Name"] === "JaWE_GRAPH_START_OF_WORKFLOW")
     .forEach((it) => {
@@ -446,9 +442,7 @@ function parseExtendNode(
   (process.ExtendedAttributes.ExtendedAttribute as [])
     .filter((it) => it["@_Name"] === "BURI_GRAPH_COMMENT")
     .forEach((it) => {
-      const val = String(it["@_Value"]).match(
-        /CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+),COMMENT=(.*)/,
-      );
+      const val = String(it["@_Value"]).match(/CONNECTING_ACTIVITY_ID=(.*),X_OFFSET=(.+),Y_OFFSET=(.+),COMMENT=(.*)/);
       if (val) {
         const commentNode = dataFactory.createCommentNode(nodeList, Number(val[2]), Number(val[3]));
         commentNode.comment = val[4];
@@ -478,8 +472,7 @@ function parseExtendNode(
   return { nodeList, edgeList, envs };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseActivityType(activity: any): ActivityNodeType {
+function parseActivityType(activity: Xml): ActivityNodeType {
   const isLimit = "Limit" in activity;
   const isManual = "Manual" in (activity.FinishMode ?? {});
   const isAutomatic = "Automatic" in (activity.FinishMode ?? {});
@@ -498,22 +491,14 @@ function parseActivityType(activity: any): ActivityNodeType {
   }
 }
 
-function parseActivityApplication(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  activity: any,
-  applications: ApplicationEntity[],
-): ActivityNode["applications"] {
-  return (activity.Implementation.Tool || []).map(
-    // @ts-ignore
-    (tool: toolIdx) => ({
-      id: applications.find((it) => it.xpdlId === tool["@_Id"])!.id,
-      ognl: tool.ExtendedAttributes.ExtendedAttribute["@_Value"],
-    }),
-  );
+function parseActivityApplication(activity: Xml, applications: ApplicationEntity[]): ActivityNode["applications"] {
+  return (activity.Implementation.Tool || []).map((tool: Xml) => ({
+    id: applications.find((it) => it.xpdlId === tool["@_Id"])?.id,
+    ognl: tool.ExtendedAttributes.ExtendedAttribute["@_Value"],
+  }));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseActivityJoinType(activity: any, transactionList: any[]): ActivityJoinType {
+function parseActivityJoinType(activity: Xml, transactionList: Xml[]): ActivityJoinType {
   const count = transactionList.filter((it) => it["@_To"] === activity["@_Id"]).length;
   switch (count) {
     case 0:
@@ -521,14 +506,11 @@ function parseActivityJoinType(activity: any, transactionList: any[]): ActivityJ
     case 1:
       return "oneJoin";
     default:
-      return activity.TransitionRestrictions.TransitionRestriction?.Join["@_Type"] === "AND"
-        ? "andJoin"
-        : "xorJoin";
+      return activity.TransitionRestrictions.TransitionRestriction?.Join["@_Type"] === "AND" ? "andJoin" : "xorJoin";
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseActivitySplitType(activity: any, transactionList: any[]): ActivitySplitType {
+function parseActivitySplitType(activity: Xml, transactionList: Xml[]): ActivitySplitType {
   const count = transactionList.filter((it) => it["@_From"] === activity["@_Id"]).length;
   switch (count) {
     case 0:
@@ -536,17 +518,14 @@ function parseActivitySplitType(activity: any, transactionList: any[]): Activity
     case 1:
       return "oneSplit";
     default:
-      return activity.TransitionRestrictions.TransitionRestriction?.Split["@_Type"] === "AND"
-        ? "andSplit"
-        : "xorSplit";
+      return activity.TransitionRestrictions.TransitionRestriction?.Split["@_Type"] === "AND" ? "andSplit" : "xorSplit";
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseActivityRectangle(activity: any): Rectangle {
-  const attr = (activity.ExtendedAttributes.ExtendedAttribute as []).find(
+function parseActivityRectangle(activity: Xml): Rectangle {
+  const attr: Xml = (activity.ExtendedAttributes.ExtendedAttribute as []).find(
     (it) => it["@_Name"] === "BURI_GRAPH_RECTANGLE",
-  )!;
+  );
   const rect = (attr["@_Value"] as string).split(",");
   return {
     x: Number(rect[0]),

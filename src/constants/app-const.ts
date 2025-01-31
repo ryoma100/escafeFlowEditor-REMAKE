@@ -1,4 +1,4 @@
-import { Circle, Line, Point, Rectangle, Size } from "@/data-source/data-type";
+import type { Circle, Line, Point, Rectangle, Size } from "@/data-source/data-type";
 
 export const ACTIVITY_MIN_WIDTH = 68;
 export const ACTIVITY_MIN_HEIGHT = 70;

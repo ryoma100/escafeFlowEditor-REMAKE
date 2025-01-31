@@ -1,6 +1,6 @@
-import { EdgeModel } from "@/data-model/edge-model";
+import type { EdgeModel } from "@/data-model/edge-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { CommentEdge, EndEdge, INode, StartEdge } from "@/data-source/data-type";
+import type { CommentEdge, EndEdge, INode, StartEdge } from "@/data-source/data-type";
 
 export type ExtendEdgeModel = ReturnType<typeof makeExtendEdgeModel>;
 

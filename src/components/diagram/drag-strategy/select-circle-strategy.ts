@@ -1,11 +1,11 @@
 import { produce } from "solid-js/store";
 
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { EdgeModel } from "@/data-model/edge-model";
-import { NodeModel } from "@/data-model/node-model";
-import { Point } from "@/data-source/data-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { EdgeModel } from "@/data-model/edge-model";
+import type { NodeModel } from "@/data-model/node-model";
+import type { Point } from "@/data-source/data-type";
 import { pointLength } from "@/utils/point-utils";
 import { minLengthOfPointToRect } from "@/utils/rectangle-utils";
 
@@ -28,7 +28,9 @@ export function makeSelectCircleStrategy(
     diagramModel.setSelectCircle({ cx: centerPoint.x, cy: centerPoint.y, r });
     nodeModel.setNodeList(
       (_it) => true,
-      produce((it) => (it.selected = minLengthOfPointToRect(centerPoint, it) < r)),
+      produce((it) => {
+        it.selected = minLengthOfPointToRect(centerPoint, it) < r;
+      }),
     );
     edgeModel.setEdgeList(() => true, "selected", false);
   }

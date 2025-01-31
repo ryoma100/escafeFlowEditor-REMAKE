@@ -39,6 +39,9 @@ importers:
         specifier: 1.0.0-beta.14
         version: 1.0.0-beta.14(typescript@5.7.3)
     devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
       '@chromatic-com/storybook':
         specifier: ^3.2.4
         version: 3.2.4(react@18.3.1)(storybook@8.5.2(prettier@3.4.2))
@@ -84,18 +87,9 @@ importers:
       eslint:
         specifier: ^9.19.0
         version: 9.19.0(jiti@2.4.2)
-      eslint-config-prettier:
-        specifier: ^10.0.1
-        version: 10.0.1(eslint@9.19.0(jiti@2.4.2))
-      eslint-plugin-simple-import-sort:
-        specifier: ^12.1.1
-        version: 12.1.1(eslint@9.19.0(jiti@2.4.2))
       eslint-plugin-solid:
         specifier: ^0.14.5
         version: 0.14.5(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
-      eslint-plugin-unused-imports:
-        specifier: ^4.1.4
-        version: 4.1.4(@typescript-eslint/eslint-plugin@8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))
       globals:
         specifier: ^15.14.0
         version: 15.14.0
@@ -108,9 +102,6 @@ importers:
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
-      prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
       reg-cli:
         specifier: ^0.18.10
         version: 0.18.10
@@ -257,6 +248,59 @@ packages:
   '@bcoe/v8-coverage@1.0.2':
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
+
+  '@biomejs/biome@1.9.4':
+    resolution: {integrity: sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==}
+    engines: {node: '>=14.21.3'}
+    hasBin: true
+
+  '@biomejs/cli-darwin-arm64@1.9.4':
+    resolution: {integrity: sha512-bFBsPWrNvkdKrNCYeAp+xo2HecOGPAy9WyNyB/jKnnedgzl4W4Hb9ZMzYNbf8dMCGmUdSavlYHiR01QaYR58cw==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@biomejs/cli-darwin-x64@1.9.4':
+    resolution: {integrity: sha512-ngYBh/+bEedqkSevPVhLP4QfVPCpb+4BBe2p7Xs32dBgs7rh9nY2AIYUL6BgLw1JVXV8GlpKmb/hNiuIxfPfZg==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@biomejs/cli-linux-arm64-musl@1.9.4':
+    resolution: {integrity: sha512-v665Ct9WCRjGa8+kTr0CzApU0+XXtRgwmzIf1SeKSGAv+2scAlW6JR5PMFo6FzqqZ64Po79cKODKf3/AAmECqA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@biomejs/cli-linux-arm64@1.9.4':
+    resolution: {integrity: sha512-fJIW0+LYujdjUgJJuwesP4EjIBl/N/TcOX3IvIHJQNsAqvV2CHIogsmA94BPG6jZATS4Hi+xv4SkBBQSt1N4/g==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@biomejs/cli-linux-x64-musl@1.9.4':
+    resolution: {integrity: sha512-gEhi/jSBhZ2m6wjV530Yy8+fNqG8PAinM3oV7CyO+6c3CEh16Eizm21uHVsyVBEB6RIM8JHIl6AGYCv6Q6Q9Tg==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [linux]
+
+  '@biomejs/cli-linux-x64@1.9.4':
+    resolution: {integrity: sha512-lRCJv/Vi3Vlwmbd6K+oQ0KhLHMAysN8lXoCI7XeHlxaajk06u7G+UsFSO01NAs5iYuWKmVZjmiOzJ0OJmGsMwg==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [linux]
+
+  '@biomejs/cli-win32-arm64@1.9.4':
+    resolution: {integrity: sha512-tlbhLk+WXZmgwoIKwHIHEBZUwxml7bRJgk0X2sPyNR3S93cdRq6XulAZRQJ17FYGGzWne0fgrXBKpl7l4M87Hg==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@biomejs/cli-win32-x64@1.9.4':
+    resolution: {integrity: sha512-8Y5wMhVIPaWe6jw2H+KlEm4wP/f7EW3810ZLmDlrEEy5KvBsb9ECEfu/kMWD484ijfQ8+nIi0giMgu9g1UAuuA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [win32]
 
   '@chromatic-com/storybook@3.2.4':
     resolution: {integrity: sha512-5/bOOYxfwZ2BktXeqcCpOVAoR6UCoeART5t9FVy22hoo8F291zOuX4y3SDgm10B1GVU/ZTtJWPT2X9wZFlxYLg==}
@@ -1064,10 +1108,10 @@ packages:
       storybook: ^8.5.2
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
-  '@storybook/builder-vite@8.6.0-alpha.2':
-    resolution: {integrity: sha512-O5Ha7ub4dsXSbOo4/yBa9mBGuBp6puJHH47m528KXFiuaj4FgP0OHdD2ztbk3mMGTYl+HM8m8JuByPkBZm0RRg==}
+  '@storybook/builder-vite@8.6.0-alpha.3':
+    resolution: {integrity: sha512-NfLTdOSm1oGaxJJ62esQlNXkHxWNuawWPwg0TBeyuNxE7YA9YmMa+07dtTz6WVr7LuDxWl6qq0NBz3s05JpYAA==}
     peerDependencies:
-      storybook: ^8.6.0-alpha.2
+      storybook: ^8.6.0-alpha.3
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
   '@storybook/core@8.5.2':
@@ -1083,10 +1127,10 @@ packages:
     peerDependencies:
       storybook: ^8.5.2
 
-  '@storybook/csf-plugin@8.6.0-alpha.2':
-    resolution: {integrity: sha512-g5XY9SAe5hp8YzjBk6jHORt0Mn6YF4JI1upFFxTa+YjMMgx7R3tERN+rDoAIZcVTCTTqrjG0LhR8KhMVdY4yMA==}
+  '@storybook/csf-plugin@8.6.0-alpha.3':
+    resolution: {integrity: sha512-uAyRJyec4ydCWrUyzPXyjnJLUI1jbYfSklRW1sEjTIEfRxkPNKNg2XIajGOxeF4GEyvKqArz/4KJU3sFt66w/w==}
     peerDependencies:
-      storybook: ^8.6.0-alpha.2
+      storybook: ^8.6.0-alpha.3
 
   '@storybook/csf@0.1.12':
     resolution: {integrity: sha512-9/exVhabisyIVL0VxTCxo01Tdm8wefIXKXfltAPTSr8cbLn5JAxGQ6QV3mjdecLGEOucfoVhAKtJfVHxEK1iqw==}
@@ -2077,32 +2121,12 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-prettier@10.0.1:
-    resolution: {integrity: sha512-lZBts941cyJyeaooiKxAtzoPHTN+GbQTJFAIdQbRhA4/8whaAraEh47Whw/ZFfrjNSnlAxqfm9i0XVAEkULjCw==}
-    hasBin: true
-    peerDependencies:
-      eslint: '>=7.0.0'
-
-  eslint-plugin-simple-import-sort@12.1.1:
-    resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
-    peerDependencies:
-      eslint: '>=5.0.0'
-
   eslint-plugin-solid@0.14.5:
     resolution: {integrity: sha512-nfuYK09ah5aJG/oEN6P1qziy1zLgW4PDWe75VNPi4CEFYk1x2AEqwFeQfEPR7gNn0F2jOeqKhx2E+5oNCOBYWQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
       typescript: '>=4.8.4'
-
-  eslint-plugin-unused-imports@4.1.4:
-    resolution: {integrity: sha512-YptD6IzQjDardkl0POxnnRBhU1OEePMV0nd6siHaRBbd+lyh6NAhFEobiznKU7kTsSsDeSD62Pe7kAM1b7dAZQ==}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^8.0.0-0 || ^7.0.0 || ^6.0.0 || ^5.0.0
-      eslint: ^9.0.0 || ^8.0.0
-    peerDependenciesMeta:
-      '@typescript-eslint/eslint-plugin':
-        optional: true
 
   eslint-scope@8.2.0:
     resolution: {integrity: sha512-PHlWUfG6lvPc3yvP5A4PNyBL1W8fkDUccmI21JUu/+GKZBoH/W5u6usENXUrWFRsyoW5ACUjFGgAFQp5gUlb/A==}
@@ -4397,6 +4421,41 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
+  '@biomejs/biome@1.9.4':
+    optionalDependencies:
+      '@biomejs/cli-darwin-arm64': 1.9.4
+      '@biomejs/cli-darwin-x64': 1.9.4
+      '@biomejs/cli-linux-arm64': 1.9.4
+      '@biomejs/cli-linux-arm64-musl': 1.9.4
+      '@biomejs/cli-linux-x64': 1.9.4
+      '@biomejs/cli-linux-x64-musl': 1.9.4
+      '@biomejs/cli-win32-arm64': 1.9.4
+      '@biomejs/cli-win32-x64': 1.9.4
+
+  '@biomejs/cli-darwin-arm64@1.9.4':
+    optional: true
+
+  '@biomejs/cli-darwin-x64@1.9.4':
+    optional: true
+
+  '@biomejs/cli-linux-arm64-musl@1.9.4':
+    optional: true
+
+  '@biomejs/cli-linux-arm64@1.9.4':
+    optional: true
+
+  '@biomejs/cli-linux-x64-musl@1.9.4':
+    optional: true
+
+  '@biomejs/cli-linux-x64@1.9.4':
+    optional: true
+
+  '@biomejs/cli-win32-arm64@1.9.4':
+    optional: true
+
+  '@biomejs/cli-win32-x64@1.9.4':
+    optional: true
+
   '@chromatic-com/storybook@3.2.4(react@18.3.1)(storybook@8.5.2(prettier@3.4.2))':
     dependencies:
       chromatic: 11.25.1
@@ -5140,9 +5199,9 @@ snapshots:
       ts-dedent: 2.2.0
       vite: 6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
 
-  '@storybook/builder-vite@8.6.0-alpha.2(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))':
+  '@storybook/builder-vite@8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))':
     dependencies:
-      '@storybook/csf-plugin': 8.6.0-alpha.2(storybook@8.5.2(prettier@3.4.2))
+      '@storybook/csf-plugin': 8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))
       browser-assert: 1.2.1
       storybook: 8.5.2(prettier@3.4.2)
       ts-dedent: 2.2.0
@@ -5173,7 +5232,7 @@ snapshots:
       storybook: 8.5.2(prettier@3.4.2)
       unplugin: 1.16.1
 
-  '@storybook/csf-plugin@8.6.0-alpha.2(storybook@8.5.2(prettier@3.4.2))':
+  '@storybook/csf-plugin@8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))':
     dependencies:
       storybook: 8.5.2(prettier@3.4.2)
       unplugin: 1.16.1
@@ -6337,14 +6396,6 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-prettier@10.0.1(eslint@9.19.0(jiti@2.4.2)):
-    dependencies:
-      eslint: 9.19.0(jiti@2.4.2)
-
-  eslint-plugin-simple-import-sort@12.1.1(eslint@9.19.0(jiti@2.4.2)):
-    dependencies:
-      eslint: 9.19.0(jiti@2.4.2)
-
   eslint-plugin-solid@0.14.5(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3):
     dependencies:
       '@typescript-eslint/utils': 8.21.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
@@ -6357,12 +6408,6 @@ snapshots:
       typescript: 5.7.3
     transitivePeerDependencies:
       - supports-color
-
-  eslint-plugin-unused-imports@4.1.4(@typescript-eslint/eslint-plugin@8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2)):
-    dependencies:
-      eslint: 9.19.0(jiti@2.4.2)
-    optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
 
   eslint-scope@8.2.0:
     dependencies:
@@ -7564,7 +7609,8 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.4.2: {}
+  prettier@3.4.2:
+    optional: true
 
   pretty-format@27.5.1:
     dependencies:
@@ -7989,7 +8035,7 @@ snapshots:
 
   storybook-solidjs-vite@1.0.0-beta.6(@testing-library/jest-dom@6.6.3)(solid-js@1.9.4)(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)):
     dependencies:
-      '@storybook/builder-vite': 8.6.0-alpha.2(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
+      '@storybook/builder-vite': 8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
       magic-string: 0.30.17
       vite-plugin-solid: 2.11.0(@testing-library/jest-dom@6.6.3)(solid-js@1.9.4)(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
     transitivePeerDependencies:

@@ -1,12 +1,12 @@
-import { For, JSXElement, onMount, Show } from "solid-js";
+import { For, type JSXElement, Show, onMount } from "solid-js";
 
 import { makePointerListener } from "@/components/diagram/listener/pointer-listener";
 import { makeWheelListener } from "@/components/diagram/listener/wheel-listener";
 import { ContextMenu } from "@/components/parts/context-menu";
 import { GRID_SPACING } from "@/constants/app-const";
-import { I18nDict } from "@/constants/i18n";
+import type { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
-import {
+import type {
   ActivityNode,
   Circle,
   CommentEdge,
@@ -149,16 +149,7 @@ export function DiagramContainer(): JSXElement {
 
       <ContextMenu
         openPoint={diagramModel.contextMenuPoint()}
-        menuItems={[
-          "select",
-          "transition",
-          "manualActivity",
-          "autoActivity",
-          "handWork",
-          "start",
-          "end",
-          "comment",
-        ]}
+        menuItems={["select", "transition", "manualActivity", "autoActivity", "handWork", "start", "end", "comment"]}
         onClickMenu={onContextMenuSelect}
       />
     </>
@@ -197,7 +188,9 @@ export function DiagramView(props: {
           height: rect.height,
         });
         if (props.onWheel) {
-          diagramRef.addEventListener("wheel", props.onWheel, { passive: true });
+          diagramRef.addEventListener("wheel", props.onWheel, {
+            passive: true,
+          });
         }
       }
     });
@@ -254,15 +247,7 @@ export function DiagramView(props: {
         </defs>
         <g data-id="gird-line">
           <For each={props.gridLines}>
-            {(it) => (
-              <line
-                x1={it.p1.x}
-                y1={it.p1.y}
-                x2={it.p2.x}
-                y2={it.p2.y}
-                stroke="var(--gridline-color)"
-              />
-            )}
+            {(it) => <line x1={it.p1.x} y1={it.p1.y} x2={it.p2.x} y2={it.p2.y} stroke="var(--gridline-color)" />}
           </For>
         </g>
 
@@ -313,7 +298,7 @@ export function DiagramView(props: {
         <g data-id="adding-line">
           <Show when={props.addingLine != null}>
             <line
-              class="pointer-events-none fill-none stroke-foreground stroke-2"
+              class="pointer-events-none fill-none stroke-2 stroke-foreground"
               x1={props.addingLine?.p1.x}
               y1={props.addingLine?.p1.y}
               x2={props.addingLine?.p2.x}

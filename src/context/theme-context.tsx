@@ -1,11 +1,11 @@
 import * as i18n from "@solid-primitives/i18n";
 import {
+  type JSX,
   createContext,
   createEffect,
   createMemo,
   createRenderEffect,
   createSignal,
-  JSX,
   useContext,
 } from "solid-js";
 
@@ -18,25 +18,23 @@ export type Theme = "material" | "crab";
 export type Color = "green" | "red";
 
 export function makeThemeContext() {
-  const LOCALE_KEY = "locale";
-  const defaultLocale = (localStorage.getItem(LOCALE_KEY) || navigator.language)
-    .toLowerCase()
-    .startsWith("ja")
+  const localeKey = "locale";
+  const defaultLocale = (localStorage.getItem(localeKey) || navigator.language).toLowerCase().startsWith("ja")
     ? "ja"
     : "en";
   const dictionaries = { ja: i18nJaDict, en: i18nEnDict };
   const [locale, setLocale] = createSignal<keyof typeof dictionaries>(defaultLocale);
   const dict = createMemo(() => i18n.flatten(dictionaries[locale()]));
   createRenderEffect(() => {
-    localStorage.setItem(LOCALE_KEY, locale());
+    localStorage.setItem(localeKey, locale());
     setDataFactoryDict(dict());
   });
 
-  const APPEARANCE_KEY = "appearance";
-  const defaultAppearance = (localStorage.getItem(APPEARANCE_KEY) as Appearance) || "auto";
+  const appearanceKey = "appearance";
+  const defaultAppearance = (localStorage.getItem(appearanceKey) as Appearance) || "auto";
   const [appearance, setAppearance] = createSignal<Appearance>(defaultAppearance);
   createEffect(() => {
-    localStorage.setItem(APPEARANCE_KEY, appearance());
+    localStorage.setItem(appearanceKey, appearance());
 
     switch (appearance()) {
       case "light":
@@ -54,18 +52,18 @@ export function makeThemeContext() {
     }
   });
 
-  const THEME_KEY = "theme";
-  const defaultTheme = (localStorage.getItem(THEME_KEY) as Theme) || "material";
+  const themeKey = "theme";
+  const defaultTheme = (localStorage.getItem(themeKey) as Theme) || "material";
   const [theme, setTheme] = createSignal<Theme>(defaultTheme);
   createEffect(() => {
-    localStorage.setItem(THEME_KEY, theme());
+    localStorage.setItem(themeKey, theme());
   });
 
-  const COLOR_KEY = "color";
-  const defaultColor = (localStorage.getItem(COLOR_KEY) as Color) || "green";
+  const colorKey = "color";
+  const defaultColor = (localStorage.getItem(colorKey) as Color) || "green";
   const [color, setColor] = createSignal<Color>(defaultColor);
   createEffect(() => {
-    localStorage.setItem(COLOR_KEY, color());
+    localStorage.setItem(colorKey, color());
 
     if (color() === "red") {
       document.documentElement.style.setProperty("--THEME1-COLOR", "#C2185B");
@@ -76,7 +74,17 @@ export function makeThemeContext() {
     }
   });
 
-  return { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor };
+  return {
+    dict,
+    locale,
+    setLocale,
+    appearance,
+    setAppearance,
+    theme,
+    setTheme,
+    color,
+    setColor,
+  };
 }
 
 const dummyValue = undefined as unknown as ReturnType<typeof makeThemeContext>;

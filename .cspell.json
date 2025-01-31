@@ -52,6 +52,7 @@
     "**/*.avif",
     "lefthook.yml",
     "**/*.mp4",
-    ".vscode/**"
+    ".vscode/**",
+    "__local-vrt__/**"
   ]
 }

@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSXElement } from "solid-js";
+import type { JSXElement } from "solid-js";
 
 import { ToggleIconButton } from "@/components/parts/toggle-icon-button";
 import { useModelContext } from "@/context/model-context";

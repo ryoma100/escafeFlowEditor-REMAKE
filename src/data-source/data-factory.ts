@@ -1,7 +1,7 @@
 import * as v from "valibot";
 
 import { ACTIVITY_MIN_WIDTH, NORMAL_ICON_SIZE } from "@/constants/app-const";
-import { I18nDict, i18nEnDict } from "@/constants/i18n";
+import { type I18nDict, i18nEnDict } from "@/constants/i18n";
 import {
   actorIdSchema,
   applicationIdSchema,
@@ -11,7 +11,7 @@ import {
   nodeIdSchema,
   xpdlIdSchema,
 } from "@/data-source/data-schema";
-import {
+import type {
   ActivityNode,
   ActivityNodeType,
   ActorEntity,
@@ -62,10 +62,7 @@ function createProject(created: DateTime = toDateTime()): ProjectEntity {
   return project;
 }
 
-function createProcess(
-  processList: ProcessEntity[],
-  created: DateTime = toDateTime(),
-): ProcessEntity {
+function createProcess(processList: ProcessEntity[], created: DateTime = toDateTime()): ProcessEntity {
   let id = maxId(processList);
   let xpdlId = "";
   do {
@@ -182,11 +179,7 @@ export function toEdgeId(id: number): EdgeId {
   return v.parse(edgeIdSchema, id);
 }
 
-function createTransitionEdge(
-  edgeList: IEdge[],
-  fromNodeId: NodeId,
-  toNodeId: NodeId,
-): TransitionEdge {
+function createTransitionEdge(edgeList: IEdge[], fromNodeId: NodeId, toNodeId: NodeId): TransitionEdge {
   const transitionList = edgeList.filter((it) => it.type === "transitionEdge") as TransitionEdge[];
   let transitionId = transitionList.length;
   let xpdlId = "";

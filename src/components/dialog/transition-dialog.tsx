@@ -1,12 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, createSignal, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap, toNodeId } from "@/data-source/data-factory";
-import { TransitionEdge } from "@/data-source/data-type";
+import type { TransitionEdge } from "@/data-source/data-type";
 
 export function TransitionDialog(): JSXElement {
   const { dialogModel, transitionEdgeModel } = useModelContext();
@@ -40,7 +40,7 @@ export function TransitionDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={transition()} keyed>
+      <Show when={transition()} keyed={true}>
         {(transition) => (
           <TransitionDialogView
             transition={transition}
@@ -86,11 +86,7 @@ export function TransitionDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center space-y-2">
           <div>ID:</div>
-          <input
-            type="text"
-            value={formData.xpdlId}
-            onChange={(e) => setFormData("xpdlId", e.target.value)}
-          />
+          <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("connectCondition")}</div>
           <div class="flex items-center">
             <input

@@ -1,10 +1,10 @@
 import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
-import { ActivityNodeModel } from "@/data-model/activity-node-model";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
-import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { ActivityNode, Point } from "@/data-source/data-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { ActivityNodeModel } from "@/data-model/activity-node-model";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { ExtendEdgeModel } from "@/data-model/extend-edge-model";
+import type { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
+import type { ActivityNode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeAddActivityEdgeStrategy(

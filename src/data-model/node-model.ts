@@ -1,9 +1,9 @@
 import { createStore, produce } from "solid-js/store";
 
-import { defaultRectangle, GRID_SPACING } from "@/constants/app-const";
-import { DiagramModel } from "@/data-model/diagram-model";
+import { GRID_SPACING, defaultRectangle } from "@/constants/app-const";
+import type { DiagramModel } from "@/data-model/diagram-model";
 import { deepUnwrap } from "@/data-source/data-factory";
-import { INode, NodeId, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
+import type { INode, NodeId, Point, ProcessEntity, Rectangle } from "@/data-source/data-type";
 import { rotatePoint } from "@/utils/point-utils";
 
 export type NodeModel = ReturnType<typeof makeNodeModel>;
@@ -22,10 +22,7 @@ export function makeNodeModel(diagramModel: DiagramModel) {
     return deepUnwrap(nodeList);
   }
 
-  function changeSelectNodes(
-    type: "select" | "selectAll" | "toggle" | "clearAll",
-    ids: number[] = [],
-  ) {
+  function changeSelectNodes(type: "select" | "selectAll" | "toggle" | "clearAll", ids: number[] = []) {
     setNodeList(
       (it) => type !== "toggle" || (type === "toggle" && ids.includes(it.id)),
       produce((it) => {
@@ -62,7 +59,10 @@ export function makeNodeModel(diagramModel: DiagramModel) {
     setNodeList(
       (it) => it.selected,
       produce((it) => {
-        const centerPoint: Point = { x: it.x + it.width / 2, y: it.y + it.height / 2 };
+        const centerPoint: Point = {
+          x: it.x + it.width / 2,
+          y: it.y + it.height / 2,
+        };
         it.x += centerPoint.x > basePoint.x ? moveX : -moveX;
         it.y += centerPoint.y > basePoint.y ? moveY : -moveY;
       }),
@@ -77,7 +77,10 @@ export function makeNodeModel(diagramModel: DiagramModel) {
     setNodeList(
       (it) => it.selected,
       produce((it) => {
-        const centerPoint: Point = { x: it.x + it.width / 2, y: it.y + it.height / 2 };
+        const centerPoint: Point = {
+          x: it.x + it.width / 2,
+          y: it.y + it.height / 2,
+        };
         const point: Point = { x: it.x, y: it.y };
         if (centerPoint.y > basePoint.y) {
           point.y = basePoint.y + (point.y - basePoint.y) * delta;

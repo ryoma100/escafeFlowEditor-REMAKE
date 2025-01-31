@@ -1,10 +1,10 @@
 import { makeDragScrollDelegate } from "@/components/diagram/drag-strategy/drag-scroll-delegate";
 import { ACTIVITY_EAR_WIDTH } from "@/constants/app-const";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
-import { ExtendNodeModel } from "@/data-model/extend-node-model";
-import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { IEdge, INode, Point } from "@/data-source/data-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { ExtendEdgeModel } from "@/data-model/extend-edge-model";
+import type { ExtendNodeModel } from "@/data-model/extend-node-model";
+import type { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
+import type { IEdge, INode, Point } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeMoveStartEdgeStrategy(
@@ -26,9 +26,15 @@ export function makeMoveStartEdgeStrategy(
     targetEdge = edge;
     endNode = node;
     if (edge.type === "transitionEdge") {
-      endPoint = { x: endNode.x - ACTIVITY_EAR_WIDTH, y: endNode.y + endNode.height / 2 };
+      endPoint = {
+        x: endNode.x - ACTIVITY_EAR_WIDTH,
+        y: endNode.y + endNode.height / 2,
+      };
     } else {
-      endPoint = { x: endNode.x + endNode.width / 2, y: endNode.y + endNode.height / 2 };
+      endPoint = {
+        x: endNode.x + endNode.width / 2,
+        y: endNode.y + endNode.height / 2,
+      };
     }
     edgeModel.changeDisableEdge("disable", edge.id);
     drawEdge(e);

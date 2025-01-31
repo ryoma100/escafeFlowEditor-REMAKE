@@ -2,13 +2,13 @@ import * as i18n from "@solid-primitives/i18n";
 import {} from "@tauri-apps/api";
 import * as dialog from "@tauri-apps/plugin-dialog";
 import { readTextFile } from "@tauri-apps/plugin-fs";
-import { createEffect, createSignal, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, createSignal, onMount } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { importXml } from "@/data-source/data-converter";
-import { ProjectEntity } from "@/data-source/data-type";
+import type { ProjectEntity } from "@/data-source/data-type";
 
 export function LoadDialog(): JSXElement {
   const { dialogModel, processModel, diagramModel } = useModelContext();
@@ -29,7 +29,9 @@ export function LoadDialog(): JSXElement {
   }
 
   async function tauriLoad() {
-    const path = await dialog.open({ filters: [{ extensions: ["xml"], name: "*" }] });
+    const path = await dialog.open({
+      filters: [{ extensions: ["xml"], name: "*" }],
+    });
     if (path) {
       const data = await readTextFile(String(path));
       const project: ProjectEntity = importXml(data);
@@ -79,11 +81,7 @@ export function LoadDialog(): JSXElement {
   return (
     <dialog ref={dialogRef}>
       <Show when={dialogModel.openDialog()?.type === "load"}>
-        <LoadDialogView
-          onLoadClick={handleFileLoad}
-          onInputClick={handleInput}
-          onDialogClose={handleDialogClose}
-        />
+        <LoadDialogView onLoadClick={handleFileLoad} onInputClick={handleInput} onDialogClose={handleDialogClose} />
       </Show>
     </dialog>
   );
@@ -114,11 +112,7 @@ export function LoadDialogView(props: {
       <h5 class="mb-2">{t("openXpdl")}</h5>
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("inputXpdl")}</p>
-        <textarea
-          class="mb-2 h-[410px] w-full resize-none"
-          value={data()}
-          onChange={(e) => setData(e.target.value)}
-        />
+        <textarea class="mb-2 h-[410px] w-full resize-none" value={data()} onChange={(e) => setData(e.target.value)} />
         <div class="flex justify-between">
           <button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
             {t("loadFile")}

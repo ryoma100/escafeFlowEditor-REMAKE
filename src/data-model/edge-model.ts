@@ -1,8 +1,8 @@
 import { createStore, produce } from "solid-js/store";
 
-import { NodeModel } from "@/data-model/node-model";
+import type { NodeModel } from "@/data-model/node-model";
 import { deepUnwrap } from "@/data-source/data-factory";
-import { EdgeId, IEdge, ProcessEntity } from "@/data-source/data-type";
+import type { EdgeId, IEdge, ProcessEntity } from "@/data-source/data-type";
 
 export type EdgeModel = ReturnType<typeof makeEdgeModel>;
 
@@ -17,10 +17,7 @@ export function makeEdgeModel(nodeModel: NodeModel) {
     return deepUnwrap(edgeList);
   }
 
-  function changeSelectEdges(
-    type: "select" | "selectAll" | "toggle" | "clearAll",
-    ids: EdgeId[] = [],
-  ) {
+  function changeSelectEdges(type: "select" | "selectAll" | "toggle" | "clearAll", ids: EdgeId[] = []) {
     setEdgeList(
       (it) => type !== "toggle" || (type === "toggle" && ids.includes(it.id)),
       produce((it) => {
@@ -58,10 +55,7 @@ export function makeEdgeModel(nodeModel: NodeModel) {
   function deleteSelectedEdge() {
     setEdgeList(
       edgeList.filter(
-        (it) =>
-          !it.selected &&
-          !nodeModel.getNode(it.fromNodeId).selected &&
-          !nodeModel.getNode(it.toNodeId).selected,
+        (it) => !it.selected && !nodeModel.getNode(it.fromNodeId).selected && !nodeModel.getNode(it.toNodeId).selected,
       ),
     );
   }

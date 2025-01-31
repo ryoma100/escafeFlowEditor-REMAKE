@@ -1,10 +1,10 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, createSignal, For, JSXElement, onMount } from "solid-js";
+import { For, type JSXElement, createEffect, createSignal, onMount } from "solid-js";
 
 import { defaultPoint } from "@/constants/app-const";
-import { I18nDict } from "@/constants/i18n";
+import type { I18nDict } from "@/constants/i18n";
 import { useThemeContext } from "@/context/theme-context";
-import { Point, Size } from "@/data-source/data-type";
+import type { Point, Size } from "@/data-source/data-type";
 
 export function ContextMenu(props: {
   readonly openPoint: Point | null;
@@ -58,17 +58,17 @@ export function ContextMenu(props: {
     <div
       ref={contextMenuRef}
       class="fixed hidden border-2 border-background bg-secondary"
-      classList={{ hidden: props.openPoint == null, block: props.openPoint != null }}
+      classList={{
+        hidden: props.openPoint == null,
+        block: props.openPoint != null,
+      }}
       style={{ left: `${adjustPoint().x}px`, top: `${adjustPoint().y}px` }}
       onContextMenu={(e) => e.preventDefault()}
     >
       <ul class="m-1">
         <For each={props.menuItems}>
           {(it) => (
-            <li
-              class="cursor-pointer text-nowrap p-1 hover:bg-primary"
-              onClick={() => onMenuClick(it)}
-            >
+            <li class="cursor-pointer text-nowrap p-1 hover:bg-primary" onClick={() => onMenuClick(it)}>
               {t(it)}
             </li>
           )}

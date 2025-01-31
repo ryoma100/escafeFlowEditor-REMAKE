@@ -1,8 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement, Show } from "solid-js";
+import { type JSXElement, Show, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
-import { I18nDict } from "@/constants/i18n";
+import type { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 
@@ -24,7 +24,7 @@ export function MessageDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={dialogModel.openMessage()} keyed>
+      <Show when={dialogModel.openMessage()} keyed={true}>
         {(message) => <MessageDialogView message={message} onDialogClose={handleDialogClose} />}
       </Show>
     </dialog>

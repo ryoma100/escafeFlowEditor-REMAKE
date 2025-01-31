@@ -1,4 +1,4 @@
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 
 export function makeDefaultStrategy(): DragStrategy {
   function handlePointerDown(_e: PointerEvent) {}
