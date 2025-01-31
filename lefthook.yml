@@ -13,19 +13,18 @@
 pre-commit:
   parallel: true
   commands:
-    prettier:
-      glob: "*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md,yml,yaml}"
-      run: |
-        pnpm prettier --write --ignore-unknown {staged_files}
-        git add {staged_files}
+    biome:
+      glob: "*.{js,ts,jsx,tsx,css}"
+      run: pnpm biome check --diagnostic-level=warn --write {staged_files}
+      stage_fixed: true
     eslint:
-      glob: "*.{tsx,ts,mts,mcs}"
+      glob: "*.{js,ts,jsx,tsx}"
       run: pnpm eslint {staged_files}
+    cspell:
+      glob: "*.{js,ts,jsx,tsx,json,md}"
+      run: pnpm cspell lint --gitignore --cache {staged_files}
     tsc:
       glob: "*.{tsx,ts}"
       run: pnpm lint:tsc
-    cspell:
-      glob: "*.{tsx,ts,mts,mcs,mjs,cjs,js,json,md}"
-      run: pnpm cspell lint --gitignore --cache {staged_files}
     test:
       run: pnpm test run

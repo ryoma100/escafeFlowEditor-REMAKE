@@ -1,5 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement, Show } from "solid-js";
+import { type JSXElement, Show, createEffect } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
@@ -20,10 +20,7 @@ export function ConfirmDialog(): JSXElement {
   }
 
   createEffect(() => {
-    if (
-      dialogModel.openDialog()?.type === "initAll" ||
-      dialogModel.openDialog()?.type === "deleteProcess"
-    ) {
+    if (dialogModel.openDialog()?.type === "initAll" || dialogModel.openDialog()?.type === "deleteProcess") {
       dialogRef?.showModal();
     } else {
       dialogRef?.close();
@@ -33,10 +30,8 @@ export function ConfirmDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleClose}>
-      <Show when={dialogModel.openDialog()?.type} keyed>
-        {(type) => (
-          <ConfirmDialogView type={type} onFormSubmit={handleSubmit} onDialogClose={handleClose} />
-        )}
+      <Show when={dialogModel.openDialog()?.type} keyed={true}>
+        {(type) => <ConfirmDialogView type={type} onFormSubmit={handleSubmit} onDialogClose={handleClose} />}
       </Show>
     </dialog>
   );

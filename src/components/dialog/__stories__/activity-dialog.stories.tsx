@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "storybook-solidjs";
 
 import { ActivityDialogView } from "@/components/dialog/activity-dialog";
 import { dataFactory } from "@/data-source/data-factory";
-import { ActivityNodeType } from "@/data-source/data-type";
+import type { ActivityNodeType } from "@/data-source/data-type";
 
 const meta = {
   title: "Dialog/Activity",

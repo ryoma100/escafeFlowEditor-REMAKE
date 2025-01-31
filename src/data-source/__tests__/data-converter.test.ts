@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { exportXml, importXml } from "@/data-source/data-converter";
 import { dataFactory, toDateTime, toXpdlId } from "@/data-source/data-factory";
-import { ActivityNode, CommentNode } from "@/data-source/data-type";
+import type { ActivityNode, CommentNode } from "@/data-source/data-type";
 
 describe("exportXml", () => {
   it("init project", () => {
@@ -70,7 +70,7 @@ const initProjectXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
  * autoActivity#2,manualTimerActivity#2 -> (andJoin)autoTimerActivity#4(oneSplit) -> userActivity#5
  * autoTimerActivity#3,comment -> (oneJoin)userActivity#5(oneSplit) -> autoActivity#2,end
  */
-const oneProcessData = (function () {
+const oneProcessData = (() => {
   const project = dataFactory.createProject(toDateTime("0001-01-01T00:00:00.000Z"));
   const process = project.processes[0];
   process.detail.applications.push(dataFactory.createApplication(process.detail.applications));
@@ -91,29 +91,19 @@ const oneProcessData = (function () {
   const actor1 = process.actors[0];
   const actor2 = process.actors[1];
 
-  process.nodeList.push(
-    dataFactory.createActivityNode(process.nodeList, actor1.id, "manualActivity", 11, 12),
-  );
+  process.nodeList.push(dataFactory.createActivityNode(process.nodeList, actor1.id, "manualActivity", 11, 12));
   const manualActivity = process.nodeList[0] as ActivityNode;
-  process.nodeList.push(
-    dataFactory.createActivityNode(process.nodeList, actor2.id, "autoActivity", 21, 22),
-  );
+  process.nodeList.push(dataFactory.createActivityNode(process.nodeList, actor2.id, "autoActivity", 21, 22));
   const autoActivity = process.nodeList[1] as ActivityNode;
   autoActivity.applications = [
     { id: application1.id, ognl: "ognl1" },
     { id: application2.id, ognl: "ognl2" },
   ];
-  process.nodeList.push(
-    dataFactory.createActivityNode(process.nodeList, actor1.id, "manualTimerActivity", 31, 32),
-  );
+  process.nodeList.push(dataFactory.createActivityNode(process.nodeList, actor1.id, "manualTimerActivity", 31, 32));
   const manualTimerActivity = process.nodeList[2] as ActivityNode;
-  process.nodeList.push(
-    dataFactory.createActivityNode(process.nodeList, actor2.id, "autoTimerActivity", 41, 42),
-  );
+  process.nodeList.push(dataFactory.createActivityNode(process.nodeList, actor2.id, "autoTimerActivity", 41, 42));
   const autoTimerActivity = process.nodeList[3] as ActivityNode;
-  process.nodeList.push(
-    dataFactory.createActivityNode(process.nodeList, actor1.id, "userActivity", 51, 52),
-  );
+  process.nodeList.push(dataFactory.createActivityNode(process.nodeList, actor1.id, "userActivity", 51, 52));
   const userActivity = process.nodeList[4] as ActivityNode;
 
   process.nodeList.push(dataFactory.createStartNode(process.nodeList, 10, 11));
@@ -123,31 +113,15 @@ const oneProcessData = (function () {
   process.nodeList.push(dataFactory.createCommentNode(process.nodeList, 71, 72));
   const commentNode = process.nodeList[7] as CommentNode;
 
+  process.edgeList.push(dataFactory.createTransitionEdge(process.edgeList, manualTimerActivity.id, manualActivity.id));
+  process.edgeList.push(dataFactory.createTransitionEdge(process.edgeList, manualActivity.id, autoActivity.id));
+  process.edgeList.push(dataFactory.createTransitionEdge(process.edgeList, userActivity.id, autoActivity.id));
+  process.edgeList.push(dataFactory.createTransitionEdge(process.edgeList, autoActivity.id, manualTimerActivity.id));
+  process.edgeList.push(dataFactory.createTransitionEdge(process.edgeList, autoActivity.id, autoTimerActivity.id));
   process.edgeList.push(
-    dataFactory.createTransitionEdge(process.edgeList, manualTimerActivity.id, manualActivity.id),
+    dataFactory.createTransitionEdge(process.edgeList, manualTimerActivity.id, autoTimerActivity.id),
   );
-  process.edgeList.push(
-    dataFactory.createTransitionEdge(process.edgeList, manualActivity.id, autoActivity.id),
-  );
-  process.edgeList.push(
-    dataFactory.createTransitionEdge(process.edgeList, userActivity.id, autoActivity.id),
-  );
-  process.edgeList.push(
-    dataFactory.createTransitionEdge(process.edgeList, autoActivity.id, manualTimerActivity.id),
-  );
-  process.edgeList.push(
-    dataFactory.createTransitionEdge(process.edgeList, autoActivity.id, autoTimerActivity.id),
-  );
-  process.edgeList.push(
-    dataFactory.createTransitionEdge(
-      process.edgeList,
-      manualTimerActivity.id,
-      autoTimerActivity.id,
-    ),
-  );
-  process.edgeList.push(
-    dataFactory.createTransitionEdge(process.edgeList, autoTimerActivity.id, userActivity.id),
-  );
+  process.edgeList.push(dataFactory.createTransitionEdge(process.edgeList, autoTimerActivity.id, userActivity.id));
   manualActivity.joinType = "oneJoin";
   manualActivity.splitType = "oneSplit";
   autoActivity.joinType = "xorJoin";
@@ -159,13 +133,9 @@ const oneProcessData = (function () {
   userActivity.joinType = "oneJoin";
   userActivity.splitType = "oneSplit";
 
-  process.edgeList.push(
-    dataFactory.createStartEdge(process.edgeList, startNode.id, manualActivity.id),
-  );
+  process.edgeList.push(dataFactory.createStartEdge(process.edgeList, startNode.id, manualActivity.id));
   process.edgeList.push(dataFactory.createEndEdge(process.edgeList, userActivity.id, endNode.id));
-  process.edgeList.push(
-    dataFactory.createCommentEdge(process.edgeList, commentNode.id, userActivity.id),
-  );
+  process.edgeList.push(dataFactory.createCommentEdge(process.edgeList, commentNode.id, userActivity.id));
 
   return project;
 })();

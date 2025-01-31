@@ -9,13 +9,7 @@ const meta = {
   argTypes: {
     activityType: {
       control: "select",
-      options: [
-        "manualActivity",
-        "autoActivity",
-        "manualTimerActivity",
-        "autoTimerActivity",
-        "userActivity",
-      ],
+      options: ["manualActivity", "autoActivity", "manualTimerActivity", "autoTimerActivity", "userActivity"],
     },
     joinType: {
       control: "select",

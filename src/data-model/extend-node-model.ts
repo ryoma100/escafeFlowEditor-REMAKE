@@ -1,9 +1,9 @@
 import { produce } from "solid-js/store";
 
 import { START_END_HEIGHT, START_END_WIDTH } from "@/constants/app-const";
-import { NodeModel } from "@/data-model/node-model";
+import type { NodeModel } from "@/data-model/node-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { CommentNode, EndNode, NodeId, StartNode } from "@/data-source/data-type";
+import type { CommentNode, EndNode, NodeId, StartNode } from "@/data-source/data-type";
 
 export type ExtendNodeModel = ReturnType<typeof makeExtendNodeModel>;
 
@@ -27,11 +27,7 @@ export function makeExtendNodeModel(nodeModel: NodeModel) {
   }
 
   function addStartNode(x: number, y: number): StartNode {
-    const node = dataFactory.createStartNode(
-      nodeModel.nodeList,
-      x - START_END_WIDTH / 2,
-      y - START_END_HEIGHT / 2,
-    );
+    const node = dataFactory.createStartNode(nodeModel.nodeList, x - START_END_WIDTH / 2, y - START_END_HEIGHT / 2);
     nodeModel.addNode(node);
     return node;
   }
@@ -45,11 +41,7 @@ export function makeExtendNodeModel(nodeModel: NodeModel) {
   }
 
   function addEndNode(x: number, y: number): EndNode {
-    const node = dataFactory.createEndNode(
-      nodeModel.nodeList,
-      x - START_END_WIDTH / 2,
-      y - START_END_HEIGHT / 2,
-    );
+    const node = dataFactory.createEndNode(nodeModel.nodeList, x - START_END_WIDTH / 2, y - START_END_HEIGHT / 2);
     nodeModel.addNode(node);
     return node;
   }

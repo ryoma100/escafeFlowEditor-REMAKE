@@ -1,14 +1,13 @@
 import * as i18n from "@solid-primitives/i18n";
-import {} from "@tauri-apps/api";
 import * as dialog from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
-import { createEffect, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, onMount } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { exportXml } from "@/data-source/data-converter";
-import { ProjectEntity } from "@/data-source/data-type";
+import type { ProjectEntity } from "@/data-source/data-type";
 
 export function SaveDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -62,13 +61,9 @@ export function SaveDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={project()} keyed>
+      <Show when={project()} keyed={true}>
         {(project) => (
-          <SaveDialogView
-            project={project}
-            onFormSubmit={handleFormSubmit}
-            onDialogClose={handleDialogClose}
-          />
+          <SaveDialogView project={project} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />
         )}
       </Show>
     </dialog>
@@ -102,7 +97,7 @@ export function SaveDialogView(props: {
       <h5 class="mb-2">{t("saveXpdl")}</h5>
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("copyXpdl")}</p>
-        <textarea class="mb-2 h-[410px] w-full resize-none" readOnly>
+        <textarea class="mb-2 h-[410px] w-full resize-none" readOnly={true}>
           {data()}
         </textarea>
 

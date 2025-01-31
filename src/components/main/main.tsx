@@ -1,4 +1,4 @@
-import { JSXElement } from "solid-js";
+import type { JSXElement } from "solid-js";
 
 import { DiagramContainer } from "@/components/diagram/diagram";
 import { useModelContext } from "@/context/model-context";

@@ -1,12 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
+import type { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 
 export function ProjectDialog(): JSXElement {
   const { projectModel, dialogModel } = useModelContext();
@@ -36,13 +36,9 @@ export function ProjectDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={project()} keyed>
+      <Show when={project()} keyed={true}>
         {(project) => (
-          <ProjectDialogView
-            project={project}
-            onFormSubmit={handleFormSubmit}
-            onDialogClose={handleDialogClose}
-          />
+          <ProjectDialogView project={project} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />
         )}
       </Show>
     </dialog>
@@ -75,17 +71,9 @@ export function ProjectDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID:</div>
-          <input
-            type="text"
-            value={formData.xpdlId}
-            onInput={(e) => setFormData("xpdlId", e.target.value)}
-          />
+          <input type="text" value={formData.xpdlId} onInput={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("name")}:</div>
-          <input
-            type="text"
-            value={formData.name}
-            onInput={(e) => setFormData("name", e.target.value)}
-          />
+          <input type="text" value={formData.name} onInput={(e) => setFormData("name", e.target.value)} />
         </div>
 
         <ButtonsContainer>

@@ -1,10 +1,10 @@
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
-import { NodeModel } from "@/data-model/node-model";
-import { Point } from "@/data-source/data-type";
-import { INode } from "@/data-source/data-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { ExtendEdgeModel } from "@/data-model/extend-edge-model";
+import type { NodeModel } from "@/data-model/node-model";
+import type { Point } from "@/data-source/data-type";
+import type { INode } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makeAddStartEdgeStrategy(

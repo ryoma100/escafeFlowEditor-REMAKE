@@ -1,12 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { CommentNode } from "@/data-source/data-type";
+import type { CommentNode } from "@/data-source/data-type";
 
 export function CommentDialog(): JSXElement {
   const { extendNodeModel, dialogModel } = useModelContext();
@@ -36,13 +36,9 @@ export function CommentDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={comment()} keyed>
+      <Show when={comment()} keyed={true}>
         {(comment) => (
-          <CommentDialogView
-            comment={comment}
-            onFormSubmit={handleFormSubmit}
-            onDialogClose={handleDialogClose}
-          />
+          <CommentDialogView comment={comment} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />
         )}
       </Show>
     </dialog>

@@ -1,4 +1,4 @@
-import { DiagramModel } from "@/data-model/diagram-model";
+import type { DiagramModel } from "@/data-model/diagram-model";
 
 export function makeWheelListener(diagramModel: DiagramModel) {
   function handleWheel(e: WheelEvent) {

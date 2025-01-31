@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 
-import { i18nEnDict } from "@/constants/i18n";
-import {
+import type { i18nEnDict } from "@/constants/i18n";
+import type {
   ActivityNode,
   ActorEntity,
   CommentNode,

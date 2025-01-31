@@ -1,13 +1,10 @@
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { defaultPoint } from "@/constants/app-const";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { NodeModel } from "@/data-model/node-model";
-import { Point } from "@/data-source/data-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { NodeModel } from "@/data-model/node-model";
+import type { Point } from "@/data-source/data-type";
 
-export function makeRotateNodesStrategy(
-  diagramModel: DiagramModel,
-  nodeModel: NodeModel,
-): DragStrategy {
+export function makeRotateNodesStrategy(diagramModel: DiagramModel, nodeModel: NodeModel): DragStrategy {
   let basePoint: Point = defaultPoint;
 
   function handlePointerDown(e: PointerEvent) {
@@ -23,7 +20,9 @@ export function makeRotateNodesStrategy(
     nodeModel.rotateSelectedNodes(basePoint, moveX, moveY);
   }
 
-  function handlePointerUp(_e: PointerEvent) {}
+  function handlePointerUp(_e: PointerEvent) {
+    // do nothing
+  }
 
   return {
     handlePointerDown,

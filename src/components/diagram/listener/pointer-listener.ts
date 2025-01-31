@@ -2,7 +2,7 @@ import { makeAddActivityEdgeStrategy } from "@/components/diagram/drag-strategy/
 import { makeAddCommentEdgeStrategy } from "@/components/diagram/drag-strategy/add-comment-edge-strategy";
 import { makeAddStartEdgeStrategy } from "@/components/diagram/drag-strategy/add-start-edge-strategy";
 import { makeDefaultStrategy } from "@/components/diagram/drag-strategy/default-strategy";
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
 import { makeMoveEndEdgeStrategy } from "@/components/diagram/drag-strategy/move-end-edge-strategy";
 import { makeMoveNodesStrategy } from "@/components/diagram/drag-strategy/move-nodes-strategy";
 import { makeMoveStartEdgeStrategy } from "@/components/diagram/drag-strategy/move-start-edge-strategy";
@@ -15,16 +15,16 @@ import { makeSelectBoxStrategy } from "@/components/diagram/drag-strategy/select
 import { makeSelectCircleStrategy } from "@/components/diagram/drag-strategy/select-circle-strategy";
 import { makeSelectStrategy } from "@/components/diagram/drag-strategy/select-strategy";
 import { makeMultiTouchListener } from "@/components/diagram/listener/multi-touch-listener";
-import { ToolbarType } from "@/components/toolbar/toolbar";
-import { ActivityNodeModel } from "@/data-model/activity-node-model";
-import { ActorModel } from "@/data-model/actor-model";
-import { DiagramModel } from "@/data-model/diagram-model";
-import { EdgeModel } from "@/data-model/edge-model";
-import { ExtendEdgeModel } from "@/data-model/extend-edge-model";
-import { ExtendNodeModel } from "@/data-model/extend-node-model";
-import { NodeModel } from "@/data-model/node-model";
-import { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
-import { ActivityNode, IEdge, INode, NodeId } from "@/data-source/data-type";
+import type { ToolbarType } from "@/components/toolbar/toolbar";
+import type { ActivityNodeModel } from "@/data-model/activity-node-model";
+import type { ActorModel } from "@/data-model/actor-model";
+import type { DiagramModel } from "@/data-model/diagram-model";
+import type { EdgeModel } from "@/data-model/edge-model";
+import type { ExtendEdgeModel } from "@/data-model/extend-edge-model";
+import type { ExtendNodeModel } from "@/data-model/extend-node-model";
+import type { NodeModel } from "@/data-model/node-model";
+import type { TransitionEdgeModel } from "@/data-model/transaction-edge-model";
+import type { ActivityNode, IEdge, INode, NodeId } from "@/data-source/data-type";
 import { containsRect } from "@/utils/rectangle-utils";
 
 export function makePointerListener(
@@ -62,12 +62,7 @@ export function makePointerListener(
       transitionEdgeModel,
       extendEdgeModel,
     ),
-    moveEndEdgeStrategy: makeMoveEndEdgeStrategy(
-      diagramModel,
-      activityNodeModel,
-      transitionEdgeModel,
-      extendEdgeModel,
-    ),
+    moveEndEdgeStrategy: makeMoveEndEdgeStrategy(diagramModel, activityNodeModel, transitionEdgeModel, extendEdgeModel),
   };
   let dragStrategy: DragStrategy = dragStrategies.defaultStrategy;
   const pointerEvents: Map<number, PointerEvent> = new Map();
@@ -100,6 +95,8 @@ export function makePointerListener(
         dragStrategy = dragStrategies.addActivityEdgeStrategy;
         dragStrategy.handlePointerDown(e, activity);
         return;
+      default:
+        return;
     }
   }
 
@@ -122,6 +119,8 @@ export function makePointerListener(
           dragStrategy = dragStrategies.addStartEdgeStrategy;
           dragStrategy.handlePointerDown(e, node);
         }
+        return;
+      default:
         return;
     }
   }
@@ -211,6 +210,8 @@ export function makePointerListener(
             dragStrategy.handlePointerDown(e, node);
           }
         }
+        return;
+      default:
         return;
     }
   }

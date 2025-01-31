@@ -1,10 +1,10 @@
 import { produce } from "solid-js/store";
 
 import { ACTIVITY_MIN_WIDTH } from "@/constants/app-const";
-import { i18nEnDict } from "@/constants/i18n";
-import { NodeModel } from "@/data-model//node-model";
+import type { i18nEnDict } from "@/constants/i18n";
+import type { NodeModel } from "@/data-model//node-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { ActivityNode, ActivityNodeType, ActorId, IEdge, NodeId } from "@/data-source/data-type";
+import type { ActivityNode, ActivityNodeType, ActorId, IEdge, NodeId } from "@/data-source/data-type";
 
 export type ActivityNodeModel = ReturnType<typeof makeActivityModel>;
 
@@ -13,12 +13,7 @@ export function makeActivityModel(nodeModel: NodeModel) {
     return nodeModel.nodeList.filter((it) => it.type === "activityNode") as ActivityNode[];
   }
 
-  function addActivity(
-    type: ActivityNodeType,
-    actorId: ActorId,
-    cx: number,
-    cy: number,
-  ): ActivityNode {
+  function addActivity(type: ActivityNodeType, actorId: ActorId, cx: number, cy: number): ActivityNode {
     const activity = dataFactory.createActivityNode(nodeModel.nodeList, actorId, type, cx, cy);
     nodeModel.setNodeList([...nodeModel.nodeList, activity]);
     return activity;
@@ -128,10 +123,7 @@ export function makeActivityModel(nodeModel: NodeModel) {
   function updateAllJoinSplitType(edges: IEdge[]) {
     nodeModel.nodeList.forEach((node) => {
       if (node.type === "activityNode") {
-        updateJoinType(
-          node.id,
-          edges.filter((it) => it.type === "transitionEdge" && it.toNodeId === node.id).length,
-        );
+        updateJoinType(node.id, edges.filter((it) => it.type === "transitionEdge" && it.toNodeId === node.id).length);
         updateSplitType(
           node.id,
           edges.filter((it) => it.type === "transitionEdge" && it.fromNodeId === node.id).length,

@@ -1,8 +1,8 @@
-import { createSignal, JSXElement, onMount } from "solid-js";
+import { type JSXElement, createSignal, onMount } from "solid-js";
 
 import { ACTIVITY_EAR_WIDTH } from "@/constants/app-const";
 import { useModelContext } from "@/context/model-context";
-import { Line, NodeId, Rectangle, TransitionEdge } from "@/data-source/data-type";
+import type { Line, NodeId, Rectangle, TransitionEdge } from "@/data-source/data-type";
 import { computeLine, extendLine } from "@/utils/line-utils";
 
 function adjustActivityRect(rect: Rectangle): Rectangle {
@@ -21,10 +21,8 @@ export function TransitionEdgeContainer(props: {
 }): JSXElement {
   const { activityNodeModel, nodeModel, edgeModel, dialogModel } = useModelContext();
 
-  const fromRect = () =>
-    adjustActivityRect(activityNodeModel.getActivityNode(props.transition.fromNodeId));
-  const toRect = () =>
-    adjustActivityRect(activityNodeModel.getActivityNode(props.transition.toNodeId));
+  const fromRect = () => adjustActivityRect(activityNodeModel.getActivityNode(props.transition.fromNodeId));
+  const toRect = () => adjustActivityRect(activityNodeModel.getActivityNode(props.transition.toNodeId));
   const line = () =>
     computeLine(fromRect(), toRect(), {
       p1: {
@@ -47,7 +45,10 @@ export function TransitionEdgeContainer(props: {
   }
 
   function handleDlbClick(_e: MouseEvent) {
-    dialogModel.setOpenDialog({ type: "transition", transition: props.transition });
+    dialogModel.setOpenDialog({
+      type: "transition",
+      transition: props.transition,
+    });
   }
 
   function handleFromPointerDown(e: PointerEvent) {

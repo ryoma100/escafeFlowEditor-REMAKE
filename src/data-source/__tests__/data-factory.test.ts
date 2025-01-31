@@ -225,9 +225,7 @@ describe("createActivityNode", () => {
 
   it("two activity", () => {
     const activity = dataFactory.createActivityNode([], toActorId(1), "autoActivity", 0, 0);
-    expect(
-      dataFactory.createActivityNode([activity], toActorId(11), "manualActivity", 21, 22),
-    ).toStrictEqual({
+    expect(dataFactory.createActivityNode([activity], toActorId(11), "manualActivity", 21, 22)).toStrictEqual({
       id: 2,
       xpdlId: "activity-2",
       type: "activityNode",
@@ -249,9 +247,7 @@ describe("createActivityNode", () => {
   it("duplicate activity", () => {
     const activity = dataFactory.createActivityNode([], toActorId(1), "autoActivity", 0, 0);
     activity.xpdlId = toXpdlId("activity-2");
-    expect(
-      dataFactory.createActivityNode([activity], toActorId(21), "userActivity", 31, 32),
-    ).toStrictEqual({
+    expect(dataFactory.createActivityNode([activity], toActorId(21), "userActivity", 31, 32)).toStrictEqual({
       id: 2,
       xpdlId: "activity-3",
       type: "activityNode",
@@ -287,9 +283,7 @@ describe("createTransitionEdge", () => {
 
   it("two transition", () => {
     const transition = dataFactory.createTransitionEdge([], toNodeId(1), toNodeId(2));
-    expect(
-      dataFactory.createTransitionEdge([transition], toNodeId(11), toNodeId(12)),
-    ).toStrictEqual({
+    expect(dataFactory.createTransitionEdge([transition], toNodeId(11), toNodeId(12))).toStrictEqual({
       id: 2,
       xpdlId: "transition-2",
       type: "transitionEdge",
@@ -304,9 +298,7 @@ describe("createTransitionEdge", () => {
   it("duplicate transition", () => {
     const transition = dataFactory.createTransitionEdge([], toNodeId(1), toNodeId(2));
     transition.xpdlId = toXpdlId("transition-2");
-    expect(
-      dataFactory.createTransitionEdge([transition], toNodeId(21), toNodeId(22)),
-    ).toStrictEqual({
+    expect(dataFactory.createTransitionEdge([transition], toNodeId(21), toNodeId(22))).toStrictEqual({
       id: 2,
       xpdlId: "transition-3",
       type: "transitionEdge",

@@ -1,6 +1,6 @@
 import { withThemeByClassName } from "@storybook/addon-themes";
-import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 import { ModelContext, makeModelContext } from "../src/context/model-context";
+import { ThemeContext, makeThemeContext } from "../src/context/theme-context";
 
 import "../src/index.css";
 
@@ -35,7 +35,11 @@ const preview = {
       toolbar: {
         icon: "facehappy",
         items: [
-          { value: "material", right: "", title: "Default (Used By Material Icons)" },
+          {
+            value: "material",
+            right: "",
+            title: "Default (Used By Material Icons)",
+          },
           {
             value: "crab",
             right: "🦀",

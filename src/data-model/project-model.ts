@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
 
-import { ProcessModel } from "@/data-model/process-model";
+import type { ProcessModel } from "@/data-model/process-model";
 import { dataFactory } from "@/data-source/data-factory";
-import { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
+import type { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 
 const initialProject = dataFactory.createProject();
 
@@ -34,5 +34,12 @@ export function makeProjectModel(processModel: ProcessModel) {
     processModel.load(project());
   }
 
-  return { initProject, getProjectDetail, setProjectDetail, save, load, project };
+  return {
+    initProject,
+    getProjectDetail,
+    setProjectDetail,
+    save,
+    load,
+    project,
+  };
 }

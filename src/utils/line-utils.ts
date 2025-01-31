@@ -1,4 +1,4 @@
-import { Line, Point, Rectangle } from "@/data-source/data-type";
+import type { Line, Point, Rectangle } from "@/data-source/data-type";
 
 const ACCURACY: number = 0.000000000001;
 
@@ -46,7 +46,10 @@ export function intersectionLineRectangle(line: Line, rect: Rectangle): Point | 
   const topLeft: Point = { x: rect.x, y: rect.y };
   const topRight: Point = { x: rect.x + rect.width - 1, y: rect.y };
   const bottomLeft: Point = { x: rect.x, y: rect.y + rect.height - 1 };
-  const bottomRight: Point = { x: rect.x + rect.width - 1, y: rect.y + rect.height - 1 };
+  const bottomRight: Point = {
+    x: rect.x + rect.width - 1,
+    y: rect.y + rect.height - 1,
+  };
 
   const lines: Line[] = [
     { p1: topLeft, p2: topRight },
@@ -73,7 +76,7 @@ export function computeLine(rect1: Rectangle, rect2: Rectangle, line: Line): Lin
 
 export function lineDistance(line: Line): number {
   const { p1, p2 } = line;
-  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+  return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
 }
 
 export function extendLine(line: Line, diffDistance: number): Line {
@@ -135,7 +138,10 @@ export function intersectionWithRectangle(rect: Rectangle, line: Line): Point | 
   const topLeft: Point = { x: rect.x, y: rect.y };
   const topRight: Point = { x: rect.x + rect.width - 1, y: rect.y };
   const bottomLeft: Point = { x: rect.x, y: rect.y + rect.height - 1 };
-  const bottomRight: Point = { x: rect.x + rect.width - 1, y: rect.y + rect.height - 1 };
+  const bottomRight: Point = {
+    x: rect.x + rect.width - 1,
+    y: rect.y + rect.height - 1,
+  };
 
   const lines: Line[] = [];
   lines.push({ p1: topLeft, p2: topRight });

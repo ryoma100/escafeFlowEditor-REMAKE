@@ -1,20 +1,13 @@
 import * as i18n from "@solid-primitives/i18n";
-import { JSXElement } from "solid-js";
+import type { JSXElement } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 
 export function AppMenu(): JSXElement {
   const { dict } = useThemeContext();
-  const {
-    projectModel,
-    processModel,
-    actorModel,
-    nodeModel,
-    activityNodeModel,
-    edgeModel,
-    dialogModel,
-  } = useModelContext();
+  const { projectModel, processModel, actorModel, nodeModel, activityNodeModel, edgeModel, dialogModel } =
+    useModelContext();
   const t = i18n.translator(dict);
 
   function handleFileNewClick() {
@@ -34,7 +27,10 @@ export function AppMenu(): JSXElement {
 
   function handleFileSaveClick() {
     projectModel.save();
-    dialogModel.setOpenDialog({ type: "save", project: projectModel.project() });
+    dialogModel.setOpenDialog({
+      type: "save",
+      project: projectModel.project(),
+    });
     return false;
   }
 
@@ -69,7 +65,10 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProjectPropertyClick() {
-    dialogModel.setOpenDialog({ type: "project", project: projectModel.project() });
+    dialogModel.setOpenDialog({
+      type: "project",
+      project: projectModel.project(),
+    });
     return false;
   }
 
@@ -79,12 +78,18 @@ export function AppMenu(): JSXElement {
   }
 
   function handleProcessRemoveClick() {
-    dialogModel.setOpenDialog({ type: "deleteProcess", process: processModel.selectedProcess() });
+    dialogModel.setOpenDialog({
+      type: "deleteProcess",
+      process: processModel.selectedProcess(),
+    });
     return false;
   }
 
   function handleProcessPropertyClick() {
-    dialogModel.setOpenDialog({ type: "process", process: processModel.selectedProcess() });
+    dialogModel.setOpenDialog({
+      type: "process",
+      process: processModel.selectedProcess(),
+    });
     return false;
   }
 
@@ -102,7 +107,10 @@ export function AppMenu(): JSXElement {
   }
 
   function handleActorPropertyClick() {
-    dialogModel.setOpenDialog({ type: "actor", actor: actorModel.selectedActor() });
+    dialogModel.setOpenDialog({
+      type: "actor",
+      actor: actorModel.selectedActor(),
+    });
     return false;
   }
 
@@ -154,7 +162,10 @@ function MenuBar(props: { readonly children: JSXElement }): JSXElement {
   );
 }
 
-function Menu(props: { readonly title: string; readonly children: JSXElement }): JSXElement {
+function Menu(props: {
+  readonly title: string;
+  readonly children: JSXElement;
+}): JSXElement {
   return (
     <li class="group relative z-10 hover:bg-secondary">
       <div class="flex h-6 items-center">
@@ -169,7 +180,10 @@ function Menu(props: { readonly title: string; readonly children: JSXElement }):
   );
 }
 
-function MenuItem(props: { readonly title: string; readonly onClick: () => void }): JSXElement {
+function MenuItem(props: {
+  readonly title: string;
+  readonly onClick: () => void;
+}): JSXElement {
   return (
     <li class="hover:bg-primary">
       <a class="flex items-center px-4 py-1" href="#" onClick={() => props.onClick()}>

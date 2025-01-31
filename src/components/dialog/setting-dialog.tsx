@@ -1,9 +1,9 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, onMount } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
-import { Appearance, Color, Theme, useThemeContext } from "@/context/theme-context";
+import { type Appearance, type Color, type Theme, useThemeContext } from "@/context/theme-context";
 
 export function SettingDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -31,8 +31,7 @@ export function SettingDialog(): JSXElement {
 }
 
 export function SettingDialogView(props: { readonly onClose?: () => void }) {
-  const { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor } =
-    useThemeContext();
+  const { dict, locale, setLocale, appearance, setAppearance, theme, setTheme, color, setColor } = useThemeContext();
   const t = i18n.translator(dict);
 
   onMount(() => {
@@ -47,10 +46,7 @@ export function SettingDialogView(props: { readonly onClose?: () => void }) {
         <div class="mb-4 grid grid-cols-[80px_360px] items-center gap-1">
           <div>{t("language")}</div>
           <div>
-            <select
-              value={locale()}
-              onChange={(e) => setLocale(e.currentTarget.value as "en" | "ja")}
-            >
+            <select value={locale()} onChange={(e) => setLocale(e.currentTarget.value as "en" | "ja")}>
               <option value="en">{t("en")}</option>
               <option value="ja">{t("ja")}</option>
             </select>
@@ -58,10 +54,7 @@ export function SettingDialogView(props: { readonly onClose?: () => void }) {
 
           <div>{t("appearance")}</div>
           <div>
-            <select
-              value={appearance()}
-              onChange={(e) => setAppearance(e.currentTarget.value as Appearance)}
-            >
+            <select value={appearance()} onChange={(e) => setAppearance(e.currentTarget.value as Appearance)}>
               <option value="light">{t("light")}</option>
               <option value="dark">{t("dark")}</option>
               <option value="auto">{t("auto")}</option>

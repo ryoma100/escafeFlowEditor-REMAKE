@@ -1,21 +1,17 @@
 import { batch, createSignal } from "solid-js";
 
-import { i18nEnDict } from "@/constants/i18n";
-import { ActorModel } from "@/data-model/actor-model";
-import { EdgeModel } from "@/data-model/edge-model";
-import { NodeModel } from "@/data-model/node-model";
+import type { i18nEnDict } from "@/constants/i18n";
+import type { ActorModel } from "@/data-model/actor-model";
+import type { EdgeModel } from "@/data-model/edge-model";
+import type { NodeModel } from "@/data-model/node-model";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { ProcessEntity, ProjectEntity } from "@/data-source/data-type";
+import type { ProcessEntity, ProjectEntity } from "@/data-source/data-type";
 
 const dummy = dataFactory.createProcess([]);
 
 export type ProcessModel = ReturnType<typeof makeProcessModel>;
 
-export function makeProcessModel(
-  actorModel: ActorModel,
-  nodeModel: NodeModel,
-  edgeModel: EdgeModel,
-) {
+export function makeProcessModel(actorModel: ActorModel, nodeModel: NodeModel, edgeModel: EdgeModel) {
   const [processList, setProcessList] = createSignal<ProcessEntity[]>([]);
   const [selectedProcess, setSelectedProcess] = createSignal<ProcessEntity>(dummy);
 
@@ -38,13 +34,16 @@ export function makeProcessModel(
       edgeList: edgeModel.save(),
     };
     setProcessList(processList().map((it) => (it.id === process.id ? process : it)));
-    setSelectedProcess(processList().find((it) => it.id === process.id)!);
+    const findProcess = processList().find((it) => it.id === process.id);
+    if (!findProcess) throw new Error("process not found");
+    setSelectedProcess(findProcess);
     return deepUnwrap(processList());
   }
 
   function changeProcess(newProcess: ProcessEntity) {
     save();
-    const process = processList().find((it) => it.id === newProcess.id)!;
+    const process = processList().find((it) => it.id === newProcess.id);
+    if (!process) throw new Error("process not found");
     batch(() => {
       setSelectedProcess(process);
       actorModel.load(process);
@@ -60,20 +59,17 @@ export function makeProcessModel(
   }
 
   function updateProcessDetail(process: ProcessEntity): keyof typeof i18nEnDict | undefined {
-    if (
-      processList().some((it) => it.id !== process.id && it.detail.xpdlId === process.detail.xpdlId)
-    ) {
+    if (processList().some((it) => it.id !== process.id && it.detail.xpdlId === process.detail.xpdlId)) {
       return "idExists";
     }
-    if (
-      new Set(process.detail.applications.map((it) => it.xpdlId)).size !==
-      process.detail.applications.length
-    ) {
+    if (new Set(process.detail.applications.map((it) => it.xpdlId)).size !== process.detail.applications.length) {
       return "duplicateApplicationId";
     }
 
     setProcessList(processList().map((it) => (process.id === it.id ? process : it)));
-    setSelectedProcess(processList().find((it) => it.id === process.id)!);
+    const findProcess = processList().find((it) => it.id === process.id);
+    if (!findProcess) throw new Error("process not found");
+    setSelectedProcess(findProcess);
   }
 
   function removeProcess(process: ProcessEntity) {

@@ -1,12 +1,12 @@
 import * as i18n from "@solid-primitives/i18n";
-import { createEffect, JSXElement, onMount, Show } from "solid-js";
+import { type JSXElement, Show, createEffect, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
-import { ActorEntity } from "@/data-source/data-type";
+import type { ActorEntity } from "@/data-source/data-type";
 
 export function ActorDialog(): JSXElement {
   const { actorModel, dialogModel } = useModelContext();
@@ -40,14 +40,8 @@ export function ActorDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleDialogClose}>
-      <Show when={actor()} keyed>
-        {(actor) => (
-          <ActorDialogView
-            actor={actor}
-            onFormSubmit={handleFormSubmit}
-            onDialogClose={handleDialogClose}
-          />
-        )}
+      <Show when={actor()} keyed={true}>
+        {(actor) => <ActorDialogView actor={actor} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />}
       </Show>
     </dialog>
   );
@@ -79,17 +73,9 @@ export function ActorDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] gap-y-2">
           <div>ID:</div>
-          <input
-            type="text"
-            value={formData.xpdlId}
-            onChange={(e) => setFormData("xpdlId", e.target.value)}
-          />
+          <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("name")}:</div>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData("name", e.target.value)}
-          />
+          <input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
         </div>
 
         <ButtonsContainer>

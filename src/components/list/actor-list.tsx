@@ -1,10 +1,10 @@
 import * as i18n from "@solid-primitives/i18n";
-import { For, JSXElement } from "solid-js";
+import { For, type JSXElement } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
-import { ActorEntity } from "@/data-source/data-type";
+import type { ActorEntity } from "@/data-source/data-type";
 
 export function ActorList(): JSXElement {
   const { dict } = useThemeContext();
@@ -41,7 +41,9 @@ export function ActorList(): JSXElement {
             {(it) => (
               <li
                 class="cursor-pointer p-1 hover:bg-primary"
-                classList={{ "bg-primary": it.id === actorModel.selectedActor().id }}
+                classList={{
+                  "bg-primary": it.id === actorModel.selectedActor().id,
+                }}
                 onPointerDown={[handleItemMouseDown, it]}
                 onDblClick={[handleItemDblClick, it]}
               >
@@ -56,11 +58,7 @@ export function ActorList(): JSXElement {
         <button type="submit" onClick={handleAddButtonClick}>
           {t("add")}
         </button>
-        <button
-          type="button"
-          onClick={handleRemoveButtonClick}
-          disabled={actorModel.actorList.length === 1}
-        >
+        <button type="button" onClick={handleRemoveButtonClick} disabled={actorModel.actorList.length === 1}>
           {t("delete")}
         </button>
       </ButtonsContainer>

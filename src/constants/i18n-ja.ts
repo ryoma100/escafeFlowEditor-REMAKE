@@ -1,4 +1,4 @@
-import { I18nDict } from "@/constants/i18n";
+import type { I18nDict } from "@/constants/i18n";
 
 export const i18nJaDict: I18nDict = {
   // menu

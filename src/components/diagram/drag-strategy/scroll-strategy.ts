@@ -1,5 +1,5 @@
-import { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
-import { DiagramModel } from "@/data-model/diagram-model";
+import type { DragStrategy } from "@/components/diagram/drag-strategy/drag-strategy-type";
+import type { DiagramModel } from "@/data-model/diagram-model";
 
 export function makeScrollStrategy(diagramModel: DiagramModel): DragStrategy {
   let isContextMenu = false;

@@ -1,4 +1,4 @@
-import { createEffect, JSXElement, onMount } from "solid-js";
+import { type JSXElement, createEffect, onMount } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
@@ -21,10 +21,7 @@ export function AboutDialog(): JSXElement {
   let dialogRef: HTMLDialogElement | undefined;
   return (
     <dialog ref={dialogRef} onClose={handleClose}>
-      <AboutDialogView
-        version={import.meta.env.VITE_APP_VERSION ?? "v0.0.0"}
-        onClose={handleClose}
-      />
+      <AboutDialogView version={import.meta.env.VITE_APP_VERSION ?? "v0.0.0"} onClose={handleClose} />
     </dialog>
   );
 }
@@ -49,6 +46,7 @@ export function AboutDialogView(props: {
             href="https://github.com/ryoma100/escafeFlowEditor-REMAKE"
             class="underline"
             target="_blank"
+            rel="noreferrer"
           >
             https://github.com/ryoma100/escafeFlowEditor-REMAKE/
           </a>

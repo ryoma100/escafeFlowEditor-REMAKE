@@ -1,7 +1,7 @@
-import { JSXElement } from "solid-js";
+import type { JSXElement } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
-import { CommentEdge, EndEdge, Line, NodeId, StartEdge } from "@/data-source/data-type";
+import type { CommentEdge, EndEdge, Line, NodeId, StartEdge } from "@/data-source/data-type";
 import { computeLine, extendLine } from "@/utils/line-utils";
 
 export function ExtendEdgeContainer(props: {
