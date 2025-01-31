@@ -34,6 +34,9 @@ export function makeEdgeModel(nodeModel: NodeModel) {
           case "clearAll":
             it.selected = false;
             break;
+          default:
+            const notExpectedValue: never = type;
+            throw new Error(notExpectedValue);
         }
       }),
     );

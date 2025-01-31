@@ -19,13 +19,18 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "all": true,
       "correctness": {
         "noUnusedImports": "warn",
-        "noUnusedVariables": "warn"
+        "noUnusedVariables": "warn",
+        "noSwitchDeclarations": "off",
+        "useImportExtensions": "off"
       },
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "noExcessiveCognitiveComplexity": "info",
+        "useSimplifiedLogicExpression": "info",
+        "useDateNow": "info"
       },
       "nursery": {
         "useSortedClasses": {
@@ -34,11 +39,21 @@
           "options": {}
         }
       },
+      "style": {
+        "useBlockStatements": "info",
+        "useSingleCaseStatement": "off",
+        "noDefaultExport": "info",
+        "noNamespaceImport": "info",
+        "useNamingConvention": "info"
+      },
       "a11y": {
         "noSvgWithoutTitle": "info",
         "useAltText": "info",
         "useValidAnchor": "info",
         "useKeyWithClickEvents": "info"
+      },
+      "performance": {
+        "useTopLevelRegex": "info"
       }
     }
   },

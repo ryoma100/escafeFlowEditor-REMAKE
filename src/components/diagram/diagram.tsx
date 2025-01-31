@@ -94,6 +94,8 @@ export function DiagramContainer(): JSXElement {
       case "comment":
         diagramModel.setToolbar("addCommentNode");
         return;
+      default:
+        return;
     }
   }
 

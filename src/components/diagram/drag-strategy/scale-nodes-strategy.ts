@@ -20,7 +20,9 @@ export function makeScaleNodesStrategy(diagramModel: DiagramModel, nodeModel: No
     nodeModel.scaleSelectedNodes(basePoint, moveX, moveY);
   }
 
-  function handlePointerUp(_e: PointerEvent) {}
+  function handlePointerUp(_e: PointerEvent) {
+    // do nothing
+  }
 
   return {
     handlePointerDown,

@@ -21,7 +21,9 @@ export function makeResizeActivityRightStrategy(
     activityModel.resizeRight(moveX);
   }
 
-  function handlePointerUp(_e: PointerEvent) {}
+  function handlePointerUp(_e: PointerEvent) {
+    // do nothing
+  }
 
   return {
     handlePointerDown,

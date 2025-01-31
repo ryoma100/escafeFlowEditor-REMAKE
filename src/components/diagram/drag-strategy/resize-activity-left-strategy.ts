@@ -21,7 +21,9 @@ export function makeResizeActivityLeftStrategy(
     activityModel.resizeLeft(moveX);
   }
 
-  function handlePointerUp(_e: PointerEvent) {}
+  function handlePointerUp(_e: PointerEvent) {
+    // do nothing
+  }
 
   return {
     handlePointerDown,

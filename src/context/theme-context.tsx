@@ -34,9 +34,10 @@ export function makeThemeContext() {
   const defaultAppearance = (localStorage.getItem(appearanceKey) as Appearance) || "auto";
   const [appearance, setAppearance] = createSignal<Appearance>(defaultAppearance);
   createEffect(() => {
-    localStorage.setItem(appearanceKey, appearance());
+    const value = appearance();
+    localStorage.setItem(appearanceKey, value);
 
-    switch (appearance()) {
+    switch (value) {
       case "light":
         document.body.classList.add("light-theme");
         document.body.classList.remove("dark-theme");
@@ -49,6 +50,9 @@ export function makeThemeContext() {
         document.body.classList.remove("dark-theme");
         document.body.classList.remove("dark-theme");
         break;
+      default:
+        const notExpectedValue: never = value;
+        throw new Error(notExpectedValue);
     }
   });
 

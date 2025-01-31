@@ -53,6 +53,8 @@ export function makeAddActivityEdgeStrategy(
       case "endNode":
         extendEdgeModel.addEndEdge(fromNode, node);
         break;
+      default:
+        break;
     }
   }
 

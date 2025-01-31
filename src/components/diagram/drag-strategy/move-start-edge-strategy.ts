@@ -85,6 +85,8 @@ export function makeMoveStartEdgeStrategy(
           edgeModel.deleteEdge(targetEdge.id);
         }
         return;
+      default:
+        return;
     }
   }
 

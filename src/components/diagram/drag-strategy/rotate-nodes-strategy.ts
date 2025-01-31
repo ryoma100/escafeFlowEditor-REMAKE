@@ -20,7 +20,9 @@ export function makeRotateNodesStrategy(diagramModel: DiagramModel, nodeModel: N
     nodeModel.rotateSelectedNodes(basePoint, moveX, moveY);
   }
 
-  function handlePointerUp(_e: PointerEvent) {}
+  function handlePointerUp(_e: PointerEvent) {
+    // do nothing
+  }
 
   return {
     handlePointerDown,

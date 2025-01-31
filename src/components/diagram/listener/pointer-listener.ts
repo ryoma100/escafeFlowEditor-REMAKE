@@ -95,6 +95,8 @@ export function makePointerListener(
         dragStrategy = dragStrategies.addActivityEdgeStrategy;
         dragStrategy.handlePointerDown(e, activity);
         return;
+      default:
+        return;
     }
   }
 
@@ -117,6 +119,8 @@ export function makePointerListener(
           dragStrategy = dragStrategies.addStartEdgeStrategy;
           dragStrategy.handlePointerDown(e, node);
         }
+        return;
+      default:
         return;
     }
   }
@@ -206,6 +210,8 @@ export function makePointerListener(
             dragStrategy.handlePointerDown(e, node);
           }
         }
+        return;
+      default:
         return;
     }
   }
