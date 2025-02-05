@@ -9,6 +9,7 @@ import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { importXml } from "@/data-source/data-converter";
 import type { ProjectEntity } from "@/data-source/data-type";
+import { Button } from "../parts/button";
 
 export function LoadDialog(): JSXElement {
   const { dialogModel, processModel, diagramModel } = useModelContext();
@@ -114,16 +115,16 @@ export function LoadDialogView(props: {
         <p class="mb-2">{t("inputXpdl")}</p>
         <textarea class="mb-2 h-[410px] w-full resize-none" value={data()} onChange={(e) => setData(e.target.value)} />
         <div class="flex justify-between">
-          <button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
+          <Button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
             {t("loadFile")}
-          </button>
+          </Button>
           <ButtonsContainer>
-            <button type="button" onClick={() => props.onInputClick?.(data())}>
+            <Button type="button" onClick={() => props.onInputClick?.(data())}>
               {t("readXpdl")}
-            </button>
-            <button type="button" onClick={() => props.onDialogClose?.()}>
+            </Button>
+            <Button type="button" onClick={() => props.onDialogClose?.()}>
               {t("close")}
-            </button>
+            </Button>
           </ButtonsContainer>
         </div>
       </form>

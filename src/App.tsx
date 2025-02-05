@@ -1,8 +1,11 @@
+import { type JSXElement, Show } from "solid-js";
+
 import { TauriEvent } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import * as dialog from "@tauri-apps/plugin-dialog";
 import { exit } from "@tauri-apps/plugin-process";
-import { type JSXElement, Show } from "solid-js";
+
+import Resizable from "@corvu/resizable";
 
 import { AboutDialog } from "@/components/dialog/about-dialog";
 import { ActivityDialog } from "@/components/dialog/activity-dialog";
@@ -20,9 +23,9 @@ import { ActorList } from "@/components/list/actor-list";
 import { ProcessList } from "@/components/list/process-list";
 import { Main } from "@/components/main/main";
 import { AppMenu } from "@/components/menu/menu";
-import { Toolbar } from "@/components/toolbar/toolbar";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
+import { Toolbar } from "./components/toolbar/toolbar";
 
 function App(): JSXElement {
   const {
@@ -56,22 +59,30 @@ function App(): JSXElement {
 
 export function AppView() {
   return (
-    <div class="grid size-full select-none grid-cols-[160px_84px_auto] grid-rows-[24px_35fr_65fr] bg-secondary">
-      <div class="col-start-1 col-end-5 row-start-1">
-        <AppMenu />
-      </div>
-      <div class="col-start-1 row-start-2 ml-2 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
-        <ProcessList />
-      </div>
-      <div class="col-start-1 row-start-3 ml-2 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
-        <ActorList />
-      </div>
-      <div class="col-start-2 row-start-2 row-end-4 mt-5">
-        <Toolbar />
-      </div>
-      <div class="col-start-3 col-end-5 row-start-2 row-end-4 h-[calc(100%_-_4px)] w-[calc(100%_-_8px)]">
-        <Main />
-      </div>
+    <div class="grid size-full select-none grid-rows-[auto_1fr] bg-secondary">
+      <AppMenu />
+      <Resizable class="size-full px-2">
+        <Resizable.Panel initialSize={0.25}>
+          <Resizable orientation="vertical" class="size-full pb-1">
+            <Resizable.Panel initialSize={0.5}>
+              <ProcessList />
+            </Resizable.Panel>
+            <Resizable.Handle aria-label="Resize Handle">
+              <div class="h-2 w-full hover:bg-primary" />
+            </Resizable.Handle>
+            <Resizable.Panel>
+              <ActorList />
+            </Resizable.Panel>
+          </Resizable>
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize Handle">
+          <div class="h-full w-2 hover:bg-primary" />
+        </Resizable.Handle>
+        <Resizable.Panel initialSize={0.75} class="flex pb-1">
+          <Toolbar />
+          <Main />
+        </Resizable.Panel>
+      </Resizable>
     </div>
   );
 }

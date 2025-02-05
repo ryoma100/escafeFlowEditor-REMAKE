@@ -2,6 +2,7 @@ import { type JSXElement, createEffect, onMount } from "solid-js";
 
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
+import { Button } from "../parts/button";
 
 export function AboutDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -53,9 +54,9 @@ export function AboutDialogView(props: {
         </div>
 
         <ButtonsContainer>
-          <button type="submit" ref={okButtonRef}>
+          <Button type="submit" ref={okButtonRef}>
             OK
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

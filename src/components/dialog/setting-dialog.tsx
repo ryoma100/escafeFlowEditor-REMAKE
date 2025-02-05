@@ -4,6 +4,7 @@ import { type JSXElement, Show, createEffect, onMount } from "solid-js";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { type Appearance, type Color, type Theme, useThemeContext } from "@/context/theme-context";
+import { Button } from "../parts/button";
 
 export function SettingDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -79,9 +80,9 @@ export function SettingDialogView(props: { readonly onClose?: () => void }) {
         </div>
 
         <ButtonsContainer>
-          <button type="button" onClick={() => props.onClose?.()}>
+          <Button type="button" onClick={() => props.onClose?.()}>
             {t("close")}
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

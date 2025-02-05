@@ -4,6 +4,7 @@ import { type JSXElement, Show, createEffect } from "solid-js";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
+import { Button } from "../parts/button";
 
 export function ConfirmDialog(): JSXElement {
   const { projectModel, processModel, dialogModel } = useModelContext();
@@ -67,10 +68,10 @@ export function ConfirmDialogView(props: {
         <p class="mb-4">{message()}</p>
 
         <ButtonsContainer>
-          <button type="submit">OK</button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
+          <Button type="submit">OK</Button>
+          <Button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

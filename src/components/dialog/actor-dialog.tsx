@@ -7,6 +7,7 @@ import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { ActorEntity } from "@/data-source/data-type";
+import { Button } from "../parts/button";
 
 export function ActorDialog(): JSXElement {
   const { actorModel, dialogModel } = useModelContext();
@@ -79,10 +80,10 @@ export function ActorDialogView(props: {
         </div>
 
         <ButtonsContainer>
-          <button type="submit">OK</button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
+          <Button type="submit">OK</Button>
+          <Button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

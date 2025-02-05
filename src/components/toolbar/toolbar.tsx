@@ -35,7 +35,7 @@ export function Toolbar(): JSXElement {
   }
 
   return (
-    <div class="mx-2 flex-col outline-hidden" onKeyDown={handleKeyDown}>
+    <div class="mt-5 mr-2 flex-col outline-hidden" onKeyDown={handleKeyDown}>
       <ToggleIconButton
         id="toolbar-cursor"
         title={t("select")}

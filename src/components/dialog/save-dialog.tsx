@@ -8,6 +8,7 @@ import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { exportXml } from "@/data-source/data-converter";
 import type { ProjectEntity } from "@/data-source/data-type";
+import { Button } from "../parts/button";
 
 export function SaveDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -102,12 +103,12 @@ export function SaveDialogView(props: {
         </textarea>
 
         <ButtonsContainer>
-          <button type="button" ref={saveButtonRef} onClick={handleFormSubmit}>
+          <Button type="button" ref={saveButtonRef} onClick={handleFormSubmit}>
             {t("saveFile")}
-          </button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
+          </Button>
+          <Button type="button" onClick={() => props.onDialogClose?.()}>
             {t("close")}
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>
