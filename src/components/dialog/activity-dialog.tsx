@@ -13,6 +13,7 @@ import { AutoTimerActivityIcon } from "@/icons/auto-timer-activity-icon";
 import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
+import { Button } from "../parts/button";
 
 export function ActivityDialog(): JSXElement {
   const { processModel, actorModel, activityNodeModel, dialogModel } = useModelContext();
@@ -330,10 +331,10 @@ export function ActivityDialogView(props: {
         </div>
 
         <ButtonsContainer>
-          <button type="submit">OK</button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
+          <Button type="submit">OK</Button>
+          <Button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

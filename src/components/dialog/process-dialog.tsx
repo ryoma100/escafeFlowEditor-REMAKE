@@ -14,6 +14,7 @@ import type {
   ProcessDetailEntity,
   ProcessEntity,
 } from "@/data-source/data-type";
+import { Button } from "../parts/button";
 
 export function ProcessDialog(): JSXElement {
   const { processModel, activityNodeModel, dialogModel } = useModelContext();
@@ -172,12 +173,12 @@ export function ProcessDialogView(props: {
           </tbody>
         </table>
         <ButtonsContainer justify="end">
-          <button type="button" onClick={handleAddEnvButtonClick}>
+          <Button type="button" onClick={handleAddEnvButtonClick}>
             {t("add")}
-          </button>
-          <button type="button" onClick={handleRemoveEnvButtonClick}>
+          </Button>
+          <Button type="button" onClick={handleRemoveEnvButtonClick}>
             {t("delete")}
-          </button>
+          </Button>
         </ButtonsContainer>
 
         <p>{t("application")}:</p>
@@ -232,12 +233,12 @@ export function ProcessDialogView(props: {
           </tbody>
         </table>
         <ButtonsContainer justify="end">
-          <button type="button" onClick={handleAddAppButtonClick}>
+          <Button type="button" onClick={handleAddAppButtonClick}>
             {t("add")}
-          </button>
-          <button type="button" onClick={handleRemoveAppButtonClick}>
+          </Button>
+          <Button type="button" onClick={handleRemoveAppButtonClick}>
             {t("delete")}
-          </button>
+          </Button>
         </ButtonsContainer>
 
         <p>{t("expireLimit")}</p>
@@ -252,10 +253,10 @@ export function ProcessDialogView(props: {
         </div>
 
         <ButtonsContainer>
-          <button type="submit">OK</button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
+          <Button type="submit">OK</Button>
+          <Button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

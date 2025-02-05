@@ -7,6 +7,7 @@ import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
+import { Button } from "../parts/button";
 
 export function ProjectDialog(): JSXElement {
   const { projectModel, dialogModel } = useModelContext();
@@ -77,10 +78,10 @@ export function ProjectDialogView(props: {
         </div>
 
         <ButtonsContainer>
-          <button type="submit">OK</button>
-          <button type="button" onClick={() => props.onDialogClose?.()}>
+          <Button type="submit">OK</Button>
+          <Button type="button" onClick={() => props.onDialogClose?.()}>
             Cancel
-          </button>
+          </Button>
         </ButtonsContainer>
       </form>
     </div>

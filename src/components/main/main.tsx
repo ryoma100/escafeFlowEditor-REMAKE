@@ -2,6 +2,7 @@ import type { JSXElement } from "solid-js";
 
 import { DiagramContainer } from "@/components/diagram/diagram";
 import { useModelContext } from "@/context/model-context";
+import { Button } from "../parts/button";
 
 export function Main(): JSXElement {
   const { processModel, diagramModel } = useModelContext();
@@ -23,9 +24,9 @@ export function Main(): JSXElement {
         <DiagramContainer />
       </div>
       <div class="mt-1 flex h-7 w-full flex-row justify-center gap-x-2">
-        <button type="button" onClick={handleAutoZoomButtonClick}>
+        <Button type="button" onClick={handleAutoZoomButtonClick}>
           Auto
-        </button>
+        </Button>
         <input
           type="range"
           min="0.1"
@@ -34,9 +35,9 @@ export function Main(): JSXElement {
           value={diagramModel.zoom()}
           onInput={(e) => diagramModel.changeZoom(Number(e.target.value))}
         />
-        <button type="button" onClick={handleNormalZoomButtonClick}>
+        <Button type="button" onClick={handleNormalZoomButtonClick}>
           {Math.trunc(diagramModel.zoom() * 100)}%
-        </button>
+        </Button>
       </div>
     </div>
   );

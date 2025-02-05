@@ -5,6 +5,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import type { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
+import { Button } from "../parts/button";
 
 export function MessageDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -48,7 +49,7 @@ export function MessageDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <div class="mb-4">{t(props.message)}</div>
         <ButtonsContainer>
-          <button type="submit">OK</button>
+          <Button type="submit">OK</Button>
         </ButtonsContainer>
       </form>
     </div>

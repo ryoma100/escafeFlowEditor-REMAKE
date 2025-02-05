@@ -27,7 +27,7 @@
         "useImportExtensions": "off"
       },
       "complexity": {
-        "noForEach": "off",
+        "noForEach": "info",
         "noExcessiveCognitiveComplexity": "info",
         "useSimplifiedLogicExpression": "info",
         "useDateNow": "info"

@@ -11,6 +11,9 @@ importers:
 
   .:
     dependencies:
+      '@corvu/resizable':
+        specifier: ^0.2.4
+        version: 0.2.4(solid-js@1.9.4)
       '@solid-primitives/i18n':
         specifier: ^2.2.0
         version: 2.2.0(solid-js@1.9.4)
@@ -307,6 +310,16 @@ packages:
     engines: {node: '>=16.0.0', yarn: '>=1.22.18'}
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+
+  '@corvu/resizable@0.2.4':
+    resolution: {integrity: sha512-IWn9KAo7P6GCoRK96A3/oPSamc3fGjR7GhvyiGqMVIOr0kKKHpq0dQpmwq4NBM2xsuzEyIlWSn74MU9md2je/Q==}
+    peerDependencies:
+      solid-js: ^1.8
+
+  '@corvu/utils@0.4.2':
+    resolution: {integrity: sha512-Ox2kYyxy7NoXdKWdHeDEjZxClwzO4SKM8plAaVwmAJPxHMqA0rLOoAsa+hBDwRLpctf+ZRnAd/ykguuJidnaTA==}
+    peerDependencies:
+      solid-js: ^1.8
 
   '@cspell/cspell-bundled-dicts@8.17.2':
     resolution: {integrity: sha512-t+DQtruJF2cYfXF5GC4F0O/PQR04hL5WH55R9oOaor5i7K8ejbw6+jex2LB0XbZFf3qBhXNSnMPuM3b/113LnA==}
@@ -739,6 +752,15 @@ packages:
     resolution: {integrity: sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@floating-ui/core@1.6.9':
+    resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
+
+  '@floating-ui/dom@1.6.13':
+    resolution: {integrity: sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==}
+
+  '@floating-ui/utils@0.2.9':
+    resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
 
@@ -1108,10 +1130,10 @@ packages:
       storybook: ^8.5.2
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
-  '@storybook/builder-vite@8.6.0-alpha.3':
-    resolution: {integrity: sha512-NfLTdOSm1oGaxJJ62esQlNXkHxWNuawWPwg0TBeyuNxE7YA9YmMa+07dtTz6WVr7LuDxWl6qq0NBz3s05JpYAA==}
+  '@storybook/builder-vite@8.6.0-alpha.4':
+    resolution: {integrity: sha512-zaXoEd9jWaRpV1n+eIDUdK9CTvh1Qq2AFCFdS2/pj3kenojVmB/BYS9gjbscKMO2h8d38JjSuUY3U+3kpcvgpQ==}
     peerDependencies:
-      storybook: ^8.6.0-alpha.3
+      storybook: ^8.6.0-alpha.4
       vite: ^4.0.0 || ^5.0.0 || ^6.0.0
 
   '@storybook/core@8.5.2':
@@ -1127,10 +1149,10 @@ packages:
     peerDependencies:
       storybook: ^8.5.2
 
-  '@storybook/csf-plugin@8.6.0-alpha.3':
-    resolution: {integrity: sha512-uAyRJyec4ydCWrUyzPXyjnJLUI1jbYfSklRW1sEjTIEfRxkPNKNg2XIajGOxeF4GEyvKqArz/4KJU3sFt66w/w==}
+  '@storybook/csf-plugin@8.6.0-alpha.4':
+    resolution: {integrity: sha512-34zcOmaSR0aheFqaHWTBvbA6R3RQ4IAJ21Dks6KM+neJzdfm7vvWr/A2fqk8wppN49NNyF3B5g2rVYh/F4PspA==}
     peerDependencies:
-      storybook: ^8.6.0-alpha.3
+      storybook: ^8.6.0-alpha.4
 
   '@storybook/csf@0.1.12':
     resolution: {integrity: sha512-9/exVhabisyIVL0VxTCxo01Tdm8wefIXKXfltAPTSr8cbLn5JAxGQ6QV3mjdecLGEOucfoVhAKtJfVHxEK1iqw==}
@@ -4469,6 +4491,16 @@ snapshots:
       - '@chromatic-com/playwright'
       - react
 
+  '@corvu/resizable@0.2.4(solid-js@1.9.4)':
+    dependencies:
+      '@corvu/utils': 0.4.2(solid-js@1.9.4)
+      solid-js: 1.9.4
+
+  '@corvu/utils@0.4.2(solid-js@1.9.4)':
+    dependencies:
+      '@floating-ui/dom': 1.6.13
+      solid-js: 1.9.4
+
   '@cspell/cspell-bundled-dicts@8.17.2':
     dependencies:
       '@cspell/dict-ada': 4.1.0
@@ -4816,6 +4848,17 @@ snapshots:
     dependencies:
       '@eslint/core': 0.10.0
       levn: 0.4.1
+
+  '@floating-ui/core@1.6.9':
+    dependencies:
+      '@floating-ui/utils': 0.2.9
+
+  '@floating-ui/dom@1.6.13':
+    dependencies:
+      '@floating-ui/core': 1.6.9
+      '@floating-ui/utils': 0.2.9
+
+  '@floating-ui/utils@0.2.9': {}
 
   '@hapi/hoek@9.3.0': {}
 
@@ -5199,9 +5242,9 @@ snapshots:
       ts-dedent: 2.2.0
       vite: 6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
 
-  '@storybook/builder-vite@8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))':
+  '@storybook/builder-vite@8.6.0-alpha.4(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))':
     dependencies:
-      '@storybook/csf-plugin': 8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))
+      '@storybook/csf-plugin': 8.6.0-alpha.4(storybook@8.5.2(prettier@3.4.2))
       browser-assert: 1.2.1
       storybook: 8.5.2(prettier@3.4.2)
       ts-dedent: 2.2.0
@@ -5232,7 +5275,7 @@ snapshots:
       storybook: 8.5.2(prettier@3.4.2)
       unplugin: 1.16.1
 
-  '@storybook/csf-plugin@8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))':
+  '@storybook/csf-plugin@8.6.0-alpha.4(storybook@8.5.2(prettier@3.4.2))':
     dependencies:
       storybook: 8.5.2(prettier@3.4.2)
       unplugin: 1.16.1
@@ -8035,7 +8078,7 @@ snapshots:
 
   storybook-solidjs-vite@1.0.0-beta.6(@testing-library/jest-dom@6.6.3)(solid-js@1.9.4)(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)):
     dependencies:
-      '@storybook/builder-vite': 8.6.0-alpha.3(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
+      '@storybook/builder-vite': 8.6.0-alpha.4(storybook@8.5.2(prettier@3.4.2))(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
       magic-string: 0.30.17
       vite-plugin-solid: 2.11.0(@testing-library/jest-dom@6.6.3)(solid-js@1.9.4)(vite@6.0.11(@types/node@22.10.10)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
     transitivePeerDependencies:

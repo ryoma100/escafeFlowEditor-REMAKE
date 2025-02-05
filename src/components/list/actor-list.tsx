@@ -5,6 +5,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import type { ActorEntity } from "@/data-source/data-type";
+import { Button } from "../parts/button";
 
 export function ActorList(): JSXElement {
   const { dict } = useThemeContext();
@@ -55,12 +56,12 @@ export function ActorList(): JSXElement {
       </div>
 
       <ButtonsContainer margin="4px 0 0 0">
-        <button type="submit" onClick={handleAddButtonClick}>
+        <Button type="submit" onClick={handleAddButtonClick}>
           {t("add")}
-        </button>
-        <button type="button" onClick={handleRemoveButtonClick} disabled={actorModel.actorList.length === 1}>
+        </Button>
+        <Button type="button" onClick={handleRemoveButtonClick} disabled={actorModel.actorList.length === 1}>
           {t("delete")}
-        </button>
+        </Button>
       </ButtonsContainer>
     </div>
   );
