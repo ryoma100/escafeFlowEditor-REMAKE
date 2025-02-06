@@ -88,10 +88,10 @@ jobs:
 
       - name: upload artifact (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs/
 
       - name: Deploy to Github Pages (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
