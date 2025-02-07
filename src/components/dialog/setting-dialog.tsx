@@ -5,6 +5,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { type Appearance, type Color, type Theme, useThemeContext } from "@/context/theme-context";
 import { Button } from "../parts/button";
+import { Select } from "../parts/select";
 
 export function SettingDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -47,35 +48,35 @@ export function SettingDialogView(props: { readonly onClose?: () => void }) {
         <div class="mb-4 grid grid-cols-[80px_360px] items-center gap-1">
           <div>{t("language")}</div>
           <div>
-            <select value={locale()} onChange={(e) => setLocale(e.currentTarget.value as "en" | "ja")}>
+            <Select value={locale()} onChange={(e) => setLocale(e.currentTarget.value as "en" | "ja")}>
               <option value="en">{t("en")}</option>
               <option value="ja">{t("ja")}</option>
-            </select>
+            </Select>
           </div>
 
           <div>{t("appearance")}</div>
           <div>
-            <select value={appearance()} onChange={(e) => setAppearance(e.currentTarget.value as Appearance)}>
+            <Select value={appearance()} onChange={(e) => setAppearance(e.currentTarget.value as Appearance)}>
               <option value="light">{t("light")}</option>
               <option value="dark">{t("dark")}</option>
               <option value="auto">{t("auto")}</option>
-            </select>
+            </Select>
           </div>
 
           <div>{t("theme")}</div>
           <div>
-            <select value={theme()} onChange={(e) => setTheme(e.currentTarget.value as Theme)}>
+            <Select value={theme()} onChange={(e) => setTheme(e.currentTarget.value as Theme)}>
               <option value="material">{t("themeMaterial")}</option>
               <option value="crab">{t("themeCrab")}</option>
-            </select>
+            </Select>
           </div>
 
           <div>{t("color")}</div>
           <div>
-            <select value={color()} onChange={(e) => setColor(e.currentTarget.value as Color)}>
+            <Select value={color()} onChange={(e) => setColor(e.currentTarget.value as Color)}>
               <option value="green">{t("colorGreen")}</option>
               <option value="red">{t("colorRed")}</option>
-            </select>
+            </Select>
           </div>
         </div>
 

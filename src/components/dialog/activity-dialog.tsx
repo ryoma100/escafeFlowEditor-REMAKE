@@ -14,6 +14,7 @@ import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { Button } from "../parts/button";
+import { Select } from "../parts/select";
 
 export function ActivityDialog(): JSXElement {
   const { processModel, actorModel, activityNodeModel, dialogModel } = useModelContext();
@@ -229,7 +230,7 @@ export function ActivityDialogView(props: {
               <input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
 
               <div>{t("actor")}</div>
-              <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
+              <Select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
                 <For each={props.actorList}>
                   {(actor) => (
                     <option value={actor.id} selected={actor.id === formData.actorId}>
@@ -237,13 +238,13 @@ export function ActivityDialogView(props: {
                     </option>
                   )}
                 </For>
-              </select>
+              </Select>
 
               <Switch>
                 <Match when={formData.activityType === "autoActivity"}>
                   <div>{t("processingDetails")}</div>
                   <div class="flex h-[160px] flex-col border-gray-300 border-solid">
-                    <select
+                    <Select
                       disabled={selectedAppIndex() < 0}
                       value={selectedAppIndex()}
                       onChange={(e) => {
@@ -253,7 +254,7 @@ export function ActivityDialogView(props: {
                       <For each={props.applications}>
                         {(app, index) => <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>}
                       </For>
-                    </select>
+                    </Select>
                     <textarea
                       class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
