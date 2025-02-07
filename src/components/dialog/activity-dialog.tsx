@@ -14,6 +14,7 @@ import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { Button } from "../parts/button";
+import { Input } from "../parts/input";
 import { Select } from "../parts/select";
 
 export function ActivityDialog(): JSXElement {
@@ -159,7 +160,7 @@ export function ActivityDialogView(props: {
         </div>
 
         <div class="mb-2 flex flex-wrap">
-          <input
+          <Input
             id="tab-join"
             data-testId="tab-join"
             type="radio"
@@ -181,7 +182,7 @@ export function ActivityDialogView(props: {
             <div>
               <div>{t("previousWork")}</div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="joinOne"
                   value="joinOne"
@@ -193,7 +194,7 @@ export function ActivityDialogView(props: {
                 <label for="joinOne">{t("whenOneDone")}</label>
               </div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="joinMany"
                   value="joinMany"
@@ -208,7 +209,7 @@ export function ActivityDialogView(props: {
             </div>
           </div>
 
-          <input
+          <Input
             id="tab-work"
             type="radio"
             name="tab-switch"
@@ -224,10 +225,10 @@ export function ActivityDialogView(props: {
           <div class="hidden h-[300px] w-full border border-secondary border-solid py-4 pl-2 peer-checked/tab-switch2:block">
             <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
-              <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+              <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
 
               <div>{t("jobTitle")}</div>
-              <input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
+              <Input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
 
               <div>{t("actor")}</div>
               <Select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
@@ -281,7 +282,7 @@ export function ActivityDialogView(props: {
             </div>
           </div>
 
-          <input
+          <Input
             id="tab-split"
             data-testId="tab-split"
             type="radio"
@@ -303,7 +304,7 @@ export function ActivityDialogView(props: {
             <div>
               <div>{t("nextJobCondition")}</div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="splitOne"
                   value="splitOne"
@@ -315,7 +316,7 @@ export function ActivityDialogView(props: {
                 <label for="splitOne">{t("oneOfThese")}</label>
               </div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="splitMany"
                   value="splitMany"

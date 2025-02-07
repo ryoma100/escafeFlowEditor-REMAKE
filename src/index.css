@@ -76,13 +76,6 @@ dialog {
   border-radius: 4px;
   margin: auto;
 }
-input {
-  border-radius: 4px;
-  border: solid 1px var(--primary-color);
-  accent-color: var(--primary-color);
-  padding: 4px 8px;
-  background-color: var(--background-color);
-}
 
 textarea {
   border-radius: 4px;
@@ -93,13 +86,11 @@ textarea {
   outline: 1px solid var(--primary-color);
 }
 
-input:disabled,
 textarea:disabled {
   background-color: gray;
   opacity: 1;
 }
 
-input:focus,
 textarea:focus {
   outline: 2px solid var(--primary-color);
 }

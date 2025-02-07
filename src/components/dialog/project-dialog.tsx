@@ -8,6 +8,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Input } from "../parts/input";
 
 export function ProjectDialog(): JSXElement {
   const { projectModel, dialogModel } = useModelContext();
@@ -72,9 +73,9 @@ export function ProjectDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID:</div>
-          <input type="text" value={formData.xpdlId} onInput={(e) => setFormData("xpdlId", e.target.value)} />
+          <Input type="text" value={formData.xpdlId} onInput={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("name")}:</div>
-          <input type="text" value={formData.name} onInput={(e) => setFormData("name", e.target.value)} />
+          <Input type="text" value={formData.name} onInput={(e) => setFormData("name", e.target.value)} />
         </div>
 
         <ButtonsContainer>
