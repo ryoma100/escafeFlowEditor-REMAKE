@@ -15,6 +15,7 @@ import type {
   ProcessEntity,
 } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Input } from "../parts/input";
 
 export function ProcessDialog(): JSXElement {
@@ -48,7 +49,7 @@ export function ProcessDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={process()} keyed={true}>
         {(process) => (
           <ProcessDialogView
@@ -60,7 +61,7 @@ export function ProcessDialog(): JSXElement {
           />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

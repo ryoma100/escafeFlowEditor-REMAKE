@@ -5,6 +5,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { type Appearance, type Color, type Theme, useThemeContext } from "@/context/theme-context";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Select } from "../parts/select";
 
 export function SettingDialog(): JSXElement {
@@ -24,11 +25,11 @@ export function SettingDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleClose}>
+    <Dialog ref={dialogRef} onClose={handleClose}>
       <Show when={dialogModel.openDialog()?.type === "setting"}>
         <SettingDialogView onClose={handleClose} />
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

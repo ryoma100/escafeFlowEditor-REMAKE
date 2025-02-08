@@ -8,6 +8,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap, toNodeId } from "@/data-source/data-factory";
 import type { TransitionEdge } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Input } from "../parts/input";
 
 export function TransitionDialog(): JSXElement {
@@ -41,7 +42,7 @@ export function TransitionDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={transition()} keyed={true}>
         {(transition) => (
           <TransitionDialogView
@@ -51,7 +52,7 @@ export function TransitionDialog(): JSXElement {
           />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

@@ -8,6 +8,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { CommentNode } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Textarea } from "../parts/textarea";
 
 export function CommentDialog(): JSXElement {
@@ -37,13 +38,13 @@ export function CommentDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={comment()} keyed={true}>
         {(comment) => (
           <CommentDialogView comment={comment} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

@@ -9,6 +9,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { exportXml } from "@/data-source/data-converter";
 import type { ProjectEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Textarea } from "../parts/textarea";
 
 export function SaveDialog(): JSXElement {
@@ -62,13 +63,13 @@ export function SaveDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={project()} keyed={true}>
         {(project) => (
           <SaveDialogView project={project} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

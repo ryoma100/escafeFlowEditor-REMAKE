@@ -14,6 +14,7 @@ import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Input } from "../parts/input";
 import { Select } from "../parts/select";
 import { Textarea } from "../parts/textarea";
@@ -49,7 +50,7 @@ export function ActivityDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={activity()} keyed={true}>
         {(activity) => (
           <ActivityDialogView
@@ -61,7 +62,7 @@ export function ActivityDialog(): JSXElement {
           />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

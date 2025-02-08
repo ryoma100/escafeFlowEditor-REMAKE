@@ -8,6 +8,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { ActorEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 import { Input } from "../parts/input";
 
 export function ActorDialog(): JSXElement {
@@ -41,11 +42,11 @@ export function ActorDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={actor()} keyed={true}>
         {(actor) => <ActorDialogView actor={actor} onFormSubmit={handleFormSubmit} onDialogClose={handleDialogClose} />}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 
