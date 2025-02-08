@@ -10,6 +10,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { importXml } from "@/data-source/data-converter";
 import type { ProjectEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Textarea } from "../parts/textarea";
 
 export function LoadDialog(): JSXElement {
   const { dialogModel, processModel, diagramModel } = useModelContext();
@@ -113,7 +114,7 @@ export function LoadDialogView(props: {
       <h5 class="mb-2">{t("openXpdl")}</h5>
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("inputXpdl")}</p>
-        <textarea class="mb-2 h-[410px] w-full resize-none" value={data()} onChange={(e) => setData(e.target.value)} />
+        <Textarea class="mb-2 h-[410px] w-full resize-none" value={data()} onChange={(e) => setData(e.target.value)} />
         <div class="flex justify-between">
           <Button type="submit" ref={loadButtonRef} onClick={handleFormSubmit}>
             {t("loadFile")}

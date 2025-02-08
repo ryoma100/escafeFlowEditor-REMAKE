@@ -16,6 +16,7 @@ import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { Button } from "../parts/button";
 import { Input } from "../parts/input";
 import { Select } from "../parts/select";
+import { Textarea } from "../parts/textarea";
 
 export function ActivityDialog(): JSXElement {
   const { processModel, actorModel, activityNodeModel, dialogModel } = useModelContext();
@@ -256,7 +257,7 @@ export function ActivityDialogView(props: {
                         {(app, index) => <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>}
                       </For>
                     </Select>
-                    <textarea
+                    <Textarea
                       class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
                       value={formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")}
@@ -271,7 +272,7 @@ export function ActivityDialogView(props: {
                 >
                   <div>{t("whenRunAutomatically")}</div>
                   <div class="h-[160px] w-[266px]">
-                    <textarea
+                    <Textarea
                       class="size-full resize-none border-0"
                       value={formData.ognl}
                       onChange={(e) => setFormData("ognl", e.target.value)}

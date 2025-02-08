@@ -8,6 +8,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { CommentNode } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Textarea } from "../parts/textarea";
 
 export function CommentDialog(): JSXElement {
   const { extendNodeModel, dialogModel } = useModelContext();
@@ -69,7 +70,7 @@ export function CommentDialogView(props: {
     <div class="w-96 bg-primary p-2">
       <h5 class="mb-2">{t("editComment")}</h5>
       <form class="bg-background p-2" onSubmit={handleSubmit}>
-        <textarea
+        <Textarea
           class="mb-2 h-48 w-full resize-none"
           value={formData.comment}
           onChange={(e) => setFormData("comment", e.target.value)}

@@ -9,6 +9,7 @@ import { useThemeContext } from "@/context/theme-context";
 import { exportXml } from "@/data-source/data-converter";
 import type { ProjectEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Textarea } from "../parts/textarea";
 
 export function SaveDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -98,9 +99,9 @@ export function SaveDialogView(props: {
       <h5 class="mb-2">{t("saveXpdl")}</h5>
       <form class="bg-background p-2" onSubmit={handleFormSubmit}>
         <p class="mb-2">{t("copyXpdl")}</p>
-        <textarea class="mb-2 h-[410px] w-full resize-none" readOnly={true}>
+        <Textarea class="mb-2 h-[410px] w-full resize-none" readOnly={true}>
           {data()}
-        </textarea>
+        </Textarea>
 
         <ButtonsContainer>
           <Button type="button" ref={saveButtonRef} onClick={handleFormSubmit}>
