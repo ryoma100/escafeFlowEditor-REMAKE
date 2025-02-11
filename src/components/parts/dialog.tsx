@@ -7,7 +7,7 @@ export function Dialog(props: Props) {
   return (
     <dialog
       {...others}
-      class="color-foreground m-auto rounded bg-primary"
+      class="m-auto rounded bg-primary text-foreground"
       classList={{ [local.class || ""]: true, ...local.classList }}
     >
       {local.children}
