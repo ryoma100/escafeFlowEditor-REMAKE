@@ -14,6 +14,10 @@ import { ManualActivityIcon } from "@/icons/manual-activity-icon";
 import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
+import { Input } from "../parts/input";
+import { Select } from "../parts/select";
+import { Textarea } from "../parts/textarea";
 
 export function ActivityDialog(): JSXElement {
   const { processModel, actorModel, activityNodeModel, dialogModel } = useModelContext();
@@ -46,7 +50,7 @@ export function ActivityDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={activity()} keyed={true}>
         {(activity) => (
           <ActivityDialogView
@@ -58,7 +62,7 @@ export function ActivityDialog(): JSXElement {
           />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 
@@ -158,7 +162,7 @@ export function ActivityDialogView(props: {
         </div>
 
         <div class="mb-2 flex flex-wrap">
-          <input
+          <Input
             id="tab-join"
             data-testId="tab-join"
             type="radio"
@@ -180,7 +184,7 @@ export function ActivityDialogView(props: {
             <div>
               <div>{t("previousWork")}</div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="joinOne"
                   value="joinOne"
@@ -192,7 +196,7 @@ export function ActivityDialogView(props: {
                 <label for="joinOne">{t("whenOneDone")}</label>
               </div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="joinMany"
                   value="joinMany"
@@ -207,7 +211,7 @@ export function ActivityDialogView(props: {
             </div>
           </div>
 
-          <input
+          <Input
             id="tab-work"
             type="radio"
             name="tab-switch"
@@ -223,13 +227,13 @@ export function ActivityDialogView(props: {
           <div class="hidden h-[300px] w-full border border-secondary border-solid py-4 pl-2 peer-checked/tab-switch2:block">
             <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
-              <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+              <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
 
               <div>{t("jobTitle")}</div>
-              <input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
+              <Input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
 
               <div>{t("actor")}</div>
-              <select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
+              <Select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
                 <For each={props.actorList}>
                   {(actor) => (
                     <option value={actor.id} selected={actor.id === formData.actorId}>
@@ -237,13 +241,13 @@ export function ActivityDialogView(props: {
                     </option>
                   )}
                 </For>
-              </select>
+              </Select>
 
               <Switch>
                 <Match when={formData.activityType === "autoActivity"}>
                   <div>{t("processingDetails")}</div>
                   <div class="flex h-[160px] flex-col border-gray-300 border-solid">
-                    <select
+                    <Select
                       disabled={selectedAppIndex() < 0}
                       value={selectedAppIndex()}
                       onChange={(e) => {
@@ -253,8 +257,8 @@ export function ActivityDialogView(props: {
                       <For each={props.applications}>
                         {(app, index) => <option value={index()}>{`${app.name} (${app.xpdlId})`}</option>}
                       </For>
-                    </select>
-                    <textarea
+                    </Select>
+                    <Textarea
                       class="mt-2 h-full resize-none"
                       disabled={selectedAppIndex() < 0}
                       value={formData.applications[selectedAppIndex()]?.ognl ?? t("registerProcessApp")}
@@ -269,7 +273,7 @@ export function ActivityDialogView(props: {
                 >
                   <div>{t("whenRunAutomatically")}</div>
                   <div class="h-[160px] w-[266px]">
-                    <textarea
+                    <Textarea
                       class="size-full resize-none border-0"
                       value={formData.ognl}
                       onChange={(e) => setFormData("ognl", e.target.value)}
@@ -280,7 +284,7 @@ export function ActivityDialogView(props: {
             </div>
           </div>
 
-          <input
+          <Input
             id="tab-split"
             data-testId="tab-split"
             type="radio"
@@ -302,7 +306,7 @@ export function ActivityDialogView(props: {
             <div>
               <div>{t("nextJobCondition")}</div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="splitOne"
                   value="splitOne"
@@ -314,7 +318,7 @@ export function ActivityDialogView(props: {
                 <label for="splitOne">{t("oneOfThese")}</label>
               </div>
               <div>
-                <input
+                <Input
                   type="radio"
                   id="splitMany"
                   value="splitMany"

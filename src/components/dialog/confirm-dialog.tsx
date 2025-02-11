@@ -5,6 +5,7 @@ import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 
 export function ConfirmDialog(): JSXElement {
   const { projectModel, processModel, dialogModel } = useModelContext();
@@ -30,11 +31,11 @@ export function ConfirmDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleClose}>
+    <Dialog ref={dialogRef} onClose={handleClose}>
       <Show when={dialogModel.openDialog()?.type} keyed={true}>
         {(type) => <ConfirmDialogView type={type} onFormSubmit={handleSubmit} onDialogClose={handleClose} />}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 

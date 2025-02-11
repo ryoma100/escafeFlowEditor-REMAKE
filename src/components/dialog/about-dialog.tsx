@@ -3,6 +3,7 @@ import { type JSXElement, createEffect, onMount } from "solid-js";
 import { ButtonsContainer } from "@/components/parts/buttons-container";
 import { useModelContext } from "@/context/model-context";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 
 export function AboutDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -21,9 +22,9 @@ export function AboutDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleClose}>
+    <Dialog ref={dialogRef} onClose={handleClose}>
       <AboutDialogView version={import.meta.env.VITE_APP_VERSION ?? "v0.0.0"} onClose={handleClose} />
-    </dialog>
+    </Dialog>
   );
 }
 

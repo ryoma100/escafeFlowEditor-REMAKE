@@ -8,6 +8,8 @@ import { useThemeContext } from "@/context/theme-context";
 import { dataFactory, deepUnwrap, toNodeId } from "@/data-source/data-factory";
 import type { TransitionEdge } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
+import { Input } from "../parts/input";
 
 export function TransitionDialog(): JSXElement {
   const { dialogModel, transitionEdgeModel } = useModelContext();
@@ -40,7 +42,7 @@ export function TransitionDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={transition()} keyed={true}>
         {(transition) => (
           <TransitionDialogView
@@ -50,7 +52,7 @@ export function TransitionDialog(): JSXElement {
           />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 
@@ -87,10 +89,10 @@ export function TransitionDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center space-y-2">
           <div>ID:</div>
-          <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+          <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("connectCondition")}</div>
           <div class="flex items-center">
-            <input
+            <Input
               type="radio"
               id="condition-on"
               name="condition"
@@ -101,7 +103,7 @@ export function TransitionDialogView(props: {
             <label for="condition-on" class="mr-2 cursor-pointer pl-1">
               {t("conditionOn")}
             </label>
-            <input
+            <Input
               type="radio"
               id="condition-off"
               name="condition"
@@ -114,7 +116,7 @@ export function TransitionDialogView(props: {
             </label>
           </div>
           <div classList={{ invisible: !showOgnl() }}>{t("conditionExpression")} (OGNL)</div>
-          <input
+          <Input
             classList={{ invisible: !showOgnl() }}
             type="text"
             value={formData.ognl}

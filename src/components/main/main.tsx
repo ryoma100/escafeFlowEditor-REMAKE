@@ -3,6 +3,7 @@ import type { JSXElement } from "solid-js";
 import { DiagramContainer } from "@/components/diagram/diagram";
 import { useModelContext } from "@/context/model-context";
 import { Button } from "../parts/button";
+import { Input } from "../parts/input";
 
 export function Main(): JSXElement {
   const { processModel, diagramModel } = useModelContext();
@@ -27,7 +28,7 @@ export function Main(): JSXElement {
         <Button type="button" onClick={handleAutoZoomButtonClick}>
           Auto
         </Button>
-        <input
+        <Input
           type="range"
           min="0.1"
           max="2"

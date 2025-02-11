@@ -15,6 +15,8 @@ import type {
   ProcessEntity,
 } from "@/data-source/data-type";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
+import { Input } from "../parts/input";
 
 export function ProcessDialog(): JSXElement {
   const { processModel, activityNodeModel, dialogModel } = useModelContext();
@@ -47,7 +49,7 @@ export function ProcessDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={process()} keyed={true}>
         {(process) => (
           <ProcessDialogView
@@ -59,7 +61,7 @@ export function ProcessDialog(): JSXElement {
           />
         )}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 
@@ -134,9 +136,9 @@ export function ProcessDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="grid grid-cols-[80px_220px] items-center gap-y-2">
           <p>ID:</p>
-          <input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+          <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
           <p>{t("name")}:</p>
-          <input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
+          <Input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
         </div>
 
         <p class="mt-2 mb-1">{t("extendedSetting")}:</p>
@@ -152,7 +154,7 @@ export function ProcessDialogView(props: {
               {(it, index) => (
                 <tr onClick={[handleEnvClick, it]} classList={{ "bg-primary": it.id === selectedEnv()?.id }}>
                   <td class="w-[240px]">
-                    <input
+                    <Input
                       type="text"
                       class="ml-1 w-[228px]"
                       value={it.name}
@@ -160,7 +162,7 @@ export function ProcessDialogView(props: {
                     />
                   </td>
                   <td class="w-[240px]">
-                    <input
+                    <Input
                       type="text"
                       class="ml-1 w-[228px]"
                       value={it.value}
@@ -196,7 +198,7 @@ export function ProcessDialogView(props: {
               {(it, index) => (
                 <tr onClick={[handleAppClick, it]} classList={{ "bg-primary": it.id === selectedApp()?.id }}>
                   <td class="w-[120px] pl-1">
-                    <input
+                    <Input
                       class="w-[112px]"
                       type="text"
                       value={it.xpdlId}
@@ -204,7 +206,7 @@ export function ProcessDialogView(props: {
                     />
                   </td>
                   <td class="w-[120px] pl-1">
-                    <input
+                    <Input
                       class="w-[112px]"
                       type="text"
                       value={it.name}
@@ -212,7 +214,7 @@ export function ProcessDialogView(props: {
                     />
                   </td>
                   <td class="w-[120px] pl-1">
-                    <input
+                    <Input
                       class="w-[112px]"
                       type="text"
                       value={it.extendedName}
@@ -220,7 +222,7 @@ export function ProcessDialogView(props: {
                     />
                   </td>
                   <td class="w-[120px] pl-1">
-                    <input
+                    <Input
                       class="w-[112px]"
                       type="text"
                       value={it.extendedValue}
@@ -244,11 +246,11 @@ export function ProcessDialogView(props: {
         <p>{t("expireLimit")}</p>
         <div class="mb-2 grid grid-cols-[80px_220px_180px] items-center gap-y-2">
           <p>From:</p>
-          <input type="text" value={formData.validFrom} onChange={(e) => setFormData("validFrom", e.target.value)} />
+          <Input type="text" value={formData.validFrom} onChange={(e) => setFormData("validFrom", e.target.value)} />
           <p class="ml-2">{t("inputExample")}: 2009/1/2</p>
 
           <p>To:</p>
-          <input type="text" value={formData.validTo} onChange={(e) => setFormData("validTo", e.target.value)} />
+          <Input type="text" value={formData.validTo} onChange={(e) => setFormData("validTo", e.target.value)} />
           <p class="ml-2">{t("inputExample")}: 2009/1/2</p>
         </div>
 

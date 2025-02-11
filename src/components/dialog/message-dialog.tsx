@@ -6,6 +6,7 @@ import type { I18nDict } from "@/constants/i18n";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { Button } from "../parts/button";
+import { Dialog } from "../parts/dialog";
 
 export function MessageDialog(): JSXElement {
   const { dialogModel } = useModelContext();
@@ -24,11 +25,11 @@ export function MessageDialog(): JSXElement {
 
   let dialogRef: HTMLDialogElement | undefined;
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <Dialog ref={dialogRef} onClose={handleDialogClose}>
       <Show when={dialogModel.openMessage()} keyed={true}>
         {(message) => <MessageDialogView message={message} onDialogClose={handleDialogClose} />}
       </Show>
-    </dialog>
+    </Dialog>
   );
 }
 
