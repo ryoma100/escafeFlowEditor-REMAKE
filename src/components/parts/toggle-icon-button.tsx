@@ -1,5 +1,5 @@
 import type { JSXElement } from "solid-js";
-import { Input } from "./input";
+import { RadioInput } from "./radio-input";
 
 export function ToggleIconButton(props: {
   readonly id: string;
@@ -12,9 +12,8 @@ export function ToggleIconButton(props: {
 }): JSXElement {
   return (
     <div class="flex" style={{ margin: props.margin }}>
-      <Input
+      <RadioInput
         class="peer/toolbar-toggle m-0 size-0 p-0 opacity-0"
-        type="radio"
         name={props.name ?? "toggleIconButtons"}
         id={props.id}
         checked={props.checked}

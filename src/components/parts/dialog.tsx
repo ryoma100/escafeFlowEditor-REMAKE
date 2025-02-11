@@ -1,16 +1,16 @@
-import { type JSX, splitProps } from "solid-js";
+import type { JSX } from "solid-js";
 
-type Props = JSX.IntrinsicElements["dialog"];
+type Props = Pick<JSX.IntrinsicElements["dialog"], "ref" | "onClose" | "class" | "classList" | "children">;
 
 export function Dialog(props: Props) {
-  const [local, others] = splitProps(props, ["class", "classList", "children"]);
   return (
     <dialog
-      {...others}
+      ref={props.ref}
+      onClose={props.onClose}
       class="m-auto rounded bg-primary text-foreground"
-      classList={{ [local.class || ""]: true, ...local.classList }}
+      classList={{ [props.class || ""]: true, ...props.classList }}
     >
-      {local.children}
+      {props.children}
     </dialog>
   );
 }

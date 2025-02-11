@@ -9,7 +9,7 @@ import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { ActorEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
 import { Dialog } from "../parts/dialog";
-import { Input } from "../parts/input";
+import { TextInput } from "../parts/text-input";
 
 export function ActorDialog(): JSXElement {
   const { actorModel, dialogModel } = useModelContext();
@@ -76,9 +76,9 @@ export function ActorDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] gap-y-2">
           <div>ID:</div>
-          <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+          <TextInput value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("name")}:</div>
-          <Input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
+          <TextInput value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
         </div>
 
         <ButtonsContainer>

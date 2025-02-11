@@ -9,7 +9,8 @@ import { dataFactory, deepUnwrap, toNodeId } from "@/data-source/data-factory";
 import type { TransitionEdge } from "@/data-source/data-type";
 import { Button } from "../parts/button";
 import { Dialog } from "../parts/dialog";
-import { Input } from "../parts/input";
+import { RadioInput } from "../parts/radio-input";
+import { TextInput } from "../parts/text-input";
 
 export function TransitionDialog(): JSXElement {
   const { dialogModel, transitionEdgeModel } = useModelContext();
@@ -89,11 +90,10 @@ export function TransitionDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[71px_280px] items-center space-y-2">
           <div>ID:</div>
-          <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+          <TextInput value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("connectCondition")}</div>
           <div class="flex items-center">
-            <Input
-              type="radio"
+            <RadioInput
               id="condition-on"
               name="condition"
               class="cursor-pointer"
@@ -103,8 +103,7 @@ export function TransitionDialogView(props: {
             <label for="condition-on" class="mr-2 cursor-pointer pl-1">
               {t("conditionOn")}
             </label>
-            <Input
-              type="radio"
+            <RadioInput
               id="condition-off"
               name="condition"
               class="cursor-pointer"
@@ -116,9 +115,8 @@ export function TransitionDialogView(props: {
             </label>
           </div>
           <div classList={{ invisible: !showOgnl() }}>{t("conditionExpression")} (OGNL)</div>
-          <Input
+          <TextInput
             classList={{ invisible: !showOgnl() }}
-            type="text"
             value={formData.ognl}
             onChange={(e) => setFormData("ognl", e.target.value)}
           />

@@ -9,7 +9,7 @@ import { dataFactory, deepUnwrap } from "@/data-source/data-factory";
 import type { ProjectDetailEntity, ProjectEntity } from "@/data-source/data-type";
 import { Button } from "../parts/button";
 import { Dialog } from "../parts/dialog";
-import { Input } from "../parts/input";
+import { TextInput } from "../parts/text-input";
 
 export function ProjectDialog(): JSXElement {
   const { projectModel, dialogModel } = useModelContext();
@@ -74,9 +74,9 @@ export function ProjectDialogView(props: {
       <form class="bg-background p-2" onSubmit={handleSubmit}>
         <div class="mb-4 grid grid-cols-[72px_272px] items-center gap-y-2">
           <div>ID:</div>
-          <Input type="text" value={formData.xpdlId} onInput={(e) => setFormData("xpdlId", e.target.value)} />
+          <TextInput value={formData.xpdlId} onInput={(e) => setFormData("xpdlId", e.target.value)} />
           <div>{t("name")}:</div>
-          <Input type="text" value={formData.name} onInput={(e) => setFormData("name", e.target.value)} />
+          <TextInput value={formData.name} onInput={(e) => setFormData("name", e.target.value)} />
         </div>
 
         <ButtonsContainer>
