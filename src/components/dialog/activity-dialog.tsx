@@ -15,8 +15,9 @@ import { ManualTimerActivityIcon } from "@/icons/manual-timer-activity-icon";
 import { UserActivityIcon } from "@/icons/user-activity-icon";
 import { Button } from "../parts/button";
 import { Dialog } from "../parts/dialog";
-import { Input } from "../parts/input";
+import { RadioInput } from "../parts/radio-input";
 import { Select } from "../parts/select";
+import { TextInput } from "../parts/text-input";
 import { Textarea } from "../parts/textarea";
 
 export function ActivityDialog(): JSXElement {
@@ -162,10 +163,9 @@ export function ActivityDialogView(props: {
         </div>
 
         <div class="mb-2 flex flex-wrap">
-          <Input
+          <RadioInput
             id="tab-join"
             data-testId="tab-join"
-            type="radio"
             name="tab-switch"
             class="peer/tab-switch1 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
@@ -184,8 +184,7 @@ export function ActivityDialogView(props: {
             <div>
               <div>{t("previousWork")}</div>
               <div>
-                <Input
-                  type="radio"
+                <RadioInput
                   id="joinOne"
                   value="joinOne"
                   name="joinRadio"
@@ -196,8 +195,7 @@ export function ActivityDialogView(props: {
                 <label for="joinOne">{t("whenOneDone")}</label>
               </div>
               <div>
-                <Input
-                  type="radio"
+                <RadioInput
                   id="joinMany"
                   value="joinMany"
                   name="joinRadio"
@@ -211,9 +209,8 @@ export function ActivityDialogView(props: {
             </div>
           </div>
 
-          <Input
+          <RadioInput
             id="tab-work"
-            type="radio"
             name="tab-switch"
             class="peer/tab-switch2 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
             ref={radioTabCenterRef}
@@ -227,10 +224,10 @@ export function ActivityDialogView(props: {
           <div class="hidden h-[300px] w-full border border-secondary border-solid py-4 pl-2 peer-checked/tab-switch2:block">
             <div class="grid grid-cols-[64px_266px] gap-2">
               <div>ID</div>
-              <Input type="text" value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
+              <TextInput value={formData.xpdlId} onChange={(e) => setFormData("xpdlId", e.target.value)} />
 
               <div>{t("jobTitle")}</div>
-              <Input type="text" value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
+              <TextInput value={formData.name} onChange={(e) => setFormData("name", e.target.value)} />
 
               <div>{t("actor")}</div>
               <Select onChange={(e) => setFormData("actorId", Number(e.target.value))}>
@@ -284,10 +281,9 @@ export function ActivityDialogView(props: {
             </div>
           </div>
 
-          <Input
+          <RadioInput
             id="tab-split"
             data-testId="tab-split"
-            type="radio"
             name="tab-switch"
             class="peer/tab-switch3 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
@@ -306,8 +302,7 @@ export function ActivityDialogView(props: {
             <div>
               <div>{t("nextJobCondition")}</div>
               <div>
-                <Input
-                  type="radio"
+                <RadioInput
                   id="splitOne"
                   value="splitOne"
                   name="splitRadio"
@@ -318,8 +313,7 @@ export function ActivityDialogView(props: {
                 <label for="splitOne">{t("oneOfThese")}</label>
               </div>
               <div>
-                <Input
-                  type="radio"
+                <RadioInput
                   id="splitMany"
                   value="splitMany"
                   name="splitRadio"

@@ -8,23 +8,20 @@
 #   commands:
 #     packages-audit:
 #       tags: frontend security
-#       run: pnpm audit
+#       run: npm audit
 
 pre-commit:
   parallel: true
   commands:
     biome:
       glob: "*.{js,ts,jsx,tsx,css}"
-      run: pnpm biome check --diagnostic-level=warn --write {staged_files}
+      run: npx biome check --diagnostic-level=warn --write {staged_files}
       stage_fixed: true
     eslint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: pnpm eslint {staged_files}
-    cspell:
-      glob: "*.{js,ts,jsx,tsx,json,md}"
-      run: pnpm cspell lint --gitignore --cache {staged_files}
+      run: npx eslint {staged_files}
     tsc:
       glob: "*.{tsx,ts}"
-      run: pnpm lint:tsc
+      run: npx tsc --noEmit
     test:
-      run: pnpm test run
+      run: npx vitest run
