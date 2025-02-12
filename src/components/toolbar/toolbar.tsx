@@ -35,7 +35,7 @@ export function Toolbar(): JSXElement {
   }
 
   return (
-    <div class="mt-5 mr-2 flex-col outline-hidden" onKeyDown={handleKeyDown}>
+    <nav class="mt-5 mr-2 flex-col outline-hidden" onKeyDown={handleKeyDown}>
       <ToggleIconButton
         id="toolbar-cursor"
         title={t("select")}
@@ -120,6 +120,6 @@ export function Toolbar(): JSXElement {
           <CommentIcon class="[fill:var(--foreground-color)]" />
         </div>
       </ToggleIconButton>
-    </div>
+    </nav>
   );
 }

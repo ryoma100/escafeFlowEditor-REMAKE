@@ -34,7 +34,7 @@ export function ActorList(): JSXElement {
   }
 
   return (
-    <div class="flex h-full flex-col">
+    <section class="flex h-full flex-col">
       <h5>{t("actor")}</h5>
       <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
         <ul class="list-none">
@@ -63,6 +63,6 @@ export function ActorList(): JSXElement {
           {t("delete")}
         </Button>
       </ButtonsContainer>
-    </div>
+    </section>
   );
 }

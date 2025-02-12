@@ -17,7 +17,7 @@ export function Main(): JSXElement {
   }
 
   return (
-    <div class="flex size-full flex-col">
+    <section class="flex size-full flex-col">
       <div class="h-6">
         <h5 class="leading-6">{processModel.selectedProcess().detail.name}</h5>
       </div>
@@ -39,6 +39,6 @@ export function Main(): JSXElement {
           {Math.trunc(diagramModel.zoom() * 100)}%
         </Button>
       </div>
-    </div>
+    </section>
   );
 }

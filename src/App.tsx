@@ -61,28 +61,30 @@ export function AppView() {
   return (
     <div class="grid size-full select-none grid-rows-[auto_1fr] bg-secondary">
       <AppMenu />
-      <Resizable class="size-full px-2">
-        <Resizable.Panel initialSize={0.25}>
-          <Resizable orientation="vertical" class="size-full pb-1">
-            <Resizable.Panel initialSize={0.5}>
-              <ProcessList />
-            </Resizable.Panel>
-            <Resizable.Handle aria-label="Resize Handle">
-              <div class="h-2 w-full hover:bg-primary" />
-            </Resizable.Handle>
-            <Resizable.Panel>
-              <ActorList />
-            </Resizable.Panel>
-          </Resizable>
-        </Resizable.Panel>
-        <Resizable.Handle aria-label="Resize Handle">
-          <div class="h-full w-2 hover:bg-primary" />
-        </Resizable.Handle>
-        <Resizable.Panel initialSize={0.75} class="flex pb-1">
-          <Toolbar />
-          <Main />
-        </Resizable.Panel>
-      </Resizable>
+      <main>
+        <Resizable class="size-full px-2">
+          <Resizable.Panel initialSize={0.25}>
+            <Resizable orientation="vertical" class="size-full pb-1">
+              <Resizable.Panel initialSize={0.5}>
+                <ProcessList />
+              </Resizable.Panel>
+              <Resizable.Handle aria-label="Resize Handle">
+                <div class="h-2 w-full hover:bg-primary" />
+              </Resizable.Handle>
+              <Resizable.Panel>
+                <ActorList />
+              </Resizable.Panel>
+            </Resizable>
+          </Resizable.Panel>
+          <Resizable.Handle aria-label="Resize Handle">
+            <div class="h-full w-2 hover:bg-primary" />
+          </Resizable.Handle>
+          <Resizable.Panel initialSize={0.75} class="flex pb-1">
+            <Toolbar />
+            <Main />
+          </Resizable.Panel>
+        </Resizable>
+      </main>
     </div>
   );
 }
