@@ -34,7 +34,7 @@ export function ProcessList(): JSXElement {
   }
 
   return (
-    <div class="flex h-full flex-col">
+    <section class="flex h-full flex-col">
       <div class="h-6">
         <h5 class="leading-6">{t("process")}</h5>
       </div>
@@ -63,6 +63,6 @@ export function ProcessList(): JSXElement {
           {t("delete")}
         </Button>
       </ButtonsContainer>
-    </div>
+    </section>
   );
 }

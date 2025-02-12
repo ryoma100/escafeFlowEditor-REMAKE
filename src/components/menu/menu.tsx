@@ -120,7 +120,7 @@ export function AppMenu(): JSXElement {
   }
 
   return (
-    <div class="flex size-full flex-row justify-between bg-primary">
+    <header class="flex size-full flex-row justify-between bg-primary">
       <MenuBar>
         <Menu title={t("file")}>
           <MenuItem title={t("new")} onClick={handleFileNewClick} />
@@ -150,7 +150,7 @@ export function AppMenu(): JSXElement {
           <MenuItem title={t("about")} onClick={handleHelpAboutClick} />
         </Menu>
       </MenuBar>
-    </div>
+    </header>
   );
 }
 
