@@ -245,7 +245,7 @@ export function makePointerListener(
   }
 
   function handleDocumentPointerUp(e: PointerEvent) {
-    if (pointerEvents.size === 1) {
+    if (pointerEvents.size <= 1) {
       dragStrategy.handlePointerUp(e);
       dragStrategy = dragStrategies.defaultStrategy;
     }
