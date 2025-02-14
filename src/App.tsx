@@ -63,7 +63,7 @@ export function AppView() {
       <AppMenu />
       <main>
         <Resizable class="size-full px-2">
-          <Resizable.Panel initialSize={0.25}>
+          <Resizable.Panel initialSize={0.2}>
             <Resizable orientation="vertical" class="size-full pb-1">
               <Resizable.Panel initialSize={0.5}>
                 <ProcessList />
@@ -79,7 +79,7 @@ export function AppView() {
           <Resizable.Handle aria-label="Resize Handle">
             <div class="h-full w-2 hover:bg-primary" />
           </Resizable.Handle>
-          <Resizable.Panel initialSize={0.75} class="flex pb-1">
+          <Resizable.Panel initialSize={0.8} class="flex pb-1">
             <Toolbar />
             <Main />
           </Resizable.Panel>
