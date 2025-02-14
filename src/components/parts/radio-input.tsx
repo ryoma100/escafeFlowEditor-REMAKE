@@ -22,8 +22,8 @@ export function RadioInput(props: Props) {
       disabled={props.disabled}
       checked={props.checked}
       ref={props.ref}
-      class="rounded border border-primary bg-background p-1 accent-primary focus:outline-2 focus:outline-primary disabled:bg-gray-400 disabled:opacity-100"
-      classList={{ [props.class || ""]: true, ...props.classList }}
+      class={props.class}
+      classList={props.classList}
       onChange={(e) => props.onChange?.(e)}
     />
   );
