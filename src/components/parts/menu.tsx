@@ -55,15 +55,15 @@ export function Menu(props: {
   );
 }
 
-export function MenuBar(props: { readonly children: JSXElement }): JSXElement {
+export function MenuBar(props: { readonly id: string; readonly children: JSXElement }): JSXElement {
   document.addEventListener("click", (e) => {
-    if (!(e.target as Element).closest("#menuBar")) {
+    if (!(e.target as Element).closest(`#${props.id}`)) {
       setOpenMenu(null);
     }
   });
 
   return (
-    <nav id="menuBar" class="h-full bg-primary">
+    <nav id={props.id} class="h-full bg-primary">
       <ul class="flex">{props.children}</ul>
     </nav>
   );

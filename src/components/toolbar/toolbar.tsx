@@ -35,13 +35,13 @@ export function Toolbar(): JSXElement {
   }
 
   return (
-    <nav class="mt-5 mr-2 flex-col outline-hidden" onKeyDown={handleKeyDown}>
+    <nav class="mt-6 mr-2 flex-col outline-hidden" onKeyDown={handleKeyDown}>
       <ToggleIconButton
         id="toolbar-cursor"
         title={t("select")}
         checked={diagramModel.toolbar() === "cursor"}
         onChange={() => diagramModel.setToolbar("cursor")}
-        margin="4px 0 8px 0"
+        margin="5px 0 6px 0"
       >
         <CursorIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
@@ -61,7 +61,7 @@ export function Toolbar(): JSXElement {
         title={t("manualActivity")}
         checked={diagramModel.toolbar() === "addManualActivity"}
         onChange={() => diagramModel.setToolbar("addManualActivity")}
-        margin="0 0 8px 0"
+        margin="0 0 6px 0"
       >
         <ManualActivityIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
@@ -71,7 +71,7 @@ export function Toolbar(): JSXElement {
         title={t("autoActivity")}
         checked={diagramModel.toolbar() === "addAutoActivity"}
         onChange={() => diagramModel.setToolbar("addAutoActivity")}
-        margin="0 0 8px 0"
+        margin="0 0 6px 0"
       >
         <AutoActivityIcon class="[fill:var(--foreground-color)]" />
       </ToggleIconButton>
@@ -91,7 +91,7 @@ export function Toolbar(): JSXElement {
         title={t("start")}
         checked={diagramModel.toolbar() === "addStartNode"}
         onChange={() => diagramModel.setToolbar("addStartNode")}
-        margin="0 0 8px 0"
+        margin="0 0 6px 0"
       >
         <div class="flex h-12 w-16 items-center justify-center">
           <StartIcon class="[fill:var(--foreground-color)]" />
@@ -103,7 +103,7 @@ export function Toolbar(): JSXElement {
         title={t("end")}
         checked={diagramModel.toolbar() === "addEndNode"}
         onChange={() => diagramModel.setToolbar("addEndNode")}
-        margin="0 0 8px 0"
+        margin="0 0 6px 0"
       >
         <div class="flex h-12 w-16 items-center justify-center">
           <EndIcon class="[fill:var(--foreground-color)]" />

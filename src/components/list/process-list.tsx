@@ -35,16 +35,14 @@ export function ProcessList(): JSXElement {
 
   return (
     <section class="flex h-full flex-col">
-      <div class="h-6">
-        <h5 class="leading-6">{t("process")}</h5>
-      </div>
+      <h5 class="py-1.25">{t("process")}</h5>
       <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
         <ul class="list-none">
           <For each={processModel.processList()}>
             {(it) => (
               <li
                 data-select={it.id === processModel.selectedProcess().id}
-                class="cursor-pointer p-1 hover:bg-primary data-[select=true]:bg-primary"
+                class="cursor-pointer p-1.25 hover:bg-primary data-[select=true]:bg-primary"
                 onPointerDown={[handleItemMouseDown, it]}
                 onDblClick={[handleItemDblClick, it]}
               >

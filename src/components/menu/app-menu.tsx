@@ -122,7 +122,7 @@ export function AppMenu(): JSXElement {
 
   return (
     <header class="flex size-full flex-row justify-between bg-primary">
-      <MenuBar>
+      <MenuBar id="app-menu">
         <Menu title={t("file")}>
           <MenuItem title={t("new")} onClick={handleFileNewClick} />
           <MenuItem title={t("open")} onClick={handleFileOpenClick} />

@@ -18,9 +18,7 @@ export function Main(): JSXElement {
 
   return (
     <section class="flex size-full flex-col">
-      <div class="h-6">
-        <h5 class="leading-6">{processModel.selectedProcess().detail.name}</h5>
-      </div>
+      <h5 class="py-1.25">{processModel.selectedProcess().detail.name}</h5>
       <div class="size-full grow bg-background">
         <DiagramContainer />
       </div>
