@@ -3,6 +3,7 @@ import type { JSXElement } from "solid-js";
 
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
+import { Menu, MenuBar, MenuItem } from "../parts/menu";
 
 export function AppMenu(): JSXElement {
   const { dict } = useThemeContext();
@@ -121,7 +122,7 @@ export function AppMenu(): JSXElement {
 
   return (
     <header class="flex size-full flex-row justify-between bg-primary">
-      <MenuBar>
+      <MenuBar id="app-menu">
         <Menu title={t("file")}>
           <MenuItem title={t("new")} onClick={handleFileNewClick} />
           <MenuItem title={t("open")} onClick={handleFileOpenClick} />
@@ -151,44 +152,5 @@ export function AppMenu(): JSXElement {
         </Menu>
       </MenuBar>
     </header>
-  );
-}
-
-function MenuBar(props: { readonly children: JSXElement }): JSXElement {
-  return (
-    <nav class="h-full bg-primary">
-      <ul class="flex">{props.children}</ul>
-    </nav>
-  );
-}
-
-function Menu(props: {
-  readonly title: string;
-  readonly children: JSXElement;
-}): JSXElement {
-  return (
-    <li class="group relative z-10 hover:bg-secondary">
-      <div class="flex h-6 items-center">
-        <a class="px-2 no-underline" href="#">
-          {props.title}
-        </a>
-      </div>
-      <ul class="invisible absolute w-max list-none border bg-secondary p-0 [border-color:var(--primary-color)] group-hover:visible">
-        {props.children}
-      </ul>
-    </li>
-  );
-}
-
-function MenuItem(props: {
-  readonly title: string;
-  readonly onClick: () => void;
-}): JSXElement {
-  return (
-    <li class="hover:bg-primary">
-      <a class="flex items-center px-4 py-1" href="#" onClick={() => props.onClick()}>
-        {props.title}
-      </a>
-    </li>
   );
 }

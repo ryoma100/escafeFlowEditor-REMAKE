@@ -35,13 +35,13 @@ export function ActorList(): JSXElement {
 
   return (
     <section class="flex h-full flex-col">
-      <h5>{t("actor")}</h5>
+      <h5 class="pb-1.25">{t("actor")}</h5>
       <div class="h-full overflow-y-auto overflow-x-hidden bg-background">
         <ul class="list-none">
           <For each={actorModel.actorList}>
             {(it) => (
               <li
-                class="cursor-pointer p-1 hover:bg-primary"
+                class="cursor-pointer p-1.25 hover:bg-primary"
                 classList={{
                   "bg-primary": it.id === actorModel.selectedActor().id,
                 }}

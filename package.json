@@ -2,6 +2,7 @@
 	"name": "escafe-flow-editor-remake",
 	"version": "0.0.0",
 	"description": "escafeFlowEditor REMAKE",
+	"license": "MIT",
 	"type": "module",
 	"scripts": {
 		"start": "vite",
@@ -27,7 +28,6 @@
 		"vrt-diff": "cd __screenshots__; rm -rf diff; reg-cli after before diff -R report.html; open report.html",
 		"preinstall": "npx -y only-allow pnpm"
 	},
-	"license": "MIT",
 	"dependencies": {
 		"@corvu/resizable": "^0.2.4",
 		"@solid-primitives/i18n": "^2.2.0",
