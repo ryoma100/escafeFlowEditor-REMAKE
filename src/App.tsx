@@ -22,7 +22,7 @@ import { TransitionDialog } from "@/components/dialog/transition-dialog";
 import { ActorList } from "@/components/list/actor-list";
 import { ProcessList } from "@/components/list/process-list";
 import { Main } from "@/components/main/main";
-import { AppMenu } from "@/components/menu/menu";
+import { AppMenu } from "@/components/menu/app-menu";
 import { useModelContext } from "@/context/model-context";
 import { useThemeContext } from "@/context/theme-context";
 import { Toolbar } from "./components/toolbar/toolbar";
