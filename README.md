@@ -4,9 +4,9 @@ This is a remake of [escafeFlowEditor](https://github.com/ryoma100/escafeFlowEdi
 
 <img width="809" alt="flow" src="docs/flow.png">
 
-- [Web Application](https://ryoma100.github.io/escafeFlowEditor-REMAKE/editor/)
+- [Web Application](https://escafe-flow-editor-remake.pages.dev/editor/)
 - [PC Installer](https://github.com/ryoma100/escafeFlowEditor-REMAKE/releases)
-- [Storybook](https://ryoma100.github.io/escafeFlowEditor-REMAKE/storybook-static/)
+- [Storybook](https://escafe-flow-editor-remake.pages.dev/storybook-static/)
 
 ## Development
 

@@ -86,12 +86,10 @@ jobs:
           pnpm build-storybook
           mv storybook-static docs
 
-      - name: upload artifact (ubuntu only)
+      - name: Deploy to CloudFlare Pages (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
-        uses: actions/upload-pages-artifact@v3
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: docs/
-
-      - name: Deploy to Github Pages (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04'
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy ./docs --project-name=escafe-flow-editor-remake --branch=main --commit-dirty=true
