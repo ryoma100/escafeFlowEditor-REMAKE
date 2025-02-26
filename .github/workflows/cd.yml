@@ -92,4 +92,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./docs --project-name=escafe-flow-editor-remake --commit-dirty=true
+          command: pages deploy ./docs --project-name=escafe-flow-editor-remake --branch=main --commit-dirty=true
