@@ -90,6 +90,6 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04'
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy ./docs --project-name=escafeFlowEditor-REMAKE --commit-dirty=true
