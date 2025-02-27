@@ -8,7 +8,8 @@ import { Dialog } from "../parts/dialog";
 export function AboutDialog(): JSXElement {
   const { dialogModel } = useModelContext();
 
-  function handleClose() {
+  function handleClose(e: Event) {
+    e.preventDefault();
     dialogModel.setOpenDialog(null);
   }
 
@@ -30,7 +31,7 @@ export function AboutDialog(): JSXElement {
 
 export function AboutDialogView(props: {
   readonly version: string;
-  readonly onClose?: () => void;
+  readonly onClose?: (e: SubmitEvent) => void;
 }) {
   onMount(() => {
     okButtonRef?.focus();
@@ -40,7 +41,7 @@ export function AboutDialogView(props: {
   return (
     <div class="w-96 bg-primary p-2">
       <h5 class="mb-2">escafeFlowEditor-REMAKE</h5>
-      <form class="my-1 bg-background p-2" onSubmit={() => props.onClose?.()}>
+      <form class="my-1 bg-background p-2" onSubmit={(e) => props.onClose?.(e)}>
         <div>version: {props.version.substring(1)}</div>
         <div>author: Ryouichi Matsuda</div>
         <div class="mb-4">
