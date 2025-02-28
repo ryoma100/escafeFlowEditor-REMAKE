@@ -165,7 +165,7 @@ export function ActivityDialogView(props: {
         <div class="mb-2 flex flex-wrap">
           <RadioInput
             id="tab-join"
-            data-testId="tab-join"
+            data-testid="tab-join"
             name="tab-switch"
             class="peer/tab-switch1 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
@@ -283,7 +283,7 @@ export function ActivityDialogView(props: {
 
           <RadioInput
             id="tab-split"
-            data-testId="tab-split"
+            data-testid="tab-split"
             name="tab-switch"
             class="peer/tab-switch3 -m-px absolute size-px overflow-hidden whitespace-nowrap border-0 p-0 [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
           />
