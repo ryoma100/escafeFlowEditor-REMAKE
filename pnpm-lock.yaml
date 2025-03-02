@@ -15,8 +15,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(solid-js@1.9.5)
       '@tauri-apps/api':
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: ^2.3.0
+        version: 2.3.0
       '@tauri-apps/plugin-dialog':
         specifier: ~2.2.0
         version: 2.2.0
@@ -30,14 +30,14 @@ importers:
         specifier: ~2.2.0
         version: 2.2.0
       fast-xml-parser:
-        specifier: ^5.0.6
-        version: 5.0.6
+        specifier: ^5.0.8
+        version: 5.0.8
       solid-js:
         specifier: ^1.9.5
         version: 1.9.5
       valibot:
-        specifier: 1.0.0-rc.1
-        version: 1.0.0-rc.1(typescript@5.7.3)
+        specifier: 1.0.0-rc.3
+        version: 1.0.0-rc.3(typescript@5.7.3)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -1424,8 +1424,8 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6
 
-  '@tauri-apps/api@2.2.0':
-    resolution: {integrity: sha512-R8epOeZl1eJEl603aUMIGb4RXlhPjpgxbGVEaqY+0G5JG9vzV/clNlzTeqc+NLYXVqXcn8mb4c5b9pJIUDEyAg==}
+  '@tauri-apps/api@2.3.0':
+    resolution: {integrity: sha512-33Z+0lX2wgZbx1SPFfqvzI6su63hCBkbzv+5NexeYjIx7WA9htdOKoRR7Dh3dJyltqS5/J8vQFyybiRoaL0hlA==}
 
   '@tauri-apps/cli-darwin-arm64@2.2.7':
     resolution: {integrity: sha512-54kcpxZ3X1Rq+pPTzk3iIcjEVY4yv493uRx/80rLoAA95vAC0c//31Whz75UVddDjJfZvXlXZ3uSZ+bnCOnt0A==}
@@ -2417,8 +2417,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-xml-parser@5.0.6:
-    resolution: {integrity: sha512-5zIl0jWsewL5LdneswG6aJXx1YH1FXQ02UVIe/CZI3wXhI3SqP62bjcIYRNOgU43/MnN1t/MCpH6UoOtBrDNug==}
+  fast-xml-parser@5.0.8:
+    resolution: {integrity: sha512-qY8NiI5L8ff00F2giyICiJxSSKHO52tC36LJqx2JtvGyAd5ZfehC/l4iUVVHpmpIa6sM9N5mneSLHQG2INGoHA==}
     hasBin: true
 
   fastq@1.19.0:
@@ -3978,8 +3978,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  strnum@2.0.4:
-    resolution: {integrity: sha512-qrXhLMohxtEPKMlajtNaOp5zvAQUo6L3fNcdiJKzWH98kGfklqGwmxhFjM7DzxsuoVM7rJeiYr+lEcu4Jlu9UQ==}
+  strnum@2.0.5:
+    resolution: {integrity: sha512-YAT3K/sgpCUxhxNMrrdhtod3jckkpYwH6JAuwmUdXZsmzH1wUyzTMrrK2wYCEEqlKwrWDd35NeuUkbBy/1iK+Q==}
 
   style-to-object@1.0.8:
     resolution: {integrity: sha512-xT47I/Eo0rwJmaXC4oilDGDWLohVhR6o/xAQcPQN8q6QBuZVL8qMYL85kLmST5cPjAorwvqIA4qXTRQoYHaL6g==}
@@ -4211,8 +4211,8 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  valibot@1.0.0-rc.1:
-    resolution: {integrity: sha512-bTHNpeeQ403xS7qGHF/tw3EC/zkZOU5VdkfIsmRDu1Sp+BJNTNCm6m5HlwOgyW/03lofP+uQiq3R+Poo9wiCEg==}
+  valibot@1.0.0-rc.3:
+    resolution: {integrity: sha512-LT0REa7Iqx4QGcaHLiTiTkcmJqJ9QdpOy89HALFFBJgejTS64GQFRIbDF7e4f6pauQbo/myfKGmWXCLhMeM6+g==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -5654,7 +5654,7 @@ snapshots:
       tailwindcss: 4.0.8
       vite: 6.1.1(@types/node@22.13.4)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
 
-  '@tauri-apps/api@2.2.0': {}
+  '@tauri-apps/api@2.3.0': {}
 
   '@tauri-apps/cli-darwin-arm64@2.2.7':
     optional: true
@@ -5701,19 +5701,19 @@ snapshots:
 
   '@tauri-apps/plugin-dialog@2.2.0':
     dependencies:
-      '@tauri-apps/api': 2.2.0
+      '@tauri-apps/api': 2.3.0
 
   '@tauri-apps/plugin-fs@2.2.0':
     dependencies:
-      '@tauri-apps/api': 2.2.0
+      '@tauri-apps/api': 2.3.0
 
   '@tauri-apps/plugin-process@2.2.0':
     dependencies:
-      '@tauri-apps/api': 2.2.0
+      '@tauri-apps/api': 2.3.0
 
   '@tauri-apps/plugin-shell@2.2.0':
     dependencies:
-      '@tauri-apps/api': 2.2.0
+      '@tauri-apps/api': 2.3.0
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -6902,9 +6902,9 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-xml-parser@5.0.6:
+  fast-xml-parser@5.0.8:
     dependencies:
-      strnum: 2.0.4
+      strnum: 2.0.5
 
   fastq@1.19.0:
     dependencies:
@@ -8526,7 +8526,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  strnum@2.0.4: {}
+  strnum@2.0.5: {}
 
   style-to-object@1.0.8:
     dependencies:
@@ -8766,7 +8766,7 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  valibot@1.0.0-rc.1(typescript@5.7.3):
+  valibot@1.0.0-rc.3(typescript@5.7.3):
     optionalDependencies:
       typescript: 5.7.3
 
