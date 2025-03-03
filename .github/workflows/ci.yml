@@ -18,6 +18,11 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
+      - uses: actions/cache@v4
+        id: pnpm-cache
+        with:
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: pnpm install
         run: pnpm install
 
@@ -26,15 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/cache/restore@v4
         with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-      - name: pnpm install
-        run: pnpm install
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run lint
 
   test:
@@ -42,15 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/cache/restore@v4
         with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-      - name: pnpm install
-        run: pnpm install
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npx vitest --coverage.enabled true
       - name: report coverage
         if: always()
@@ -61,15 +56,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/cache/restore@v4
         with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-      - name: pnpm install
-        run: pnpm install
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: npm run build
 
   build-storybook:
@@ -77,13 +67,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/cache/restore@v4
         with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: pnpm install
         run: pnpm install
       - run: npm run build-storybook
