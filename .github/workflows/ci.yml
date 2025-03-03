@@ -24,6 +24,7 @@ jobs:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: pnpm install
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install
 
   lint:
@@ -71,8 +72,6 @@ jobs:
         with:
           path: node_modules
           key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - name: pnpm install
-        run: pnpm install
       - run: npm run build-storybook
 
   complete-ci:
