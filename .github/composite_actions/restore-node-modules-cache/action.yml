@@ -14,4 +14,4 @@ runs:
     - uses: actions/cache/restore@v4
       with:
         path: node_modules
-        key: node-modules-pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: node-modules-${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
