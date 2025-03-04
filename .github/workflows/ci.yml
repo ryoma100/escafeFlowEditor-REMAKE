@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/composite_actions/store-node-cache
+      - uses: .github/composite_actions/store-node-cache
 
   lint:
     needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/composite_actions/restore-node-cache
+      - uses: .github/composite_actions/restore-node-cache
       - run: npm run lint
 
   test:
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/composite_actions/restore-node-cache
+      - uses: .github/composite_actions/restore-node-cache
       - run: npx vitest --coverage.enabled true
       - name: report coverage
         if: always()
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/composite_actions/restore-node-cache
+      - uses: .github/composite_actions/restore-node-cache
       - run: npm run build
 
   build-storybook:
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/composite_actions/restore-node-cache
+      - uses: .github/composite_actions/restore-node-cache
       - run: npm run build-storybook
 
   complete-ci:
