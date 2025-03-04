@@ -19,3 +19,4 @@ runs:
     - name: pnpm install
       if: steps.pnpm-cache.outputs.cache-hit != 'true'
       run: pnpm install
+      shell: bash
