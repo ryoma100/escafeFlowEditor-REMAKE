@@ -11,28 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-      - uses: actions/cache@v4
-        id: pnpm-cache
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - name: pnpm install
-        if: steps.pnpm-cache.outputs.cache-hit != 'true'
-        run: pnpm install
+      - uses: ./.github/composite_actions/store-node-cache
 
   lint:
     needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: ./.github/composite_actions/restore-node-cache
       - run: npm run lint
 
   test:
@@ -40,10 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: ./.github/composite_actions/restore-node-cache
       - run: npx vitest --coverage.enabled true
       - name: report coverage
         if: always()
@@ -54,10 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: ./.github/composite_actions/restore-node-cache
       - run: npm run build
 
   build-storybook:
@@ -65,10 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - uses: ./.github/composite_actions/restore-node-cache
       - run: npm run build-storybook
 
   complete-ci:
