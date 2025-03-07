@@ -23,8 +23,8 @@
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"test-storybook": "rm -rf __screenshots__; test-storybook",
-		"vrt-before": "pnpm test-storybook; mkdir -p __vrt__; mv __screenshots__ __vrt__/before",
-		"vrt-after": "pnpm test-storybook; mkdir -p __vrt__; mv __screenshots__ __vrt__/after",
+		"vrt-before": "pnpm test-storybook; mkdir -p __vrt__; cd $_ && rm -rf before; cp -r ../__screenshots__ before",
+		"vrt-after": "pnpm test-storybook; mkdir -p __vrt__; cd $_ && rm -rf after; cp -r ../__screenshots__ after",
 		"vrt-diff": "cd __vrt__; rm -rf diff; reg-cli after before diff -R report.html; open report.html",
 		"preinstall": "npx -y only-allow pnpm"
 	},
