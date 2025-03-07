@@ -1,4 +1,4 @@
-name: "Store Node Cache"
+name: "Restore Node Cache"
 
 runs:
   using: "composite"
@@ -11,12 +11,7 @@ runs:
         node-version: 20
         cache: "pnpm"
         cache-dependency-path: pnpm-lock.yaml
-    - uses: actions/cache@v4
-      id: pnpm-cache
+    - uses: actions/cache/restore@v4
       with:
         path: node_modules
-        key: js-depend-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-    - name: pnpm install
-      if: steps.pnpm-cache.outputs.cache-hit != 'true'
-      run: pnpm install
-      shell: bash
+        key: node-modules-${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
