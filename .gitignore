@@ -97,6 +97,7 @@ out
 dist
 storybook-static
 __screenshots__
+__vrt__
 
 # Gatsby files
 .cache/

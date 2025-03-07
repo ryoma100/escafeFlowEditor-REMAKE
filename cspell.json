@@ -33,6 +33,7 @@
     "stylelint",
     "tailwindcss",
     "tauri",
+    "testrun",
     "textareas",
     "valibot",
     "VITE"
@@ -54,6 +55,7 @@
     "lefthook.yml",
     "**/*.mp4",
     ".vscode/**",
-    "__local-vrt__/**"
+    "__local-vrt__/**",
+    "__vrt__/**",
   ]
 }
