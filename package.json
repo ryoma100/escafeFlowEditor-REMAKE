@@ -76,5 +76,9 @@
 		"vite-plugin-solid": "^2.11.6",
 		"vite-plugin-solid-svg": "^0.8.1",
 		"vitest": "^3.0.8"
+	},
+	"volta": {
+		"node": "20.18.3",
+		"pnpm": "10.6.1"
 	}
 }

@@ -15,13 +15,13 @@ pre-commit:
   commands:
     biome:
       glob: "*.{js,ts,jsx,tsx,css}"
-      run: npx biome check --diagnostic-level=warn {staged_files}
+      run: pnpm biome check --diagnostic-level=warn {staged_files}
       stage_fixed: true
     eslint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: npx eslint {staged_files}
+      run: pnpm eslint {staged_files}
     tsc:
       glob: "*.{tsx,ts}"
-      run: npx tsc --noEmit
+      run: pnpm tsc --noEmit
     test:
-      run: npx vitest run
+      run: pnpm vitest run
